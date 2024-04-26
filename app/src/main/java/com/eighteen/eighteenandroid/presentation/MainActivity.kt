@@ -1,7 +1,8 @@
-package com.eighteen.eighteenandroid
+package com.eighteen.eighteenandroid.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.eighteen.eighteenandroid.R
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

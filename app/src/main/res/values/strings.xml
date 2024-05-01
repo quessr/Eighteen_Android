@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">EighteenAndroid</string>
+    <string name="menu_main">메인</string>
+    <string name="menu_ranking">랭킹</string>
+    <string name="menu_chat">채팅</string>
+    <string name="menu_profile">프로필</string>
+    <string name="main_greeting">반가워요, 김철수님</string>
+    <string name="main_today_teen">오늘의 Teen</string>
+    <string name="tag_exercise">운동</string>
+    <string name="tag_beauty">외모</string>
 </resources>

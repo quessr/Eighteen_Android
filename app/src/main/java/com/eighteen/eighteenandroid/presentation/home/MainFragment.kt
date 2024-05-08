@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation
+package com.eighteen.eighteenandroid.presentation.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,11 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.google.android.material.chip.Chip
 
+/**
+ *
+ * @file MainFragment.kt
+ * @date 05/08/2024
+ */
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
@@ -30,23 +35,23 @@ class MainFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        val profiles: MutableList<String> = mutableListOf()
+        val teenList: MutableList<String> = mutableListOf()
 
-        profiles.add("Kim Young Hoon")
-        profiles.add("Heo Se Ra")
-        profiles.add("Jeong Minji Ji")
+        teenList.add("Kim Young Hoon")
+        teenList.add("Heo Se Ra")
+        teenList.add("Jeong Minji Ji")
 
-        val adapter = ViewPagerAdapter(profiles)
-        binding.profileViewPager.apply {
+        val adapter = ViewPagerAdapter(teenList)
+        binding.vpTodayTeen.apply {
             this.adapter = adapter
             this.clipToPadding = false
         }
     }
 
     private fun initChipGroup() {
-        val chipNameList = listOf("전체", "운동", "외모")
-        for (chipName in chipNameList) {
-            val chip = createChip(chipName)
+        val tagList = listOf("전체", "운동", "외모")
+        for (tag in tagList) {
+            val chip = createChip(tag)
             var isBlackBackground = false
             chip.setOnClickListener { view ->
                 isBlackBackground = !isBlackBackground
@@ -58,7 +63,7 @@ class MainFragment : Fragment() {
                     chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
                 }
             }
-            binding.tagGroup.addView(chip)
+            binding.chipGroup.addView(chip)
         }
     }
 

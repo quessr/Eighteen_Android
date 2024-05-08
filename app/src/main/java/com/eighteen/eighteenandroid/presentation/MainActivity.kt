@@ -6,7 +6,13 @@ import androidx.fragment.app.add
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ActivityMainBinding
 import androidx.fragment.app.commit
+import com.eighteen.eighteenandroid.presentation.home.MainFragment
 
+/**
+ *
+ * @file MainActivity.kt
+ * @date 05/08/2024
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

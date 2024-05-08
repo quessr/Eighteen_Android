@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">EighteenAndroid</string>
+    <string name="menu_main">Main</string>
+    <string name="menu_ranking">Ranking</string>
+    <string name="menu_teen">TEEN</string>
+    <string name="menu_chat">Chat</string>
+    <string name="menu_profile">My</string>
+    <string name="main_today_teen">오늘의 Teen</string>
+    <string name="tag_exercise">운동</string>
+    <string name="tag_beauty">외모</string>
 </resources>

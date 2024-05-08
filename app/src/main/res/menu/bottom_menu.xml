@@ -13,6 +13,12 @@
         android:title="@string/menu_ranking" />
 
     <item
+        android:id="@+id/btn_bottom_teen"
+        android:enabled="true"
+        android:icon="@drawable/menu_teen_selected"
+        android:title="@string/menu_teen" />
+
+    <item
         android:id="@+id/btn_bottom_chat"
         android:enabled="true"
         android:icon="@drawable/menu_chat_selected"
@@ -21,6 +27,5 @@
     <item
         android:id="@+id/btn_bottom_profile"
         android:enabled="true"
-        android:icon="@drawable/menu_profile_selected"
         android:title="@string/menu_profile" />
 </menu>

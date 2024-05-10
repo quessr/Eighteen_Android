@@ -9,9 +9,11 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.FragmentFactory
+import androidx.viewbinding.ViewBinding
 import com.eighteen.eighteenandroid.R
 
-abstract class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : Fragment() {
+abstract class BaseFragment<T  : ViewBinding>(private val bindingFactory: (LayoutInflater) -> T) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +26,8 @@ abstract class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = bindingFactory(inflater)
+
         return binding.root
     }
 
@@ -41,7 +43,7 @@ abstract class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId
         _binding = null;
     }
 
-    protected inline  fun bind(block: T.() -> Unit) {
+    protected inline fun bind(block: T.() -> Unit) {
         binding.apply(block)
     }
 

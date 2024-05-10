@@ -8,7 +8,7 @@ import androidx.databinding.ViewDataBinding
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentTestBinding
 
-class TestFragment : BaseFragment<FragmentTestBinding>(R.layout.fragment_test) {
+class TestFragment : BaseFragment<FragmentTestBinding>(FragmentTestBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -21,7 +21,9 @@ class TestFragment : BaseFragment<FragmentTestBinding>(R.layout.fragment_test) {
     }
 
     override fun initView() {
-        binding.tvTest1
-        binding.tvTest2
+        bind {
+            binding.tvTest2
+            binding.tvTest1
+        }
     }
 }

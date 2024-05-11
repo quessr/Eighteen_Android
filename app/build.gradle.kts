@@ -37,6 +37,8 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        viewBinding = true
+        compose = true
         buildConfig = true
         viewBinding = true
     }
@@ -64,6 +66,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.7.0")
     implementation("androidx.databinding:databinding-runtime:8.4.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -71,6 +74,10 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+
+    // fragment
+    implementation ("androidx.fragment:fragment-ktx:1.3.6")
 
     //retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
@@ -82,4 +89,5 @@ dependencies {
     //okhttp3
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 }

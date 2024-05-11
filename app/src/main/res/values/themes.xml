@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.EighteenAndroid" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.EighteenAndroid" parent="Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="colorPrimary">@color/mainColor</item>
+        <item name="colorAccent">@color/subColor</item>
+        <item name="background">@color/backgroundColor</item>
+        <item name="android:statusBarColor">@color/backgroundColor</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

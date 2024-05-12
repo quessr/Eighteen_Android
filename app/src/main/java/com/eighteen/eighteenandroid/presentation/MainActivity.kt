@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 add<MainFragment>(R.id.fragment_container_view)
+                add<TestFragment>(R.id.test_fragment)
             }
         }
     }

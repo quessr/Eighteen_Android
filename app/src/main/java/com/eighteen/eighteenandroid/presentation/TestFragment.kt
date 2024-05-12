@@ -1,11 +1,6 @@
 package com.eighteen.eighteenandroid.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
-import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentTestBinding
 
 class TestFragment : BaseFragment<FragmentTestBinding>(FragmentTestBinding::inflate) {
@@ -13,17 +8,10 @@ class TestFragment : BaseFragment<FragmentTestBinding>(FragmentTestBinding::infl
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_test, container, false)
-    }
-
     override fun initView() {
         bind {
-            binding.tvTest2
-            binding.tvTest1
+            tvTest1.text = "text1"
+            tvTest2.text = "text2"
         }
     }
 }

@@ -45,7 +45,7 @@
                 android:backgroundTint="@color/white"
                 app:chipCornerRadius="16dp" />
 
-            <androidx.viewpager.widget.ViewPager
+            <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_today_teen"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"

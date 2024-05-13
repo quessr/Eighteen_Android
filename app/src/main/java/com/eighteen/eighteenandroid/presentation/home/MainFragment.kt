@@ -2,7 +2,6 @@ package com.eighteen.eighteenandroid.presentation.home
 
 import android.view.ViewGroup.LayoutParams
 import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
@@ -27,11 +26,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         teenList.add("https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg")
         teenList.add("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800")
 
-        val adapter = ViewPagerAdapter(requireContext(), teenList)
         binding.vpTodayTeen.apply {
-            this.adapter = adapter
-            this.clipToPadding = false
-            this.setPadding(0, 0, 50, 0)
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 1
+            setPadding(0, 0, 70, 0)
+            adapter = ViewPagerAdapter(requireContext(), teenList)
         }
     }
 

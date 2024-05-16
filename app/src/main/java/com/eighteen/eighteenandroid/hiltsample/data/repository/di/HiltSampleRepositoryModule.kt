@@ -1,20 +1,18 @@
 package com.eighteen.eighteenandroid.hiltsample.data.repository.di
 
-import com.eighteen.eighteenandroid.hiltsample.data.datasource.remote.service.HiltSampleRemoteService
 import com.eighteen.eighteenandroid.hiltsample.data.repository.HiltSampleRepositoryImpl
 import com.eighteen.eighteenandroid.hiltsample.domain.repository.HiltSampleRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object HiltSampleRepositoryModule {
+abstract class HiltSampleRepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideHiltSampleRepository(hiltSampleRemoteService: HiltSampleRemoteService): HiltSampleRepository =
-        HiltSampleRepositoryImpl(hiltSampleRemoteService = hiltSampleRemoteService)
+    abstract fun bindHiltSampleRepository(hiltSampleRemoteRepositoryImpl: HiltSampleRepositoryImpl): HiltSampleRepository
 }

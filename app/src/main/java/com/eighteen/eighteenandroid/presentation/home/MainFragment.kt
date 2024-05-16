@@ -1,13 +1,10 @@
 package com.eighteen.eighteenandroid.presentation.home
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import androidx.core.content.ContextCompat
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
+import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.google.android.material.chip.Chip
 
 /**
@@ -15,21 +12,9 @@ import com.google.android.material.chip.Chip
  * @file MainFragment.kt
  * @date 05/08/2024
  */
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
 
-    private lateinit var binding: FragmentMainBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMainBinding.inflate(inflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initView() {
         initViewPager()
         initChipGroup()
     }
@@ -37,14 +22,16 @@ class MainFragment : Fragment() {
     private fun initViewPager() {
         val teenList: MutableList<String> = mutableListOf()
 
-        teenList.add("Kim Young Hoon")
-        teenList.add("Heo Se Ra")
-        teenList.add("Jeong Minji Ji")
+        teenList.add("https://image.blip.kr/v1/file/021ec61ff1c9936943383b84236a0e69")
+        teenList.add("https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg")
+        teenList.add("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800")
 
-        val adapter = ViewPagerAdapter(teenList)
         binding.vpTodayTeen.apply {
-            this.adapter = adapter
-            this.clipToPadding = false
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 1
+            setPadding(0, 0, 70, 0)
+            adapter = ViewPagerAdapter(requireContext(), teenList)
         }
     }
 
@@ -63,7 +50,9 @@ class MainFragment : Fragment() {
                     chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
                 }
             }
-            binding.chipGroup.addView(chip)
+            bind {
+                chipGroup.addView(chip)
+            }
         }
     }
 
@@ -71,6 +60,11 @@ class MainFragment : Fragment() {
         val chip = layoutInflater.inflate(R.layout.tag_item, null) as Chip
         chip.text = tag
         chip.setChipBackgroundColorResource(android.R.color.white)
+
+        // TODO: 추후 태그 문자열의 길이가 길어지는 경우도 대응해야함
+        val params = LayoutParams(200, LayoutParams.WRAP_CONTENT)
+        chip.layoutParams = params
+
         return chip
     }
 }

@@ -1,10 +1,12 @@
 package com.eighteen.eighteenandroid.presentation.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.eighteen.eighteenandroid.R
 
 /**
@@ -13,6 +15,7 @@ import com.eighteen.eighteenandroid.R
  * @date 05/08/2024
  */
 class ViewPagerAdapter (
+    private val context: Context,
     private var tagList: List<String>,
 ) : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
 
@@ -23,7 +26,7 @@ class ViewPagerAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = tagList[position]
-        holder.title.text = item
+        Glide.with(context).load(item).into(holder.profileImg);
     }
 
     override fun getItemCount(): Int {
@@ -31,6 +34,6 @@ class ViewPagerAdapter (
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.tx_name)
+        val profileImg: ImageView = view.findViewById(R.id.img_today_teen)
     }
 }

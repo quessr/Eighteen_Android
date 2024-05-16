@@ -15,6 +15,9 @@ class HiltSampleViewModel @Inject constructor(
     private val hiltSampleUseCase: HiltSampleUseCase
 ) : ViewModel() {
 
+    init {
+        fetchTestData()
+    }
     //Livedata
 //    private val _postLiveData = MutableLiveData<List<HiltSamplePost>>(emptyList())
 //    val postLiveData: LiveData<List<HiltSamplePost>> = _postLiveData
@@ -28,6 +31,7 @@ class HiltSampleViewModel @Inject constructor(
         viewModelScope.launch {
             hiltSampleUseCase.invoke(userId.toString()).onSuccess {
                 _textStateFlow.value = it
+                userId++
             }.onFailure {
                 //에러처리
             }

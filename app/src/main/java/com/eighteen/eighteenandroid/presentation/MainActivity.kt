@@ -1,11 +1,14 @@
 package com.eighteen.eighteenandroid.presentation
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ActivityMainBinding
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.eighteen.eighteenandroid.presentation.home.MainFragment
 
 /**
@@ -23,12 +26,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.bottomNavigationBar.itemIconTintList = null
+        setupNavigation()
+    }
 
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.commit {
-//                setReorderingAllowed(true)
-//                add<MainFragment>(R.id.fragment_container_view)
-//            }
-//        }
+    private fun setupNavigation() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        // 바텀 네비게이션과 NavController 연결
+        binding.bottomNavigationBar.setupWithNavController(navController)
+
+        // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigationBar.visibility = if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
+        }
     }
 }

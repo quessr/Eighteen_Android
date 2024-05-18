@@ -18,18 +18,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     override fun initView() {
         initViewPager()
         initChipGroup()
-        initNavigation()
-
-    }
-
-    private fun initNavigation() {
-        bind {
-            btnGoProfileDetail.setOnClickListener {
-                val navController =
-                    Navigation.findNavController(requireActivity().findViewById(R.id.fragment_container_view))
-                navController.navigate(R.id.action_fragmentMain_to_fragmentProfileDetail)
-            }
-        }
     }
 
     private fun initViewPager() {

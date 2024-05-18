@@ -24,11 +24,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationBar.itemIconTintList = null
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<MainFragment>(R.id.fragment_container_view)
-            }
-        }
+//        if (savedInstanceState == null) {
+//            supportFragmentManager.commit {
+//                setReorderingAllowed(true)
+//                add<MainFragment>(R.id.fragment_container_view)
+//            }
+//        }
     }
 }

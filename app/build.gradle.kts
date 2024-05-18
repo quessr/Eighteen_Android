@@ -40,7 +40,6 @@ android {
         viewBinding = true
         compose = true
         buildConfig = true
-        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -76,7 +75,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
 
-    // fragment
+    //fragment
     implementation ("androidx.fragment:fragment-ktx:1.3.6")
 
     //retrofit2
@@ -93,4 +92,7 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    //navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 }

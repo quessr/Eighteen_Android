@@ -2,6 +2,7 @@ package com.eighteen.eighteenandroid.presentation.home
 
 import android.view.ViewGroup.LayoutParams
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
@@ -44,10 +45,20 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 isBlackBackground = !isBlackBackground
                 if (isBlackBackground) {
                     chip.setChipBackgroundColorResource(android.R.color.black)
-                    chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+                    chip.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.white
+                        )
+                    )
                 } else {
                     chip.setChipBackgroundColorResource(android.R.color.white)
-                    chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+                    chip.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.black
+                        )
+                    )
                 }
             }
             bind {

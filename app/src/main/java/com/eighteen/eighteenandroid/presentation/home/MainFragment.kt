@@ -2,18 +2,24 @@ package com.eighteen.eighteenandroid.presentation.home
 
 import android.view.ViewGroup.LayoutParams
 import androidx.core.content.ContextCompat
-import androidx.navigation.Navigation
+import androidx.fragment.app.viewModels
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.home.util.enums.Tag
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *
  * @file MainFragment.kt
  * @date 05/08/2024
  */
+@AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
+    private val viewModel by viewModels<MainViewModel>()
+
+    private var selectedChip: Chip? = null
 
     override fun initView() {
         initViewPager()
@@ -21,45 +27,34 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun initViewPager() {
-        val teenList: MutableList<String> = mutableListOf()
+        val adapter = TodayTeenAdapter(requireContext())
 
-        teenList.add("https://image.blip.kr/v1/file/021ec61ff1c9936943383b84236a0e69")
-        teenList.add("https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg")
-        teenList.add("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800")
+        bind {
+            vpTodayTeen.clipToPadding = false
+            vpTodayTeen.clipChildren = false
+            vpTodayTeen.offscreenPageLimit = 1
+            vpTodayTeen.setPadding(0, 0, 70, 0)
+            vpTodayTeen.adapter = adapter
+        }
 
-        binding.vpTodayTeen.apply {
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 1
-            setPadding(0, 0, 70, 0)
-            adapter = ViewPagerAdapter(requireContext(), teenList)
+        viewModel.userData.observe(viewLifecycleOwner) { userList ->
+            adapter.updateData(userList)
         }
     }
 
     private fun initChipGroup() {
-        val tagList = listOf("전체", "운동", "외모")
-        for (tag in tagList) {
-            val chip = createChip(tag)
-            var isBlackBackground = false
-            chip.setOnClickListener { view ->
-                isBlackBackground = !isBlackBackground
-                if (isBlackBackground) {
-                    chip.setChipBackgroundColorResource(android.R.color.black)
-                    chip.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            android.R.color.white
-                        )
-                    )
-                } else {
-                    chip.setChipBackgroundColorResource(android.R.color.white)
-                    chip.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            android.R.color.black
-                        )
-                    )
+        for (tag in Tag.values()) {
+            val chip = createChip(tag.strValue)
+            if (tag == Tag.ALL) {
+                setChipStyle(chip, isBlackBackground = true)
+                selectedChip = chip
+            }
+            chip.setOnClickListener { _ ->
+                selectedChip?.let { it ->
+                    setChipStyle(it, isBlackBackground = false)
                 }
+                setChipStyle(chip, isBlackBackground = true)
+                selectedChip = chip
             }
             bind {
                 chipGroup.addView(chip)
@@ -77,5 +72,25 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         chip.layoutParams = params
 
         return chip
+    }
+
+    private fun setChipStyle(chip: Chip, isBlackBackground: Boolean) {
+        if (isBlackBackground) {
+            chip.setChipBackgroundColorResource(android.R.color.black)
+            chip.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    android.R.color.white
+                )
+            )
+        } else {
+            chip.setChipBackgroundColorResource(android.R.color.white)
+            chip.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    android.R.color.black
+                )
+            )
+        }
     }
 }

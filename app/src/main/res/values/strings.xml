@@ -8,4 +8,15 @@
     <string name="main_today_teen">오늘의 Teen</string>
     <string name="tag_exercise">운동</string>
     <string name="tag_beauty">외모</string>
+    <string name="main_about_teen">About A-Teen</string>
+    <string name="about_teen_title">Teen</string>
+    <string name="about_teen_detail">친구들의 프로필을\n투표해보세요!</string>
+    <string name="about_teen_tournament_title">토너먼트</string>
+    <string name="about_teen_tournament_detail">투표 결과를\n한 눈에 볼 수 있어요!</string>
+    <string name="about_teen_chat_title">채팅</string>
+    <string name="about_teen_chat_detail">채팅을 통해 친구들과\n소통해보세요!</string>
+    <string name="about_teen_my_teen_title">나만의 틴</string>
+    <string name="about_teen_my_teen_detail">나만의 프로필을\n등록해보세요!</string>
+    <string name="main_tournament_in_progress">진행 중인 토너먼트</string>
+    <string name="tournament_in_progress_more">더보기</string>
 </resources>

@@ -11,4 +11,6 @@
     <color name="mainColor">#0041FF</color>
     <color name="subColor">#FFB000</color>
     <color name="lightGrey">#DBDBDB</color>
+    <color name="whiteGrey">#F2F2F2</color>
+    <color name="darkGrey">#717171</color>
 </resources>

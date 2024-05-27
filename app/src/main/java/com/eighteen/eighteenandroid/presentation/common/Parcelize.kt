@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.util
+package com.eighteen.eighteenandroid.presentation.common
 
 import android.os.Build
 import android.os.Bundle

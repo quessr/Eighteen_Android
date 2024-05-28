@@ -22,5 +22,15 @@
         <action
             android:id="@+id/action_fragmentProfileDetail_to_fragmentMain"
             app:destination="@id/fragmentMain" />
+        <action
+            android:id="@+id/action_fragmentProfileDetail_to_fragmentMediaDetail"
+            app:destination="@+id/fragmentMediaDetail" />
     </fragment>
+
+    <dialog
+        android:id="@+id/fragmentMediaDetail"
+        android:name="com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment"
+        android:label="fragment_media_detail"
+        tools:layout="@layout/fragment_media_detail_dialog">
+    </dialog>
 </navigation>

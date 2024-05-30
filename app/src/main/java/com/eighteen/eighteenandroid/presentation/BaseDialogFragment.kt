@@ -30,10 +30,9 @@ abstract class BaseDialogFragment<T : ViewBinding>(private val bindingFactory: (
 
     abstract fun initView()
 
-    @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null;
+        _binding = null
     }
 
     protected inline fun bind(block: T.() -> Unit) {

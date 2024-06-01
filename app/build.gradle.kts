@@ -95,4 +95,14 @@ dependencies {
     //navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    //hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    ksp("com.google.dagger:hilt-android-compiler:2.48")
+
+    //kotlin ext
+    implementation("androidx.fragment:fragment-ktx:1.7.0")
+
+    //viewpager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }

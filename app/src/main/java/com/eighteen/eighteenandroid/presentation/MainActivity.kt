@@ -3,19 +3,18 @@ package com.eighteen.eighteenandroid.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.databinding.ActivityMainBinding
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.eighteen.eighteenandroid.presentation.home.MainFragment
+import com.eighteen.eighteenandroid.R
+import com.eighteen.eighteenandroid.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *
  * @file MainActivity.kt
  * @date 05/08/2024
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -30,7 +29,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         val navController = navHostFragment.navController
 
         // 바텀 네비게이션과 NavController 연결
@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavigationBar.visibility = if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
+            binding.bottomNavigationBar.visibility =
+                if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
         }
     }
 }

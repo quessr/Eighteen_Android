@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.home.adapter.TeenAdapter
 import com.eighteen.eighteenandroid.presentation.home.util.enums.Tag
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,25 +28,27 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun initViewPager() {
-        val adapter = TodayTeenAdapter(requireContext())
+        val adapter = TeenAdapter(requireContext())
 
         bind {
-            vpTodayTeen.clipToPadding = false
-            vpTodayTeen.clipChildren = false
-            vpTodayTeen.offscreenPageLimit = 1
-            vpTodayTeen.setPadding(0, 0, 70, 0)
-            vpTodayTeen.adapter = adapter
+            vpTodayTeen.run {
+                clipToPadding = false
+                clipChildren = false
+                offscreenPageLimit = 1
+                setPadding(0, 0, 70, 0)
+                this.adapter = adapter
+            }
         }
 
         viewModel.userData.observe(viewLifecycleOwner) { userList ->
-            adapter.updateData(userList)
+            adapter.updateView(userList)
         }
     }
 
     private fun initChipGroup() {
         for (tag in Tag.values()) {
             val chip = createChip(tag.strValue)
-            if (tag == Tag.ALL) {
+            if (tag == Tag.ALL) { // 화면 최초 진입 시 전체 태그가 클릭된 상태여야함
                 setChipStyle(chip, isBlackBackground = true)
                 selectedChip = chip
             }

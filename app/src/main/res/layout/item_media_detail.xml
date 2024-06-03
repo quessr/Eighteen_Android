@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/pvMedia"
+    <com.eighteen.eighteenandroid.presentation.common.media3.MediaView
+        android:id="@+id/mvMedia"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

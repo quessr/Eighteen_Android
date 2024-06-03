@@ -2,8 +2,6 @@ package com.eighteen.eighteenandroid.presentation.mediadetail
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.databinding.FragmentMediaDetailDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.getParcelableListOrNull
-import com.eighteen.eighteenandroid.presentation.common.media3.PlayerWrapper
+import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import kotlinx.coroutines.launch
 
@@ -33,24 +31,13 @@ class MediaDetailDialogFragment :
 
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
 
-    private val mediaDetailPagerAdapter by lazy {
-        MediaDetailPagerAdapter(mediaDetailModels = medias)
-    }
-
     private val mediaPageChangeCallback = object : OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             mediaDetailViewModel.setSelectedIndex(index = position)
         }
     }
 
-    private var playerWrapper: PlayerWrapper? = null
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        playerWrapper = context?.let {
-            PlayerWrapper(viewLifecycleOwner, it)
-        }
-    }
+    private var viewPagerPlayerManager: ViewPagerPlayerManager? = null
 
     override fun onResume() {
         super.onResume()
@@ -61,6 +48,7 @@ class MediaDetailDialogFragment :
     }
 
     override fun initView() {
+        initPlayerWrapper()
         bind {
             ivBtnBack.setOnClickListener {
                 //TODO 네비게이션 back
@@ -73,13 +61,29 @@ class MediaDetailDialogFragment :
         initObservers()
     }
 
-    private fun bindMediaPager() {
-        bind {
-            vpMedias.adapter = mediaDetailPagerAdapter
-            vpMedias.registerOnPageChangeCallback(mediaPageChangeCallback)
+    private fun initPlayerWrapper() {
+        viewPagerPlayerManager = context?.let {
+            ViewPagerPlayerManager(
+                viewPager2 = binding.vpMedias,
+                lifecycleOwner = viewLifecycleOwner,
+                context = it
+            )
         }
     }
 
+    private fun bindMediaPager() {
+        bind {
+            with(vpMedias) {
+                adapter = MediaDetailPagerAdapter().apply {
+                    submitList(medias)
+                    registerOnPageChangeCallback(mediaPageChangeCallback)
+                }
+                offscreenPageLimit = MAXIMUM_VIEWPAGER_OFF_SCREEN_PAGE_LIMIT.coerceAtMost(
+                    (MAXIMUM_DISPLAY_MEDIAS_COUNT + 1) / 2
+                )
+            }
+        }
+    }
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -93,13 +97,14 @@ class MediaDetailDialogFragment :
 
     override fun onDestroyView() {
         binding.vpMedias.unregisterOnPageChangeCallback(mediaPageChangeCallback)
-        playerWrapper = null
+        viewPagerPlayerManager = null
         super.onDestroyView()
     }
 
     companion object {
         //TODO 글로벌 변수화 고려
         private const val MAXIMUM_DISPLAY_MEDIAS_COUNT = 10
+        private const val MAXIMUM_VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 10
         const val ARGUMENT_MEDIAS_KEY = "argument_medias_key"
     }
 }

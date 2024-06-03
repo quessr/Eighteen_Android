@@ -8,10 +8,7 @@ import com.eighteen.eighteenandroid.databinding.ItemMediaDetailBinding
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.viewholder.MediaDetailViewHolder
 
-class MediaDetailPagerAdapter(
-    private val mediaDetailModels: List<MediaDetailModel>
-) : ListAdapter<MediaDetailModel, MediaDetailViewHolder>(diffUtil) {
-
+class MediaDetailPagerAdapter : ListAdapter<MediaDetailModel, MediaDetailViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaDetailViewHolder {
         val binding =
             ItemMediaDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,9 +16,13 @@ class MediaDetailPagerAdapter(
     }
 
     override fun onBindViewHolder(holder: MediaDetailViewHolder, position: Int) {
-        mediaDetailModels.getOrNull(position)?.let {
-            holder.bind(mediaDetailModel = it)
+        getItem(position)?.let {
+            holder.bind(it)
         }
+    }
+
+    override fun getItem(position: Int): MediaDetailModel? {
+        return currentList.getOrNull(position)
     }
 
     companion object {

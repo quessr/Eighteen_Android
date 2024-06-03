@@ -1,11 +1,12 @@
 package com.eighteen.eighteenandroid.presentation.common.media3
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.CallSuper
+import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 /**
@@ -22,30 +23,33 @@ open class PlayerManager(
     protected open val player = ExoPlayer.Builder(context).build()
     private val playingInfoMap = HashMap<String, PlayingInfo>()
     protected var targetMediaInfo: MediaInfo? = null
-    //TODO 썸네일 뷰 visibility 조절
-//    private val playerListener = object : Player.Listener {
-//        override fun onPlaybackStateChanged(playbackState: Int) {
-//            when (playbackState) {
-//                Player.STATE_IDLE->{
-//                    Log.d("TESTLOG","idle")
-//                }
-//                Player.STATE_BUFFERING->{
-//                    Log.d("TESTLOG","buffering")
-//                }
-//                Player.STATE_READY->{
-//                    Log.d("TESTLOG","ready")
-//                    targetMediaInfo?.mediaView?.thumbnailView?.isVisible= false
-//                }
-//            }
-//        }
-//    }
+
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            when (playbackState) {
+                Player.STATE_READY -> {
+                    targetMediaInfo?.mediaView?.thumbnailView?.isVisible = false
+                }
+                Player.STATE_BUFFERING -> {
+                    //TODO 버퍼링 중 로딩아이콘 논의 필요
+                }
+                Player.STATE_ENDED -> {}
+                Player.STATE_IDLE -> {}
+            }
+        }
+    }
 
     init {
         initLifecycle()
+        initPlayer()
     }
 
     private fun initLifecycle() {
         lifecycleOwner.lifecycle.addObserver(this)
+    }
+
+    private fun initPlayer() {
+        player.addListener(playerListener)
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -66,12 +70,7 @@ open class PlayerManager(
             detachPlayer(targetMediaInfo)
         }
         targetMediaInfo = mediaInfo
-        if (mediaInfo.mediaUrl != null) {
-            player.setMediaItem(MediaItem.fromUri(mediaInfo.mediaUrl))
-        } else {
-            //TODO 영상 주소가 없을 경우 처리
-            Log.d("PlayerWrapper", "mediaUrl is null")
-        }
+        player.setMediaItem(MediaItem.fromUri(mediaInfo.mediaUrl))
         mediaInfo.id?.let { playingInfoMap[it] }?.let { playingInfo ->
             setPlayingInfo(playingInfo)
         }
@@ -111,6 +110,7 @@ open class PlayerManager(
 
     private fun release() {
         targetMediaInfo = null
+        player.removeListener(playerListener)
         player.release()
     }
 

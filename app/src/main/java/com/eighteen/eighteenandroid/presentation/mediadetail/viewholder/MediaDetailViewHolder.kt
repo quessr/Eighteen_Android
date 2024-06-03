@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.presentation.common.media3.MediaInfo
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerMediaItem
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 
+//TODO 이미지 placeholder 추가
 sealed class MediaDetailViewHolder(
     binding: ViewBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -21,11 +22,13 @@ sealed class MediaDetailViewHolder(
         private var videoModel: MediaDetailModel.Video? = null
         override fun onBind(mediaDetailModel: MediaDetailModel) {
             videoModel = mediaDetailModel as? MediaDetailModel.Video
+            ImageLoader.get()
+                .loadUrl(imageView = binding.mvMedia.thumbnailView, url = mediaDetailModel.imageUrl)
         }
 
         override fun getMediaInfo() = MediaInfo(
             id = videoModel?.id,
-            mediaUrl = videoModel?.videoUrl,
+            mediaUrl = videoModel?.videoUrl ?: "",
             mediaView = binding.mvMedia
         )
     }

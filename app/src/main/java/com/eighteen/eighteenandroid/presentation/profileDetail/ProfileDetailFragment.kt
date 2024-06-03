@@ -41,7 +41,14 @@ class ProfileDetailFragment :
             "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
         )
 
-        bind { viewPager.adapter = ViewPagerAdapter(items) }
+        bind {
+            viewPager.adapter = ViewPagerAdapter(items)
+
+            questionAnswer1.setQuestion("1. Lorem ipsum dolor sit amet?")
+            questionAnswer1.setAnswer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            questionAnswer2.setQuestion("2. Lorem ipsum dolor sit amet?")
+            questionAnswer2.setAnswer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+        }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position -> }.attach()
     }
 

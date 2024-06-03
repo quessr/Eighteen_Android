@@ -1,29 +1,40 @@
 package com.eighteen.eighteenandroid.presentation.mediadetail.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import com.eighteen.eighteenandroid.databinding.ItemMediaDetailBinding
+import androidx.viewbinding.ViewBinding
+import com.eighteen.eighteenandroid.databinding.ItemMediaDetailImageBinding
+import com.eighteen.eighteenandroid.databinding.ItemMediaDetailVideoBinding
+import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
 import com.eighteen.eighteenandroid.presentation.common.media3.MediaInfo
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerMediaItem
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 
-class MediaDetailViewHolder(
-    private val binding: ItemMediaDetailBinding
-) : RecyclerView.ViewHolder(binding.root), ViewPagerMediaItem {
+sealed class MediaDetailViewHolder(
+    binding: ViewBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
-    private var model: MediaDetailModel? = null
+    open fun onBind(mediaDetailModel: MediaDetailModel) {}
 
-    fun bind(mediaDetailModel: MediaDetailModel) {
-        model = mediaDetailModel
+    class Video(private val binding: ItemMediaDetailVideoBinding) :
+        MediaDetailViewHolder(binding), ViewPagerMediaItem {
+
+        private var videoModel: MediaDetailModel.Video? = null
+        override fun onBind(mediaDetailModel: MediaDetailModel) {
+            videoModel = mediaDetailModel as? MediaDetailModel.Video
+        }
+
+        override fun getMediaInfo() = MediaInfo(
+            id = videoModel?.id,
+            mediaUrl = videoModel?.videoUrl,
+            mediaView = binding.mvMedia
+        )
     }
 
-    override fun getMediaInfo(): MediaInfo {
-        val id = model?.id
-        val url = model?.let {
-            when (it) {
-                is MediaDetailModel.Video -> it.videoUrl
-                is MediaDetailModel.Image -> it.imageUrl
-            }
+    class Image(private val binding: ItemMediaDetailImageBinding) :
+        MediaDetailViewHolder(binding) {
+
+        override fun onBind(mediaDetailModel: MediaDetailModel) {
+            ImageLoader.get().loadUrl(imageView = binding.ivImage, url = mediaDetailModel.imageUrl)
         }
-        return MediaInfo(id, url, binding.mvMedia)
     }
 }

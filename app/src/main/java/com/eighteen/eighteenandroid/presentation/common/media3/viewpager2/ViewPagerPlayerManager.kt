@@ -20,7 +20,6 @@ class ViewPagerPlayerManager(
     private val viewPagerRecyclerView = viewPager2.getRecyclerViewOrNull()
 
     private val onPageChangedCallback = object : ViewPager2.OnPageChangeCallback() {
-        //TODO 동영상 -> 이미지, 이미지 ->동영상 테스트
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             findViewPagerMediaItem(position = position)?.let { mediaItem ->
@@ -42,6 +41,6 @@ class ViewPagerPlayerManager(
         super.onDestroy(owner)
     }
 
-    fun findViewPagerMediaItem(position: Int) =
+    private fun findViewPagerMediaItem(position: Int) =
         viewPagerRecyclerView?.findViewHolderForAdapterPosition(position) as? ViewPagerMediaItem
 }

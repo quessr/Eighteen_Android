@@ -3,37 +3,29 @@ package com.eighteen.eighteenandroid.presentation.mediadetail
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.databinding.FragmentMediaDetailDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.getParcelableListOrNull
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
-import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import kotlinx.coroutines.launch
 
 /**
  * add fragment로 열어야 하기 때문에 DialogFragment를 상속받음
  * JetPack navigation의 navigation graph에서 <dialog> 태그로 열어야 함
  */
-//TODO 열고 닫을 때 애니메이션 추가
+//TODO 열고 닫을 때 애니메이션 추가, 미디어 포지션 공유할지 기획 문의 필요
 class MediaDetailDialogFragment :
     BaseDialogFragment<FragmentMediaDetailDialogBinding>(FragmentMediaDetailDialogBinding::inflate) {
 
-    private val medias
-        get() = arguments?.getParcelableListOrNull(
-            ARGUMENT_MEDIAS_KEY,
-            MediaDetailModel::class.java
-        )?.take(MAXIMUM_DISPLAY_MEDIAS_COUNT) ?: emptyList()
-
-    private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
+    private val mediaDetailViewModel by activityViewModels<MediaDetailViewModel>()
 
     private val mediaPageChangeCallback = object : OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            mediaDetailViewModel.setSelectedIndex(index = position)
+            mediaDetailViewModel.selectedIndex = position
         }
     }
 
@@ -75,7 +67,6 @@ class MediaDetailDialogFragment :
         bind {
             with(vpMedias) {
                 adapter = MediaDetailPagerAdapter().apply {
-                    submitList(medias)
                     registerOnPageChangeCallback(mediaPageChangeCallback)
                 }
                 offscreenPageLimit = MAXIMUM_VIEWPAGER_OFF_SCREEN_PAGE_LIMIT.coerceAtMost(
@@ -88,8 +79,12 @@ class MediaDetailDialogFragment :
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mediaDetailViewModel.selectedIndexStateFlow.collect {
-                    binding.vpMedias.currentItem = it
+                mediaDetailViewModel.mediasStateFlow.collect {
+                    binding.vpMedias.run {
+                        (adapter as? MediaDetailPagerAdapter)?.submitList(it) {
+                            setCurrentItem(mediaDetailViewModel.selectedIndex, false)
+                        }
+                    }
                 }
             }
         }
@@ -105,6 +100,5 @@ class MediaDetailDialogFragment :
         //TODO 글로벌 변수화 고려
         private const val MAXIMUM_DISPLAY_MEDIAS_COUNT = 10
         private const val MAXIMUM_VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 10
-        const val ARGUMENT_MEDIAS_KEY = "argument_medias_key"
     }
 }

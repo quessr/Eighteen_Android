@@ -13,13 +13,13 @@ import androidx.media3.exoplayer.ExoPlayer
  * @param lifecycleOwner : destroy 시점에 player를 release 하기 위해 지정하는 lifecycle
  * @param context : ExoPlayer Builder에서 사용하는 context
  */
-//TODO pause resume 추가, 영상 주소 잘못됐거나 로딩 실패했을 경우 처리
+//TODO 영상 주소 잘못됐거나 로딩 실패했을 경우 처리, 사운드 처리
 open class PlayerManager(
     private val lifecycleOwner: LifecycleOwner,
     context: Context
 ) : DefaultLifecycleObserver {
 
-    open val player = ExoPlayer.Builder(context).build()
+    protected open val player = ExoPlayer.Builder(context).build()
     private val playingInfoMap = HashMap<String, PlayingInfo>()
     protected var targetMediaInfo: MediaInfo? = null
     //TODO 썸네일 뷰 visibility 조절
@@ -46,6 +46,14 @@ open class PlayerManager(
 
     private fun initLifecycle() {
         lifecycleOwner.lifecycle.addObserver(this)
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        player.play()
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        player.pause()
     }
 
     @CallSuper

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.R
@@ -17,6 +18,7 @@ class ProfileDetailFragment :
 
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
+    private lateinit var adapter: QuestionAnswerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -30,6 +32,20 @@ class ProfileDetailFragment :
     override fun initView() {
         initNavigation()
         setupViewPagerAndTabs()
+        setupQuestionAnswerList()
+    }
+
+    private fun setupQuestionAnswerList() {
+        val questionAnswerItems = listOf(
+            "1. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "2. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "3. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        )
+        adapter = QuestionAnswerAdapter(questionAnswerItems)
+        bind {
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            recyclerView.adapter = adapter
+        }
     }
 
     private fun setupViewPagerAndTabs() {
@@ -44,10 +60,10 @@ class ProfileDetailFragment :
         bind {
             viewPager.adapter = ViewPagerAdapter(items)
 
-            questionAnswer1.setQuestion("1. Lorem ipsum dolor sit amet?")
-            questionAnswer1.setAnswer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-            questionAnswer2.setQuestion("2. Lorem ipsum dolor sit amet?")
-            questionAnswer2.setAnswer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+//            questionAnswer1.setQuestion("1. Lorem ipsum dolor sit amet?")
+//            questionAnswer1.setAnswer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+//            questionAnswer2.setQuestion("2. Lorem ipsum dolor sit amet?")
+//            questionAnswer2.setAnswer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
         }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position -> }.attach()
     }

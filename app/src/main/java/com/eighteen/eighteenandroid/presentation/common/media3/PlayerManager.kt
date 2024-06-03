@@ -89,7 +89,7 @@ open class PlayerManager(
     }
 
     //기존에 있던 Player와 분리하고 id값이 있을 경우 재생정보 저장
-    private fun detachPlayer(mediaInfo: MediaInfo) {
+    protected fun detachPlayer(mediaInfo: MediaInfo) {
         mediaInfo.id?.let {
             playingInfoMap[mediaInfo.id] = PlayingInfo(positionMs = player.currentPosition)
         }

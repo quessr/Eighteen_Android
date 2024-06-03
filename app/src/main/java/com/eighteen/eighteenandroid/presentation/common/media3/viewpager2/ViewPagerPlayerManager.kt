@@ -26,7 +26,7 @@ class ViewPagerPlayerManager(
                 play(mediaItem.getMediaInfo())
             } ?: run {
                 targetMediaInfo?.let {
-                    pause()
+                    detachPlayer(it)
                 }
             }
         }

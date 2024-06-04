@@ -70,6 +70,5 @@ class ProfileDetailFragment :
      */
     private fun openMediaDetailDialogFragment() {
         showDialogFragment(MediaDetailDialogFragment())
-//        findNavController().navigate(R.id.action_fragmentProfileDetail_to_fragmentMediaDetail)
     }
 }

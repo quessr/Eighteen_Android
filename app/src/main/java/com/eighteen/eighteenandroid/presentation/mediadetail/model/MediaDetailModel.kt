@@ -1,10 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.mediadetail.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-sealed class MediaDetailModel : Parcelable {
+sealed class MediaDetailModel {
     abstract val id: String
     abstract val imageUrl: String?
 

@@ -66,6 +66,10 @@ open class PlayerManager(
     }
 
     open fun play(mediaInfo: MediaInfo) {
+        if (mediaInfo.id == targetMediaInfo?.id) {
+            player.play()
+            return
+        }
         targetMediaInfo?.takeIf { it != mediaInfo }?.let { targetMediaInfo ->
             detachPlayer(targetMediaInfo)
         }

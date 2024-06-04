@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.mediadetail
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -95,7 +96,10 @@ class MediaDetailDialogFragment :
                 mediaDetailViewModel.mediasStateFlow.collect {
                     binding.vpMedias.run {
                         (adapter as? MediaDetailPagerAdapter)?.submitList(it) {
-                            setCurrentItem(mediaDetailViewModel.selectedIndex, false)
+                            val lastPosition = mediaDetailViewModel.selectedIndex
+                            doOnLayout {
+                                setCurrentItem(lastPosition, false)
+                            }
                         }
                     }
                 }

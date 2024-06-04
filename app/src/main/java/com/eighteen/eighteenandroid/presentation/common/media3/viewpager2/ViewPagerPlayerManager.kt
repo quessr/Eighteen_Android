@@ -36,6 +36,13 @@ class ViewPagerPlayerManager(
         viewPager2.registerOnPageChangeCallback(onPageChangedCallback)
     }
 
+    fun playCurrent() {
+        val position = viewPager2.currentItem
+        findViewPagerMediaItem(position)?.let { mediaItem ->
+            play(mediaItem.getMediaInfo())
+        }
+    }
+
     override fun onDestroy(owner: LifecycleOwner) {
         viewPager2.unregisterOnPageChangeCallback(onPageChangedCallback)
         super.onDestroy(owner)

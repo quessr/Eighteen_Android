@@ -3,7 +3,7 @@ package com.eighteen.eighteenandroid.presentation.mediadetail
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -14,14 +14,16 @@ import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPa
 import kotlinx.coroutines.launch
 
 /**
- * add fragment로 열어야 하기 때문에 DialogFragment를 상속받음
- * JetPack navigation의 navigation graph에서 <dialog> 태그로 열어야 함
+ * 미디어와 선택된 position을 공유하기 위해 호출하는 Fragment와 MediaDetailViewModel 공유 필요
+ * Fragment.showDialogFragment로 직접 열어줘야 ViewModel공유 가능(parentFragment로 공유)
  */
-//TODO 열고 닫을 때 애니메이션 추가, 미디어 포지션 공유할지 기획 문의 필요
+//TODO 열고 닫을 때 애니메이션 추가, 미디어 포지션 공유할지 기획 문의 필요 + 기획에 따라 포지션 초기화 필요
 class MediaDetailDialogFragment :
     BaseDialogFragment<FragmentMediaDetailDialogBinding>(FragmentMediaDetailDialogBinding::inflate) {
 
-    private val mediaDetailViewModel by activityViewModels<MediaDetailViewModel>()
+    private val mediaDetailViewModel by viewModels<MediaDetailViewModel>(ownerProducer = {
+        parentFragment ?: this
+    })
 
     private val mediaPageChangeCallback = object : OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -54,10 +56,10 @@ class MediaDetailDialogFragment :
         initPlayerWrapper()
         bind {
             ivBtnBack.setOnClickListener {
-                //TODO 네비게이션 back
+                dismiss()
             }
             ivBtnOption.setOnClickListener {
-                //TODO 옵션메뉴
+                //TODO 옵션메뉴 추가(메인화면과 공유)
             }
         }
         bindMediaPager()

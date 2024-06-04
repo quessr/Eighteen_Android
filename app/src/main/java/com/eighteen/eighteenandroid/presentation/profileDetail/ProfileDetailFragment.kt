@@ -1,13 +1,14 @@
 package com.eighteen.eighteenandroid.presentation.profileDetail
 
 import android.os.Bundle
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import kotlinx.coroutines.flow.flowOf
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 class ProfileDetailFragment :
     BaseFragment<FragmentProfileDetailBinding>(FragmentProfileDetailBinding::inflate) {
 
-    private val mediaDetailViewModel by activityViewModels<MediaDetailViewModel>()
+    private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +69,7 @@ class ProfileDetailFragment :
      * 프로필 상세에서 사진/영상 클릭 시 미디어 상세화면으로 이동
      */
     private fun openMediaDetailDialogFragment() {
-        findNavController().navigate(R.id.action_fragmentProfileDetail_to_fragmentMediaDetail)
+        showDialogFragment(MediaDetailDialogFragment())
+//        findNavController().navigate(R.id.action_fragmentProfileDetail_to_fragmentMediaDetail)
     }
 }

@@ -8,7 +8,7 @@ import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
 
 /**
  * ViewPager2와 ExoPlayer를 연결시켜는 class
- * PlayerWrapper를 상속받음
+ * PlayerManager를 상속받음
  * @param viewPager2 : ViewPagerMediaItem을 구현한 ViewHolder가 포함된 ViewPager2
  */
 class ViewPagerPlayerManager(

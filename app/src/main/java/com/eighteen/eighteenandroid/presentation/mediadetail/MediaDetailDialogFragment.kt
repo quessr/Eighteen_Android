@@ -53,7 +53,7 @@ class MediaDetailDialogFragment :
     }
 
     override fun initView() {
-        initPlayerWrapper()
+        initPlayerManager()
         bind {
             ivBtnBack.setOnClickListener {
                 dismiss()
@@ -66,7 +66,7 @@ class MediaDetailDialogFragment :
         initObservers()
     }
 
-    private fun initPlayerWrapper() {
+    private fun initPlayerManager() {
         viewPagerPlayerManager = context?.let {
             ViewPagerPlayerManager(
                 viewPager2 = binding.vpMedias,

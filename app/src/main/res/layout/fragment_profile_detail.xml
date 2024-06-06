@@ -201,7 +201,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="안녕하세요! 음악 듣기와 책 읽기를 좋아해요. 여러분과 다양한 이야기를 나누며 즐거운 시간을 보내고 싶어요. 서로 응원하며 멋진 추억을 만들어 봐요!" />
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
         </LinearLayout>
 
         <ImageView

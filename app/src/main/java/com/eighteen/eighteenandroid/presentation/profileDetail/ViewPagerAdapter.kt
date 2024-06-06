@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.eighteen.eighteenandroid.R
 
 class ViewPagerAdapter(private val items: List<String>) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
@@ -27,6 +28,7 @@ class ViewPagerAdapter(private val items: List<String>) : RecyclerView.Adapter<V
         fun bind(url: String) {
             Glide.with(itemView.context)
                 .load(url)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView)
         }
     }

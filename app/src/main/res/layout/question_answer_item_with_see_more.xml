@@ -27,7 +27,7 @@
         android:src="@drawable/question_answer_more"/>
 
     <TextView
-        android:id="@+id/btn_see_more"
+        android:id="@+id/tv_see_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

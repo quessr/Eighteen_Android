@@ -12,11 +12,17 @@ class QuestionAnswerAdapter(private val items: List<Pair<String, String>>, priva
     companion object {
         private const val ITEM_TYPE_NORMAL = 0
         private const val ITEM_TYPE_LAST = 1
-        private const val ITEM_COUNT_THRESHOLD = 3
+        private const val ITEM_COUNT_THRESHOLD = 2
+    }
+
+    private var showAllItems: Boolean = false
+    private fun showAllItems() {
+        showAllItems = true
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (items.size >= ITEM_COUNT_THRESHOLD && position == items.size -1) ITEM_TYPE_LAST else ITEM_TYPE_NORMAL
+        return if (!showAllItems && items.size > ITEM_COUNT_THRESHOLD && position == ITEM_COUNT_THRESHOLD) ITEM_TYPE_LAST else ITEM_TYPE_NORMAL
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -25,7 +31,7 @@ class QuestionAnswerAdapter(private val items: List<Pair<String, String>>, priva
         return when (viewType) {
             ITEM_TYPE_LAST -> {
                 val binding = QuestionAnswerItemWithSeeMoreBinding.inflate(inflater, parent, false)
-                LastViewHolder(binding)
+                LastViewHolder(binding) { showAllItems() }
             }
 
             else -> {
@@ -36,19 +42,28 @@ class QuestionAnswerAdapter(private val items: List<Pair<String, String>>, priva
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = items[position]
-        when (holder) {
-            is NormalViewHolder -> {
-                holder.bind(item.first, item.second)
-            }
-
-            is LastViewHolder -> {
-                holder.bind(item.first, item.second)
-            }
+//        val item = items[position]
+//        when (holder) {
+//            is NormalViewHolder -> {
+//                holder.bind(item.first, item.second)
+//            }
+//
+//            is LastViewHolder -> {
+//                holder.bind(item.first, item.second)
+//            }
+//        }
+        if (getItemViewType(position) == ITEM_TYPE_LAST) {
+            val item = items[position - 1]
+            (holder as LastViewHolder).bind(item.first, item.second)
+        } else {
+            val item = items[position]
+            (holder as NormalViewHolder).bind(item.first, item.second)
         }
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int {
+        return if (showAllItems || items.size <= ITEM_COUNT_THRESHOLD) items.size else ITEM_COUNT_THRESHOLD + 1
+    }
 
     class NormalViewHolder(private val binding: QuestionAnswerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -58,14 +73,14 @@ class QuestionAnswerAdapter(private val items: List<Pair<String, String>>, priva
         }
     }
 
-    class LastViewHolder(private val binding: QuestionAnswerItemWithSeeMoreBinding) :
+    class LastViewHolder(private val binding: QuestionAnswerItemWithSeeMoreBinding,   private val onClick: () -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(question: String, answer: String) {
             binding.question.text = question
             binding.answer.text = answer
 
-            binding.btnSeeMore.setOnClickListener {
-
+            binding.tvSeeMore.setOnClickListener {
+                onClick()
             }
         }
     }

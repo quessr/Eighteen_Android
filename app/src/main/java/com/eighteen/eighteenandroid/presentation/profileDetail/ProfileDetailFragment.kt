@@ -21,8 +21,6 @@ class ProfileDetailFragment :
     BaseFragment<FragmentProfileDetailBinding>(FragmentProfileDetailBinding::inflate) {
 
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
-    private lateinit var viewPager: ViewPager2
-    private lateinit var tabLayout: TabLayout
     private lateinit var adapter: QuestionAnswerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

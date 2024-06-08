@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 //TODO 로그인, 회원가입 관련 api 연동
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class SignUpViewModel @Inject constructor() : ViewModel() {
 }

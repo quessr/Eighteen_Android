@@ -8,4 +8,9 @@
     <string name="main_today_teen">오늘의 Teen</string>
     <string name="tag_exercise">운동</string>
     <string name="tag_beauty">외모</string>
+
+    <!-- 로그인/회원가입 -->
+    <string name="sign_up_next">다음으로</string>
+    <string name="sign_up_pass">건너뛰기</string>
+    <string name="sign_up_start">시작하기</string>
 </resources>

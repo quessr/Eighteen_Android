@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.profileDetail
+package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.view.LayoutInflater
 import android.view.View
@@ -31,8 +31,8 @@ class QuestionAnswerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-
         holder.bind(item.first, item.second)
+
         // 마지막 아이템 뒤에만 "펼치기"/"접기" 버튼을 보이게 설정
         if (position == ITEM_COUNT_THRESHOLD - 1 && !showAllItems && items.size > ITEM_COUNT_THRESHOLD) {
             holder.showSeeMore(true)

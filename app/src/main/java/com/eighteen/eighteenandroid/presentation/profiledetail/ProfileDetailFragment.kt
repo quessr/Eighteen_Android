@@ -1,12 +1,10 @@
-package com.eighteen.eighteenandroid.presentation.profileDetail
+package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope

@@ -39,5 +39,15 @@
         android:id="@+id/fragmentSignUpEnterId"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterid.SignUpEnterIdFragment"
         android:label="fragment_sign_up_enter_id"
-        tools:layout="@layout/fragment_sign_up_enter_id" />
+        tools:layout="@layout/fragment_sign_up_enter_id">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname"
+            app:destination="@id/fragmentSignUpEnterNickname" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterNickname"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.SignUpEnterNickNameFragment"
+        android:label="fragment_sign_up_enter_nickname"
+        tools:layout="@layout/fragment_sign_up_enter_nickname" />
 </navigation>

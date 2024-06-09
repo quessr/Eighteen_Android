@@ -1,20 +1,19 @@
-package com.eighteen.eighteenandroid.presentation.auth.signup.enterid
+package com.eighteen.eighteenandroid.presentation.auth.signup.enternickname
 
 import androidx.navigation.fragment.findNavController
-import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterIdBinding
+import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterNicknameBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
-class SignUpEnterIdFragment :
-    BaseSignUpContentFragment<FragmentSignUpEnterIdBinding>(FragmentSignUpEnterIdBinding::inflate) {
+class SignUpEnterNickNameFragment :
+    BaseSignUpContentFragment<FragmentSignUpEnterNicknameBinding>(FragmentSignUpEnterNicknameBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
         findNavController().popBackStack()
     }
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController().navigate(R.id.action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname)
+        //TODO 구현
     }
-    override val progress: Int = 20
+    override val progress: Int = 40
     override val nextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = false,
@@ -23,9 +22,7 @@ class SignUpEnterIdFragment :
     )
 
     override fun initView() {
-        //fixme 네비게이션 테스트 코드 삭제
-        binding.tvTest.setOnClickListener {
-            onMoveNextPageAction.invoke()
-        }
+
     }
+
 }

@@ -19,7 +19,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
  * @property nextButtonModel : 하단 다음버튼 디자인 모델
  */
 //TODO back pressed handle 구현
-abstract class SignUpContentBaseFragment<VB : ViewBinding>(bindingFactory: (LayoutInflater) -> VB) :
+abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (LayoutInflater) -> VB) :
     BaseFragment<VB>(bindingFactory) {
 
     private val signUpViewModel by viewModels<SignUpViewModel>(ownerProducer = {

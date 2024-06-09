@@ -7,7 +7,17 @@
 
     <fragment
         android:id="@+id/fragmentSignUpEnterPhoneNumber"
-        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber.SignUpEnterPhoneNumberFragment"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber.SignUpEnterPhoneNumberSignUpContentFragment"
         android:label="fragment_sign_up_enter_phone_number"
-        tools:layout="@layout/fragment_sign_up_enter_phone_number" />
+        tools:layout="@layout/fragment_sign_up_enter_phone_number">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterPhoneNumber_to_fragmentSignUpEnterAuthCode"
+            app:destination="@id/fragmentSignUpEnterAuthCode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterAuthCode"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterauthcode.SignUpEnterAuthCodeFragment"
+        android:label="fragment_sign_up_enter_auth_code"
+        tools:layout="@layout/fragment_sign_up_enter_auth_code" />
 </navigation>

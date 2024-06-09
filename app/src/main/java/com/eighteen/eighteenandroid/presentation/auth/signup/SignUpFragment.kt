@@ -1,9 +1,14 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup.LayoutParams
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
@@ -16,6 +21,23 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate),
     SignUpContentContainer {
     private val signUpViewModel by viewModels<SignUpViewModel>()
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val navHostFragment =
+                childFragmentManager.findFragmentById(R.id.fcvSignUpContentContainer) as? NavHostFragment
+            val backStackEntryCount =
+                navHostFragment?.childFragmentManager?.backStackEntryCount ?: 0
+            if (backStackEntryCount <= 0) findNavController().popBackStack()
+            else signUpViewModel.actionToPrevPage()
+        }
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
+    }
 
     override fun initView() {
         bind {
@@ -57,7 +79,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     }
                 }
             }
-
         }
     }
 }

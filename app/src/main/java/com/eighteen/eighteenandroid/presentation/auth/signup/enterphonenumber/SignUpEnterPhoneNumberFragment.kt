@@ -23,7 +23,7 @@ class SignUpEnterPhoneNumberFragment :
     override val nextButtonModel: SignUpNextButtonModel = SignUpNextButtonModel(isVisible = false)
 
     override fun initView() {
-        //fixme 임시 테스트 코드 삭제
+        //fixme 네비게이션 테스트 코드 삭제
         binding.tvTest.setOnClickListener {
             onMoveNextPageAction.invoke()
         }

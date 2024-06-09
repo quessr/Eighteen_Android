@@ -29,5 +29,15 @@
         android:id="@+id/fragmentSignUpTermsOfService"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.termsofservice.SignUpTermsOfServiceFragment"
         android:label="fragment_sign_up_terms_of_service"
-        tools:layout="@layout/fragment_sign_up_terms_of_service" />
+        tools:layout="@layout/fragment_sign_up_terms_of_service">
+        <action
+            android:id="@+id/action_fragmentSignUpTermsOfService_to_fragmentSignUpEnterId"
+            app:destination="@id/fragmentSignUpEnterId" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterId"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterid.SignUpEnterIdFragment"
+        android:label="fragment_sign_up_enter_id"
+        tools:layout="@layout/fragment_sign_up_enter_id" />
 </navigation>

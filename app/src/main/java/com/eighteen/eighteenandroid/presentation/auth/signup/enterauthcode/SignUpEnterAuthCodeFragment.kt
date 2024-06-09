@@ -27,6 +27,10 @@ class SignUpEnterAuthCodeFragment :
     )
 
     override fun initView() {
+        //fixme 네비게이션 테스트 코드 삭제
+        binding.tvTest.setOnClickListener {
+            onMoveNextPageAction.invoke()
+        }
     }
 
 }

@@ -1,28 +1,24 @@
-package com.eighteen.eighteenandroid.presentation.auth.signup.termsofservice
+package com.eighteen.eighteenandroid.presentation.auth.signup.enterid
 
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.databinding.FragmentSignUpTermsOfServiceBinding
+import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterIdBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
-/**
- * 약관 동의 페이지
- */
-class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTermsOfServiceBinding>(
-    FragmentSignUpTermsOfServiceBinding::inflate
-) {
+class SignUpEnterIdFragment :
+    BaseSignUpContentFragment<FragmentSignUpEnterIdBinding>(FragmentSignUpEnterIdBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
         findNavController().popBackStack()
     }
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController().navigate(R.id.action_fragmentSignUpTermsOfService_to_fragmentSignUpEnterId)
+        //TODO 구현
     }
-    override val progress: Int? = null
+    override val progress: Int = 20
     override val nextButtonModel = SignUpNextButtonModel(
         isVisible = true,
-        isEnabled = true,
-        size = SignUpNextButtonModel.Size.FULL,
+        isEnabled = false,
+        size = SignUpNextButtonModel.Size.NORMAL,
         textRes = R.string.sign_up_next
     )
 

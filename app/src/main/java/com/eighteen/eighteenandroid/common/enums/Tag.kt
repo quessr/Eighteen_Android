@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.home.util.enums
+package com.eighteen.eighteenandroid.common.enums
 
 enum class Tag(val strValue: String) {
     ALL("전체"),

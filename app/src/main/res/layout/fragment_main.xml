@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
+    android:background="@color/background_color"
     tools:context=".presentation.home.MainFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -68,7 +68,7 @@
                 android:id="@+id/view_center_line_1"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/whiteGrey"
+                android:background="@color/white_grey"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintTop_toBottomOf="@id/vp_today_teen"/>
@@ -117,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_title"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textStyle="bold"
                         android:textSize="17dp"
                         app:layout_constraintTop_toTopOf="@id/img_about_teen"
@@ -129,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_detail"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textAlignment="textStart"
                         android:textSize="15dp"
                         android:layout_marginTop="5dp"
@@ -161,7 +161,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_tournament_title"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="@id/img_tournament"
                         app:layout_constraintBottom_toBottomOf="@id/img_tournament"
@@ -172,7 +172,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_tournament_detail"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textAlignment="textStart"
                         android:textSize="15dp"
                         android:layout_marginTop="5dp"
@@ -207,7 +207,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_chat_title"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="@id/img_chat"
                         app:layout_constraintBottom_toBottomOf="@id/img_chat"
@@ -218,7 +218,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_chat_detail"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textAlignment="textStart"
                         android:textSize="15dp"
                         android:layout_marginTop="5dp"
@@ -252,7 +252,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_my_teen_title"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="@id/img_my_teen"
                         app:layout_constraintBottom_toBottomOf="@id/img_my_teen"
@@ -263,7 +263,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about_teen_my_teen_detail"
-                        android:textColor="@color/mainColor"
+                        android:textColor="@color/main_color"
                         android:textAlignment="textStart"
                         android:textSize="15dp"
                         android:layout_marginTop="5dp"
@@ -278,7 +278,7 @@
                 android:id="@+id/view_center_line_2"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/whiteGrey"
+                android:background="@color/white_grey"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 app:layout_constraintTop_toBottomOf="@id/layout_about_teen"/>
@@ -302,7 +302,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tournament_in_progress_more"
-                android:textColor="@color/darkGrey"
+                android:textColor="@color/dark_grey"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintTop_toBottomOf="@+id/view_center_line_2"
@@ -340,10 +340,37 @@
                 android:id="@+id/view_center_line_3"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/whiteGrey"
+                android:background="@color/white_grey"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
                 app:layout_constraintTop_toBottomOf="@id/ns_tournament"/>
+
+            <TextView
+                android:id="@+id/tx_another_teen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:text="@string/main_another_teen"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@id/view_center_line_3"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_another_teen"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tx_another_teen"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

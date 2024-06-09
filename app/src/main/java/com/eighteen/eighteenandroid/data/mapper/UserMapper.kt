@@ -11,7 +11,8 @@ object UserMapper {
                 userId = userId,
                 userName = name,
                 userAge = age,
-                userSchoolName = userSchoolName
+                userSchoolName = userSchoolName,
+                tag = tag
             )
         }
 }

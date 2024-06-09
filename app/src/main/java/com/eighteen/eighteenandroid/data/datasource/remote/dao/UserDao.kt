@@ -5,5 +5,6 @@ data class UserDao(
     val userId: String,
     val name: String,
     val age: String,
-    val userSchoolName: String
+    val userSchoolName: String,
+    val tag: String
 )

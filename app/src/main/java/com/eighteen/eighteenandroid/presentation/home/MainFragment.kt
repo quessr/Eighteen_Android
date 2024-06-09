@@ -1,20 +1,24 @@
 package com.eighteen.eighteenandroid.presentation.home
 
-import android.view.ViewGroup.LayoutParams
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.eighteen.eighteenandroid.R
+import androidx.viewpager2.widget.ViewPager2
+import com.eighteen.eighteenandroid.presentation.common.createChip
+import com.eighteen.eighteenandroid.presentation.common.setTagStyle
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.TeenAdapter
-import com.eighteen.eighteenandroid.presentation.home.util.enums.Tag
+import com.eighteen.eighteenandroid.common.enums.Tag
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import com.eighteen.eighteenandroid.presentation.common.showReportDialog
 
 /**
  *
  * @file MainFragment.kt
  * @date 05/08/2024
+ * 메인화면
  */
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
@@ -28,35 +32,45 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun initViewPager() {
-        val adapter = TeenAdapter(requireContext())
+        requireContext().let { context ->
+            val todayTeenAdapter = TeenAdapter(context = context, showDialog = {showReportDialog()})
+            val anotherTeenAdapter = TeenAdapter(context = context, showDialog = {showReportDialog()})
 
-        bind {
-            vpTodayTeen.run {
-                clipToPadding = false
-                clipChildren = false
-                offscreenPageLimit = 1
-                setPadding(0, 0, 70, 0)
-                this.adapter = adapter
+            bind {
+                vpTodayTeen.run {
+                    clipToPadding = false
+                    clipChildren = false
+                    offscreenPageLimit = 1
+                    this.adapter = todayTeenAdapter
+                    registerOnPageChangeCallback(pageChangeCallback)
+                }
+                vpAnotherTeen.run {
+                    clipToPadding = false
+                    clipChildren = false
+                    offscreenPageLimit = 1
+                    setPadding(10, 10, 10, 10)
+                    this.adapter = anotherTeenAdapter
+                }
             }
-        }
 
-        viewModel.userData.observe(viewLifecycleOwner) { userList ->
-            adapter.updateView(userList)
+            viewModel.userData.observe(viewLifecycleOwner) { userList ->
+                val randomUserList = userList.shuffled() // 또 다른 틴 - 랜덤 유저 목록
+                todayTeenAdapter.updateView(userList)
+                anotherTeenAdapter.updateView(randomUserList)
+            }
         }
     }
 
     private fun initChipGroup() {
         for (tag in Tag.values()) {
-            val chip = createChip(tag.strValue)
+            val chip = createChip(requireContext(), tag.strValue)
             if (tag == Tag.ALL) { // 화면 최초 진입 시 전체 태그가 클릭된 상태여야함
-                setChipStyle(chip, isBlackBackground = true)
+                chip.setTagStyle(isBlackBackground = true)
                 selectedChip = chip
             }
             chip.setOnClickListener { _ ->
-                selectedChip?.let { it ->
-                    setChipStyle(it, isBlackBackground = false)
-                }
-                setChipStyle(chip, isBlackBackground = true)
+                selectedChip?.setTagStyle(isBlackBackground = false)
+                chip.setTagStyle(isBlackBackground = true)
                 selectedChip = chip
             }
             bind {
@@ -65,35 +79,24 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         }
     }
 
-    private fun createChip(tag: String): Chip {
-        val chip = layoutInflater.inflate(R.layout.tag_item, null) as Chip
-        chip.text = tag
-        chip.setChipBackgroundColorResource(android.R.color.white)
-
-        // TODO: 추후 태그 문자열의 길이가 길어지는 경우도 대응해야함
-        val params = LayoutParams(200, LayoutParams.WRAP_CONTENT)
-        chip.layoutParams = params
-
-        return chip
-    }
-
-    private fun setChipStyle(chip: Chip, isBlackBackground: Boolean) {
-        if (isBlackBackground) {
-            chip.setChipBackgroundColorResource(android.R.color.black)
-            chip.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    android.R.color.white
-                )
-            )
-        } else {
-            chip.setChipBackgroundColorResource(android.R.color.white)
-            chip.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    android.R.color.black
-                )
-            )
+    private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            bind {
+                if (position == 0) {
+                    vpTodayTeen.setPadding(0, 0, 70, 0)
+                } else {
+                    vpTodayTeen.setPadding(70, 0, 70, 0)
+                }
+            }
         }
     }
+
+    private fun showReportDialog() {
+        showReportDialog(
+            context = requireContext(),
+            showDialog = { showDialogFragment(ReportDialogFragment()) }
+        )
+    }
+
 }

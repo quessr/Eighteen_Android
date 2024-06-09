@@ -20,12 +20,14 @@ import com.eighteen.eighteenandroid.domain.model.User
  */
 class TeenAdapter(
     private val context: Context,
-    private var userList: MutableList<User> = mutableListOf(),
+    private val showDialog:() -> Unit
 ) : RecyclerView.Adapter<TeenAdapter.ViewHolder>() {
+
+    private var userList: MutableList<User> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = TodayTeenItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding = binding)
+        return ViewHolder(binding = binding, showDialog = showDialog)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,14 +39,21 @@ class TeenAdapter(
         return userList.size
     }
 
-    class ViewHolder(private val binding: TodayTeenItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    // 또 다른 틴 스크롤
+    class ViewHolder(
+        private val binding: TodayTeenItemBinding,
+        private val showDialog: () -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: User, context: Context) {
             binding.run {
-                Glide.with(context).load(item.userImage).into(binding.imgTodayTeen)
-                binding.txName.text = item.userName
-                binding.txAge.text = item.userAge
-                binding.txSchool.text = item.userSchoolName
+                Glide.with(context).load(item.userImage).into(imgTodayTeen)
+                txName.text = item.userName
+                txAge.text = item.userAge
+                txSchool.text = item.userSchoolName
                 initNavigation(binding.imgTodayTeen)
+                btnSetting.setOnClickListener {
+                    showDialog()
+                }
             }
         }
 

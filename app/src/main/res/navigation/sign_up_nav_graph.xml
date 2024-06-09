@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/signup_nav_graph"
+    android:id="@+id/sign_up_nav_graph"
     app:startDestination="@id/fragmentSignUpEnterPhoneNumber">
 
     <fragment
         android:id="@+id/fragmentSignUpEnterPhoneNumber"
-        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber.SignUpEnterPhoneNumberSignUpContentFragment"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber.SignUpEnterPhoneNumberFragment"
         android:label="fragment_sign_up_enter_phone_number"
         tools:layout="@layout/fragment_sign_up_enter_phone_number">
         <action
@@ -19,5 +19,15 @@
         android:id="@+id/fragmentSignUpEnterAuthCode"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterauthcode.SignUpEnterAuthCodeFragment"
         android:label="fragment_sign_up_enter_auth_code"
-        tools:layout="@layout/fragment_sign_up_enter_auth_code" />
+        tools:layout="@layout/fragment_sign_up_enter_auth_code">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService"
+            app:destination="@id/fragmentSignUpTermsOfService" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpTermsOfService"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.termsofservice.SignUpTermsOfServiceFragment"
+        android:label="fragment_sign_up_terms_of_service"
+        tools:layout="@layout/fragment_sign_up_terms_of_service" />
 </navigation>

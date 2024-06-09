@@ -7,11 +7,12 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Date
 import javax.inject.Inject
 
-//TODO 로그인, 회원가입 관련 api 연동
+//TODO 로그인, 회원가입 관련 api 연동, 입력받은 정보 저장
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel() {
+class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelContainerInterface {
     private val _actionEventLiveData = MutableLiveData<Event<SignUpAction>>()
     val actionEventLiveData: LiveData<Event<SignUpAction>> = _actionEventLiveData
 
@@ -21,6 +22,13 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     //진행도 표시 0일경우 비어있음, 100일경우 최대, null일 경우 gone
     private val _progressLiveData = MutableLiveData<Int?>(null)
     val progressLiveData: LiveData<Int?> = _progressLiveData
+
+    override var id: String = ""
+    override var nickName: String = ""
+    override var birth: Date = Date()
+    override var school: String = ""
+    override var medias: List<String> = emptyList()
+
     fun actionToPrevPage() {
         _actionEventLiveData.value = Event(SignUpAction.PREV)
     }

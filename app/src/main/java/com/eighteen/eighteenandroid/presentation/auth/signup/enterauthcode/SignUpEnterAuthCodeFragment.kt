@@ -6,13 +6,16 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterAuthCodeBindi
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
+/**
+ * 인증 코드 입력 페이지
+ */
 class SignUpEnterAuthCodeFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterAuthCodeBinding>(FragmentSignUpEnterAuthCodeBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
         findNavController().popBackStack()
     }
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController()
+        findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
     }
     override val progress: Int? = null
 
@@ -24,7 +27,6 @@ class SignUpEnterAuthCodeFragment :
     )
 
     override fun initView() {
-
     }
 
 }

@@ -22,9 +22,12 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (LayoutInflater) -> VB) :
     BaseFragment<VB>(bindingFactory) {
 
-    private val signUpViewModel by viewModels<SignUpViewModel>(ownerProducer = {
+    private val _signUpViewModel by viewModels<SignUpViewModel>(ownerProducer = {
         getContainerFragment() ?: this
     })
+
+    protected val signUpViewModelContainerInterface: SignUpViewModelContainerInterface
+        get() = _signUpViewModel
 
     abstract val onMovePrevPageAction: () -> Unit
     abstract val onMoveNextPageAction: () -> Unit
@@ -39,14 +42,14 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
     }
 
     private fun initButtonValue() {
-        signUpViewModel.run {
+        _signUpViewModel.run {
             setProgress(progress = progress)
             setNextButtonModel(nextButtonModel = nextButtonModel)
         }
     }
 
     private fun initActionObserver() {
-        signUpViewModel.actionEventLiveData.observe(viewLifecycleOwner) {
+        _signUpViewModel.actionEventLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { action ->
                 when (action) {
                     SignUpAction.NEXT -> onMoveNextPageAction.invoke()

@@ -9,8 +9,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 /**
  * 휴대폰 번호 입력 페이지
  */
-//TODO 상속받은 값 수정 필요 현재 임의의 값임
-class SignUpEnterPhoneNumberSignUpContentFragment :
+class SignUpEnterPhoneNumberFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterPhoneNumberBinding>(
         FragmentSignUpEnterPhoneNumberBinding::inflate
     ) {

@@ -1,5 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias
 
+import androidx.navigation.fragment.findNavController
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpAddMediasBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
@@ -7,7 +9,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 class SignUpAddMediasFragment :
     BaseSignUpContentFragment<FragmentSignUpAddMediasBinding>(FragmentSignUpAddMediasBinding::inflate) {
     override val onMoveNextPageAction: () -> Unit = {
-        //TODO 구현
+        findNavController().navigate(R.id.action_fragmentSignUpAddMedias_to_fragmentSignUpCompleted)
     }
     override val progress: Int = 100
     override val nextButtonModel = SignUpNextButtonModel(

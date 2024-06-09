@@ -45,10 +45,10 @@ class ProfileDetailFragment :
             "3. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             "4. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             "5. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "6. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "7. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//            "6. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//            "7. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         )
-        adapter = QuestionAnswerAdapter(questionAnswerItems, binding.recyclerView)
+        adapter = QuestionAnswerAdapter(questionAnswerItems)
         bind {
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             recyclerView.adapter = adapter

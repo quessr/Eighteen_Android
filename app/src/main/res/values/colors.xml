@@ -12,5 +12,7 @@
     <color name="subColor">#FFB000</color>
     <color name="lightGrey">#DBDBDB</color>
     <!-- TODO color 값 맞는지 확인 필요 -->
+    <color name="grey01">#9F9F9F</color>
+    <color name="grey02">#555555</color>
     <color name="grey03">#E6E6E6</color>
 </resources>

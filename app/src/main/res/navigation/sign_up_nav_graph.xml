@@ -59,5 +59,15 @@
         android:id="@+id/fragmentSignUpEnterBirth"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterbirth.SignUpEnterBirthFragment"
         android:label="fragment_sign_up_enter_birth"
-        tools:layout="@layout/fragment_sign_up_enter_birth" />
+        tools:layout="@layout/fragment_sign_up_enter_birth">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterBirth_to_fragmentSignUpEnterSchool"
+            app:destination="@id/fragmentSignUpEnterSchool" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterSchool"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterschool.SignUpEnterSchoolFragment"
+        android:label="fragment_sign_up_enter_school"
+        tools:layout="@layout/fragment_sign_up_enter_school" />
 </navigation>

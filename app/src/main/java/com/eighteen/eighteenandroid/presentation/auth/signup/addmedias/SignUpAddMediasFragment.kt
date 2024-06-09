@@ -1,25 +1,24 @@
-package com.eighteen.eighteenandroid.presentation.auth.signup.enterschool
+package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias
 
 import androidx.navigation.fragment.findNavController
-import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterSchoolBinding
+import com.eighteen.eighteenandroid.databinding.FragmentSignUpAddMediasBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
-class SignUpEnterSchoolFragment :
-    BaseSignUpContentFragment<FragmentSignUpEnterSchoolBinding>(FragmentSignUpEnterSchoolBinding::inflate) {
+class SignUpAddMediasFragment :
+    BaseSignUpContentFragment<FragmentSignUpAddMediasBinding>(FragmentSignUpAddMediasBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
         findNavController().popBackStack()
     }
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController().navigate(R.id.action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias)
+        //TODO 구현
     }
-    override val progress: Int = 80
+    override val progress: Int = 100
     override val nextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = true,
         size = SignUpNextButtonModel.Size.NORMAL,
-        buttonText = SignUpNextButtonModel.ButtonText.NEXT
+        buttonText = SignUpNextButtonModel.ButtonText.PASS
     )
 
     override fun initView() {

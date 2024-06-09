@@ -14,7 +14,7 @@ class SignUpEnterPhoneNumberFragment :
         FragmentSignUpEnterPhoneNumberBinding::inflate
     ) {
     override val onMovePrevPageAction: () -> Unit = {
-        findNavController().popBackStack()
+
     }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpEnterPhoneNumber_to_fragmentSignUpEnterAuthCode)

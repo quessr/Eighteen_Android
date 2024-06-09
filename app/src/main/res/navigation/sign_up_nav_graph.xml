@@ -69,5 +69,15 @@
         android:id="@+id/fragmentSignUpEnterSchool"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterschool.SignUpEnterSchoolFragment"
         android:label="fragment_sign_up_enter_school"
-        tools:layout="@layout/fragment_sign_up_enter_school" />
+        tools:layout="@layout/fragment_sign_up_enter_school">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias"
+            app:destination="@id/fragmentSignUpAddMedias" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpAddMedias"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.SignUpAddMediasFragment"
+        android:label="fragment_sign_up_add_medias"
+        tools:layout="@layout/fragment_sign_up_add_medias" />
 </navigation>

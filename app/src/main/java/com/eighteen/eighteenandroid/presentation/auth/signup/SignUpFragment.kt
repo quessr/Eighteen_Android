@@ -1,8 +1,10 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
 import android.view.ViewGroup.LayoutParams
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
@@ -44,6 +46,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     isVisible = it.isVisible
                     isEnabled = it.isEnabled
                     text = context?.getText(it.textRes)
+                    val textColor = ContextCompat.getColor(
+                        context,
+                        if (it.isEnabled) R.color.white else R.color.grey02
+                    )
+                    setTextColor(textColor)
                     layoutParams = layoutParams.apply {
                         width =
                             if (it.size == SignUpNextButtonModel.Size.FULL) LayoutParams.MATCH_PARENT else LayoutParams.WRAP_CONTENT

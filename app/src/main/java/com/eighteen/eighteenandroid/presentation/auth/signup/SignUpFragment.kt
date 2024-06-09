@@ -1,9 +1,11 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import android.view.ViewGroup.LayoutParams
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
 /**
  * 회원가입 / 로그인 기능의 진입점
@@ -42,7 +44,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     isVisible = it.isVisible
                     isEnabled = it.isEnabled
                     text = context?.getText(it.textRes)
-                    //TODO size 조절
+                    layoutParams = layoutParams.apply {
+                        width =
+                            if (it.size == SignUpNextButtonModel.Size.FULL) LayoutParams.MATCH_PARENT else LayoutParams.WRAP_CONTENT
+                    }
                 }
             }
 

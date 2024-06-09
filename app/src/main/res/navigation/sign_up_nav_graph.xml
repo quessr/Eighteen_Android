@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentSignUpEnterPhoneNumber"
-        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.SignUpEnterPhoneNumberFragment"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber.SignUpEnterPhoneNumberFragment"
         android:label="fragment_sign_up_enter_phone_number"
         tools:layout="@layout/fragment_sign_up_enter_phone_number" />
 </navigation>

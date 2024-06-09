@@ -24,8 +24,7 @@ abstract class SignUpContentBaseFragment<VB : ViewBinding>(bindingFactory: (Layo
 
     private val signUpViewModel by viewModels<SignUpViewModel>(ownerProducer = {
         getContainerFragment() ?: this
-    }
-    )
+    })
 
     abstract val onMovePrevPageAction: () -> Unit
     abstract val onMoveNextPageAction: () -> Unit

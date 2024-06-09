@@ -23,7 +23,7 @@ class SignUpEnterAuthCodeFragment :
         isVisible = true,
         isEnabled = false,
         size = SignUpNextButtonModel.Size.NORMAL,
-        textRes = R.string.sign_up_next
+        buttonText = SignUpNextButtonModel.ButtonText.NEXT
     )
 
     override fun initView() {

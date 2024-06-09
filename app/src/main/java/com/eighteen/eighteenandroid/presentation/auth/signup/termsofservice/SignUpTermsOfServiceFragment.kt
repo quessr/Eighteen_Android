@@ -23,7 +23,7 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
         isVisible = true,
         isEnabled = true,
         size = SignUpNextButtonModel.Size.FULL,
-        textRes = R.string.sign_up_next
+        buttonText = SignUpNextButtonModel.ButtonText.NEXT
     )
 
     override fun initView() {

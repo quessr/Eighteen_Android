@@ -1,7 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterid
 
 import androidx.navigation.fragment.findNavController
-import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterIdBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
@@ -19,7 +18,7 @@ class SignUpEnterIdFragment :
         isVisible = true,
         isEnabled = false,
         size = SignUpNextButtonModel.Size.NORMAL,
-        textRes = R.string.sign_up_next
+        buttonText = SignUpNextButtonModel.ButtonText.NEXT
     )
 
     override fun initView() {

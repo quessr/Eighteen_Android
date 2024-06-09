@@ -67,7 +67,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 with(tvBtnNext) {
                     isVisible = it.isVisible
                     isEnabled = it.isEnabled
-                    text = context?.getText(it.textRes)
+                    text = context?.getText(it.buttonText.strRes)
                     val textColor = ContextCompat.getColor(
                         context,
                         if (it.isEnabled) R.color.white else R.color.grey02

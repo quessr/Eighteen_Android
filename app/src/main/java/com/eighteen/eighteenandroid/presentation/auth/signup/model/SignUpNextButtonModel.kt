@@ -7,10 +7,16 @@ data class SignUpNextButtonModel(
     val isVisible: Boolean = false,
     val isEnabled: Boolean = false,
     val size: Size = Size.NORMAL,
-    @StringRes val textRes: Int = R.string.sign_up_next
+    val buttonText: ButtonText = ButtonText.NEXT
 ) {
     enum class Size {
         FULL,
         NORMAL
+    }
+
+    enum class ButtonText(@StringRes val strRes: Int) {
+        NEXT(R.string.sign_up_next),
+        PASS(R.string.sign_up_pass),
+        START(R.string.sign_up_start)
     }
 }

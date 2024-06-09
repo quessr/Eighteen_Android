@@ -1,15 +1,11 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias
 
-import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpAddMediasBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
 class SignUpAddMediasFragment :
     BaseSignUpContentFragment<FragmentSignUpAddMediasBinding>(FragmentSignUpAddMediasBinding::inflate) {
-    override val onMovePrevPageAction: () -> Unit = {
-        findNavController().popBackStack()
-    }
     override val onMoveNextPageAction: () -> Unit = {
         //TODO 구현
     }

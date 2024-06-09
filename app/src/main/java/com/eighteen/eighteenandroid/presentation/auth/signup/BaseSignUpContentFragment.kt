@@ -6,6 +6,7 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
@@ -29,10 +30,12 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
     protected val signUpViewModelContainerInterface: SignUpViewModelContainerInterface
         get() = _signUpViewModel
 
-    abstract val onMovePrevPageAction: () -> Unit
-    abstract val onMoveNextPageAction: () -> Unit
-    abstract val progress: Int?
-    abstract val nextButtonModel: SignUpNextButtonModel
+    protected open val onMovePrevPageAction: () -> Unit = {
+        findNavController().popBackStack()
+    }
+    protected abstract val onMoveNextPageAction: () -> Unit
+    protected abstract val progress: Int?
+    protected abstract val nextButtonModel: SignUpNextButtonModel
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -11,9 +11,6 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
  */
 class SignUpEnterAuthCodeFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterAuthCodeBinding>(FragmentSignUpEnterAuthCodeBinding::inflate) {
-    override val onMovePrevPageAction: () -> Unit = {
-        findNavController().popBackStack()
-    }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
     }

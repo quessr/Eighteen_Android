@@ -8,9 +8,6 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 
 class SignUpEnterBirthFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterBirthBinding>(FragmentSignUpEnterBirthBinding::inflate) {
-    override val onMovePrevPageAction: () -> Unit = {
-        findNavController().popBackStack()
-    }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpEnterBirth_to_fragmentSignUpEnterSchool)
     }

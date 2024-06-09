@@ -49,5 +49,15 @@
         android:id="@+id/fragmentSignUpEnterNickname"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.SignUpEnterNickNameFragment"
         android:label="fragment_sign_up_enter_nickname"
-        tools:layout="@layout/fragment_sign_up_enter_nickname" />
+        tools:layout="@layout/fragment_sign_up_enter_nickname">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterNickname_to_fragmentSignUpEnterBirth"
+            app:destination="@id/fragmentSignUpEnterBirth" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterBirth"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterbirth.SignUpEnterBirthFragment"
+        android:label="fragment_sign_up_enter_birth"
+        tools:layout="@layout/fragment_sign_up_enter_birth" />
 </navigation>

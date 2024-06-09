@@ -36,9 +36,9 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         initActionObserver()
         initButtonValue()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun initButtonValue() {

@@ -46,13 +46,6 @@ class MediaDetailDialogFragment :
         dialog?.window?.run {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            //TODO 블러처리 리소스를 많이 잡아먹는 작업임 + 안드 12이상부터 작동(논의 필요)
-//            addFlags(FLAG_BLUR_BEHIND)
-//            attributes= attributes.apply{
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                    blurBehindRadius = 20
-//                }
-//            }
         }
     }
 

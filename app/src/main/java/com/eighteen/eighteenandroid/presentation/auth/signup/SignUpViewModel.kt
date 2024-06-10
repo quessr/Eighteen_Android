@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 //TODO 로그인, 회원가입 관련 api 연동, 입력받은 정보 저장 뒤로가기 시 데이터 지워진 상태로 나옴
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelContainerInterface {
+class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelContentInterface {
     private val _actionEventLiveData = MutableLiveData<Event<SignUpAction>>()
     val actionEventLiveData: LiveData<Event<SignUpAction>> = _actionEventLiveData
 

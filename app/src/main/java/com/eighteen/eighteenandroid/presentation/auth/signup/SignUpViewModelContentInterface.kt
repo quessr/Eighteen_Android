@@ -5,7 +5,7 @@ import java.util.Date
 /**
  * 회원가입 과정 중 받는 정보들을 저장하기 위한 interface
  */
-interface SignUpViewModelContainerInterface {
+interface SignUpViewModelContentInterface {
     var id: String
     var nickName: String
     var birth: Date

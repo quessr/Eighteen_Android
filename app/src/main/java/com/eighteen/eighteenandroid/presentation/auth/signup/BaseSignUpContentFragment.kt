@@ -27,7 +27,7 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
         getContainerFragment() ?: this
     })
 
-    protected val signUpViewModelContainerInterface: SignUpViewModelContainerInterface
+    protected val signUpViewModelContentInterface: SignUpViewModelContentInterface
         get() = _signUpViewModel
 
     protected open val onMovePrevPageAction: () -> Unit = {

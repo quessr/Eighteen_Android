@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  * 미디어와 선택된 position을 공유하기 위해 호출하는 Fragment와 MediaDetailViewModel 공유 필요
  * Fragment.showDialogFragment로 직접 열어줘야 ViewModel공유 가능(parentFragment로 공유)
  */
-//TODO 열고 닫을 때 애니메이션 추가, 미디어 포지션 공유할지 기획 문의 필요 + 기획에 따라 포지션 초기화 필요
+//TODO 열고 닫을 때 애니메이션 추가
 class MediaDetailDialogFragment :
     BaseDialogFragment<FragmentMediaDetailDialogBinding>(FragmentMediaDetailDialogBinding::inflate) {
 

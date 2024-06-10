@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_rounded_dialog">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="320dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tx_report_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/report_content_title"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_dismiss_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="#00ff0000"
+            android:src="@drawable/ic_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/tx_report_title">
+
+            <RadioButton
+                android:id="@+id/radio_btn_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/main_color"
+                android:text="@string/report_content_reason_1"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/main_color"
+                android:text="@string/report_content_reason_2"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_third"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/main_color"
+                android:text="@string/report_content_reason_3"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_fourth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/main_color"
+                android:text="@string/report_content_reason_4"
+                android:textColor="@color/black" />
+        </RadioGroup>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_edt_container"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_about_teen"
+            app:layout_constraintTop_toBottomOf="@id/radio_group">
+
+            <EditText
+                android:id="@+id/edt_report_reason"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@null"
+                android:gravity="start"
+                android:textSize="14dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox_block_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:buttonTint="@color/main_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_edt_container" />
+
+        <TextView
+            android:id="@+id/tx_block_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_content_block_profile"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/checkbox_block_profile"
+            app:layout_constraintStart_toEndOf="@id/checkbox_block_profile"
+            app:layout_constraintTop_toTopOf="@id/checkbox_block_profile" />
+
+        <TextView
+            android:id="@+id/tx_report_caution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_content_caution"
+            android:textColor="@color/grey_01"
+            app:layout_constraintEnd_toEndOf="@id/view_edt_container"
+            app:layout_constraintStart_toStartOf="@id/view_edt_container"
+            app:layout_constraintTop_toBottomOf="@id/checkbox_block_profile" />
+
+        <Button
+            android:id="@+id/btn_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_rounded_btn"
+            android:text="@string/report_title"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tx_report_caution" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

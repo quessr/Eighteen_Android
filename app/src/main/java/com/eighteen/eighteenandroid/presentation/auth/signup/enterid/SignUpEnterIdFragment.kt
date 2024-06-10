@@ -12,7 +12,7 @@ class SignUpEnterIdFragment :
         findNavController().navigate(R.id.action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname)
     }
     override val progress: Int = 20
-    override val nextButtonModel = SignUpNextButtonModel(
+    override val signUpNextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = false,
         size = SignUpNextButtonModel.Size.NORMAL,

@@ -15,7 +15,7 @@ class SignUpEnterSchoolFragment :
         findNavController().navigate(R.id.action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias)
     }
     override val progress: Int = 80
-    override val nextButtonModel = SignUpNextButtonModel(
+    override val signUpNextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = true,
         size = SignUpNextButtonModel.Size.NORMAL,

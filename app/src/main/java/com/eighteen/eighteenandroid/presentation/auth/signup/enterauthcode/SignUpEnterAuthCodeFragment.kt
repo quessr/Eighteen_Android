@@ -16,7 +16,7 @@ class SignUpEnterAuthCodeFragment :
     }
     override val progress: Int? = null
 
-    override val nextButtonModel: SignUpNextButtonModel = SignUpNextButtonModel(
+    override val signUpNextButtonModel: SignUpNextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = false,
         size = SignUpNextButtonModel.Size.NORMAL,

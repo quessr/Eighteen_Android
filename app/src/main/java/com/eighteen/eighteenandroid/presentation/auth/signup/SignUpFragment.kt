@@ -15,7 +15,7 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 
 /**
- * 회원가입 / 로그인 기능의 진입점
+ * 회원가입 기능의 진입점
  * 내부의 ChildFragment에 대해 navigation graph 소유
  */
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate),

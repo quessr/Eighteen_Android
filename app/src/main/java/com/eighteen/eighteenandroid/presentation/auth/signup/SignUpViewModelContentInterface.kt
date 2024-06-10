@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import java.util.Date
 
 /**
@@ -11,4 +12,5 @@ interface SignUpViewModelContentInterface {
     var birth: Date
     var school: String
     var medias: List<String>
+    fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)
 }

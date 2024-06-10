@@ -37,8 +37,8 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
         _actionEventLiveData.value = Event(SignUpAction.NEXT)
     }
 
-    fun setNextButtonModel(nextButtonModel: SignUpNextButtonModel) {
-        _nextButtonLiveData.value = nextButtonModel
+    override fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel) {
+        _nextButtonLiveData.value = signUpNextButtonModel
     }
 
     /**

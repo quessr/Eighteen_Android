@@ -10,7 +10,7 @@ class SignUpCompletedFragment :
         //TODO 회원가입 api 호출, 성공 시 회원가입 이전 화면으로 되돌아감
     }
     override val progress: Int? = null
-    override val nextButtonModel = SignUpNextButtonModel(
+    override val signUpNextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = true,
         size = SignUpNextButtonModel.Size.FULL,

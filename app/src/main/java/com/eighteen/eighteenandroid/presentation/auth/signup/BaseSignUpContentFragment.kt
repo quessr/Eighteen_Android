@@ -17,25 +17,25 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
  * @property onMoveNextPageAction : 다음 페이지로 이동 버튼 누를 때 실행하는 action
  * @property onMovePrevPageAction : 이전 페이지 혹은 백버튼 누를 때 실행하는 action
  * @property progress : progress bar 진행도 (0~100), null일 경우 gone
- * @property nextButtonModel : 하단 다음버튼 디자인 모델
+ * @property signUpNextButtonModel : 하단 다음버튼 디자인 모델
  */
 //TODO back pressed handle 구현
 abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (LayoutInflater) -> VB) :
     BaseFragment<VB>(bindingFactory) {
 
-    private val _signUpViewModel by viewModels<SignUpViewModel>(ownerProducer = {
+    private val signUpViewModel by viewModels<SignUpViewModel>(ownerProducer = {
         getContainerFragment() ?: this
     })
 
     protected val signUpViewModelContentInterface: SignUpViewModelContentInterface
-        get() = _signUpViewModel
+        get() = signUpViewModel
 
     protected open val onMovePrevPageAction: () -> Unit = {
         findNavController().popBackStack()
     }
     protected abstract val onMoveNextPageAction: () -> Unit
     protected abstract val progress: Int?
-    protected abstract val nextButtonModel: SignUpNextButtonModel
+    protected abstract val signUpNextButtonModel: SignUpNextButtonModel
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,14 +45,14 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
     }
 
     private fun initButtonValue() {
-        _signUpViewModel.run {
+        signUpViewModel.run {
             setProgress(progress = progress)
-            setNextButtonModel(nextButtonModel = nextButtonModel)
+            setNextButtonModel(signUpNextButtonModel = signUpNextButtonModel)
         }
     }
 
     private fun initActionObserver() {
-        _signUpViewModel.actionEventLiveData.observe(viewLifecycleOwner) {
+        signUpViewModel.actionEventLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { action ->
                 when (action) {
                     SignUpAction.NEXT -> onMoveNextPageAction.invoke()

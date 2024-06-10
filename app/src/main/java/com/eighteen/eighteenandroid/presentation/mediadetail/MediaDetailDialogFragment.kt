@@ -12,6 +12,9 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.databinding.FragmentMediaDetailDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.common.showReportDialog
+import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import kotlinx.coroutines.launch
 
 /**
@@ -56,11 +59,15 @@ class MediaDetailDialogFragment :
     override fun initView() {
         initPlayerManager()
         bind {
-            ivBtnBack.setOnClickListener {
+            ivBtnClose.setOnClickListener {
                 dismiss()
             }
             ivBtnOption.setOnClickListener {
-                //TODO 옵션메뉴 추가(메인화면과 공유)
+                context?.let {
+                    showReportDialog(it) {
+                        showDialogFragment(ReportDialogFragment())
+                    }
+                }
             }
         }
         bindMediaPager()

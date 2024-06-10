@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-    private const val BASE_URL = "https://jsonplaceholder.typicode.com"
+    private const val BASE_URL = "https://9382364e-69d5-447e-a389-c48c4801beb4.mock.pstmn.io/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level =

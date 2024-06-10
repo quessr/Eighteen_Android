@@ -1,9 +1,12 @@
 package com.eighteen.eighteenandroid.presentation
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
@@ -20,6 +23,8 @@ abstract class BaseDialogFragment<T : ViewBinding>(private val bindingFactory: (
         savedInstanceState: Bundle?
     ): View? {
         _binding = bindingFactory(inflater)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return binding.root
     }
 

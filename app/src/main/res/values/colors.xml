@@ -7,8 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="backgroundColor">#F8F8F8</color>
-    <color name="mainColor">#0041FF</color>
-    <color name="subColor">#FFB000</color>
-    <color name="lightGrey">#DBDBDB</color>
+    <color name="background_color">#F8F8F8</color>
+    <color name="main_color">#5258EE</color>
+    <color name="sub_color">#FFB000</color>
+    <color name="light_grey">#DBDBDB</color>
+    <color name="white_grey">#F2F2F2</color>
+    <color name="dark_grey">#717171</color>
+    <color name="grey_01">#9F9F9F</color>
+    <color name="grey_02">#555555</color>
+    <color name="grey_03">#E6E6E6</color>
 </resources>

@@ -1,8 +1,26 @@
 package com.eighteen.eighteenandroid.presentation.common
 
+import android.content.Context
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import com.eighteen.eighteenandroid.R
+import com.eighteen.eighteenandroid.databinding.DialogReportSelectBinding
 
 fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = null) {
     dialogFragment.show(childFragmentManager, tag)
+}
+
+// 신고하기 & 차단하기 다이얼로그
+fun showReportDialog(context: Context, showDialog: () -> Unit) {
+    val reportSelectBinding = DialogReportSelectBinding.inflate(LayoutInflater.from(context))
+    val customAlertDialog = AlertDialog.Builder(context, R.style.CustomDialog)
+        .setView(reportSelectBinding.root)
+        .create()
+    customAlertDialog.show()
+    reportSelectBinding.txReport.setOnClickListener {
+        showDialog()
+        customAlertDialog.dismiss()
+    }
 }

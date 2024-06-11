@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -77,8 +78,8 @@ class QuestionAnswerAdapter(
         }
 
         fun showSeeMore(show: Boolean) {
-            binding.ivSeeMore.visibility = if (show) View.VISIBLE else View.GONE
-            binding.tvSeeMore.visibility = if (show) View.VISIBLE else View.GONE
+            binding.ivSeeMore.isVisible = show
+            binding.tvSeeMore.isVisible = show
         }
 
         fun setSeeMoreText(text: String) {

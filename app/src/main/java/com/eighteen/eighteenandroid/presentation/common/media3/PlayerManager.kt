@@ -2,11 +2,9 @@ package com.eighteen.eighteenandroid.presentation.common.media3
 
 import android.content.Context
 import androidx.annotation.CallSuper
-import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 /**
@@ -14,7 +12,7 @@ import androidx.media3.exoplayer.ExoPlayer
  * @param lifecycleOwner : destroy 시점에 player를 release 하기 위해 지정하는 lifecycle
  * @param context : ExoPlayer Builder에서 사용하는 context
  */
-//TODO 영상 주소 잘못됐거나 로딩 실패했을 경우 처리, 사운드 처리
+//TODO 영상 주소 잘못됐거나 로딩 실패했을 경우 처리, 사운드 처리, 재생 정지 로딩 처리, 홈버튼 눌렀을 때 이전상태 반영(play pause)
 open class PlayerManager(
     private val lifecycleOwner: LifecycleOwner,
     context: Context
@@ -24,32 +22,12 @@ open class PlayerManager(
     private val playingInfoMap = HashMap<String, PlayingInfo>()
     protected var targetMediaInfo: MediaInfo? = null
 
-    private val playerListener = object : Player.Listener {
-        override fun onPlaybackStateChanged(playbackState: Int) {
-            when (playbackState) {
-                Player.STATE_READY -> {
-                    targetMediaInfo?.mediaView?.thumbnailView?.isVisible = false
-                }
-                Player.STATE_BUFFERING -> {
-                    //TODO 버퍼링 중 로딩아이콘 논의 필요
-                }
-                Player.STATE_ENDED -> {}
-                Player.STATE_IDLE -> {}
-            }
-        }
-    }
-
     init {
         initLifecycle()
-        initPlayer()
     }
 
     private fun initLifecycle() {
         lifecycleOwner.lifecycle.addObserver(this)
-    }
-
-    private fun initPlayer() {
-        player.addListener(playerListener)
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -114,7 +92,6 @@ open class PlayerManager(
 
     private fun release() {
         targetMediaInfo = null
-        player.removeListener(playerListener)
         player.release()
     }
 

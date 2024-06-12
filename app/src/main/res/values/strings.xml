@@ -13,4 +13,29 @@
     <string name="sign_up_next">다음으로</string>
     <string name="sign_up_pass">건너뛰기</string>
     <string name="sign_up_start">시작하기</string>
+
+    <string name="main_about_teen">About A-Teen</string>
+    <string name="about_teen_title">Teen</string>
+    <string name="about_teen_detail">친구들의 프로필을\n투표해보세요!</string>
+    <string name="about_teen_tournament_title">토너먼트</string>
+    <string name="about_teen_tournament_detail">투표 결과를\n한 눈에 볼 수 있어요!</string>
+    <string name="about_teen_chat_title">채팅</string>
+    <string name="about_teen_chat_detail">채팅을 통해 친구들과\n소통해보세요!</string>
+    <string name="about_teen_my_teen_title">나만의 틴</string>
+    <string name="about_teen_my_teen_detail">나만의 프로필을\n등록해보세요!</string>
+    <string name="main_tournament_in_progress">진행 중인 토너먼트</string>
+    <string name="tournament_in_progress_more">더보기</string>
+    <string name="main_another_teen">또 다른 Teen 살펴보기</string>
+    <string name="report_title">신고하기</string>
+    <string name="block_title">차단하기</string>
+    <string name="report_content_title">신고 사유</string>
+    <string name="report_content_reason_1">폭력성 또는 선정적인 프로필</string>
+    <string name="report_content_reason_2">광고 게시물 또는 프로필</string>
+    <string name="report_content_reason_3">타인을 사칭한 프로필</string>
+    <string name="report_content_reason_4">기타</string>
+    <string name="report_content_block_profile">해당 프로필 다시는 보지 않기</string>
+    <string name="report_content_caution">신고는 반대 의견을 표시하는 기능이 아닙니다.</string>
+    <string name="report_completed_title">신고가 완료되었습니다.</string>
+    <string name="report_completed_content">해당 프로필은\n더이상 표시되지 않아요</string>
+    <string name="report_completed_button_title">알겠어요!</string>
 </resources>

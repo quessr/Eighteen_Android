@@ -14,6 +14,7 @@ import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
+import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
@@ -47,11 +48,19 @@ class ProfileDetailFragment :
 
         profileDetailViewModel.setItems(
             listOf(
-                "1. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "2. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "3. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "4. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "5. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                ProfileDetailModel.Qna(question = "1. Lorem ipsum dolor sit amet?", answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+
+//                "1. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//                "2. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//                "3. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//                "4. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//                "5. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 //            "6. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 //            "7. Lorem ipsum dolor sit amet?" to "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             )
@@ -60,16 +69,25 @@ class ProfileDetailFragment :
     }
 
     private fun setupViewPagerAndTabs() {
-        val items = listOf(
-            "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-            "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
-            "https://cdn.hankooki.com/news/photo/202309/107376_146623_1695826504.jpg",
-            "https://cdn.dailycc.net/news/photo/202312/766253_670987_1515.png",
-            "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
+        val profileImages = ProfileDetailModel.ProfileImages(
+            imageUrl = listOf(
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
+                "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
+                "https://cdn.hankooki.com/news/photo/202309/107376_146623_1695826504.jpg",
+                "https://cdn.dailycc.net/news/photo/202312/766253_670987_1515.png",
+                "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
+            )
         )
+//        val items = listOf(
+//            "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
+//            "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
+//            "https://cdn.hankooki.com/news/photo/202309/107376_146623_1695826504.jpg",
+//            "https://cdn.dailycc.net/news/photo/202312/766253_670987_1515.png",
+//            "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
+//        )
 
         bind {
-            viewPager.adapter = ViewPagerAdapter(items)
+            viewPager.adapter = ViewPagerAdapter(profileImages.imageUrl)
         }
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position -> }.attach()

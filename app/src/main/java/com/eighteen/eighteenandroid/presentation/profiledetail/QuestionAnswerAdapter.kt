@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.databinding.QuestionAnswerItemBinding
+import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.launch
 
 class QuestionAnswerAdapter(
@@ -16,7 +17,7 @@ class QuestionAnswerAdapter(
 ) :
     RecyclerView.Adapter<QuestionAnswerAdapter.ViewHolder>() {
 
-    private var items: List<Pair<String, String>> = emptyList()
+    private var items: List<ProfileDetailModel.Qna> = emptyList()
 
 
     init {
@@ -47,7 +48,7 @@ class QuestionAnswerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.bind(item.first, item.second)
+        holder.bind(item.question, item.answer)
 
         val showAllItems = viewModel.showAllItems.value
         val itemCountThreshold = ProfileDetailViewModel.ITEM_COUNT_THRESHOLD

@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import android.widget.RemoteViews.RemoteCollectionItems
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
+import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class ProfileDetailViewModel : ViewModel() {
-    private val _items = MutableStateFlow<List<Pair<String, String>>>(emptyList())
-    val items: StateFlow<List<Pair<String, String>>> get() = _items
+    private val _items = MutableStateFlow<List<ProfileDetailModel>>(emptyList())
+    val items: StateFlow<List<ProfileDetailModel>> get() = _items
 
     private val _showAllItems = MutableStateFlow(false)
     val showAllItems: StateFlow<Boolean> get() = _showAllItems
@@ -19,7 +20,7 @@ class ProfileDetailViewModel : ViewModel() {
         const val ITEM_COUNT_THRESHOLD = 2
     }
 
-    fun setItems(newItems: List<Pair<String, String>>) {
+    fun setItems(newItems: List<ProfileDetailModel.Qna>) {
         _items.value = newItems
     }
 

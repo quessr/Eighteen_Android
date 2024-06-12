@@ -44,6 +44,7 @@ open class PlayerManager(
     }
 
     open fun play(mediaInfo: MediaInfo) {
+        player.repeatMode = mediaInfo.repeatMode
         if (mediaInfo.id == targetMediaInfo?.id) {
             player.play()
             return

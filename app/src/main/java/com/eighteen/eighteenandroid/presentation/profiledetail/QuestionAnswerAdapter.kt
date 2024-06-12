@@ -23,7 +23,7 @@ class QuestionAnswerAdapter(
     init {
         lifecycleOwner.lifecycleScope.launch {
             viewModel.items.collect { newItems ->
-                items = newItems
+                items = newItems.filterIsInstance<ProfileDetailModel.Qna>()
                 notifyDataSetChanged()
             }
         }

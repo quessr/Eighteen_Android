@@ -20,7 +20,7 @@ class ProfileDetailViewModel : ViewModel() {
         const val ITEM_COUNT_THRESHOLD = 2
     }
 
-    fun setItems(newItems: List<ProfileDetailModel.Qna>) {
+    fun setItems(newItems: List<ProfileDetailModel>) {
         _items.value = newItems
     }
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!-- TODO 로그인 / 회원가입 선택화면 디자인 적용 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <TextView
+        android:id="@+id/tvBtnSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="전화번호로 회원가입"
+        android:textSize="32sp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

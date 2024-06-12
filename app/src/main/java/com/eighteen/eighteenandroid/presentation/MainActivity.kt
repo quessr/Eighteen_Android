@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomNavigationBar.visibility =
                 if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
+            binding.toolbar.root.visibility =
+                if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
         }
     }
 }

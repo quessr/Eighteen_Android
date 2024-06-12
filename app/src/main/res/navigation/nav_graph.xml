@@ -5,6 +5,24 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/fragmentMain">
     <fragment
+        android:id="@+id/fragmentLogin"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_fragmentLogin_to_fragmentSignUp"
+            app:destination="@id/fragmentSignUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSignUp"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+    </fragment>
+    <fragment
         android:id="@+id/fragmentMain"
         android:name="com.eighteen.eighteenandroid.presentation.home.MainFragment"
         android:label="fragment_main"

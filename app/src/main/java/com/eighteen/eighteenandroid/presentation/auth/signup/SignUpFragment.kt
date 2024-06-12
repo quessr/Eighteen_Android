@@ -70,7 +70,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     text = context?.getText(it.buttonText.strRes)
                     val textColor = ContextCompat.getColor(
                         context,
-                        if (it.isEnabled) R.color.white else R.color.grey02
+                        if (it.isEnabled) R.color.white else R.color.grey_02
                     )
                     setTextColor(textColor)
                     layoutParams = layoutParams.apply {

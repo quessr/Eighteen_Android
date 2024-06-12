@@ -19,7 +19,7 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
         findNavController().navigate(R.id.action_fragmentSignUpTermsOfService_to_fragmentSignUpEnterId)
     }
     override val progress: Int? = null
-    override val nextButtonModel = SignUpNextButtonModel(
+    override val signUpNextButtonModel = SignUpNextButtonModel(
         isVisible = true,
         isEnabled = true,
         size = SignUpNextButtonModel.Size.FULL,

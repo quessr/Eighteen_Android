@@ -23,4 +23,8 @@ class SignUpAddMediasFragment :
 
     }
 
+    private fun initRecyclerView() {
+
+    }
+
 }

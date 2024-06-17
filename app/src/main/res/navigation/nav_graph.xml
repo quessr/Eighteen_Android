@@ -21,7 +21,15 @@
         <action
             android:id="@+id/action_fragmentSignUp_to_fragmentMain"
             app:destination="@id/fragmentMain" />
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentEditImage"
+            app:destination="@id/fragmentEditImage" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentEditImage"
+        android:name="com.eighteen.eighteenandroid.presentation.mediaedit.EditImageFragment"
+        android:label="fragment_edit_image"
+        tools:layout="@layout/fragment_edit_image" />
     <fragment
         android:id="@+id/fragmentMain"
         android:name="com.eighteen.eighteenandroid.presentation.home.MainFragment"

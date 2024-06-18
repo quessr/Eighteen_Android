@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class SignUpAddMediasViewModel : ViewModel() {
     private val _mediasStateFlow =
-        MutableStateFlow<List<SignUpMedia>>(List(MINIMUM_DISPLAY_ITEM_COUNT) { SignUpMedia.Empty })
+        MutableStateFlow(List(MINIMUM_DISPLAY_ITEM_COUNT) { if (it == 0) SignUpMedia.RefEmpty else SignUpMedia.Empty })
     val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow
 
     fun addMedia(media: SignUpMedia) {

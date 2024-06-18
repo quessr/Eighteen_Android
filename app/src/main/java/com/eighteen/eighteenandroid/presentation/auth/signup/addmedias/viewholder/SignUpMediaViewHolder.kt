@@ -18,28 +18,20 @@ class SignUpMediaViewHolder(
         bindClickListener(model = model, position = position)
     }
 
+    //TODO 디자인 가이드 적용
     private fun bindImage(model: SignUpMedia) {
         when (model) {
-            is SignUpMedia.Empty -> {
-                binding.ivMedia.run {
-                    setImageResource(R.drawable.ic_launcher_background)
-                }
-            }
-            is SignUpMedia.Image -> {
-                ImageLoader.get().loadUrl(binding.ivMedia, model.imageUrl)
-                binding.ivMedia.setOnClickListener {
-
-                }
-            }
-            is SignUpMedia.Video -> {
-                ImageLoader.get().loadUrl(binding.ivMedia, model.thumbnailUrl)
-            }
+            is SignUpMedia.RefEmpty -> binding.ivMedia.setImageResource(R.drawable.bg_about_teen)
+            is SignUpMedia.Empty -> binding.ivMedia.setImageResource(R.drawable.ic_launcher_background)
+            is SignUpMedia.Image -> ImageLoader.get().loadUrl(binding.ivMedia, model.imageUrl)
+            is SignUpMedia.Video -> ImageLoader.get().loadUrl(binding.ivMedia, model.thumbnailUrl)
         }
     }
 
     private fun bindClickListener(model: SignUpMedia, position: Int) {
         binding.ivMedia.setOnClickListener {
             when (model) {
+                is SignUpMedia.RefEmpty -> clickListener.onClickAddMedia(position)
                 is SignUpMedia.Empty -> clickListener.onClickAddMedia(position)
                 is SignUpMedia.Image -> clickListener.onClickMedia()
                 is SignUpMedia.Video -> clickListener.onClickMedia()

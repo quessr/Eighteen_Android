@@ -6,9 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class SignUpAddMediasViewModel : ViewModel() {
-    private val _mediasStateFlow = MutableStateFlow<List<SignUpMedia>>(List(
-        MINIMUM_DISPLAY_ITEM_COUNT
-    ) { SignUpMedia.Empty })
+    private val _mediasStateFlow =
+        MutableStateFlow<List<SignUpMedia>>(List(MINIMUM_DISPLAY_ITEM_COUNT) { SignUpMedia.Empty })
     val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow
 
     fun addMedia(media: SignUpMedia) {
@@ -20,7 +19,7 @@ class SignUpAddMediasViewModel : ViewModel() {
 
     companion object {
         //TODO 최소 보여지는 아이템 개수(확인 후 수정)
-        private const val MINIMUM_DISPLAY_ITEM_COUNT = 4
+        private const val MINIMUM_DISPLAY_ITEM_COUNT = 2
         private const val MAXIMUM_DISPLAY_ITEM_COUNT = 10
     }
 }

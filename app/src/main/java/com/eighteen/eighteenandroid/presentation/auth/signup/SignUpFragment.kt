@@ -12,7 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
+import com.eighteen.eighteenandroid.presentation.mediaedit.BaseEditMediaFragment.Companion.EDIT_MEDIA_URI_ARGUMENT_KEY
 
 /**
  * 회원가입 기능의 진입점
@@ -79,6 +82,20 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     }
                 }
             }
+
+            signUpViewModel.editMediaActionLiveData.observe(
+                viewLifecycleOwner,
+                EventObserver { action ->
+                    //TODO 비디오 편집 fragment 추가 후 변경
+                    val navActionId = when (action) {
+                        is SignUpEditMediaAction.EditImage -> R.id.action_fragmentSignUp_to_fragmentEditImage
+                        is SignUpEditMediaAction.EditVideo -> R.id.action_fragmentSignUp_to_fragmentEditImage
+                    }
+                    val bundle = Bundle().apply {
+                        putParcelable(EDIT_MEDIA_URI_ARGUMENT_KEY, action.uri)
+                    }
+                    findNavController().navigate(navActionId, bundle)
+                })
         }
     }
 }

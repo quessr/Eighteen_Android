@@ -7,9 +7,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
+import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpAddMediasBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
+import com.eighteen.eighteenandroid.presentation.common.mediapicker.MediaPicker
 import kotlinx.coroutines.launch
 
 class SignUpAddMediasFragment :
@@ -26,11 +30,24 @@ class SignUpAddMediasFragment :
     )
 
     private val signUpAddMediasViewModel by viewModels<SignUpAddMediasViewModel>()
+    private val mediaPicker = MediaPicker(this) { uri ->
+        safeLet(uri, context) { nonNullUri, context ->
+            getMimeTypeFromUri(nonNullUri, context)?.let { typeString ->
+                if (typeString.startsWith("image")) SignUpEditMediaAction.EditImage(nonNullUri)
+                else if (typeString.startsWith("video")) SignUpEditMediaAction.EditVideo(
+                    nonNullUri
+                )
+                else null
+            }?.also { action ->
+                signUpViewModelContentInterface.setEditMediaAction(action)
+            }
+        }
+    }
+    private var signUpMediasAdapter: SignUpMediasAdapter? = null
 
     private val clickListener = object : SignUpAddMediasClickListener {
         override fun onClickAddMedia(position: Int) {
-            Log.d("TESTLOG", "onClickAddMedia $position")
-            //TODO 미디어 선택
+            mediaPicker.openMediaPicker()
         }
 
         override fun onClickMedia() {
@@ -46,7 +63,9 @@ class SignUpAddMediasFragment :
 
     private fun initRecyclerView() {
         bind {
-            rvMedias.adapter = SignUpMediasAdapter(clickListener = clickListener)
+            rvMedias.adapter = SignUpMediasAdapter(clickListener = clickListener).also {
+                signUpMediasAdapter = it
+            }
             rvMedias.addItemDecoration(SignUpMediasItemDecoration())
         }
     }
@@ -61,5 +80,8 @@ class SignUpAddMediasFragment :
         }
     }
 
-
+    override fun onDestroyView() {
+        signUpMediasAdapter = null
+        super.onDestroyView()
+    }
 }

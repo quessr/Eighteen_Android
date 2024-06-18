@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,9 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     private val _progressLiveData = MutableLiveData<Int?>(null)
     val progressLiveData: LiveData<Int?> = _progressLiveData
 
+    private val _editMediaActionLiveData = MutableLiveData<Event<SignUpEditMediaAction>>()
+    val editMediaActionLiveData: LiveData<Event<SignUpEditMediaAction>> = _editMediaActionLiveData
+
     override var id: String = ""
     override var nickName: String = ""
     override var birth: Date = Date()
@@ -39,6 +43,10 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
 
     override fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel) {
         _nextButtonLiveData.value = signUpNextButtonModel
+    }
+
+    override fun setEditMediaAction(editMediaAction: SignUpEditMediaAction) {
+        _editMediaActionLiveData.value = Event(editMediaAction)
     }
 
     /**

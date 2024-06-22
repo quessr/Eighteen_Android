@@ -37,7 +37,6 @@ class ImageCropView @JvmOverloads constructor(
         initCropAreaView()
     }
 
-
     private fun initCropAreaView() = with(binding.ivCropArea) {
         setOnTouchListener(object : OnTouchListener {
             private var actionDownRawPoint = Point()
@@ -106,18 +105,45 @@ class ImageCropView @JvmOverloads constructor(
         cropView: View,
         clickedPositions: List<CropViewClickedPosition>
     ) {
+        fun calculateMargin(
+            baseMargin: Int,
+            edgePosition: CropViewClickedPosition,
+            diff: Int
+        ) = baseMargin + if (clickedPositions.contains(edgePosition)
+            || clickedPositions.contains(CropViewClickedPosition.CENTER)
+        ) diff
+        else 0
+
         val updatedTopMargin =
-            actionDownMargins.top + if (clickedPositions.any { it == CropViewClickedPosition.TOP_EDGE || it == CropViewClickedPosition.CENTER }) diff.y else 0
+            calculateMargin(actionDownMargins.top, CropViewClickedPosition.TOP_EDGE, diff.y)
         val updatedBottomMargin =
-            actionDownMargins.bottom - if (clickedPositions.any { it == CropViewClickedPosition.BOTTOM_EDGE || it == CropViewClickedPosition.CENTER }) diff.y else 0
+            calculateMargin(actionDownMargins.bottom, CropViewClickedPosition.BOTTOM_EDGE, -diff.y)
         val updatedStartMargin =
-            actionDownMargins.start + if (clickedPositions.any { it == CropViewClickedPosition.START_EDGE || it == CropViewClickedPosition.CENTER }) diff.x else 0
+            calculateMargin(actionDownMargins.start, CropViewClickedPosition.START_EDGE, diff.x)
         val updatedEndMargin =
-            actionDownMargins.end - if (clickedPositions.any { it == CropViewClickedPosition.END_EDGE || it == CropViewClickedPosition.CENTER }) diff.x else 0
+            calculateMargin(actionDownMargins.end, CropViewClickedPosition.END_EDGE, -diff.x)
         cropView.layoutParams = (cropView.layoutParams as? MarginLayoutParams)?.apply {
-            setMargins(updatedStartMargin, updatedTopMargin, updatedEndMargin, updatedBottomMargin)
+            val verticalMarginsValidation = isSideMarginsValidation(
+                updatedTopMargin,
+                updatedBottomMargin,
+                binding.ivTargetImage.height
+            )
+            val horizontalMarginsValidation = isSideMarginsValidation(
+                updatedStartMargin,
+                updatedEndMargin,
+                binding.ivTargetImage.width
+            )
+            setMargins(
+                if (horizontalMarginsValidation) updatedStartMargin else leftMargin,
+                if (verticalMarginsValidation) updatedTopMargin else topMargin,
+                if (horizontalMarginsValidation) updatedEndMargin else rightMargin,
+                if (verticalMarginsValidation) updatedBottomMargin else bottomMargin
+            )
         }
     }
+
+    private fun isSideMarginsValidation(margin: Int, other: Int, maxSize: Int) =
+        margin >= 0 && other >= 0 && margin + other + cropViewMinSizePx <= maxSize
 
 
     private data class Margins(
@@ -136,6 +162,7 @@ class ImageCropView @JvmOverloads constructor(
     }
 
     companion object {
+        //TODO 크롭 뷰 선택영역, 최소사이즈 디자인 적용
         private const val CROP_VIEW_EDGE_DP = 20
         private const val CROP_VIEW_MIN_SIZE_DP = 100
     }

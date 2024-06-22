@@ -1,9 +1,10 @@
 package com.eighteen.eighteenandroid.presentation.mediaedit
 
 import android.net.Uri
-import android.util.Log
+import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.databinding.FragmentEditImageBinding
 import com.eighteen.eighteenandroid.presentation.common.getParcelableOrNull
+import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
 
 class EditImageFragment :
     BaseEditMediaFragment<FragmentEditImageBinding>(FragmentEditImageBinding::inflate) {
@@ -13,6 +14,11 @@ class EditImageFragment :
     }
 
     override fun initView() {
-        Log.d("TESTLOG", "imageUri : $imageUri")
+        bind {
+            ivBtnBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            ImageLoader.get().loadUrl(icvCropView.targetImageView, imageUri)
+        }
     }
 }

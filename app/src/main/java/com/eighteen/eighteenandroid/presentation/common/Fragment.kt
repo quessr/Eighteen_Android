@@ -30,6 +30,6 @@ fun showReportDialog(context: Context, showDialog: () -> Unit) {
 fun <T : Parcelable> Fragment.getNavigationResult(key: String) =
     findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
 
-fun <T : Parcelable> Fragment.setNavigationResult(result: T, key: String) {
+fun <T : Parcelable> Fragment.setNavigationResult(key: String, result: T) {
     findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
 }

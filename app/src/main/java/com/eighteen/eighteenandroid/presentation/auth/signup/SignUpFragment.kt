@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.activity.OnBackPressedCallback
@@ -14,9 +15,12 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.getNavigationResult
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
+import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig
 import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_POP_DESTINATION_ID_KEY
 import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_URI_ARGUMENT_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 
 /**
  * 회원가입 기능의 진입점
@@ -53,6 +57,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             }
         }
         initObserver()
+        initNavigationResultListener()
     }
 
     private fun initObserver() {
@@ -98,6 +103,14 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     }
                     findNavController().navigate(navActionId, bundle)
                 })
+        }
+    }
+
+    private fun initNavigationResultListener() {
+        getNavigationResult<EditMediaResult>(EditMediaConfig.EDIT_MEDIA_RESULT_KEY)?.observe(
+            viewLifecycleOwner
+        ) {
+            Log.d("TESTLOG", "result : ${it}")
         }
     }
 }

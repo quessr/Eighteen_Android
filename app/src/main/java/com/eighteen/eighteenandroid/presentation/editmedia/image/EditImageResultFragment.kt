@@ -7,18 +7,18 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.getParcelableOrNull
 import com.eighteen.eighteenandroid.presentation.common.setNavigationResult
 import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_POP_DESTINATION_ID_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_RESULT_KEY
 import com.eighteen.eighteenandroid.presentation.editmedia.image.EditImageFragment.Companion.CROP_IMAGE_ARGUMENT_KEY
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 
 class EditImageResultFragment :
     BaseFragment<FragmentEditImageResultBinding>(FragmentEditImageResultBinding::inflate) {
 
-    private val bitmap by lazy {
-        arguments?.getParcelableOrNull(
+    private val bitmap
+        get() = arguments?.getParcelableOrNull(
             CROP_IMAGE_ARGUMENT_KEY,
             Bitmap::class.java
         )
-    }
 
     private val popDestinationId by lazy {
         arguments?.getInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, -1)
@@ -38,19 +38,20 @@ class EditImageResultFragment :
                 bitmap?.let {
                     //TODO 태그 추가
                     val editImageResult = EditMediaResult.Image(emptyList(), imageBitmap = it)
-                    popDestinationId?.let {
-                        setNavigationResult(EDIT_IMAGE_RESULT_KEY, editImageResult)
-                        popDestinationId?.let { id ->
-                            findNavController().popBackStack(id, false)
-                        }
+                    popDestinationId?.let { destinationId ->
+                        it.recycle()
+                        setNavigationResult(
+                            key = EDIT_MEDIA_RESULT_KEY,
+                            result = editImageResult,
+                            destinationId = destinationId
+                        )
+                        findNavController().popBackStack(
+                            destinationId = destinationId,
+                            inclusive = false
+                        )
                     }
-
                 }
             }
         }
-    }
-
-    companion object {
-        const val EDIT_IMAGE_RESULT_KEY = "edit_image_result_key"
     }
 }

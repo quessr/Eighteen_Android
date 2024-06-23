@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.common.customview
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Point
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.Px
+import androidx.core.view.drawToBitmap
 import androidx.core.view.marginBottom
 import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
@@ -35,6 +37,15 @@ class ImageCropView @JvmOverloads constructor(
     init {
         addView(binding.root)
         initCropAreaView()
+    }
+
+    fun getCropAreaImageBitmap(): Bitmap {
+        val bitmap = binding.ivTargetImage.drawToBitmap()
+        val resizedBitmap = binding.ivCropArea.run {
+            Bitmap.createBitmap(bitmap, x.toInt(), y.toInt(), width, height)
+        }
+        bitmap.recycle()
+        return resizedBitmap
     }
 
     private fun initCropAreaView() = with(binding.ivCropArea) {

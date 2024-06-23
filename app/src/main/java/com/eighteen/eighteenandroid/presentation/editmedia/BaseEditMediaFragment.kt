@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.mediaedit
+package com.eighteen.eighteenandroid.presentation.editmedia
 
 import android.view.LayoutInflater
 import androidx.viewbinding.ViewBinding

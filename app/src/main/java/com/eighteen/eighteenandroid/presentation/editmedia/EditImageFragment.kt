@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.mediaedit
+package com.eighteen.eighteenandroid.presentation.editmedia
 
 import android.net.Uri
 import androidx.navigation.fragment.findNavController

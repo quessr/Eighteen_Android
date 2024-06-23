@@ -59,6 +59,7 @@ class SignUpAddMediasFragment :
     override fun initView() {
         initRecyclerView()
         initStateFlow()
+        initFragmentResultListener()
     }
 
     private fun initRecyclerView() {
@@ -78,6 +79,14 @@ class SignUpAddMediasFragment :
                 }
             }
         }
+    }
+
+    private fun initFragmentResultListener() {
+//        getNavigationResult<EditImageResult>(EDIT_IMAGE_RESULT_KEY)?.observe(
+//            viewLifecycleOwner
+//        ) {
+//            Log.d("TESTLOG", "add $it")
+//        }
     }
 
     override fun onDestroyView() {

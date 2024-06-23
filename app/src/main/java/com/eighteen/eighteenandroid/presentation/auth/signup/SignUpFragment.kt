@@ -15,7 +15,8 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
-import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment.Companion.EDIT_MEDIA_URI_ARGUMENT_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_POP_DESTINATION_ID_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_URI_ARGUMENT_KEY
 
 /**
  * 회원가입 기능의 진입점
@@ -93,6 +94,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     }
                     val bundle = Bundle().apply {
                         putParcelable(EDIT_MEDIA_URI_ARGUMENT_KEY, action.uri)
+                        putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, R.id.fragmentSignUp)
                     }
                     findNavController().navigate(navActionId, bundle)
                 })

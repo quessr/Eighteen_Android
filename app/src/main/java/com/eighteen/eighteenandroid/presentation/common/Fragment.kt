@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.common
 import android.content.Context
 import android.os.Parcelable
 import android.view.LayoutInflater
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -32,4 +33,12 @@ fun <T : Parcelable> Fragment.getNavigationResult(key: String) =
 
 fun <T : Parcelable> Fragment.setNavigationResult(key: String, result: T) {
     findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
+}
+
+fun <T : Parcelable> Fragment.setNavigationResult(
+    key: String,
+    result: T,
+    @IdRes destinationId: Int
+) {
+    findNavController().getBackStackEntry(destinationId).savedStateHandle[key] = result
 }

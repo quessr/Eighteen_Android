@@ -31,6 +31,7 @@ class EditImageFragment :
                         putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, it)
                     }
                 }
+                editMediaViewModel.setAndRecycleCropAreaBitmap(bitmap = binding.icvCropView.getCropAreaImageBitmap())
                 findNavController().navigate(
                     R.id.action_fragmentEditImage_to_fragmentEditImageResult,
                     bundle
@@ -48,9 +49,5 @@ class EditImageFragment :
                 }
             }
         }
-    }
-
-    companion object {
-        const val CROP_IMAGE_ARGUMENT_KEY = "crop_image_argument_key"
     }
 }

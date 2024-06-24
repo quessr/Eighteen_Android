@@ -56,12 +56,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 signUpViewModel.actionToPrevPage()
             }
         }
-        initObserver()
+        initSignUpObserver()
+        initEditMediaObserver()
     }
 
-    private fun initObserver() {
+    private fun initSignUpObserver() = with(signUpViewModel) {
         bind {
-            signUpViewModel.progressLiveData.observe(viewLifecycleOwner) {
+            progressLiveData.observe(viewLifecycleOwner) {
                 with(lpbProgress) {
                     isVisible = (it != null)
                     if (it != null) {
@@ -71,7 +72,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
             }
 
-            signUpViewModel.nextButtonLiveData.observe(viewLifecycleOwner) {
+            nextButtonLiveData.observe(viewLifecycleOwner) {
                 with(tvBtnNext) {
                     isVisible = it.isVisible
                     isEnabled = it.isEnabled
@@ -88,7 +89,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 }
             }
 
-            signUpViewModel.editMediaActionLiveData.observe(
+            editMediaActionLiveData.observe(
                 viewLifecycleOwner,
                 EventObserver { action ->
                     //TODO 비디오 편집 fragment 추가 후 변경
@@ -103,5 +104,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     findNavController().navigate(navActionId, bundle)
                 })
         }
+    }
+
+    private fun initEditMediaObserver() = with(editMediaViewModel) {
+        editResultEventLiveData.observe(viewLifecycleOwner, EventObserver {
+
+        })
     }
 }

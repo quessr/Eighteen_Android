@@ -1,7 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.activity.OnBackPressedCallback
@@ -15,12 +14,10 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
-import com.eighteen.eighteenandroid.presentation.common.getNavigationResult
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
-import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig
-import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_POP_DESTINATION_ID_KEY
-import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_URI_ARGUMENT_KEY
-import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
+import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry
+import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment.Companion.EDIT_MEDIA_POP_DESTINATION_ID_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaViewModel
 
 /**
  * 회원가입 기능의 진입점
@@ -29,6 +26,8 @@ import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate),
     SignUpContentContainer {
     private val signUpViewModel by viewModels<SignUpViewModel>()
+
+    private val editMediaViewModel by viewModelsByBackStackEntry<EditMediaViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -45,6 +44,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
+        editMediaViewModel
     }
 
     override fun initView() {
@@ -57,7 +57,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             }
         }
         initObserver()
-        initNavigationResultListener()
     }
 
     private fun initObserver() {
@@ -98,19 +97,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                         is SignUpEditMediaAction.EditVideo -> R.id.action_fragmentSignUp_to_fragmentEditImage
                     }
                     val bundle = Bundle().apply {
-                        putParcelable(EDIT_MEDIA_URI_ARGUMENT_KEY, action.uri)
                         putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, R.id.fragmentSignUp)
                     }
+                    editMediaViewModel.setMediaUriString(uriString = action.uriString)
                     findNavController().navigate(navActionId, bundle)
                 })
-        }
-    }
-
-    private fun initNavigationResultListener() {
-        getNavigationResult<EditMediaResult>(EditMediaConfig.EDIT_MEDIA_RESULT_KEY)?.observe(
-            viewLifecycleOwner
-        ) {
-            Log.d("TESTLOG", "result : ${it}")
         }
     }
 }

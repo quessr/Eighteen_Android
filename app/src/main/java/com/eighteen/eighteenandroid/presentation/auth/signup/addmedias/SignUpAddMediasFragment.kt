@@ -33,10 +33,9 @@ class SignUpAddMediasFragment :
     private val mediaPicker = MediaPicker(this) { uri ->
         safeLet(uri, context) { nonNullUri, context ->
             getMimeTypeFromUri(nonNullUri, context)?.let { typeString ->
-                if (typeString.startsWith("image")) SignUpEditMediaAction.EditImage(nonNullUri)
-                else if (typeString.startsWith("video")) SignUpEditMediaAction.EditVideo(
-                    nonNullUri
-                )
+                val uriString = nonNullUri.toString()
+                if (typeString.startsWith("image")) SignUpEditMediaAction.EditImage(uriString)
+                else if (typeString.startsWith("video")) SignUpEditMediaAction.EditVideo(uriString)
                 else null
             }?.also { action ->
                 signUpViewModelContentInterface.setEditMediaAction(action)

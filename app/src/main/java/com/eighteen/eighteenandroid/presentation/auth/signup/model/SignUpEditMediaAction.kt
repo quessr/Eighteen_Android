@@ -1,10 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.model
 
-import android.net.Uri
-
 sealed interface SignUpEditMediaAction {
-    val uri: Uri
+    val uriString: String
 
-    class EditImage(override val uri: Uri) : SignUpEditMediaAction
-    class EditVideo(override val uri: Uri) : SignUpEditMediaAction
+    class EditImage(override val uriString: String) : SignUpEditMediaAction
+    class EditVideo(override val uriString: String) : SignUpEditMediaAction
 }

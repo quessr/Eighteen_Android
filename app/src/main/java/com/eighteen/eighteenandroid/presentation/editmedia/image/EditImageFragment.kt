@@ -2,31 +2,22 @@ package com.eighteen.eighteenandroid.presentation.editmedia.image
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditImageBinding
-import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.eighteen.eighteenandroid.presentation.common.getParcelableOrNull
 import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
-import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_POP_DESTINATION_ID_KEY
-import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaConfig.EDIT_MEDIA_URI_ARGUMENT_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment
+import kotlinx.coroutines.launch
 
 class EditImageFragment :
-    BaseFragment<FragmentEditImageBinding>(FragmentEditImageBinding::inflate) {
-
-    private val imageUri by lazy {
-        arguments?.getParcelableOrNull(EDIT_MEDIA_URI_ARGUMENT_KEY, Uri::class.java)
-    }
-
-    private val popDestinationId by lazy {
-        arguments?.getInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, -1)
-    }
+    BaseEditMediaFragment<FragmentEditImageBinding>(FragmentEditImageBinding::inflate) {
 
     override fun initView() {
-        bind {
-            ImageLoader.get().loadUrl(icvCropView.targetImageView, imageUri)
-        }
         initHeader()
+        initStateFlow()
     }
 
     private fun initHeader() {
@@ -35,9 +26,7 @@ class EditImageFragment :
                 findNavController().popBackStack()
             }
             ivBtnCheck.setOnClickListener {
-                val cropImageBitmap = binding.icvCropView.getCropAreaImageBitmap()
                 val bundle = Bundle().apply {
-                    putParcelable(CROP_IMAGE_ARGUMENT_KEY, cropImageBitmap)
                     popDestinationId?.let {
                         putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, it)
                     }
@@ -46,6 +35,17 @@ class EditImageFragment :
                     R.id.action_fragmentEditImage_to_fragmentEditImageResult,
                     bundle
                 )
+            }
+        }
+    }
+
+    private fun initStateFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                editMediaViewModel.mediaUriStringStateFlow.collect { uriString ->
+                    val targetImageView = binding.icvCropView.targetImageView
+                    ImageLoader.get().loadUrl(targetImageView, Uri.parse(uriString))
+                }
             }
         }
     }

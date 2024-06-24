@@ -48,6 +48,29 @@ class ImageCropView @JvmOverloads constructor(
         return resizedBitmap
     }
 
+    fun setCropAreaViewPosition(top: Int, bottom: Int, start: Int, end: Int) {
+        with(binding.ivCropArea) {
+            layoutParams = (layoutParams as? MarginLayoutParams)?.apply {
+                val verticalMarginsValidation = isSideMarginsValidation(
+                    top,
+                    bottom,
+                    binding.ivTargetImage.height
+                )
+                val horizontalMarginsValidation = isSideMarginsValidation(
+                    start,
+                    end,
+                    binding.ivTargetImage.width
+                )
+                setMargins(
+                    if (horizontalMarginsValidation) start else leftMargin,
+                    if (verticalMarginsValidation) top else topMargin,
+                    if (horizontalMarginsValidation) end else rightMargin,
+                    if (verticalMarginsValidation) bottom else bottomMargin
+                )
+            }
+        }
+    }
+
     private fun initCropAreaView() = with(binding.ivCropArea) {
         setOnTouchListener(object : OnTouchListener {
             private var actionDownRawPoint = Point()
@@ -81,7 +104,6 @@ class ImageCropView @JvmOverloads constructor(
                         updateMarginsCropArea(
                             diff = Point(diffX, diffY),
                             actionDownMargins = actionDownMargins,
-                            cropView = view,
                             clickedPositions = clickedPositions
                         )
                     }
@@ -113,7 +135,6 @@ class ImageCropView @JvmOverloads constructor(
     private fun updateMarginsCropArea(
         diff: Point,
         actionDownMargins: Margins,
-        cropView: View,
         clickedPositions: List<CropViewClickedPosition>
     ) {
         fun calculateMargin(
@@ -133,24 +154,12 @@ class ImageCropView @JvmOverloads constructor(
             calculateMargin(actionDownMargins.start, CropViewClickedPosition.START_EDGE, diff.x)
         val updatedEndMargin =
             calculateMargin(actionDownMargins.end, CropViewClickedPosition.END_EDGE, -diff.x)
-        cropView.layoutParams = (cropView.layoutParams as? MarginLayoutParams)?.apply {
-            val verticalMarginsValidation = isSideMarginsValidation(
-                updatedTopMargin,
-                updatedBottomMargin,
-                binding.ivTargetImage.height
-            )
-            val horizontalMarginsValidation = isSideMarginsValidation(
-                updatedStartMargin,
-                updatedEndMargin,
-                binding.ivTargetImage.width
-            )
-            setMargins(
-                if (horizontalMarginsValidation) updatedStartMargin else leftMargin,
-                if (verticalMarginsValidation) updatedTopMargin else topMargin,
-                if (horizontalMarginsValidation) updatedEndMargin else rightMargin,
-                if (verticalMarginsValidation) updatedBottomMargin else bottomMargin
-            )
-        }
+        setCropAreaViewPosition(
+            updatedTopMargin,
+            updatedBottomMargin,
+            updatedStartMargin,
+            updatedEndMargin
+        )
     }
 
     private fun isSideMarginsValidation(margin: Int, other: Int, maxSize: Int) =

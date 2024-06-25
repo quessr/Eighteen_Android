@@ -89,7 +89,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 }
             }
 
-            editMediaActionLiveData.observe(
+            editMediaActionEventLiveData.observe(
                 viewLifecycleOwner,
                 EventObserver { action ->
                     //TODO 비디오 편집 fragment 추가 후 변경

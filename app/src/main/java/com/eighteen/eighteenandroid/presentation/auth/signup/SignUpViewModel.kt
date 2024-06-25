@@ -24,8 +24,9 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     private val _progressLiveData = MutableLiveData<Int?>(null)
     val progressLiveData: LiveData<Int?> = _progressLiveData
 
-    private val _editMediaActionLiveData = MutableLiveData<Event<SignUpEditMediaAction>>()
-    val editMediaActionLiveData: LiveData<Event<SignUpEditMediaAction>> = _editMediaActionLiveData
+    private val _editMediaActionEventLiveData = MutableLiveData<Event<SignUpEditMediaAction>>()
+    val editMediaActionEventLiveData: LiveData<Event<SignUpEditMediaAction>> =
+        _editMediaActionEventLiveData
 
     override var id: String = ""
     override var nickName: String = ""
@@ -46,7 +47,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     }
 
     override fun setEditMediaAction(editMediaAction: SignUpEditMediaAction) {
-        _editMediaActionLiveData.value = Event(editMediaAction)
+        _editMediaActionEventLiveData.value = Event(editMediaAction)
     }
 
     /**

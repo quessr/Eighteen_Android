@@ -92,10 +92,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             editMediaActionEventLiveData.observe(
                 viewLifecycleOwner,
                 EventObserver { action ->
-                    //TODO 비디오 편집 fragment 추가 후 변경
                     val navActionId = when (action) {
                         is SignUpEditMediaAction.EditImage -> R.id.action_fragmentSignUp_to_fragmentEditImage
-                        is SignUpEditMediaAction.EditVideo -> R.id.action_fragmentSignUp_to_fragmentEditImage
+                        is SignUpEditMediaAction.EditVideo -> R.id.action_fragmentSignUp_to_fragmentEditVideo
                     }
                     val bundle = Bundle().apply {
                         putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, R.id.fragmentSignUp)

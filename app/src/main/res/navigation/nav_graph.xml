@@ -19,11 +19,11 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/action_fragmentSignUp_to_fragmentMain"
-            app:destination="@id/fragmentMain" />
-        <action
             android:id="@+id/action_fragmentSignUp_to_fragmentEditImage"
             app:destination="@id/fragmentEditImage" />
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentEditVideo"
+            app:destination="@id/fragmentEditVideo" />
     </fragment>
     <fragment
         android:id="@+id/fragmentEditImage"
@@ -39,6 +39,11 @@
         android:name="com.eighteen.eighteenandroid.presentation.editmedia.image.EditImageResultFragment"
         android:label="fragment_edit_image_result"
         tools:layout="@layout/fragment_edit_image_result" />
+    <fragment
+        android:id="@+id/fragmentEditVideo"
+        android:name="com.eighteen.eighteenandroid.presentation.editmedia.video.EditVideoFragment"
+        android:label="fragment_edit_video"
+        tools:layout="@layout/fragment_edit_video" />
     <fragment
         android:id="@+id/fragmentMain"
         android:name="com.eighteen.eighteenandroid.presentation.home.MainFragment"

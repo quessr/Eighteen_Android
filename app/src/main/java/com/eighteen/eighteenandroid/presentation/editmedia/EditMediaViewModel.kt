@@ -25,9 +25,7 @@ class EditMediaViewModel : ViewModel() {
     }
 
     fun setAndRecycleCropAreaBitmap(bitmap: Bitmap) {
-        val prevBitmap = cropAreaBitmapStateFlow.value
         _cropAreaBitmapStateFlow.value = bitmap
-        prevBitmap?.recycle()
     }
 
     fun setEditResultEvent(result: EditMediaResult) {

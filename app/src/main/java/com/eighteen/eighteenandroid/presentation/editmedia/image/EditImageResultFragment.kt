@@ -6,7 +6,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.databinding.FragmentEditImageResultBinding
 import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
-import com.eighteen.eighteenandroid.presentation.common.setNavigationResult
 import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 import kotlinx.coroutines.launch
@@ -29,11 +28,7 @@ class EditImageResultFragment :
                     //TODO 태그 추가
                     val editImageResult = EditMediaResult.Image(emptyList(), imageBitmap = it)
                     popDestinationId?.let { destinationId ->
-                        setNavigationResult(
-                            key = EDIT_MEDIA_RESULT_KEY,
-                            result = editImageResult,
-                            destinationId = destinationId
-                        )
+                        editMediaViewModel.setEditResultEvent(result = editImageResult)
                         findNavController().popBackStack(
                             destinationId = destinationId,
                             inclusive = false

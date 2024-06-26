@@ -1,7 +1,9 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 
 /**
@@ -12,7 +14,8 @@ interface SignUpViewModelContentInterface {
     var nickName: String
     var birth: Date
     var school: String
-    var medias: List<String>
+    val mediasStateFlow: StateFlow<List<SignUpMedia>>
     fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)
     fun setEditMediaAction(editMediaAction: SignUpEditMediaAction)
+    fun clearMediaResultStateFlow()
 }

@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.eighteen.eighteenandroid.databinding.ItemSignUpMediaBinding
-import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.model.SignUpMedia
+import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.model.SignUpMediaItemModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.viewholder.SignUpMediaViewHolder
 
 class SignUpMediasAdapter(private val clickListener: SignUpAddMediasClickListener) :
-    ListAdapter<SignUpMedia, SignUpMediaViewHolder>(diffUtil) {
+    ListAdapter<SignUpMediaItemModel, SignUpMediaViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SignUpMediaViewHolder {
         val binding =
             ItemSignUpMediaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,11 +21,16 @@ class SignUpMediasAdapter(private val clickListener: SignUpAddMediasClickListene
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<SignUpMedia>() {
-            override fun areItemsTheSame(oldItem: SignUpMedia, newItem: SignUpMedia): Boolean = true
+        private val diffUtil = object : DiffUtil.ItemCallback<SignUpMediaItemModel>() {
+            override fun areItemsTheSame(
+                oldItem: SignUpMediaItemModel,
+                newItem: SignUpMediaItemModel
+            ): Boolean = true
 
-            override fun areContentsTheSame(oldItem: SignUpMedia, newItem: SignUpMedia): Boolean =
-                oldItem.isSameContent(newItem)
+            override fun areContentsTheSame(
+                oldItem: SignUpMediaItemModel,
+                newItem: SignUpMediaItemModel
+            ): Boolean = oldItem.areContentsTheSame(newItem)
         }
     }
 }

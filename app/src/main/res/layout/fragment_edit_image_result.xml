@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/inHeader"
-        layout="@layout/view_edit_image_header"
+        layout="@layout/view_edit_media_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -1,7 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -40,7 +39,7 @@ class QuestionAnswerAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val binding = QuestionAnswerItemBinding.inflate(inflater, parent, false)
 
-        return ViewHolder(binding).also { holder ->
+        return ViewHolder(binding).also {
             binding.ivSeeMore.setOnClickListener {
                 viewModel.toggleItems()
             }

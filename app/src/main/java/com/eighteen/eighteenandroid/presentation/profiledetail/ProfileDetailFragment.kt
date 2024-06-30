@@ -1,20 +1,18 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.google.android.material.tabs.TabLayoutMediator
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -25,9 +23,6 @@ class ProfileDetailFragment :
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
     private val profileDetailViewModel by viewModels<ProfileDetailViewModel>()
     private lateinit var adapter: QuestionAnswerAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

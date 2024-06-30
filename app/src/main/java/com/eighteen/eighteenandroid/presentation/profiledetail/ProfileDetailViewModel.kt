@@ -1,9 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import android.view.View
-import android.view.ViewGroup
-import android.widget.RemoteViews.RemoteCollectionItems
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow

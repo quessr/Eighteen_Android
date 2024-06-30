@@ -1,10 +1,12 @@
 package com.eighteen.eighteenandroid.presentation.editmedia.video
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.net.Uri
+import android.view.MotionEvent
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.graphics.scale
 import androidx.core.view.doOnLayout
@@ -59,12 +61,16 @@ class EditVideoFragment :
         val mediaInfo = MediaInfo(id = uriString, mediaUrl = uriString, mediaView = binding.mvVideo)
         playerManager?.play(mediaInfo = mediaInfo)
         initTimelineImages(uriString = uriString)
+        initTimelineProgress()
         timelineProgressUpdateJob?.cancel()
         timelineProgressUpdateJob = viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     delay(TIMELINE_UPDATE_JOB_MIL_SEC)
-                    updateTimelineProgress()
+                    playerManager?.let {
+                        if (!it.isPlaying) return@let
+                        updateTimelineProgress()
+                    }
                 }
             }
         }
@@ -113,8 +119,30 @@ class EditVideoFragment :
         return timelineBitmap
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+
+    private fun initTimelineProgress() {
+        binding.ivTimelineImages.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> binding.ivTimelineImages.performClick()
+                MotionEvent.ACTION_DOWN -> {
+                    playerManager?.let { playerManager ->
+                        val clickedPosition =
+                            playerManager.duration * motionEvent.x.toLong() / view.width
+                        playerManager.seekTo(clickedPosition)
+                        updateTimelineProgress()
+                    }
+                }
+                else -> {
+                    //do nothing
+                }
+            }
+            binding.ivTimelineImages.performClick()
+            true
+        }
+    }
+
     private fun updateTimelineProgress() {
-        if (playerManager?.isPlaying != true) return
         val (currentPosition, duration) = (playerManager ?: return).run {
             currentPosition to duration
         }
@@ -129,6 +157,6 @@ class EditVideoFragment :
     }
 
     companion object {
-        private const val TIMELINE_UPDATE_JOB_MIL_SEC = 1000L
+        private const val TIMELINE_UPDATE_JOB_MIL_SEC = 100L
     }
 }

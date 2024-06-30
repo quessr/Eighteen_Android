@@ -116,6 +116,10 @@ open class PlayerManager(
         playingInfoMap.remove(key)
     }
 
+    fun seekTo(positionMs: Long) {
+        player.seekTo(positionMs)
+    }
+
     private fun release() {
         targetMediaInfo = null
         player.removeListener(playerListener)

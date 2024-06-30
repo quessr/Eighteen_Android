@@ -1,7 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail.model
 
-import com.eighteen.eighteenandroid.presentation.profiledetail.QuestionAnswerAdapter
-
 sealed class ProfileDetailModel {
     data class ProfileInfo(
         val name: String,

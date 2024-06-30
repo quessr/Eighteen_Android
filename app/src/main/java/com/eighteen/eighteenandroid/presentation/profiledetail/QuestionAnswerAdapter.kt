@@ -20,6 +20,7 @@ class QuestionAnswerAdapter(
     private var items: List<ProfileDetailModel.Qna> = emptyList()
 
 
+
     init {
         lifecycleOwner.lifecycleScope.launch {
             viewModel.items.collect { newItems ->
@@ -47,8 +48,10 @@ class QuestionAnswerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.bind(item.question, item.answer)
+        if (position < items.size) {
+            val item = items[position]
+            holder.bind(item.question, item.answer)
+        }
 
         val showAllItems = viewModel.showAllItems.value
         val itemCountThreshold = ProfileDetailViewModel.ITEM_COUNT_THRESHOLD

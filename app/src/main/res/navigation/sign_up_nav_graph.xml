@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_up_nav_graph"
+    app:startDestination="@id/fragmentSignUpEnterPhoneNumber">
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterPhoneNumber"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber.SignUpEnterPhoneNumberFragment"
+        android:label="fragment_sign_up_enter_phone_number"
+        tools:layout="@layout/fragment_sign_up_enter_phone_number">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterPhoneNumber_to_fragmentSignUpEnterAuthCode"
+            app:destination="@id/fragmentSignUpEnterAuthCode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterAuthCode"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterauthcode.SignUpEnterAuthCodeFragment"
+        android:label="fragment_sign_up_enter_auth_code"
+        tools:layout="@layout/fragment_sign_up_enter_auth_code">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService"
+            app:destination="@id/fragmentSignUpTermsOfService" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpTermsOfService"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.termsofservice.SignUpTermsOfServiceFragment"
+        android:label="fragment_sign_up_terms_of_service"
+        tools:layout="@layout/fragment_sign_up_terms_of_service">
+        <action
+            android:id="@+id/action_fragmentSignUpTermsOfService_to_fragmentSignUpEnterId"
+            app:destination="@id/fragmentSignUpEnterId" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterId"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterid.SignUpEnterIdFragment"
+        android:label="fragment_sign_up_enter_id"
+        tools:layout="@layout/fragment_sign_up_enter_id">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname"
+            app:destination="@id/fragmentSignUpEnterNickname" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterNickname"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.SignUpEnterNickNameFragment"
+        android:label="fragment_sign_up_enter_nickname"
+        tools:layout="@layout/fragment_sign_up_enter_nickname">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterNickname_to_fragmentSignUpEnterBirth"
+            app:destination="@id/fragmentSignUpEnterBirth" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterBirth"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterbirth.SignUpEnterBirthFragment"
+        android:label="fragment_sign_up_enter_birth"
+        tools:layout="@layout/fragment_sign_up_enter_birth">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterBirth_to_fragmentSignUpEnterSchool"
+            app:destination="@id/fragmentSignUpEnterSchool" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpEnterSchool"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.enterschool.SignUpEnterSchoolFragment"
+        android:label="fragment_sign_up_enter_school"
+        tools:layout="@layout/fragment_sign_up_enter_school">
+        <action
+            android:id="@+id/action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias"
+            app:destination="@id/fragmentSignUpAddMedias" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpAddMedias"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.SignUpAddMediasFragment"
+        android:label="fragment_sign_up_add_medias"
+        tools:layout="@layout/fragment_sign_up_add_medias">
+        <action
+            android:id="@+id/action_fragmentSignUpAddMedias_to_fragmentSignUpCompleted"
+            app:destination="@id/fragmentSignUpCompleted" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSignUpCompleted"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.completed.SignUpCompletedFragment"
+        android:label="fragment_sign_up_completed"
+        tools:layout="@layout/fragment_sign_up_completed" />
+</navigation>

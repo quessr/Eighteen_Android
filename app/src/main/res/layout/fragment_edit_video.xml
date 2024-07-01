@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
-    <!-- TODO 디자인 적용 -->
     <include
         android:id="@+id/inHeader"
         layout="@layout/view_edit_media_header"
@@ -40,17 +39,79 @@
             android:id="@+id/ivTimelineImages"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/edit_media_video_timeline_height"
+            app:layout_constraintBottom_toTopOf="@id/tvTimeStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/ivTrimStart" />
 
         <ImageView
             android:id="@+id/ivProgress"
-            android:layout_width="10dp"
+            android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/purple_200"
+            android:background="@color/red"
             app:layout_constraintBottom_toBottomOf="@id/ivTimelineImages"
             app:layout_constraintStart_toStartOf="@id/ivTimelineImages"
             app:layout_constraintTop_toTopOf="@id/ivTimelineImages" />
+
+        <ImageView
+            android:id="@+id/ivTrimStart"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="@color/white_grey"
+            app:layout_constraintBottom_toBottomOf="@id/ivTimelineImages"
+            app:layout_constraintStart_toStartOf="@id/ivTimelineImages"
+            app:layout_constraintTop_toTopOf="@id/ivTimelineImages" />
+
+        <ImageView
+            android:id="@+id/ivTrimEnd"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="100dp"
+            android:background="@color/white_grey"
+            app:layout_constraintBottom_toBottomOf="@id/ivTimelineImages"
+            app:layout_constraintEnd_toEndOf="@id/ivTimelineImages"
+            app:layout_constraintTop_toTopOf="@id/ivTimelineImages" />
+
+        <View
+            android:id="@+id/vDimmedStart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/dim"
+            app:layout_constraintBottom_toBottomOf="@id/ivTimelineImages"
+            app:layout_constraintEnd_toStartOf="@id/ivTrimStart"
+            app:layout_constraintStart_toStartOf="@id/ivTimelineImages"
+            app:layout_constraintTop_toTopOf="@id/ivTimelineImages" />
+
+        <View
+            android:id="@+id/vDimmedEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/dim"
+            app:layout_constraintBottom_toBottomOf="@id/ivTimelineImages"
+            app:layout_constraintEnd_toEndOf="@id/ivTimelineImages"
+            app:layout_constraintStart_toEndOf="@id/ivTrimEnd"
+            app:layout_constraintTop_toTopOf="@id/ivTimelineImages" />
+
+        <TextView
+            android:id="@+id/tvTimeStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/clTimeline"
+            app:layout_constraintTop_toBottomOf="@id/ivTimelineImages"
+            tools:text="00:00" />
+
+        <TextView
+            android:id="@+id/tvTimeEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvTimeStart"
+            app:layout_constraintEnd_toEndOf="@id/clTimeline"
+            app:layout_constraintTop_toTopOf="@id/tvTimeStart"
+            tools:text="00:10" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

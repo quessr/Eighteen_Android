@@ -6,10 +6,13 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.net.Uri
+import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.graphics.scale
 import androidx.core.view.doOnLayout
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,11 +34,15 @@ class EditVideoFragment :
     private var playerManager: PlayerManager? = null
 
     private var timelineProgressUpdateJob: Job? = null
+    private var duration: Int? = null
     override fun initView() {
         initPlayerManager()
         bind {
             inHeader.ivBtnClose.setOnClickListener {
                 findNavController().popBackStack()
+            }
+            inHeader.ivBtnCheck.setOnClickListener {
+                trimVideoAndFinish()
             }
         }
         initStateFlow()
@@ -60,8 +67,10 @@ class EditVideoFragment :
     private fun setVideo(uriString: String) {
         val mediaInfo = MediaInfo(id = uriString, mediaUrl = uriString, mediaView = binding.mvVideo)
         playerManager?.play(mediaInfo = mediaInfo)
+        val mediaPlayer = MediaPlayer.create(context, Uri.parse(uriString))
+        duration = mediaPlayer.duration
+        mediaPlayer.release()
         initTimelineImages(uriString = uriString)
-        initTimelineProgress()
         timelineProgressUpdateJob?.cancel()
         timelineProgressUpdateJob = viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -79,9 +88,7 @@ class EditVideoFragment :
     private fun initTimelineImages(uriString: String) {
         val timelineLayout = binding.clTimeline
         val context = context ?: return
-        val mediaPlayer = MediaPlayer.create(context, Uri.parse(uriString))
-        val duration = mediaPlayer.duration
-        mediaPlayer.release()
+        val duration = duration ?: return
         timelineLayout.doOnLayout {
             val timelineImageHeight =
                 resources.getDimensionPixelOffset(R.dimen.edit_media_video_timeline_height)
@@ -102,6 +109,10 @@ class EditVideoFragment :
                 )
                 thumbnailBitmaps.forEach { thumbnailBitmap -> thumbnailBitmap?.recycle() }
                 background = BitmapDrawable(resources, timelineBitmap)
+                doOnLayout {
+                    initTimelineProgress()
+                    initTrimView()
+                }
             }
         }
     }
@@ -120,7 +131,6 @@ class EditVideoFragment :
     }
 
     @SuppressLint("ClickableViewAccessibility")
-
     private fun initTimelineProgress() {
         binding.ivTimelineImages.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
@@ -137,7 +147,6 @@ class EditVideoFragment :
                     //do nothing
                 }
             }
-            binding.ivTimelineImages.performClick()
             true
         }
     }
@@ -151,12 +160,142 @@ class EditVideoFragment :
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initTrimView() {
+        bind {
+            updateTrimView(0, 0, TrimViewType.START)
+            ivTrimStart.setOnTouchListener(object : EditVideoTrimViewTouchListener() {
+                override fun onActionMove(
+                    actionDownMarginStartPx: Int,
+                    actionDownMarginEndPx: Int,
+                    diff: Int
+                ) {
+                    updateTrimView(
+                        startTrimViewMargin = actionDownMarginStartPx + diff,
+                        endTrimViewMargin = binding.ivTrimEnd.marginEnd,
+                        actionMoveViewType = TrimViewType.START
+                    )
+                }
+
+            })
+            ivTrimEnd.setOnTouchListener(object : EditVideoTrimViewTouchListener() {
+                override fun onActionMove(
+                    actionDownMarginStartPx: Int,
+                    actionDownMarginEndPx: Int,
+                    diff: Int
+                ) {
+                    updateTrimView(
+                        startTrimViewMargin = binding.ivTrimStart.marginStart,
+                        endTrimViewMargin = actionDownMarginEndPx - diff,
+                        actionMoveViewType = TrimViewType.END
+                    )
+                }
+            })
+        }
+    }
+
+    private fun updateTrimView(
+        startTrimViewMargin: Int,
+        endTrimViewMargin: Int,
+        actionMoveViewType: TrimViewType
+    ) {
+        if (startTrimViewMargin < 0 || endTrimViewMargin < 0) return
+        val timelineWidth = binding.ivTimelineImages.width.takeIf { it > 0 } ?: return
+        val duration = duration ?: return
+        val betweenMargin = timelineWidth - startTrimViewMargin - endTrimViewMargin
+        val betweenTime = timelineWidthToTime(betweenMargin)
+        bind {
+            var startTrimViewMarginResult = startTrimViewMargin
+            var endTrimViewMarginResult = endTrimViewMargin
+            val isValidTimeRange =
+                (MINIMUM_DURATION_MIL_SEC..MAXIMUM_DURATION_MIL_SEC).contains(betweenTime)
+            if (duration > MINIMUM_DURATION_MIL_SEC && !isValidTimeRange) {
+                if (actionMoveViewType == TrimViewType.START) {
+                    startTrimViewMarginResult = startTrimViewMargin.coerceIn(
+                        0..timelineWidth - timeToTimelineWidth(MINIMUM_DURATION_MIL_SEC.toInt())
+                    )
+                    endTrimViewMarginResult = endTrimViewMargin.coerceIn(
+                        timelineWidth - startTrimViewMarginResult - timeToTimelineWidth(
+                            MAXIMUM_DURATION_MIL_SEC.toInt()
+                        )..timelineWidth - startTrimViewMarginResult - timeToTimelineWidth(
+                            MINIMUM_DURATION_MIL_SEC.toInt()
+                        )
+                    )
+
+                } else {
+                    endTrimViewMarginResult = endTrimViewMargin.coerceIn(
+                        0..timelineWidth - timeToTimelineWidth(
+                            MINIMUM_DURATION_MIL_SEC.toInt()
+                        )
+                    )
+                    startTrimViewMarginResult = startTrimViewMargin.coerceIn(
+                        timelineWidth - endTrimViewMarginResult - timeToTimelineWidth(
+                            MAXIMUM_DURATION_MIL_SEC.toInt()
+                        )..timelineWidth - endTrimViewMarginResult - timeToTimelineWidth(
+                            MINIMUM_DURATION_MIL_SEC.toInt()
+                        )
+                    )
+                }
+            }
+            ivTrimStart.updateLayoutParams<MarginLayoutParams> {
+                marginStart = startTrimViewMarginResult
+            }
+            ivTrimEnd.updateLayoutParams<MarginLayoutParams> {
+                marginEnd = endTrimViewMarginResult
+            }
+        }
+        updateTimeText()
+    }
+
+    private fun timeToTimelineWidth(time: Int): Int {
+        val duration = duration ?: return 0
+        val totalWidth = binding.ivTimelineImages.width.takeIf { it > 0 } ?: return 0
+        return totalWidth * time / duration
+    }
+
+    private fun timelineWidthToTime(width: Int): Int {
+        val duration = duration ?: return 0
+        val totalWidth = binding.ivTimelineImages.width.takeIf { it > 0 } ?: return 0
+        return width * duration / totalWidth
+    }
+
+    private fun updateTimeText() {
+        bind {
+            val startTime = getTrimStartTime()
+            val startMin = startTime / 60
+            val startSec = startTime % 60
+            tvTimeStart.text = resources.getString(R.string.time_min_sec, startMin, startSec)
+            val endTime = getTrimEndTime()
+            val endMin = endTime / 60
+            val endSec = endTime % 60
+            tvTimeEnd.text = resources.getString(R.string.time_min_sec, endMin, endSec)
+        }
+    }
+
+    private fun getTrimStartTime() = timelineWidthToTime(binding.ivTrimStart.marginStart) / 1000
+
+    private fun getTrimEndTime(): Int {
+        return ((duration ?: return 0) - timelineWidthToTime(binding.ivTrimEnd.marginEnd)) / 1000
+    }
+
+    private fun trimVideoAndFinish() {
+        Log.d("TESTLOG", "trimVideo")
+        //TODO 비디오 trim 후 viewModel에 저장 후 종료
+    }
+
     override fun onDestroyView() {
         playerManager = null
         super.onDestroyView()
     }
 
+    private enum class TrimViewType {
+        START,
+        END
+    }
+
     companion object {
         private const val TIMELINE_UPDATE_JOB_MIL_SEC = 100L
+        private const val MINIMUM_DURATION_MIL_SEC = 1000L
+        private const val MAXIMUM_DURATION_MIL_SEC = 10000L
     }
 }

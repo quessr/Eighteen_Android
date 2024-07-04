@@ -63,5 +63,5 @@ fun getFileExtension(context: Context, uri: Uri): String {
         val mime = MimeTypeMap.getSingleton()
         mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
     } else MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(uri.path?.let { File(it) }).toString())
-    return if (extension.isNullOrEmpty()) ".mp4" else extension
+    return if (extension.isNullOrEmpty()) "mp4" else extension
 }

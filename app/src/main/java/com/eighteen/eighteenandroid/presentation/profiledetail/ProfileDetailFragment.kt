@@ -99,26 +99,32 @@ class ProfileDetailFragment :
 
         val initialQnAList = listOf(
             ProfileDetailModel.Qna(
+                id = 0,
                 question = "1. Lorem ipsum dolor sit amet?",
                 answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
             ProfileDetailModel.Qna(
+                id = 1,
                 question = "1. Lorem ipsum dolor sit amet?",
                 answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
             ProfileDetailModel.Qna(
+                id = 2,
                 question = "1. Lorem ipsum dolor sit amet?",
                 answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
             ProfileDetailModel.Qna(
+                id = 3,
                 question = "1. Lorem ipsum dolor sit amet?",
                 answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
             ProfileDetailModel.Qna(
+                id = 4,
                 question = "1. Lorem ipsum dolor sit amet?",
                 answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
             ProfileDetailModel.Qna(
+                id = 5,
                 question = "1. Lorem ipsum dolor sit amet?",
                 answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),

@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.eighteen.eighteenandroid.databinding.QuestionAnswerItemBinding
+import com.eighteen.eighteenandroid.databinding.ItemProfileDetailQnaBinding
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ class QuestionAnswerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = QuestionAnswerItemBinding.inflate(inflater, parent, false)
+        val binding = ItemProfileDetailQnaBinding.inflate(inflater, parent, false)
 
         return ViewHolder(binding).also {
             binding.ivSeeMore.setOnClickListener {
@@ -75,7 +75,7 @@ class QuestionAnswerAdapter(
         return viewModel.getItemCount()
     }
 
-    class ViewHolder(private val binding: QuestionAnswerItemBinding) :
+    class ViewHolder(private val binding: ItemProfileDetailQnaBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(question: String, answer: String) {
             binding.question.text = question

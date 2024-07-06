@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.databinding.QuestionAnswerItemBinding
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
@@ -14,7 +16,7 @@ class QuestionAnswerAdapter(
     lifecycleOwner: LifecycleOwner,
     private val viewModel: ProfileDetailViewModel,
 ) :
-    RecyclerView.Adapter<QuestionAnswerAdapter.ViewHolder>() {
+    ListAdapter<ProfileDetailModel.Qna, QuestionAnswerAdapter.ViewHolder>(diffUtil) {
 
     private var items: List<ProfileDetailModel.Qna> = emptyList()
 
@@ -91,6 +93,24 @@ class QuestionAnswerAdapter(
 
         fun seeSeeMoreClickListener(listener: () -> Unit) {
             binding.tvSeeMore.setOnClickListener { listener() }
+        }
+    }
+
+    companion object {
+        private val diffUtil = object : DiffUtil.ItemCallback<ProfileDetailModel.Qna>() {
+            override fun areItemsTheSame(
+                oldItem: ProfileDetailModel.Qna,
+                newItem: ProfileDetailModel.Qna
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ProfileDetailModel.Qna,
+                newItem: ProfileDetailModel.Qna
+            ): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

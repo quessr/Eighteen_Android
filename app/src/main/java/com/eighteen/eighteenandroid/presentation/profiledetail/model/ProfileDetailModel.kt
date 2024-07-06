@@ -21,6 +21,7 @@ sealed class ProfileDetailModel {
     ) : ProfileDetailModel()
 
     data class Qna(
+        val id: Int,
         val question: String,
         val answer: String
     ) : ProfileDetailModel()

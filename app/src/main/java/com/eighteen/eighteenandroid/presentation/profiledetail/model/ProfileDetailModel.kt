@@ -1,27 +1,32 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail.model
 
 sealed class ProfileDetailModel {
+    abstract val id: String
     data class ProfileInfo(
+        override val id: String,
         val name: String,
         val age: Int,
         val school: String,
-        val profileImageUrl: ProfileImages) : ProfileDetailModel()
+    ) : ProfileDetailModel()
 
     data class ProfileImages(
+        override val id: String,
         val imageUrl: List<String>
     ) : ProfileDetailModel()
 
     data class Like(
+        override val id: String,
         val likeCount: Int
     ) : ProfileDetailModel()
 
     data class Introduction(
+        override val id: String,
         val personalityType: String,
         val introductionText: String
     ) : ProfileDetailModel()
 
     data class Qna(
-        val id: Int,
+        override val id: String,
         val question: String,
         val answer: String
     ) : ProfileDetailModel()

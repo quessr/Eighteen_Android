@@ -22,118 +22,133 @@ class ProfileDetailFragment :
 
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
     private val profileDetailViewModel by viewModels<ProfileDetailViewModel>()
-    private lateinit var adapter: QuestionAnswerAdapter
+
+    //    private lateinit var adapter: QuestionAnswerAdapter
+    private lateinit var adapter: ProfileDetailAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupAdapter()
         initViewModel()
+        setupInitialData()
     }
 
     override fun initView() {
         initNavigation()
         setupProfileImages()
-        setupQuestionAnswerList()
+//        setupQuestionAnswerList()
+    }
+
+    private fun setupAdapter() {
+        adapter = ProfileDetailAdapter()
+        bind {
+            profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+            profileDetailRecyclerview.adapter = adapter
+        }
     }
 
     private fun initViewModel() {
         lifecycleScope.launch {
             profileDetailViewModel.items.collectLatest { details ->
-                details.forEach { detail ->
-                    when (detail) {
-                        is ProfileDetailModel.ProfileInfo -> {
-                            updateProfileInfo(detail)
-                        }
-
-                        is ProfileDetailModel.ProfileImages -> {
-                            setupViewPagerAndTabs(detail)
-                        }
-
-                        is ProfileDetailModel.Introduction -> updateIntroduction(detail)
-                        is ProfileDetailModel.Like -> updateLike(detail)
-                        else -> {
-                            handleUnknownDetail(detail)
-                        }
-                    }
-                }
+                adapter.submitList(details)
+//                details.forEach { detail ->
+//                    when (detail) {
+//                        is ProfileDetailModel.ProfileInfo -> {
+//                            updateProfileInfo(detail)
+//                        }
+//
+//                        is ProfileDetailModel.ProfileImages -> {
+//                            setupViewPagerAndTabs(detail)
+//                        }
+//
+//                        is ProfileDetailModel.Introduction -> updateIntroduction(detail)
+//                        is ProfileDetailModel.Like -> updateLike(detail)
+//                        else -> {
+//                            handleUnknownDetail(detail)
+//                        }
+//                    }
+//                }
             }
         }
     }
 
-    private fun updateProfileInfo(profileInfo: ProfileDetailModel.ProfileInfo) {
-        bind {
-            tvName.text = profileInfo.name
-            tvAge.text = profileInfo.age.toString()
-            tvSchool.text = profileInfo.school
-        }
-    }
+//    private fun updateProfileInfo(profileInfo: ProfileDetailModel.ProfileInfo) {
+//        bind {
+//            tvName.text = profileInfo.name
+//            tvAge.text = profileInfo.age.toString()
+//            tvSchool.text = profileInfo.school
+//        }
+//    }
 
-    private fun updateIntroduction(introduction: ProfileDetailModel.Introduction) {
-        bind {
-            chipPersonalityType.text = introduction.personalityType
-            tvIntroduction.text = introduction.introductionText
-        }
-    }
+
+//    private fun updateIntroduction(introduction: ProfileDetailModel.Introduction) {
+//        bind {
+//            chipPersonalityType.text = introduction.personalityType
+//            tvIntroduction.text = introduction.introductionText
+//        }
+//    }
 
     private fun updateLike(like: ProfileDetailModel.Like) {
         bind { }
     }
 
-    private fun setupViewPagerAndTabs(profileImages: ProfileDetailModel.ProfileImages) {
-        bind {
-            viewPager.adapter = ViewPagerAdapter(profileImages.imageUrl)
-        }
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
-    }
+//    private fun setupViewPagerAndTabs(profileImages: ProfileDetailModel.ProfileImages) {
+//        bind {
+//            viewPager.adapter = ViewPagerAdapter(profileImages.imageUrl)
+//        }
+//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
+//    }
 
     private fun handleUnknownDetail(detail: ProfileDetailModel) {
         //TODO 알 수 없는 detail을 처리하는 로직
     }
 
 
-    private fun setupQuestionAnswerList() {
-        adapter = QuestionAnswerAdapter(viewLifecycleOwner, profileDetailViewModel)
-        bind {
-            recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            recyclerView.adapter = adapter
-        }
-
-        val initialQnAList = listOf(
-            ProfileDetailModel.Qna(
-                id = 0,
-                question = "1. Lorem ipsum dolor sit amet?",
-                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-            ProfileDetailModel.Qna(
-                id = 1,
-                question = "1. Lorem ipsum dolor sit amet?",
-                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-            ProfileDetailModel.Qna(
-                id = 2,
-                question = "1. Lorem ipsum dolor sit amet?",
-                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-            ProfileDetailModel.Qna(
-                id = 3,
-                question = "1. Lorem ipsum dolor sit amet?",
-                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-            ProfileDetailModel.Qna(
-                id = 4,
-                question = "1. Lorem ipsum dolor sit amet?",
-                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-            ProfileDetailModel.Qna(
-                id = 5,
-                question = "1. Lorem ipsum dolor sit amet?",
-                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-        )
-        profileDetailViewModel.setItems(initialQnAList)
-    }
+//    private fun setupQuestionAnswerList() {
+//        adapter = QuestionAnswerAdapter(viewLifecycleOwner, profileDetailViewModel)
+//        bind {
+//            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//            recyclerView.adapter = adapter
+//        }
+//
+//        val initialQnAList = listOf(
+//            ProfileDetailModel.Qna(
+//                id = 0,
+//                question = "1. Lorem ipsum dolor sit amet?",
+//                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//            ),
+//            ProfileDetailModel.Qna(
+//                id = 1,
+//                question = "1. Lorem ipsum dolor sit amet?",
+//                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//            ),
+//            ProfileDetailModel.Qna(
+//                id = 2,
+//                question = "1. Lorem ipsum dolor sit amet?",
+//                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//            ),
+//            ProfileDetailModel.Qna(
+//                id = 3,
+//                question = "1. Lorem ipsum dolor sit amet?",
+//                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//            ),
+//            ProfileDetailModel.Qna(
+//                id = 4,
+//                question = "1. Lorem ipsum dolor sit amet?",
+//                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//            ),
+//            ProfileDetailModel.Qna(
+//                id = 5,
+//                question = "1. Lorem ipsum dolor sit amet?",
+//                answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//            ),
+//        )
+//        profileDetailViewModel.setItems(initialQnAList)
+//    }
 
     private fun setupProfileImages() {
         val profileImages = ProfileDetailModel.ProfileImages(
+            id = "0",
             imageUrl = listOf(
                 "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
                 "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
@@ -143,10 +158,46 @@ class ProfileDetailFragment :
             )
         )
 
-        setupViewPagerAndTabs(profileImages)
+//        setupViewPagerAndTabs(profileImages)
         initMediaDetailFlow()
 
         profileDetailViewModel.setItems(listOf(profileImages))
+    }
+
+    private fun setupInitialData() {
+        val initialData = listOf(
+            ProfileDetailModel.ProfileImages(
+                id = "2",
+                imageUrl = listOf(
+                    "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
+                    "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
+                    "https://cdn.hankooki.com/news/photo/202309/107376_146623_1695826504.jpg",
+                    "https://cdn.dailycc.net/news/photo/202312/766253_670987_1515.png",
+                    "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
+                )
+            ),
+            ProfileDetailModel.ProfileInfo(
+                id = "1",
+                name = "김 에스더",
+                age = 16,
+                school = "서울 중학교",
+            ),
+//            ProfileDetailModel.Like(
+//                id = "3",
+//                likeCount = 100
+//            ),
+//            ProfileDetailModel.Introduction(
+//                id = "4",
+//                personalityType = "INTP",
+//                introductionText = "Hello, I am INTP."
+//            ),
+//            ProfileDetailModel.Qna(
+//                id = "5",
+//                question = "What is your hobby?",
+//                answer = "My hobby is painting."
+//            )
+        )
+        profileDetailViewModel.setItems(initialData)
     }
 
     private fun initNavigation() {

@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ActivityMainBinding
+import com.eighteen.eighteenandroid.presentation.common.permission.PermissionManager
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -18,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    val permissionManager = PermissionManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

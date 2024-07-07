@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.DialogReportSelectBinding
+import com.eighteen.eighteenandroid.presentation.MainActivity
 
 fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = null) {
     dialogFragment.show(childFragmentManager, tag)
@@ -41,4 +42,16 @@ fun <T : Parcelable> Fragment.setNavigationResult(
     @IdRes destinationId: Int
 ) {
     findNavController().getBackStackEntry(destinationId).savedStateHandle[key] = result
+}
+
+fun Fragment.requestPermissions(
+    vararg permissions: String,
+    onGranted: (() -> Unit)? = null,
+    onDenied: (() -> Unit)? = null
+) {
+    (activity as? MainActivity)?.permissionManager?.requestPermissions(
+        permissions = permissions,
+        onGranted = onGranted,
+        onDenied = onDenied
+    )
 }

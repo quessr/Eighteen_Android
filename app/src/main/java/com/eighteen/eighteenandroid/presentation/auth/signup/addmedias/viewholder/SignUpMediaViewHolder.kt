@@ -26,7 +26,7 @@ class SignUpMediaViewHolder(
             is SignUpMediaItemModel.Image -> ImageLoader.get()
                 .loadBitmap(binding.ivMedia, model.imageBitmap)
             is SignUpMediaItemModel.Video -> ImageLoader.get()
-                .loadBitmap(binding.ivMedia, model.thumbnailBitmap)
+                .loadUrl(binding.ivMedia, url = model.uriString)
         }
     }
 

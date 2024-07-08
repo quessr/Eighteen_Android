@@ -9,6 +9,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.annotation.OptIn
 import androidx.core.graphics.scale
 import androidx.core.view.doOnLayout
 import androidx.core.view.marginEnd
@@ -17,16 +18,22 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditVideoBinding
+import com.eighteen.eighteenandroid.presentation.common.contentUriToPath
+import com.eighteen.eighteenandroid.presentation.common.ffmpeg.FfmpegUtils
+import com.eighteen.eighteenandroid.presentation.common.getFileExtension
 import com.eighteen.eighteenandroid.presentation.common.getVideoThumbnailFromUri
 import com.eighteen.eighteenandroid.presentation.common.media3.MediaInfo
 import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
 import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment
+import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 
 
 class EditVideoFragment :
@@ -42,7 +49,7 @@ class EditVideoFragment :
                 findNavController().popBackStack()
             }
             inHeader.ivBtnCheck.setOnClickListener {
-                trimVideoAndFinish()
+                trimVideoAndFinishIfSuccess()
             }
         }
         initStateFlow()
@@ -278,9 +285,32 @@ class EditVideoFragment :
         return ((duration ?: return 0) - timelineWidthToTime(binding.ivTrimEnd.marginEnd)) / 1000
     }
 
-    private fun trimVideoAndFinish() {
-        Log.d("TESTLOG", "trimVideo")
-        //TODO 비디오 trim 후 viewModel에 저장 후 종료
+    @OptIn(UnstableApi::class)
+    private fun trimVideoAndFinishIfSuccess() {
+        //TODO result media url cancel ,failure callback
+        val context = context ?: return
+        val uri = Uri.parse(editMediaViewModel.mediaUriStringStateFlow.value)
+        val path = contentUriToPath(context, uri) ?: return
+
+        val extension = getFileExtension(context = context, uri = uri)
+        val resultUrl =
+            "${context.getExternalFilesDir("Video")?.path}/${LocalTime.now()}.$extension"
+
+        FfmpegUtils.trimVideo(
+            mediaUriString = path,
+            resultMediaUriString = resultUrl,
+            startTimeSec = getTrimStartTime(),
+            endTimeSec = getTrimEndTime(),
+            onSuccess = {
+                Log.d("EditVideoFragment", "success")
+                val editResult = EditMediaResult.Video(tags = emptyList(), uriString = resultUrl)
+                editMediaViewModel.setEditResultEvent(result = editResult)
+                findNavController().popBackStack()
+            },
+            onCancel = { Log.d("EditVideoFragment", "cancel") },
+            onFailure = { Log.d("EditVideoFragment", "failure") }
+        )
+
     }
 
     override fun onDestroyView() {

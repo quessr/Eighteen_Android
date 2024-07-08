@@ -1,5 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
@@ -15,6 +17,7 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
+import com.eighteen.eighteenandroid.presentation.common.requestPermissions
 import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry
 import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment.Companion.EDIT_MEDIA_POP_DESTINATION_ID_KEY
 import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaViewModel
@@ -96,15 +99,33 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             editMediaActionEventLiveData.observe(
                 viewLifecycleOwner,
                 EventObserver { action ->
-                    val navActionId = when (action) {
-                        is SignUpEditMediaAction.EditImage -> R.id.action_fragmentSignUp_to_fragmentEditImage
-                        is SignUpEditMediaAction.EditVideo -> R.id.action_fragmentSignUp_to_fragmentEditVideo
-                    }
                     val bundle = Bundle().apply {
                         putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, R.id.fragmentSignUp)
                     }
                     editMediaViewModel.setMediaUriString(uriString = action.uriString)
-                    findNavController().navigate(navActionId, bundle)
+                    when (action) {
+                        is SignUpEditMediaAction.EditImage -> findNavController().navigate(
+                            R.id.action_fragmentSignUp_to_fragmentEditImage,
+                            bundle
+                        )
+                        is SignUpEditMediaAction.EditVideo -> {
+                            val onGranted = {
+                                findNavController().navigate(
+                                    R.id.action_fragmentSignUp_to_fragmentEditVideo,
+                                    bundle
+                                )
+                            }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                onGranted.invoke()
+                            } else {
+                                //TODO 권한요청 거부 시 작업(팝업 or 세팅 이동 등) 논의
+                                requestPermissions(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    onGranted = onGranted
+                                )
+                            }
+                        }
+                    }
                 })
         }
     }

@@ -11,7 +11,6 @@ sealed interface EditMediaResult : Parcelable {
     @Parcelize
     data class Image(override val tags: List<String>, val imageBitmap: Bitmap) : EditMediaResult
 
-    //TODO 비디오 모델 구현
     @Parcelize
-    data class Video(override val tags: List<String>, val thumbnailBitmap: Bitmap) : EditMediaResult
+    data class Video(override val tags: List<String>, val uriString: String) : EditMediaResult
 }

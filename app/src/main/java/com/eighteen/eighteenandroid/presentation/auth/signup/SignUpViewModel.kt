@@ -70,7 +70,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
                 tags = mediaResult.tags
             )
             is EditMediaResult.Video -> SignUpMedia.Video(
-                thumbnailBitmap = mediaResult.thumbnailBitmap,
+                uriString = mediaResult.uriString,
                 tags = mediaResult.tags
             )
         }
@@ -85,11 +85,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
 
     override fun onCleared() {
         _mediasStateFlow.value.forEach {
-            val targetBitmap = when (it) {
-                is SignUpMedia.Image -> it.imageBitmap
-                is SignUpMedia.Video -> it.thumbnailBitmap
-            }
-            targetBitmap.recycle()
+            if (it is SignUpMedia.Image) it.imageBitmap.recycle()
         }
         super.onCleared()
     }

@@ -18,8 +18,8 @@ sealed interface SignUpMediaItemModel {
             other is Image && this.imageBitmap == other.imageBitmap
     }
 
-    data class Video(val thumbnailBitmap: Bitmap) : SignUpMediaItemModel {
+    data class Video(val uriString: String) : SignUpMediaItemModel {
         override fun areContentsTheSame(other: SignUpMediaItemModel): Boolean =
-            other is Video && this.thumbnailBitmap == other.thumbnailBitmap
+            other is Video && this.uriString == other.uriString
     }
 }

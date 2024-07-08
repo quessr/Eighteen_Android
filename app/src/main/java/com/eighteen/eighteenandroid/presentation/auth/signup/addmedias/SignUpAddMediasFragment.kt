@@ -94,7 +94,7 @@ class SignUpAddMediasFragment :
             val mediaItemModels = signUpMedias.map {
                 when (it) {
                     is SignUpMedia.Image -> SignUpMediaItemModel.Image(imageBitmap = it.imageBitmap)
-                    is SignUpMedia.Video -> SignUpMediaItemModel.Video(thumbnailBitmap = it.thumbnailBitmap)
+                    is SignUpMedia.Video -> SignUpMediaItemModel.Video(uriString = it.uriString)
                 }
             }
             items.addAll(mediaItemModels)

@@ -2,11 +2,9 @@ package com.eighteen.eighteenandroid.presentation.common.media3
 
 import android.content.Context
 import androidx.annotation.CallSuper
-import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 /**
@@ -28,32 +26,12 @@ open class PlayerManager(
     val duration get() = player.duration
     val isPlaying get() = player.isPlaying
 
-    private val playerListener = object : Player.Listener {
-        override fun onPlaybackStateChanged(playbackState: Int) {
-            when (playbackState) {
-                Player.STATE_READY -> {
-                    targetMediaInfo?.mediaView?.thumbnailView?.isVisible = false
-                }
-                Player.STATE_BUFFERING -> {
-                    //TODO 버퍼링 중 로딩아이콘 논의 필요
-                }
-                Player.STATE_ENDED -> {}
-                Player.STATE_IDLE -> {}
-            }
-        }
-    }
-
     init {
         initLifecycle()
-        initPlayer()
     }
 
     private fun initLifecycle() {
         lifecycleOwner.lifecycle.addObserver(this)
-    }
-
-    private fun initPlayer() {
-        player.addListener(playerListener)
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -70,6 +48,7 @@ open class PlayerManager(
     }
 
     open fun play(mediaInfo: MediaInfo) {
+        player.repeatMode = mediaInfo.repeatMode
         if (mediaInfo.id == targetMediaInfo?.id) {
             player.play()
             return
@@ -102,6 +81,7 @@ open class PlayerManager(
         }
         player.pause()
         mediaInfo.mediaView.setPlayer(null)
+        targetMediaInfo = null
     }
 
     private fun setPlayingInfo(playingInfo: PlayingInfo) {
@@ -122,7 +102,6 @@ open class PlayerManager(
 
     private fun release() {
         targetMediaInfo = null
-        player.removeListener(playerListener)
         player.release()
     }
 

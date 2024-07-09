@@ -65,14 +65,8 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
 
     fun addMediaResult(mediaResult: EditMediaResult) {
         val signUpMedia = when (mediaResult) {
-            is EditMediaResult.Image -> SignUpMedia.Image(
-                imageBitmap = mediaResult.imageBitmap,
-                tags = mediaResult.tags
-            )
-            is EditMediaResult.Video -> SignUpMedia.Video(
-                uriString = mediaResult.uriString,
-                tags = mediaResult.tags
-            )
+            is EditMediaResult.Image -> SignUpMedia.Image(imageBitmap = mediaResult.imageBitmap)
+            is EditMediaResult.Video -> SignUpMedia.Video(uriString = mediaResult.uriString)
         }
         _mediasStateFlow.value = _mediasStateFlow.value.toMutableList().apply {
             add(signUpMedia)

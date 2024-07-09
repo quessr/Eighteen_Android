@@ -1,6 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.editmedia
 
-import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,9 +13,6 @@ class EditMediaViewModel : ViewModel() {
     private val _mediaUriStringStateFlow = MutableStateFlow("")
     val mediaUriStringStateFlow: StateFlow<String> = _mediaUriStringStateFlow
 
-    private val _cropAreaBitmapStateFlow = MutableStateFlow<Bitmap?>(null)
-    val cropAreaBitmapStateFlow: StateFlow<Bitmap?> = _cropAreaBitmapStateFlow
-
     private val _editResultEventLiveData = MutableLiveData<Event<EditMediaResult>>()
     val editResultEventLiveData: LiveData<Event<EditMediaResult>> = _editResultEventLiveData
 
@@ -24,16 +20,7 @@ class EditMediaViewModel : ViewModel() {
         _mediaUriStringStateFlow.value = uriString
     }
 
-    fun setAndRecycleCropAreaBitmap(bitmap: Bitmap) {
-        _cropAreaBitmapStateFlow.value = bitmap
-    }
-
     fun setEditResultEvent(result: EditMediaResult) {
         _editResultEventLiveData.value = Event(result)
-    }
-
-    override fun onCleared() {
-        _cropAreaBitmapStateFlow.value?.recycle()
-        super.onCleared()
     }
 }

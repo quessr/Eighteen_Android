@@ -6,11 +6,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed interface EditMediaResult : Parcelable {
-    val tags: List<String>
+    @Parcelize
+    data class Image(val imageBitmap: Bitmap) : EditMediaResult
 
     @Parcelize
-    data class Image(override val tags: List<String>, val imageBitmap: Bitmap) : EditMediaResult
-
-    @Parcelize
-    data class Video(override val tags: List<String>, val uriString: String) : EditMediaResult
+    data class Video(val uriString: String) : EditMediaResult
 }

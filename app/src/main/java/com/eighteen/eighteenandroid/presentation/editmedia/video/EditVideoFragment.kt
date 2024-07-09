@@ -303,7 +303,7 @@ class EditVideoFragment :
             endTimeSec = getTrimEndTime(),
             onSuccess = {
                 Log.d("EditVideoFragment", "success")
-                val editResult = EditMediaResult.Video(tags = emptyList(), uriString = resultUrl)
+                val editResult = EditMediaResult.Video(uriString = resultUrl)
                 editMediaViewModel.setEditResultEvent(result = editResult)
                 findNavController().popBackStack()
             },

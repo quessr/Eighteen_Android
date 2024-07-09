@@ -5,15 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--TODO typo 적용 -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="13dp"
+        android:text="@string/sign_up_add_media_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/sign_up_add_media_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMedias"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="288dp"
+        android:layout_marginTop="31dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHint"
         tools:listitem="@layout/item_sign_up_media" />
 </androidx.constraintlayout.widget.ConstraintLayout>

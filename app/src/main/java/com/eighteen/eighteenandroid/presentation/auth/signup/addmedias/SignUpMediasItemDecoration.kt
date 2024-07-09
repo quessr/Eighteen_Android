@@ -13,10 +13,10 @@ class SignUpMediasItemDecoration : ItemDecoration() {
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        super.getItemOffsets(outRect, view, parent, state)
         val itemPosition = parent.getChildAdapterPosition(view)
         val betweenMarginPx = parent.context.dp2Px(BETWEEN_MARGIN_DP)
-        if (itemPosition > 0) outRect.left = betweenMarginPx
+        outRect.left = if (itemPosition == 0) betweenMarginPx else 0
+        outRect.right = betweenMarginPx
     }
 
     companion object {

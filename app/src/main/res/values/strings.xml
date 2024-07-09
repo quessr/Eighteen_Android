@@ -13,6 +13,8 @@
     <string name="sign_up_next">다음으로</string>
     <string name="sign_up_pass">건너뛰기</string>
     <string name="sign_up_start">시작하기</string>
+    <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
+    <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
 
     <string name="main_about_teen">About A-Teen</string>
     <string name="about_teen_title">Teen</string>

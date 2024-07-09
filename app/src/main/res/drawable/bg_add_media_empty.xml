@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="247dp"
+        android:height="288dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/grey_03" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_plus_add_media"
+        android:gravity="center" />
+</layer-list>

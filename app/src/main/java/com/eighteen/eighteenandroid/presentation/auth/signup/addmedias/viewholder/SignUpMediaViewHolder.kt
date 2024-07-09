@@ -7,7 +7,6 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.SignUpAdd
 import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.model.SignUpMediaItemModel
 import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
 
-//TODO 디자인 리소스 적용
 class SignUpMediaViewHolder(
     private val binding: ItemSignUpMediaBinding,
     private val clickListener: SignUpAddMediasClickListener,
@@ -18,15 +17,14 @@ class SignUpMediaViewHolder(
         bindClickListener(model = model, position = position)
     }
 
-    //TODO 디자인 가이드 적용
     private fun bindImage(model: SignUpMediaItemModel) {
         when (model) {
-            is SignUpMediaItemModel.RefEmpty -> binding.ivMedia.setImageResource(R.drawable.bg_about_teen)
-            is SignUpMediaItemModel.Empty -> binding.ivMedia.setImageResource(R.drawable.ic_launcher_background)
+            is SignUpMediaItemModel.RefEmpty -> binding.ivMedia.setImageResource(R.drawable.bg_add_media_ref_empty)
+            is SignUpMediaItemModel.Empty -> binding.ivMedia.setImageResource(R.drawable.bg_add_media_empty)
             is SignUpMediaItemModel.Image -> ImageLoader.get()
-                .loadBitmap(binding.ivMedia, model.imageBitmap)
+                .loadBitmapCenterCrop(binding.ivMedia, model.imageBitmap)
             is SignUpMediaItemModel.Video -> ImageLoader.get()
-                .loadUrl(binding.ivMedia, url = model.uriString)
+                .loadUrlCenterCrop(binding.ivMedia, url = model.uriString)
         }
     }
 

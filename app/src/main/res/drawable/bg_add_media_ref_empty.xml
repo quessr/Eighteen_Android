@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="247dp"
+        android:height="288dp">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="2dp"
+                android:color="@color/main_color" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_add_media_ref"
+        android:gravity="center" />
+</layer-list>

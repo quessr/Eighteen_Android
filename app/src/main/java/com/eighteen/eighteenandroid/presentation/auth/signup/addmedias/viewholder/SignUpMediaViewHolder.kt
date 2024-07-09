@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.viewholder
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemSignUpMediaBinding
@@ -26,6 +27,7 @@ class SignUpMediaViewHolder(
             is SignUpMediaItemModel.Video -> ImageLoader.get()
                 .loadUrlCenterCrop(binding.ivMedia, url = model.uriString)
         }
+        binding.ivVideoIcon.isVisible = model is SignUpMediaItemModel.Video
     }
 
     private fun bindClickListener(model: SignUpMediaItemModel, position: Int) {

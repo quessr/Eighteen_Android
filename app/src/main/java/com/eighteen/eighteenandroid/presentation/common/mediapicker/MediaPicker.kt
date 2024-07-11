@@ -15,7 +15,6 @@ class MediaPicker {
             activity.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 callback.invoke(uri)
             }
-        pickMedia.unregister()
     }
 
     constructor(fragment: Fragment, callback: (Uri?) -> Unit) {

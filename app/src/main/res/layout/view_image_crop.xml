@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- TODO 디자인 가이드 적용 -->
+
     <ImageView
         android:id="@+id/ivTargetImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- TODO 디자인 소스 상하단 공백 수정 -->
     <ImageView
         android:id="@+id/ivCropArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="100dp"
-        android:src="@color/white"
+        android:background="@drawable/bg_crop_area"
         app:layout_constraintBottom_toBottomOf="@id/ivTargetImage"
         app:layout_constraintEnd_toEndOf="@id/ivTargetImage"
         app:layout_constraintStart_toStartOf="@id/ivTargetImage"

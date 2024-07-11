@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="pretendard_regular_20">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+    </style>
+
+    <style name="pretendard_regular_16">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+    </style>
+
+    <style name="pretendard_regular_14">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize" tools:ignore="SpUsage">14dp</item>
+    </style>
+
+    <style name="pretendard_regular_13">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize" tools:ignore="SpUsage">13dp</item>
+    </style>
+
+    <style name="pretendard_bold_20">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+    </style>
+
+    <style name="pretendard_bold_16">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+    </style>
+
+    <style name="pretendard_bold_14">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">14dp</item>
+    </style>
+
+    <style name="pretendard_bold_13">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">13dp</item>
+    </style>
+</resources>

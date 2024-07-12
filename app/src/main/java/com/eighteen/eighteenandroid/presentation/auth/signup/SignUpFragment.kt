@@ -1,5 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
@@ -12,7 +14,13 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
+import com.eighteen.eighteenandroid.presentation.common.requestPermissions
+import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry
+import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment.Companion.EDIT_MEDIA_POP_DESTINATION_ID_KEY
+import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaViewModel
 
 /**
  * 회원가입 기능의 진입점
@@ -21,6 +29,8 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate),
     SignUpContentContainer {
     private val signUpViewModel by viewModels<SignUpViewModel>()
+
+    private val editMediaViewModel by viewModelsByBackStackEntry<EditMediaViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -39,6 +49,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
     }
 
+    override fun onDestroyView() {
+        onBackPressedCallback.remove()
+        super.onDestroyView()
+    }
+
     override fun initView() {
         bind {
             tvBtnNext.setOnClickListener {
@@ -48,12 +63,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 signUpViewModel.actionToPrevPage()
             }
         }
-        initObserver()
+        initSignUpObserver()
+        initEditMediaObserver()
     }
 
-    private fun initObserver() {
+    private fun initSignUpObserver() = with(signUpViewModel) {
         bind {
-            signUpViewModel.progressLiveData.observe(viewLifecycleOwner) {
+            progressLiveData.observe(viewLifecycleOwner) {
                 with(lpbProgress) {
                     isVisible = (it != null)
                     if (it != null) {
@@ -63,7 +79,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
             }
 
-            signUpViewModel.nextButtonLiveData.observe(viewLifecycleOwner) {
+            nextButtonLiveData.observe(viewLifecycleOwner) {
                 with(tvBtnNext) {
                     isVisible = it.isVisible
                     isEnabled = it.isEnabled
@@ -79,6 +95,44 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     }
                 }
             }
+
+            editMediaActionEventLiveData.observe(
+                viewLifecycleOwner,
+                EventObserver { action ->
+                    val bundle = Bundle().apply {
+                        putInt(EDIT_MEDIA_POP_DESTINATION_ID_KEY, R.id.fragmentSignUp)
+                    }
+                    editMediaViewModel.setMediaUriString(uriString = action.uriString)
+                    when (action) {
+                        is SignUpEditMediaAction.EditImage -> findNavController().navigate(
+                            R.id.action_fragmentSignUp_to_fragmentEditImage,
+                            bundle
+                        )
+                        is SignUpEditMediaAction.EditVideo -> {
+                            val onGranted = {
+                                findNavController().navigate(
+                                    R.id.action_fragmentSignUp_to_fragmentEditVideo,
+                                    bundle
+                                )
+                            }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                onGranted.invoke()
+                            } else {
+                                //TODO 권한요청 거부 시 작업(팝업 or 세팅 이동 등) 논의
+                                requestPermissions(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    onGranted = onGranted
+                                )
+                            }
+                        }
+                    }
+                })
         }
+    }
+
+    private fun initEditMediaObserver() = with(editMediaViewModel) {
+        editResultEventLiveData.observe(viewLifecycleOwner, EventObserver {
+            signUpViewModel.addMediaResult(it)
+        })
     }
 }

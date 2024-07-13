@@ -10,6 +10,7 @@ import java.util.Date
  * 회원가입 과정 중 받는 정보들을 저장 혹은 child에서 parent에 event를 전달하기 위한 interface
  */
 interface SignUpViewModelContentInterface {
+    var phoneNumber: String
     var id: String
     var nickName: String
     var birth: Date

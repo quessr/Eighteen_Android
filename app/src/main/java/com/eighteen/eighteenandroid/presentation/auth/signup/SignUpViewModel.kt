@@ -32,6 +32,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     val editMediaActionEventLiveData: LiveData<Event<SignUpEditMediaAction>> =
         _editMediaActionEventLiveData
 
+    override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
     override var birth: Date = Date()

@@ -1,17 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="16dp">
 
     <TextView
-        android:id="@+id/tvTest"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTitle"
+        style="@style/pretendard_bold_20"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="전화번호 입력 페이지"
-        android:textSize="64sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="13dp"
+        android:text="@string/sign_up_enter_phone_number_title"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- TODO typo 적용(현재 문의 중) -->
+    <EditText
+        android:id="@+id/etInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:background="@drawable/bg_rect_stroke_w2_main_color_r10"
+        android:drawableEnd="@drawable/ic_text_field_clear"
+        android:drawablePadding="4dp"
+        android:inputType="number"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="13dp"
+        android:textCursorDrawable="@drawable/ic_text_field_cursor_grey_01"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        tools:text="aseljfasliefjasefzsefzsefzsefzsefzsefzsefzsefzsfea" />
+
+    <TextView
+        android:id="@+id/tvBtnGetAuthCode"
+        style="@style/pretendard_regular_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rect_main_color_r20"
+        android:gravity="center"
+        android:paddingVertical="13dp"
+        android:text="@string/sign_up_enter_phone_number_get_auth_code"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etInput"
+        app:layout_constraintVertical_bias="0.13" />
 </androidx.constraintlayout.widget.ConstraintLayout>

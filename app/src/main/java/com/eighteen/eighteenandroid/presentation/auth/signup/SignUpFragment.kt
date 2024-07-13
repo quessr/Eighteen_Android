@@ -62,6 +62,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             ivBtnBack.setOnClickListener {
                 signUpViewModel.actionToPrevPage()
             }
+            root.setOnClickListener {
+                hideKeyboard()
+            }
         }
         initSignUpObserver()
         initEditMediaObserver()

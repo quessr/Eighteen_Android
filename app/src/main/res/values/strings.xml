@@ -19,9 +19,14 @@
     <string name="sign_up_login_with_phone_number">전화번호로 회원가입</string>
     <string name="sign_up_login_notice_agreed">대한민국에서 위치한 계정으로 계속하면\n당사의 서비스 약관의 동의하고\n개인정보 처리방침을 읽었음을 인정하는 것입니다.</string>
     <string name="sign_up_login_check_has_account">이미 계정이 있으신가요?</string>
+
     <string name="sign_up_next">다음으로</string>
     <string name="sign_up_pass">건너뛰기</string>
     <string name="sign_up_start">시작하기</string>
+
+    <string name="sign_up_enter_phone_number_title">번호를 입력해주세요</string>
+    <string name="sign_up_enter_phone_number_get_auth_code">인증 코드 받기</string>
+
     <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
 

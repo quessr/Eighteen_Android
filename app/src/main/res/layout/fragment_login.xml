@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="34dp"
-        android:background="@drawable/bg_rect_grey30_stroke_r20"
+        android:background="@drawable/bg_rect_stroke_w1_grey_03_r20"
         android:gravity="center"
         android:paddingVertical="13dp"
         android:text="@string/sign_up_login_with_phone_number"

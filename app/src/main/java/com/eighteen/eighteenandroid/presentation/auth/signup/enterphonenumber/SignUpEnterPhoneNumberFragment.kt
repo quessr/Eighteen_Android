@@ -20,12 +20,12 @@ class SignUpEnterPhoneNumberFragment :
         findNavController().navigate(R.id.action_fragmentSignUpEnterPhoneNumber_to_fragmentSignUpEnterAuthCode)
     }
     override val progress: Int? = null
-    override val signUpNextButtonModel: SignUpNextButtonModel = SignUpNextButtonModel(isVisible = false)
+    override val signUpNextButtonModel: SignUpNextButtonModel =
+        SignUpNextButtonModel(isVisible = false)
 
-    override fun initView() {
-        //fixme 네비게이션 테스트 코드 삭제
-        binding.tvTest.setOnClickListener {
-            onMoveNextPageAction.invoke()
+    override fun initView() = bind {
+        root.setOnClickListener {
+            hideKeyboard()
         }
     }
 }

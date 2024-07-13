@@ -1,7 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -54,6 +53,9 @@ class SignUpEnterPhoneNumberFragment :
         tvBtnGetAuthCode.setOnClickListener {
             signUpEnterPhoneNumberViewModel.requestSendMessage(phoneNumber = etInput.text.toString())
         }
+        ivBtnClear.setOnClickListener {
+            etInput.setText("")
+        }
     }
 
     private fun initStateFlow() {
@@ -65,7 +67,6 @@ class SignUpEnterPhoneNumberFragment :
                             //TODO 로딩 처리
                         }
                         is ModelState.Success -> {
-                            Log.d("TESTLOG", "success")
                             signUpViewModelContentInterface.phoneNumber = it.data ?: ""
                             onMoveNextPageAction.invoke()
                         }

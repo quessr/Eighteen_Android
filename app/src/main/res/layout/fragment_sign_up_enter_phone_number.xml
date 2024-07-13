@@ -25,16 +25,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
         android:background="@drawable/bg_rect_stroke_w2_main_color_r10"
-        android:drawableEnd="@drawable/ic_text_field_clear"
-        android:drawablePadding="4dp"
         android:inputType="number"
-        android:paddingHorizontal="16dp"
         android:paddingVertical="13dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="44dp"
         android:textCursorDrawable="@drawable/ic_text_field_cursor_grey_01"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text="aseljfasliefjasefzsefzsefzsefzsefzsefzsefzsefzsfea" />
+
+    <ImageView
+        android:id="@+id/ivBtnClear"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_text_field_clear"
+        app:layout_constraintBottom_toBottomOf="@id/etInput"
+        app:layout_constraintEnd_toEndOf="@id/etInput"
+        app:layout_constraintTop_toTopOf="@id/etInput" />
 
     <TextView
         android:id="@+id/tvBtnGetAuthCode"

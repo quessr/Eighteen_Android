@@ -1,6 +1,6 @@
-package com.eighteen.eighteenandroid.data.datasource.remote.dao
+package com.eighteen.eighteenandroid.data.datasource.remote.response
 
-data class UserDao(
+data class UserResponse(
     val userImage: String,
     val userId: String,
     val name: String,

@@ -1,6 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.usecase.SendMessageUseCase
@@ -28,9 +27,13 @@ class SignUpEnterPhoneNumberViewModel @Inject constructor(
             sendMessageUseCase.invoke(phoneNumber = phoneNumber).onSuccess {
                 _sendMessageResultStateFlow.value = ModelState.Success(phoneNumber)
             }.onFailure {
-                Log.d("TESTLOG","failure : $it")
                 _sendMessageResultStateFlow.value = ModelState.Error(throwable = it)
             }
         }
+    }
+
+    fun clear() {
+        requestSendMessageJob?.cancel()
+        _sendMessageResultStateFlow.value = null
     }
 }

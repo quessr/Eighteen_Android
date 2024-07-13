@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -36,9 +37,13 @@ class SignUpEnterPhoneNumberFragment :
     private val signUpEnterPhoneNumberViewModel by viewModels<SignUpEnterPhoneNumberViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val savedInput = savedInstanceState?.getString(PHONE_NUMBER_SAVE_INSTANCE_KEY, "")
-        binding.etInput.setText(savedInput)
+        signUpEnterPhoneNumberViewModel.clear()
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.etInput.setText(signUpViewModelContentInterface.phoneNumber)
     }
 
     override fun initView() = bind {
@@ -60,8 +65,9 @@ class SignUpEnterPhoneNumberFragment :
                             //TODO 로딩 처리
                         }
                         is ModelState.Success -> {
+                            Log.d("TESTLOG", "success")
                             signUpViewModelContentInterface.phoneNumber = it.data ?: ""
-                            findNavController().navigate(R.id.action_fragmentSignUpEnterPhoneNumber_to_fragmentSignUpEnterAuthCode)
+                            onMoveNextPageAction.invoke()
                         }
                         is ModelState.Error -> {
                             //TODO 에러처리
@@ -75,12 +81,8 @@ class SignUpEnterPhoneNumberFragment :
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(PHONE_NUMBER_SAVE_INSTANCE_KEY, binding.etInput.text.toString())
-    }
-
-    companion object {
-        private const val PHONE_NUMBER_SAVE_INSTANCE_KEY = "phone_number_save_instance_key"
+    override fun onPause() {
+        super.onPause()
+        signUpViewModelContentInterface.phoneNumber = binding.etInput.text.toString()
     }
 }

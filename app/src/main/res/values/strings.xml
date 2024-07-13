@@ -8,13 +8,23 @@
     <string name="main_today_teen">오늘의 Teen</string>
     <string name="tag_exercise">운동</string>
     <string name="tag_beauty">외모</string>
+    <string name="login">로그인</string>
+    <string name="korea">대한민국</string>
+    <string name="terms_of_service">서비스 약관</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
 
     <!-- 로그인/회원가입 -->
+    <string name="sign_up_login_title">가입하기</string>
+    <string name="sign_up_login_tip">프로필을 만들어 나의 사진을 자랑하고\nTEEN에서 경쟁해보세요</string>
+    <string name="sign_up_login_with_phone_number">전화번호로 회원가입</string>
+    <string name="sign_up_login_notice_agreed">대한민국에서 위치한 계정으로 계속하면\n당사의 서비스 약관의 동의하고\n개인정보 처리방침을 읽었음을 인정하는 것입니다.</string>
+    <string name="sign_up_login_check_has_account">이미 계정이 있으신가요?</string>
     <string name="sign_up_next">다음으로</string>
     <string name="sign_up_pass">건너뛰기</string>
     <string name="sign_up_start">시작하기</string>
     <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
+
 
     <string name="main_about_teen">About A-Teen</string>
     <string name="about_teen_title">Teen</string>

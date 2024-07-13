@@ -2,6 +2,7 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.model
 
 sealed class ProfileDetailModel {
     abstract val id: String
+
     data class ProfileInfo(
         override val id: String,
         val name: String,
@@ -19,6 +20,12 @@ sealed class ProfileDetailModel {
         val likeCount: Int
     ) : ProfileDetailModel()
 
+    data class BadgeAndTeen(
+        override val id: String,
+        val badgeCount: Int,
+        val teenAward: String
+    ) : ProfileDetailModel()
+
     data class Introduction(
         override val id: String,
         val personalityType: String,
@@ -29,5 +36,10 @@ sealed class ProfileDetailModel {
         override val id: String,
         val question: String,
         val answer: String
+    ) : ProfileDetailModel()
+
+    data class QnaList(
+        override val id: String,
+        val qnas: List<Qna>
     ) : ProfileDetailModel()
 }

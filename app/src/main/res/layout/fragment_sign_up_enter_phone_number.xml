@@ -18,9 +18,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- TODO typo 적용(현재 문의 중) -->
     <EditText
         android:id="@+id/etInput"
+        style="@style/pretendard_bold_16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"

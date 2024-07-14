@@ -2,16 +2,213 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="16dp">
 
     <TextView
-        android:id="@+id/tvTest"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTitle"
+        style="@style/pretendard_bold_20"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="약관 페이지"
-        android:textSize="64sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="13dp"
+        android:text="@string/sign_up_terms_of_service_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+        <View
+            android:id="@+id/vBtnCheckAll"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_rect_r10_main_grey_03_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_check"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/vBtnCheckAll"
+            app:layout_constraintEnd_toEndOf="@id/vBtnCheckAll"
+            app:layout_constraintStart_toStartOf="@id/vBtnCheckAll"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckAll" />
+
+        <TextView
+            android:id="@+id/tvAllTitle"
+            style="@style/pretendard_regular_16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/sign_up_terms_of_service_agree_all"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/vBtnCheckAll"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckAll" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTermsOfService"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clAll">
+
+        <View
+            android:id="@+id/vBtnCheckTermsOfService"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_rect_r10_main_grey_03_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_check"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/vBtnCheckTermsOfService"
+            app:layout_constraintEnd_toEndOf="@id/vBtnCheckTermsOfService"
+            app:layout_constraintStart_toStartOf="@id/vBtnCheckTermsOfService"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckTermsOfService" />
+
+        <TextView
+            android:id="@+id/tvTermsOfServiceTitle"
+            style="@style/pretendard_regular_16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/sign_up_terms_of_service_agree_terms_of_service"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/vBtnCheckTermsOfService"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckTermsOfService" />
+
+        <TextView
+            android:id="@+id/tvBtnTermsOfServiceDetail"
+            style="@style/pretendard_regular_13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:gravity="center"
+            android:text="@string/sign_up_terms_of_service_see_detail"
+            android:textColor="@color/grey_01"
+            app:drawableEndCompat="@drawable/ic_more_small"
+            app:drawableTint="@color/grey_01"
+            app:layout_constraintStart_toStartOf="@id/tvTermsOfServiceTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTermsOfServiceTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clPrivacyPolicy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clTermsOfService">
+
+        <View
+            android:id="@+id/vBtnCheckPrivacyPolicy"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_rect_r10_main_grey_03_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_check"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/vBtnCheckPrivacyPolicy"
+            app:layout_constraintEnd_toEndOf="@id/vBtnCheckPrivacyPolicy"
+            app:layout_constraintStart_toStartOf="@id/vBtnCheckPrivacyPolicy"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckPrivacyPolicy" />
+
+        <TextView
+            android:id="@+id/tvPrivacyPolicyTitle"
+            style="@style/pretendard_regular_16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/sign_up_terms_of_service_agree_privacy_policy"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/vBtnCheckPrivacyPolicy"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckPrivacyPolicy" />
+
+        <TextView
+            android:id="@+id/tvBtnPrivacyPolicyDetail"
+            style="@style/pretendard_regular_13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:gravity="center"
+            android:text="@string/sign_up_terms_of_service_see_detail"
+            android:textColor="@color/grey_01"
+            app:drawableEndCompat="@drawable/ic_more_small"
+            app:drawableTint="@color/grey_01"
+            app:layout_constraintStart_toStartOf="@id/tvPrivacyPolicyTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvPrivacyPolicyTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clNotification"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clPrivacyPolicy">
+
+        <View
+            android:id="@+id/vBtnCheckNotification"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_rect_r10_main_grey_03_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_check"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/vBtnCheckNotification"
+            app:layout_constraintEnd_toEndOf="@id/vBtnCheckNotification"
+            app:layout_constraintStart_toStartOf="@id/vBtnCheckNotification"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckNotification" />
+
+        <TextView
+            android:id="@+id/tvNotificationTitle"
+            style="@style/pretendard_regular_16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/sign_up_terms_of_service_agree_notification"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/vBtnCheckNotification"
+            app:layout_constraintTop_toTopOf="@id/vBtnCheckNotification" />
+
+        <TextView
+            android:id="@+id/tvBtnNotificationDetail"
+            style="@style/pretendard_regular_13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up_terms_of_service_agree_notification_description"
+            android:textColor="@color/grey_01"
+            app:layout_constraintStart_toStartOf="@id/tvNotificationTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvNotificationTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,6 +31,14 @@
     <string name="sign_up_enter_auth_code_resend_tip">코드를 받지 못하셨나요? 다시 전송해보세요!</string>
     <string name="sign_up_enter_auth_code_resend">다시 전송하기</string>
 
+    <string name="sign_up_terms_of_service_title">사용 약관</string>
+    <string name="sign_up_terms_of_service_agree_all">모두 동의</string>
+    <string name="sign_up_terms_of_service_agree_terms_of_service">서비스 약관에 동의 (필수)</string>
+    <string name="sign_up_terms_of_service_agree_privacy_policy">개인 정보 수집 및 사용에 동의 (필수)</string>
+    <string name="sign_up_terms_of_service_agree_notification">인기 콘텐츠 및 알림 수신 동의 (선택)</string>
+    <string name="sign_up_terms_of_service_agree_notification_description">A-TEEN에서 인기 콘텐츠 및 프로모션에 대한 알림을 받습니다. 언제든지 설정을 검토하고 편집할 수 있습니다. 동의를 하지 않아도 A-TEEN 서비스 사용이 제한되지 않습니다.</string>
+    <string name="sign_up_terms_of_service_see_detail">세부 정보 보기</string>
+
     <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
 

@@ -48,7 +48,7 @@ class SignUpEnterPhoneNumberFragment :
     override fun initView() = bind {
         initStateFlow()
         root.setOnClickListener {
-            hideKeyboard()
+            hideKeyboardAndRemoveCurrentFocus()
         }
         tvBtnGetAuthCode.setOnClickListener {
             signUpEnterPhoneNumberViewModel.requestSendMessage(phoneNumber = etInput.text.toString())

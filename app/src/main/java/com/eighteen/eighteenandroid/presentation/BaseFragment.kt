@@ -56,4 +56,19 @@ abstract class BaseFragment<T : ViewBinding>(private val bindingFactory: (Layout
             )
         }
     }
+
+    fun hideKeyboardAndRemoveCurrentFocus() {
+        activity?.run {
+            hideKeyboard()
+            currentFocus?.clearFocus()
+        }
+    }
+
+    fun showKeyboard(view: View) {
+        activity?.run {
+            val inputManager =
+                (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+            inputManager?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
 }

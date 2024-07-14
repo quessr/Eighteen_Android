@@ -63,7 +63,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 signUpViewModel.actionToPrevPage()
             }
             root.setOnClickListener {
-                hideKeyboard()
+                hideKeyboardAndRemoveCurrentFocus()
             }
         }
         initSignUpObserver()

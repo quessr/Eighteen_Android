@@ -3,6 +3,8 @@ package com.eighteen.eighteenandroid.presentation.common
 import android.content.Context
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -54,4 +56,33 @@ fun Fragment.requestPermissions(
         onGranted = onGranted,
         onDenied = onDenied
     )
+}
+
+
+fun Fragment.hideKeyboard() {
+    activity?.run {
+        val inputManager =
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+        inputManager?.hideSoftInputFromWindow(
+            currentFocus?.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
+    }
+}
+
+fun Fragment.clearFocus() {
+    activity?.currentFocus?.clearFocus()
+}
+
+fun Fragment.hideKeyboardAndRemoveCurrentFocus() {
+    hideKeyboard()
+    clearFocus()
+}
+
+fun Fragment.showKeyboard(view: View) {
+    activity?.run {
+        val inputManager =
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+        inputManager?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
 }

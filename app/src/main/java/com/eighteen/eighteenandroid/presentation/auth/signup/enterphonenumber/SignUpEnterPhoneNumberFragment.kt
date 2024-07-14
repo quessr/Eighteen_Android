@@ -12,6 +12,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterPhoneNumberBi
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

@@ -16,6 +16,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
 import com.eighteen.eighteenandroid.presentation.common.requestPermissions
 import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry

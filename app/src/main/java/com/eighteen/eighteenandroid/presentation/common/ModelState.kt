@@ -6,5 +6,5 @@ sealed interface ModelState<T> {
 
     class Loading<T>(override val data: T? = null) : ModelState<T>
     class Success<T>(override val data: T? = null) : ModelState<T>
-    class Error<T>(override val data: T? = null, throwable: Throwable) : ModelState<T>
+    class Error<T>(override val data: T? = null, val throwable: Throwable) : ModelState<T>
 }

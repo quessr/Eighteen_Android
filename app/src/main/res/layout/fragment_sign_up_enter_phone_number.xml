@@ -20,16 +20,13 @@
 
     <EditText
         android:id="@+id/etInput"
-        style="@style/pretendard_bold_16"
+        style="@style/TextField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
-        android:background="@drawable/bg_text_field"
         android:inputType="number"
-        android:paddingVertical="13dp"
         android:paddingStart="16dp"
         android:paddingEnd="44dp"
-        android:textCursorDrawable="@drawable/ic_text_field_cursor_grey_01"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"

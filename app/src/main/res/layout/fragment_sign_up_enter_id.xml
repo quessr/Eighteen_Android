@@ -20,18 +20,13 @@
 
     <EditText
         android:id="@+id/etInput"
-        style="@style/pretendard_bold_16"
+        style="@style/TextField"
         android:layout_width="255dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_text_field"
         android:inputType="text"
         android:maxLength="@integer/sign_up_enter_id_max_length"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="13dp"
         android:saveEnabled="false"
-        android:textColor="@color/black"
-        android:textCursorDrawable="@drawable/ic_text_field_cursor_grey_01"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text="test1213" />

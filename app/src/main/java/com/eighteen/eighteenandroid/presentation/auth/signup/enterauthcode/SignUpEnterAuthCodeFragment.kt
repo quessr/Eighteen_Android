@@ -194,6 +194,7 @@ class SignUpEnterAuthCodeFragment :
                             Log.d("SignUpEnterAuthCodeFragment", "confirm loading")
                         }
                         is ModelState.Success -> {
+                            //TODO 확인팝업 적용(팝업 디자인 수정 후 작업 예정)
                             findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
                         }
                         is ModelState.Error -> {

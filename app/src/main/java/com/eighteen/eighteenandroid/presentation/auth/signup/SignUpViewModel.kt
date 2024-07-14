@@ -32,6 +32,9 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     val editMediaActionEventLiveData: LiveData<Event<SignUpEditMediaAction>> =
         _editMediaActionEventLiveData
 
+    private val _openWebViewEventLiveData = MutableLiveData<Event<String>>()
+    val openWebViewLiveData: LiveData<Event<String>> = _openWebViewEventLiveData
+
     override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
@@ -42,15 +45,15 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow
 
     fun actionToPrevPage() {
-        _actionEventLiveData.value = Event(SignUpAction.Prev)
+        _actionEventLiveData.value = Event(SignUpAction.PREV)
     }
 
     fun actionToNextPage() {
-        _actionEventLiveData.value = Event(SignUpAction.Next)
+        _actionEventLiveData.value = Event(SignUpAction.NEXT)
     }
 
     override fun actionOpenWebViewFragment(url: String) {
-        _actionEventLiveData.value = Event(SignUpAction.OpenWebViewFragment(url = url))
+        _openWebViewEventLiveData.value = Event(url)
     }
 
     override fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel) {

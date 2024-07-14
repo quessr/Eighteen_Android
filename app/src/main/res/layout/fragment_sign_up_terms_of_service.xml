@@ -202,7 +202,7 @@
             app:layout_constraintTop_toTopOf="@id/vBtnCheckNotification" />
 
         <TextView
-            android:id="@+id/tvBtnNotificationDetail"
+            android:id="@+id/tvBtnNotificationDescription"
             style="@style/pretendard_regular_13"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

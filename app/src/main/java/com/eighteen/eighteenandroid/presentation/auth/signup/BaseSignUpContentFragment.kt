@@ -55,8 +55,11 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
     private fun initActionObserver() {
         signUpViewModel.actionEventLiveData.observe(viewLifecycleOwner, EventObserver { action ->
             when (action) {
-                SignUpAction.NEXT -> onMoveNextPageAction.invoke()
-                SignUpAction.PREV -> onMovePrevPageAction.invoke()
+                is SignUpAction.Next -> onMoveNextPageAction.invoke()
+                is SignUpAction.Prev -> onMovePrevPageAction.invoke()
+                else -> {
+                    //do nothing
+                }
             }
         })
     }

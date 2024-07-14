@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.model
 
-enum class SignUpAction {
-    NEXT,
-    PREV
+sealed interface SignUpAction {
+    object Next : SignUpAction
+    object Prev : SignUpAction
+    class OpenWebViewFragment(val url: String) : SignUpAction
 }

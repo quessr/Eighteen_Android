@@ -42,11 +42,15 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow
 
     fun actionToPrevPage() {
-        _actionEventLiveData.value = Event(SignUpAction.PREV)
+        _actionEventLiveData.value = Event(SignUpAction.Prev)
     }
 
     fun actionToNextPage() {
-        _actionEventLiveData.value = Event(SignUpAction.NEXT)
+        _actionEventLiveData.value = Event(SignUpAction.Next)
+    }
+
+    override fun actionOpenWebViewFragment(url: String) {
+        _actionEventLiveData.value = Event(SignUpAction.OpenWebViewFragment(url = url))
     }
 
     override fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel) {

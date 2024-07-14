@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -14,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.FullWebViewFragment
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
@@ -69,6 +72,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         }
         initSignUpObserver()
         initEditMediaObserver()
+        initActionEventObserver()
     }
 
     private fun initSignUpObserver() = with(signUpViewModel) {
@@ -132,6 +136,23 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     }
                 })
         }
+    }
+
+    private fun initActionEventObserver() {
+        signUpViewModel.actionEventLiveData.observe(viewLifecycleOwner, EventObserver { action ->
+            when (action) {
+                is SignUpAction.OpenWebViewFragment -> {
+                    val bundle = bundleOf(FullWebViewFragment.URL_ARGUMENT_KEY to action.url)
+                    findNavController().navigate(
+                        R.id.action_fragmentSignUp_to_fragmentFullWebView,
+                        bundle
+                    )
+                }
+                else -> {
+                    //do nothing
+                }
+            }
+        })
     }
 
     private fun initEditMediaObserver() = with(editMediaViewModel) {

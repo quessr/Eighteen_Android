@@ -39,11 +39,16 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
             vBtnCheckTermsOfService.setOnClickListener { signUpTermsOfServiceViewModel.checkTermsOfService() }
             vBtnCheckPrivacyPolicy.setOnClickListener { signUpTermsOfServiceViewModel.checkPrivacyPolicy() }
             vBtnCheckNotification.setOnClickListener { signUpTermsOfServiceViewModel.checkNotification() }
+            tvBtnTermsOfServiceDetail.setOnClickListener {
+                signUpViewModelContentInterface.actionOpenWebViewFragment(url = URL_TERMS_OF_SERVICE)
+            }
+            tvBtnPrivacyPolicyDetail.setOnClickListener {
+                signUpViewModelContentInterface.actionOpenWebViewFragment(url = URL_PRIVACY_POLICY)
+            }
         }
         initStateFlow()
     }
 
-    //TODO 웹뷰 추가
     private fun initStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -62,5 +67,11 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
                 }
             }
         }
+    }
+
+    companion object {
+        //TODO 약관 URL 적용
+        private const val URL_TERMS_OF_SERVICE = "https://www.google.co.kr"
+        private const val URL_PRIVACY_POLICY = "https://www.google.co.jp"
     }
 }

@@ -19,4 +19,5 @@ interface SignUpViewModelContentInterface {
     fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)
     fun setEditMediaAction(editMediaAction: SignUpEditMediaAction)
     fun clearMediaResultStateFlow()
+    fun actionOpenWebViewFragment(url: String)
 }

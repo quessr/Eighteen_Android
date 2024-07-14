@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_fragmentSignUp_to_fragmentEditVideo"
             app:destination="@id/fragmentEditVideo" />
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentFullWebView"
+            app:destination="@id/fragmentFullWebView" />
     </fragment>
     <fragment
         android:id="@+id/fragmentEditImage"
@@ -35,6 +38,11 @@
         android:name="com.eighteen.eighteenandroid.presentation.editmedia.video.EditVideoFragment"
         android:label="fragment_edit_video"
         tools:layout="@layout/fragment_edit_video" />
+    <fragment
+        android:id="@+id/fragmentFullWebView"
+        android:name="com.eighteen.eighteenandroid.presentation.FullWebViewFragment"
+        android:label="fragment_full_web_view"
+        tools:layout="@layout/fragment_full_web_view" />
     <fragment
         android:id="@+id/fragmentMain"
         android:name="com.eighteen.eighteenandroid.presentation.home.MainFragment"

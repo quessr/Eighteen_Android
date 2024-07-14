@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
-        android:background="@drawable/bg_rect_stroke_w2_main_color_r10"
+        android:background="@drawable/bg_text_field"
         android:inputType="number"
         android:paddingVertical="13dp"
         android:paddingStart="16dp"

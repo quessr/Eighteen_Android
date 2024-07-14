@@ -7,7 +7,8 @@ import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val userService: UserService): UserRepository {
+class UserRepositoryImpl @Inject constructor(private val userService: UserService) :
+    UserRepository {
     override suspend fun fetchUserData(): Result<List<User>> =
         runCatching {
             userService.getUserInfo().mapper {
@@ -16,4 +17,9 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                 }
             }
         }
+
+    override suspend fun postCheckIdValidation(id: String): Result<Unit?> {
+        //TODO id 체크 api 추가
+        return Result.success(Unit)
+    }
 }

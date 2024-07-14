@@ -11,6 +11,11 @@ class SignUpEnterNickNameFragment :
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpEnterNickname_to_fragmentSignUpEnterBirth)
     }
+
+    override val onMovePrevPageAction: () -> Unit = {
+        signUpViewModelContentInterface.id = ""
+        super.onMovePrevPageAction.invoke()
+    }
     override val progress: Int = 40
     override val signUpNextButtonModel = SignUpNextButtonModel(
         isVisible = true,

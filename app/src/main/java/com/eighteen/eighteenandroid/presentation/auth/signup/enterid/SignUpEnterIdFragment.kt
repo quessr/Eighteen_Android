@@ -12,6 +12,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterIdBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.enterid.model.SignUpEnterIdStatus
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 class SignUpEnterIdFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterIdBinding>(FragmentSignUpEnterIdBinding::inflate) {
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController().navigate(R.id.action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname)
+        signUpEnterIdViewModel.checkIdValidation()
     }
     override val progress: Int = 20
     override val signUpNextButtonModel = SignUpNextButtonModel(
@@ -36,12 +37,13 @@ class SignUpEnterIdFragment :
             etInput.addTextChangedListener {
                 signUpEnterIdViewModel.setInputText(input = it?.toString() ?: "")
             }
-            etInput.setText(signUpEnterIdViewModel.signUpEnterIdModel.value.inputString)
+            etInput.setText(signUpViewModelContentInterface.id)
         }
-        initStateFlow()
+        initEnterIdModelStateFlow()
+        initCheckValidationStateFlow()
     }
 
-    private fun initStateFlow() {
+    private fun initEnterIdModelStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 signUpEnterIdViewModel.signUpEnterIdModel.collect {
@@ -67,5 +69,38 @@ class SignUpEnterIdFragment :
                 }
             }
         }
+    }
+
+    private fun initCheckValidationStateFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpEnterIdViewModel.checkIdValidationEventStateFlow.collect {
+                    when (it) {
+                        is ModelState.Loading -> {
+                            //TODO 로딩
+                        }
+                        is ModelState.Success -> {
+                            it.data?.getContentIfNotHandled()?.let {
+                                signUpViewModelContentInterface.id =
+                                    signUpEnterIdViewModel.signUpEnterIdModel.value.inputString
+                                findNavController().navigate(R.id.action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname)
+                            }
+                        }
+                        is ModelState.Error -> {
+                            //TODO 에러처리
+                        }
+                        else -> {
+                            //do nothing
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        signUpViewModelContentInterface.id =
+            signUpEnterIdViewModel.signUpEnterIdModel.value.inputString
+        super.onDestroyView()
     }
 }

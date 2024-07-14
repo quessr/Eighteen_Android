@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="CustomDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowMinWidthMinor">40%</item>
     </style>
+
     <style name="CustomDialog2" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowMinWidthMinor">40%</item>
+    </style>
+
+    <style name="AuthCodeInput" parent="pretendard_bold_32">
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">2</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textCursorDrawable">@drawable/ic_text_field_cursor_main_color</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/bg_sign_up_auth_code_edit_text</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:saveEnabled">false</item>
     </style>
 </resources>

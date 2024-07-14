@@ -32,6 +32,12 @@
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
+    <style name="pretendard_bold_32">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">32dp</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
     <style name="pretendard_bold_20">
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">20dp</item>

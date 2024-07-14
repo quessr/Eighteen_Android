@@ -1,8 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber
 
-import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,11 +36,6 @@ class SignUpEnterPhoneNumberFragment :
         SignUpNextButtonModel(isVisible = false)
 
     private val signUpEnterPhoneNumberViewModel by viewModels<SignUpEnterPhoneNumberViewModel>()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        signUpEnterPhoneNumberViewModel.clear()
-        super.onViewCreated(view, savedInstanceState)
-    }
 
     override fun onResume() {
         super.onResume()
@@ -95,5 +88,10 @@ class SignUpEnterPhoneNumberFragment :
     override fun onPause() {
         super.onPause()
         signUpViewModelContentInterface.phoneNumber = binding.etInput.text.toString()
+    }
+
+    override fun onDestroyView() {
+        signUpEnterPhoneNumberViewModel.clear()
+        super.onDestroyView()
     }
 }

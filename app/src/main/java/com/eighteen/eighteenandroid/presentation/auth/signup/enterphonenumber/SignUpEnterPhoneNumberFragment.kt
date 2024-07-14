@@ -1,7 +1,9 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +14,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterPhoneNumberBi
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.clearFocus
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -56,6 +59,12 @@ class SignUpEnterPhoneNumberFragment :
         }
         ivBtnClear.setOnClickListener {
             etInput.setText("")
+        }
+        etInput.setOnEditorActionListener { _, actionId, event ->
+            if ((event?.keyCode == KeyEvent.KEYCODE_ENTER) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                clearFocus()
+            }
+            false
         }
     }
 

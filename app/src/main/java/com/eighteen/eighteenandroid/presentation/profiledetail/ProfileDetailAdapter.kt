@@ -11,6 +11,9 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailQnaBinding
+import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
+import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
+import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
@@ -47,10 +50,27 @@ class ProfileDetailAdapter(
                 ProfileDetailViewHolder.Introduction(binding)
             }
 
-            ITEM_TYPE_QNA_LIST -> {
-                val binding = inflaterBinding(ItemProfileDetailQnaBinding::inflate)
-                ProfileDetailViewHolder.Qna(binding, lifecycleOwner, viewModel)
+            ITEM_TYPE_QNA_LIST_TITLE -> {
+                val binding = inflaterBinding(ItemQnaTitleBinding::inflate)
+                ProfileDetailViewHolder.QnaTitle(binding)
             }
+
+            ITEM_TYPE_QNA -> {
+                val binding = inflaterBinding(ItemQnaBinding::inflate)
+                ProfileDetailViewHolder.Qna(binding)
+            }
+
+            ITEM_TYPE_QNA_TOGGLE -> {
+                val binding = inflaterBinding(ItemSeeMoreBinding::inflate)
+                ProfileDetailViewHolder.QnaToggle(binding, viewModel)
+            }
+
+
+
+//            ITEM_TYPE_QNA_LIST -> {
+//                val binding = inflaterBinding(ItemProfileDetailQnaBinding::inflate)
+//                ProfileDetailViewHolder.Qna(binding, lifecycleOwner, viewModel)
+//            }
 
             else -> throw IllegalArgumentException("Invalid view type") // 코드 비교 해 볼것
         }
@@ -63,7 +83,10 @@ class ProfileDetailAdapter(
             is ProfileDetailModel.ProfileImages -> ITEM_TYPE_PROFILE_IMAGES
             is ProfileDetailModel.BadgeAndTeen -> ITEM_TYPE_BADGE_AND_TEEN
             is ProfileDetailModel.Introduction -> ITEM_TYPE_INTRODUCTION
-            is ProfileDetailModel.QnaList -> ITEM_TYPE_QNA_LIST
+            is ProfileDetailModel.QnaListTitle -> ITEM_TYPE_QNA_LIST_TITLE
+            is ProfileDetailModel.Qna -> ITEM_TYPE_QNA
+            is ProfileDetailModel.QnaToggle -> ITEM_TYPE_QNA_TOGGLE
+//            is ProfileDetailModel.QnaList -> ITEM_TYPE_QNA_LIST
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -79,6 +102,10 @@ class ProfileDetailAdapter(
         private const val ITEM_TYPE_LIKE = 4
         private const val ITEM_TYPE_INTRODUCTION = 5
         private const val ITEM_TYPE_QNA_LIST = 6
+        private const val ITEM_TYPE_QNA_LIST_TITLE = 7
+        private const val ITEM_TYPE_QNA = 8
+        private const val ITEM_TYPE_QNA_TOGGLE = 9
+
 
         private val diffUtil = object : DiffUtil.ItemCallback<ProfileDetailModel>() {
             override fun areItemsTheSame(

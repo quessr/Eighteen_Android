@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +11,10 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailQnaBinding
+import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
+import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
+import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
 import com.eighteen.eighteenandroid.presentation.profiledetail.ProfileDetailViewModel
-import com.eighteen.eighteenandroid.presentation.profiledetail.QuestionAnswerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.ViewPagerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -68,25 +71,70 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    class Qna(
-        private val binding: ItemProfileDetailQnaBinding,
-        lifecycleOwner: LifecycleOwner,
-        viewModel: ProfileDetailViewModel
-    ) : ProfileDetailViewHolder(binding) {
-        private val qnaAdapter = QuestionAnswerAdapter(lifecycleOwner, viewModel)
+//    class Qna(
+//        private val binding: ItemProfileDetailQnaBinding,
+//        lifecycleOwner: LifecycleOwner,
+//        viewModel: ProfileDetailViewModel
+//    ) : ProfileDetailViewHolder(binding) {
+//        private val qnaAdapter = QuestionAnswerAdapter(lifecycleOwner, viewModel)
+//
+//        init {
+//            binding.recyclerView.isNestedScrollingEnabled = false
+//            binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+//            binding.recyclerView.adapter = qnaAdapter
+//        }
+//
+//        override fun onBind(profileDetailModel: ProfileDetailModel) {
+//            val qnaList = profileDetailModel as? ProfileDetailModel.QnaList
+//            qnaList?.let {
+//                Log.d("Qna", "Qna list size: ${it.qnas.size}")
+//                qnaAdapter.submitList(it.qnas)
+//            }
+//        }
+//    }
 
-        init {
-            binding.recyclerView.isNestedScrollingEnabled = false
-            binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.recyclerView.adapter = qnaAdapter
-        }
-
+    class QnaTitle(private val binding: ItemQnaTitleBinding) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
-            val qnaList = profileDetailModel as? ProfileDetailModel.QnaList
-            qnaList?.let {
-                Log.d("Qna", "Qna list size: ${it.qnas.size}")
-                qnaAdapter.submitList(it.qnas)
+            super.onBind(profileDetailModel)
+        }
+    }
+
+    class Qna(private val binding: ItemQnaBinding) : ProfileDetailViewHolder(binding) {
+        override fun onBind(profileDetailModel: ProfileDetailModel) {
+            val qna = profileDetailModel as? ProfileDetailModel.Qna
+            qna.let {
+                binding.question.text = it?.question
+                binding.answer.text = it?.question
             }
         }
     }
+
+    class QnaToggle(
+        private val binding: ItemSeeMoreBinding,
+        private val profileDetailViewModel: ProfileDetailViewModel
+    ) :
+        ProfileDetailViewHolder(binding) {
+        override fun onBind(profileDetailModel: ProfileDetailModel) {
+            val toggle = profileDetailModel as? ProfileDetailModel.QnaToggle
+            toggle?.let {
+                binding.tvSeeMore.text = if (toggle.isExpanded) "접기" else "펼쳐서 보기"
+                binding.tvSeeMore.setOnClickListener(View.OnClickListener {
+                    toggleItems(toggle)
+                    profileDetailViewModel.toggleItems()
+                })
+                binding.ivSeeMore.setOnClickListener(View.OnClickListener {
+                    profileDetailViewModel.toggleItems()
+                    toggleItems(toggle)
+                })
+            }
+        }
+
+        private fun toggleItems(toggle: ProfileDetailModel.QnaToggle) {
+            val showItems = toggle.isExpanded
+            val updateToggle = toggle.copy(isExpanded = !showItems)
+            profileDetailViewModel.updateQnaToggle(updateToggle)
+        }
+    }
+
 }
+

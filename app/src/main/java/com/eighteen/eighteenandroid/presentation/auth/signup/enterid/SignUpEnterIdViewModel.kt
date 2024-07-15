@@ -39,6 +39,9 @@ class SignUpEnterIdViewModel @Inject constructor(private val checkIdValidationUs
             checkIdValidationUseCase.invoke(id = signUpEnterIdModel.value.inputString).onSuccess {
                 _checkIdValidationEventStateFlow.value = ModelState.Success(Event(Unit))
             }.onFailure {
+                //TODO 중복응답 코드 받을 경우 id 모델 수정
+//                _signUpEnterIdModel.value =
+//                    signUpEnterIdModel.value.copy(status = SignUpEnterIdStatus.Error.Duplicated)
                 _checkIdValidationEventStateFlow.value = ModelState.Error(throwable = it)
             }
         }

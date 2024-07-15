@@ -56,7 +56,7 @@ class ProfileDetailFragment() :
 
 
     private fun setupInitialData() {
-        val qnaList = List(100) { index ->
+        val qnaList = List(30) { index ->
             ProfileDetailModel.Qna(
                 id = index.toString(),
                 question = "${index + 1} Question",
@@ -95,12 +95,15 @@ class ProfileDetailFragment() :
                 personalityType = "INTP",
                 introductionText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
-            ProfileDetailModel.QnaList(
-                id = "5",
-                qnas = qnaList
-            ),
+//            ProfileDetailModel.QnaList(
+//                id = "5",
+//                qnas = qnaList
+//            ),
+            ProfileDetailModel.QnaListTitle(id = "5"),
+            ProfileDetailModel.QnaToggle(id = "6", isExpanded = true)
         )
         profileDetailViewModel.setItems(initialData)
+        profileDetailViewModel.updateQnaItems(qnaList)
         initMediaDetailFlow()
     }
 

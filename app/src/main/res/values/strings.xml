@@ -5,7 +5,7 @@
     <string name="menu_teen">TEEN</string>
     <string name="menu_chat">Chat</string>
     <string name="menu_profile">My</string>
-    <string name="main_today_teen">오늘의 Teen</string>
+    <string name="main_today_teen">오늘의 인기 Teen</string>
     <string name="tag_exercise">운동</string>
     <string name="tag_beauty">외모</string>
 
@@ -26,7 +26,7 @@
     <string name="about_teen_my_teen_title">나만의 틴</string>
     <string name="about_teen_my_teen_detail">나만의 프로필을\n등록해보세요!</string>
     <string name="main_tournament_in_progress">진행 중인 토너먼트</string>
-    <string name="tournament_in_progress_more">더보기</string>
+    <string name="more">더보기</string>
     <string name="main_another_teen">또 다른 Teen 살펴보기</string>
     <string name="report_title">신고하기</string>
     <string name="block_title">차단하기</string>

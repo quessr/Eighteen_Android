@@ -38,8 +38,18 @@ sealed class ProfileDetailModel {
         val answer: String
     ) : ProfileDetailModel()
 
-    data class QnaList(
-        override val id: String,
-        val qnas: List<Qna>
+//    data class QnaList(
+//        override val id: String,
+//        val qnas: List<Qna>
+//    ) : ProfileDetailModel()
+
+    data class QnaListTitle(
+        override val id: String
     ) : ProfileDetailModel()
+
+    data class QnaToggle(
+        override val id: String,
+        val isExpanded: Boolean
+    ) : ProfileDetailModel()
+
 }

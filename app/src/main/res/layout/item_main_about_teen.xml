@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="20dp"
+    android:paddingVertical="16dp"
+    android:background="@drawable/bg_about_teen">
+
+    <ImageView
+        android:id="@+id/img_about_teen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:src="@drawable/ic_about_teen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_about_teen_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/about_teen_title"
+        android:textColor="@color/main_color"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/img_about_teen"
+        app:layout_constraintStart_toEndOf="@id/img_about_teen"
+        app:layout_constraintTop_toTopOf="@id/img_about_teen" />
+
+    <TextView
+        android:id="@+id/tv_about_teen_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/main_color"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/img_about_teen"
+        app:layout_constraintTop_toBottomOf="@id/tv_about_teen_title"
+        tools:text="@string/about_teen_detail" />
+</androidx.constraintlayout.widget.ConstraintLayout>

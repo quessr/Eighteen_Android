@@ -8,7 +8,7 @@ import com.eighteen.eighteenandroid.R
 import com.google.android.material.chip.Chip
 
 fun createChip(context: Context, tag: String): Chip {
-    val chip = LayoutInflater.from(context).inflate(R.layout.tag_item, null) as Chip
+    val chip = LayoutInflater.from(context).inflate(R.layout.item_main_tag_chip, null) as Chip
     chip.text = tag
     chip.setChipBackgroundColorResource(android.R.color.white)
 

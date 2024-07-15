@@ -51,6 +51,10 @@
     <string name="sign_up_enter_nickname_error_length">2~8자리만 입력하실 수 있습니다.</string>
     <string name="sign_up_enter_nickname_tip">특수문자를 제외한 한글/영어/숫자 (2~8자리)\n* 추후 언제든 수정 가능합니다.</string>
 
+    <string name="sign_up_enter_birth_title">당신의\n생년월일을 알려주세요!</string>
+    <string name="sign_up_enter_birth_select_birth">태어난 날을 선택해주세요</string>
+    <string name="sign_up_enter_birth_see_terms_of_service">서비스 약관 바로 보기</string>
+
     <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
 

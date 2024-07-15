@@ -9,7 +9,8 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 class SignUpEnterSchoolFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterSchoolBinding>(FragmentSignUpEnterSchoolBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
-        findNavController().popBackStack()
+        signUpViewModelContentInterface.birth = null
+        super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias)
@@ -25,5 +26,4 @@ class SignUpEnterSchoolFragment :
     override fun initView() {
 
     }
-
 }

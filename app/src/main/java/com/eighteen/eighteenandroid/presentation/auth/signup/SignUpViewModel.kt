@@ -12,7 +12,7 @@ import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.Date
+import java.util.Calendar
 import javax.inject.Inject
 
 //TODO 로그인, 회원가입 관련 api 연동, 입력받은 정보 저장 뒤로가기 시 데이터 지워진 상태로 나옴
@@ -38,7 +38,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
-    override var birth: Date = Date()
+    override var birth: Calendar? = null
     override var school: String = ""
 
     private val _mediasStateFlow = MutableStateFlow<List<SignUpMedia>>(emptyList())

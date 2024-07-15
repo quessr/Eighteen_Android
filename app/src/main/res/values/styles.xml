@@ -30,4 +30,8 @@
         <item name="android:textCursorDrawable">@drawable/ic_text_field_cursor_grey_01</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="DatePickerStyle" parent="pretendard_regular_16">
+        <item name="android:colorControlNormal">@color/main_color</item>
+    </style>
 </resources>

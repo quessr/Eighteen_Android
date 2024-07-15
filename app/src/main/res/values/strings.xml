@@ -12,6 +12,7 @@
     <string name="korea">대한민국</string>
     <string name="terms_of_service">서비스 약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="confirm">확인</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>

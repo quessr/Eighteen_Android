@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpTermsOfServiceBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.WebViewUrl
 import kotlinx.coroutines.launch
 
 /**
@@ -40,10 +41,10 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
             vBtnCheckPrivacyPolicy.setOnClickListener { signUpTermsOfServiceViewModel.checkPrivacyPolicy() }
             vBtnCheckNotification.setOnClickListener { signUpTermsOfServiceViewModel.checkNotification() }
             tvBtnTermsOfServiceDetail.setOnClickListener {
-                signUpViewModelContentInterface.actionOpenWebViewFragment(url = URL_TERMS_OF_SERVICE)
+                signUpViewModelContentInterface.actionOpenWebViewFragment(url = WebViewUrl.TERMS_OF_SERVICE)
             }
             tvBtnPrivacyPolicyDetail.setOnClickListener {
-                signUpViewModelContentInterface.actionOpenWebViewFragment(url = URL_PRIVACY_POLICY)
+                signUpViewModelContentInterface.actionOpenWebViewFragment(url = WebViewUrl.PRIVACY_POLICY)
             }
         }
         initStateFlow()
@@ -67,11 +68,5 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
                 }
             }
         }
-    }
-
-    companion object {
-        //TODO 약관 URL 적용
-        private const val URL_TERMS_OF_SERVICE = "https://www.google.co.kr"
-        private const val URL_PRIVACY_POLICY = "https://www.google.co.jp"
     }
 }

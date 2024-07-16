@@ -71,10 +71,19 @@
         android:label="fragment_sign_up_enter_school"
         tools:layout="@layout/fragment_sign_up_enter_school">
         <action
-            android:id="@+id/action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias"
-            app:destination="@id/fragmentSignUpAddMedias" />
+            android:id="@+id/action_fragmentSignUpEnterSchool_to_fragmentSignUpSelectTag"
+            app:destination="@id/fragmentSignUpSelectTag" />
     </fragment>
 
+    <fragment
+        android:id="@+id/fragmentSignUpSelectTag"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.selecttag.SignUpSelectTagFragment"
+        android:label="fragment_sign_up_select_tag"
+        tools:layout="@layout/fragment_sign_up_select_tag">
+        <action
+            android:id="@+id/action_fragmentSignUpSelectTag_to_fragmentSignUpAddMedias"
+            app:destination="@id/fragmentSignUpAddMedias" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentSignUpAddMedias"
         android:name="com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.SignUpAddMediasFragment"

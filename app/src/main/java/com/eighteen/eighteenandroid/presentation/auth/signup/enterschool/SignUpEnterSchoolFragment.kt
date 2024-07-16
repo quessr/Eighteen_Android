@@ -13,7 +13,7 @@ class SignUpEnterSchoolFragment :
         super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController().navigate(R.id.action_fragmentSignUpEnterSchool_to_fragmentSignUpAddMedias)
+        findNavController().navigate(R.id.action_fragmentSignUpEnterSchool_to_fragmentSignUpSelectTag)
     }
     override val progress: Int = 80
     override val signUpNextButtonModel = SignUpNextButtonModel(

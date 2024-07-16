@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object MessageModule {
+object MessageUseCaseModule {
     @Provides
     @Singleton
     fun provideSendMessageUseCase(repository: MessageRepository) = SendMessageUseCase(repository)

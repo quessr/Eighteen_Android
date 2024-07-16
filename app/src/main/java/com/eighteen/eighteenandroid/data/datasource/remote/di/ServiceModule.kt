@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.data.datasource.remote.di
 
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MessageService
+import com.eighteen.eighteenandroid.data.datasource.remote.service.SchoolService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,9 @@ object ServiceModule {
     @Provides
     fun provideUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideSchoolService(retrofit: Retrofit): SchoolService =
+        retrofit.create(SchoolService::class.java)
 }

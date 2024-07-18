@@ -8,7 +8,7 @@ import com.eighteen.eighteenandroid.databinding.ItemSignUpSchoolSearchResultBind
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.enterschool.viewholder.SignUpEnterSchoolSearchResultViewHolder
 
-class SignUpEnterSchoolSearchResultAdapter :
+class SignUpEnterSchoolSearchResultAdapter(private val onClickSchool: (School) -> Unit) :
     ListAdapter<School, SignUpEnterSchoolSearchResultViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
@@ -21,7 +21,10 @@ class SignUpEnterSchoolSearchResultAdapter :
                 parent,
                 false
             )
-        return SignUpEnterSchoolSearchResultViewHolder(binding = binding)
+        return SignUpEnterSchoolSearchResultViewHolder(
+            binding = binding,
+            onClickSchool = onClickSchool
+        )
     }
 
     override fun onBindViewHolder(holder: SignUpEnterSchoolSearchResultViewHolder, position: Int) {

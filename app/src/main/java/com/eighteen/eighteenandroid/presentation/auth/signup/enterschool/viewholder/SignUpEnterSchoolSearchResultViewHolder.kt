@@ -4,12 +4,17 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eighteen.eighteenandroid.databinding.ItemSignUpSchoolSearchResultBinding
 import com.eighteen.eighteenandroid.domain.model.School
 
-class SignUpEnterSchoolSearchResultViewHolder(private val binding: ItemSignUpSchoolSearchResultBinding) :
+class SignUpEnterSchoolSearchResultViewHolder(
+    private val binding: ItemSignUpSchoolSearchResultBinding,
+    private val onClickSchool: (School) -> Unit
+) :
     ViewHolder(binding.root) {
 
     fun onBind(schoolModel: School) {
         with(binding) {
-            //TODO 클릭 리스너 추가
+            root.setOnClickListener {
+                onClickSchool.invoke(schoolModel)
+            }
             tvSchoolName.text = schoolModel.name
             tvAddress.text = schoolModel.address
         }

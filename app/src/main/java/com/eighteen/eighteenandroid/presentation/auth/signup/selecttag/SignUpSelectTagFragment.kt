@@ -8,7 +8,10 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 
 class SignUpSelectTagFragment :
     BaseSignUpContentFragment<FragmentSignUpSelectTagBinding>(FragmentSignUpSelectTagBinding::inflate) {
-
+    override val onMovePrevPageAction: () -> Unit = {
+        signUpViewModelContentInterface.school = null
+        super.onMovePrevPageAction.invoke()
+    }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpSelectTag_to_fragmentSignUpAddMedias)
     }

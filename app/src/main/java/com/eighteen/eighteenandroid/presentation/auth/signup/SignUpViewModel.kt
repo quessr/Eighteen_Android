@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.auth.signup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
@@ -39,7 +40,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     override var id: String = ""
     override var nickName: String = ""
     override var birth: Calendar? = null
-    override var school: String = ""
+    override var school: School? = null
 
     private val _mediasStateFlow = MutableStateFlow<List<SignUpMedia>>(emptyList())
     override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow

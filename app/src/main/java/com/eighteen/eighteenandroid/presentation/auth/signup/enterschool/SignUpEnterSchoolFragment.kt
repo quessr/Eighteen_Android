@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.enterschool
 
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -9,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterSchoolBinding
+import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -18,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-//TODO 검색 결과 뷰 visibility 조절, 학교 선택하면 어떻게 되는지?
 @AndroidEntryPoint
 class SignUpEnterSchoolFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterSchoolBinding>(FragmentSignUpEnterSchoolBinding::inflate) {
@@ -48,19 +49,34 @@ class SignUpEnterSchoolFragment :
     }
 
     private fun initEditText() = with(binding.etInput) {
+        setOnFocusChangeListener { _, _ ->
+            updateSearchResultVisibility()
+        }
         addTextChangedListener {
             val keyword = it?.toString() ?: ""
+            if (keyword != signUpViewModelContentInterface.school?.name) clearSelectedSchool()
             if (keyword.isBlank()) return@addTextChangedListener
             textChangeJob?.cancel()
             textChangeJob = viewLifecycleOwner.lifecycleScope.launch {
                 delay(SEARCH_DEBOUNCE_MIL_SEC)
                 signUpEnterSchoolViewModel.requestGetSchools(schoolName = keyword)
             }
+            updateSearchResultVisibility()
         }
+        signUpViewModelContentInterface.school?.let {
+            setText(it.name)
+        }
+        updateButtonModel()
+        updateSearchResultVisibility()
+    }
+
+    private fun updateSearchResultVisibility() = bind {
+        cvSearchResultContainer.isVisible =
+            etInput.isFocused && etInput.text?.toString().isNullOrBlank().not()
     }
 
     private fun initRecyclerView() = with(binding.rvSearchResult) {
-        adapter = SignUpEnterSchoolSearchResultAdapter()
+        adapter = SignUpEnterSchoolSearchResultAdapter(onClickSchool = ::onClickSchool)
         val dividerColorInt = ContextCompat.getColor(context, R.color.divider)
         val dividerHeightPx = context.dp2Px(DIVIDER_HEIGHT_DP)
         addItemDecoration(
@@ -69,7 +85,26 @@ class SignUpEnterSchoolFragment :
                 dividerHeightPx = dividerHeightPx
             )
         )
+    }
 
+    private fun onClickSchool(school: School) {
+        signUpViewModelContentInterface.school = school
+        updateButtonModel()
+        binding.etInput.setText(school.name)
+        binding.etInput.clearFocus()
+    }
+
+    private fun clearSelectedSchool() {
+        signUpViewModelContentInterface.school = null
+        updateButtonModel()
+    }
+
+    private fun updateButtonModel() {
+        signUpViewModelContentInterface.setNextButtonModel(
+            signUpNextButtonModel = signUpNextButtonModel.copy(
+                isEnabled = signUpViewModelContentInterface.school != null
+            )
+        )
     }
 
     private fun initStateFlow() {

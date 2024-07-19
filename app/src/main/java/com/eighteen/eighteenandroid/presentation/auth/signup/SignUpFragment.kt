@@ -10,6 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
@@ -18,17 +21,21 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.FullWebViewFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
 import com.eighteen.eighteenandroid.presentation.common.requestPermissions
 import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry
 import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment.Companion.EDIT_MEDIA_POP_DESTINATION_ID_KEY
 import com.eighteen.eighteenandroid.presentation.editmedia.EditMediaViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * 회원가입 기능의 진입점
  * 내부의 ChildFragment에 대해 navigation graph 소유
  */
+@AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate),
     SignUpContentContainer {
     private val signUpViewModel by viewModels<SignUpViewModel>()
@@ -72,6 +79,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         initSignUpObserver()
         initEditMediaObserver()
         initActionEventObserver()
+        initSignUpResultStateFlow()
     }
 
     private fun initSignUpObserver() = with(signUpViewModel) {
@@ -151,5 +159,23 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         editResultEventLiveData.observe(viewLifecycleOwner, EventObserver {
             signUpViewModel.addMediaResult(it)
         })
+    }
+
+    private fun initSignUpResultStateFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpViewModel.signUpResultStateFlow.collect {
+                    when (it) {
+                        is ModelState.Success -> {
+                            //TODO 로그인 처리?
+                            findNavController().popBackStack()
+                        }
+                        else -> {
+                            //do nothing
+                        }
+                    }
+                }
+            }
+        }
     }
 }

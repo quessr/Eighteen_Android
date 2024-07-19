@@ -1,9 +1,11 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Calendar
 
@@ -17,8 +19,10 @@ interface SignUpViewModelContentInterface {
     var birth: Calendar?
     var school: School?
     val mediasStateFlow: StateFlow<List<SignUpMedia>>
+    val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>>
     fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)
     fun setEditMediaAction(editMediaAction: SignUpEditMediaAction)
     fun clearMediaResultStateFlow()
     fun actionOpenWebViewFragment(url: String)
+    fun requestSignUp()
 }

@@ -2,6 +2,7 @@ package com.eighteen.eighteenandroid.domain.di
 
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import com.eighteen.eighteenandroid.domain.usecase.CheckIdValidationUseCase
+import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,8 @@ object UserUseCaseModule {
     @Singleton
     fun provideCheckIdValidationUseCase(repository: UserRepository) =
         CheckIdValidationUseCase(repository = repository)
+
+    @Provides
+    @Singleton
+    fun provideSignUpUseCase(repository: UserRepository) = SignUpUseCase(repository = repository)
 }

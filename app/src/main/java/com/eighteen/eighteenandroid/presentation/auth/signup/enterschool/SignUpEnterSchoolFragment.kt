@@ -116,6 +116,7 @@ class SignUpEnterSchoolFragment :
                             //TODO Loading 처리
                         }
                         is ModelState.Success -> {
+                            //TODO empty case 처리
                             bind {
                                 (rvSearchResult.adapter as? SignUpEnterSchoolSearchResultAdapter)?.submitList(
                                     it.data?.schools

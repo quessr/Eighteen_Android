@@ -51,7 +51,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     override val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>> =
         _signUpResultStateFlow.asStateFlow()
 
-    override var phoneNumber: String = ""
+    override var phoneNumber: String = "01077777777"
     override var id: String = ""
     override var nickName: String = ""
     override var birth: Calendar? = null
@@ -108,7 +108,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
             safeLet(birth, school) { birth, school ->
                 _signUpResultStateFlow.value = ModelState.Loading()
                 val birthDayString = birth.run {
-                    "${get(Calendar.YEAR)}-${get(Calendar.MONTH) + 1}-${get(Calendar.DATE)}"
+                    "${get(Calendar.YEAR)}-${get(Calendar.MONTH)}-${get(Calendar.DATE)}"
                 }
                 val signUpInfo = SignUpInfo(
                     phoneNumber = phoneNumber,

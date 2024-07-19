@@ -181,11 +181,14 @@ class SignUpEnterAuthCodeFragment :
                             Log.d("SignUpEnterAuthCodeFragment", "send error ${it.throwable}")
 
                         }
+                        is ModelState.Empty -> {
+                            //do nothing
+                        }
                     }
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 signUpEnterAuthCodeViewModel.confirmMessageResultStateFlow.collect {
                     when (it) {
@@ -201,7 +204,7 @@ class SignUpEnterAuthCodeFragment :
                             //TODO 에러처리
                             Log.d("SignUpEnterAuthCodeFragment", "confirm error ${it.throwable}")
                         }
-                        else -> {
+                        is ModelState.Empty -> {
                             //do nothing
                         }
                     }

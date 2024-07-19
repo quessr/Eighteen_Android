@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,11 +19,12 @@ import javax.inject.Inject
 class SignUpEnterIdViewModel @Inject constructor(private val checkIdValidationUseCase: CheckIdValidationUseCase) :
     ViewModel() {
     private val _signUpEnterIdModel = MutableStateFlow(SignUpEnterIdModel())
-    val signUpEnterIdModel: StateFlow<SignUpEnterIdModel> = _signUpEnterIdModel
+    val signUpEnterIdModel: StateFlow<SignUpEnterIdModel> = _signUpEnterIdModel.asStateFlow()
 
-    private val _checkIdValidationEventStateFlow = MutableStateFlow<ModelState<Event<Unit>>?>(null)
-    val checkIdValidationEventStateFlow: StateFlow<ModelState<Event<Unit>>?> =
-        _checkIdValidationEventStateFlow
+    private val _checkIdValidationEventStateFlow =
+        MutableStateFlow<ModelState<Event<Unit>>>(ModelState.Empty())
+    val checkIdValidationEventStateFlow: StateFlow<ModelState<Event<Unit>>> =
+        _checkIdValidationEventStateFlow.asStateFlow()
 
     private var checkIdValidationJob: Job? = null
 

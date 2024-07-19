@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -22,14 +23,15 @@ class SignUpEnterAuthCodeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _sendMessageResultStateFlow =
         MutableStateFlow<ModelState<Long>>(ModelState.Success(Calendar.getInstance().timeInMillis))
-    val sendMessageResultStateFlow: StateFlow<ModelState<Long>> = _sendMessageResultStateFlow
+    val sendMessageResultStateFlow: StateFlow<ModelState<Long>> =
+        _sendMessageResultStateFlow.asStateFlow()
 
     private var requestSendMessageJob: Job? = null
 
     private val _confirmMessageResultStateFlow =
-        MutableStateFlow<ModelState<Unit>?>(null)
-    val confirmMessageResultStateFlow: StateFlow<ModelState<Unit>?> =
-        _confirmMessageResultStateFlow
+        MutableStateFlow<ModelState<Unit>>(ModelState.Empty())
+    val confirmMessageResultStateFlow: StateFlow<ModelState<Unit>> =
+        _confirmMessageResultStateFlow.asStateFlow()
 
     private var requestConfirmMessageJob: Job? = null
 
@@ -81,7 +83,7 @@ class SignUpEnterAuthCodeViewModel @Inject constructor(
     fun clear() {
         requestSendMessageJob?.cancel()
         requestConfirmMessageJob?.cancel()
-        _confirmMessageResultStateFlow.value = null
+        _confirmMessageResultStateFlow.value = ModelState.Empty()
     }
 
     companion object {

@@ -5,10 +5,12 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.model
 import com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.model.SignUpEnterNickNameStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class SignUpEnterNickNameViewModel : ViewModel() {
     private val _signUpEnterNickNameModel = MutableStateFlow(SignUpEnterNickNameModel())
-    val signUpEnterNickNameModel: StateFlow<SignUpEnterNickNameModel> = _signUpEnterNickNameModel
+    val signUpEnterNickNameModel: StateFlow<SignUpEnterNickNameModel> =
+        _signUpEnterNickNameModel.asStateFlow()
 
     fun setInputText(input: String) {
         val status = checkStatus(input)

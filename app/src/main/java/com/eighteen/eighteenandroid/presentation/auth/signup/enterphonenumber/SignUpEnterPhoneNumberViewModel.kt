@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,8 +16,9 @@ import javax.inject.Inject
 class SignUpEnterPhoneNumberViewModel @Inject constructor(
     private val sendMessageUseCase: SendMessageUseCase
 ) : ViewModel() {
-    private val _sendMessageResultStateFlow = MutableStateFlow<ModelState<String>?>(null)
-    val sendMessageResultStateFlow: StateFlow<ModelState<String>?> = _sendMessageResultStateFlow
+    private val _sendMessageResultStateFlow =
+        MutableStateFlow<ModelState<String>>(ModelState.Empty())
+    val sendMessageResultStateFlow: StateFlow<ModelState<String>> = _sendMessageResultStateFlow.asStateFlow()
 
     private var requestSendMessageJob: Job? = null
 
@@ -34,6 +36,6 @@ class SignUpEnterPhoneNumberViewModel @Inject constructor(
 
     fun clear() {
         requestSendMessageJob?.cancel()
-        _sendMessageResultStateFlow.value = null
+        _sendMessageResultStateFlow.value = ModelState.Empty()
     }
 }

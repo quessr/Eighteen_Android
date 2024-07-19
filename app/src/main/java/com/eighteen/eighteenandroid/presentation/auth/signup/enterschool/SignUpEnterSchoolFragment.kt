@@ -126,7 +126,7 @@ class SignUpEnterSchoolFragment :
                         is ModelState.Error -> {
                             //TODO Error 처리
                         }
-                        else -> {
+                        is ModelState.Empty -> {
                             //do nothing
                         }
                     }

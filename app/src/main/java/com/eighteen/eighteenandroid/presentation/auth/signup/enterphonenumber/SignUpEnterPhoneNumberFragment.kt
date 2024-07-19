@@ -76,7 +76,7 @@ class SignUpEnterPhoneNumberFragment :
                         is ModelState.Error -> {
                             //TODO 에러처리
                         }
-                        else -> {
+                        is ModelState.Empty -> {
                             //do nothing
                         }
                     }

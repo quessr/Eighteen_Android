@@ -8,11 +8,13 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -36,6 +38,10 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     private val _openWebViewEventLiveData = MutableLiveData<Event<String>>()
     val openWebViewLiveData: LiveData<Event<String>> = _openWebViewEventLiveData
 
+    private val _signUpResultStateFlow = MutableStateFlow<ModelState<Unit>>(ModelState.Empty())
+    override val signUpResultStateFlow: StateFlow<ModelState<Unit>> =
+        _signUpResultStateFlow.asStateFlow()
+
     override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
@@ -43,7 +49,7 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
     override var school: School? = null
 
     private val _mediasStateFlow = MutableStateFlow<List<SignUpMedia>>(emptyList())
-    override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow
+    override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow.asStateFlow()
 
     fun actionToPrevPage() {
         _actionEventLiveData.value = Event(SignUpAction.PREV)
@@ -86,11 +92,14 @@ class SignUpViewModel @Inject constructor() : ViewModel(), SignUpViewModelConten
         _mediasStateFlow.value = emptyList()
     }
 
+    override fun requestSignUp() {
+        TODO("Not yet implemented")
+    }
+
     override fun onCleared() {
         _mediasStateFlow.value.forEach {
             if (it is SignUpMedia.Image) it.imageBitmap.recycle()
         }
         super.onCleared()
     }
-
 }

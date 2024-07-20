@@ -21,6 +21,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(rootDir)
+                .getProperty("BASE_URL")
+        )
     }
 
     buildTypes {
@@ -79,7 +86,7 @@ dependencies {
 
 
     //fragment
-    implementation ("androidx.fragment:fragment-ktx:1.3.6")
+    implementation("androidx.fragment:fragment-ktx:1.3.6")
 
     //retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

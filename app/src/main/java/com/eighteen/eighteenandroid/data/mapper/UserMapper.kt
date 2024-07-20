@@ -1,11 +1,11 @@
 package com.eighteen.eighteenandroid.data.mapper
 
-import com.eighteen.eighteenandroid.data.datasource.remote.dao.UserDao
+import com.eighteen.eighteenandroid.data.datasource.remote.response.UserResponse
 import com.eighteen.eighteenandroid.domain.model.User
 
 object UserMapper {
-    fun asUserCaseModel(userDao: UserDao) =
-        userDao.run {
+    fun asUserCaseModel(userResponse: UserResponse) =
+        userResponse.run {
             User(
                 userImage = userImage,
                 userId = userId,

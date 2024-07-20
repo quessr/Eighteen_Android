@@ -60,8 +60,8 @@ class ProfileDetailFragment() :
         val qnaList = List(10) { index ->
             ProfileDetailModel.Qna(
                 id = index.toString(),
-                question = "${index + 1} Question",
-                answer = "${index + 1} Answer"
+                question = "${index + 1}. Lorem ipsum dolor sit amet?",
+                answer = "${index + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             )
         }
         val initialData = listOf(

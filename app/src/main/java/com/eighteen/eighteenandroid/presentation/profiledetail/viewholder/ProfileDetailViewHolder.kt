@@ -100,7 +100,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
             val qna = profileDetailModel as? ProfileDetailModel.Qna
             qna.let {
                 binding.question.text = it?.question
-                binding.answer.text = it?.question
+                binding.answer.text = it?.answer
             }
         }
     }

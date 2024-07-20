@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:backgroundTint="#E6E6E6"
+    android:backgroundTint="@color/grey_03"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
         android:text="Lorem ipsum dolor sit amet?"
-        android:textColor="#000"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        android:textColor="#555"
+        android:textColor="@color/grey_02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question" />
 </androidx.constraintlayout.widget.ConstraintLayout>

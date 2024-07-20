@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMain">
+    app:startDestination="@id/fragmentMyProfile">
     <fragment
         android:id="@+id/fragmentLogin"
         android:name="com.eighteen.eighteenandroid.presentation.auth.LoginFragment"
@@ -52,6 +52,12 @@
             android:id="@+id/action_fragmentMain_to_fragmentProfileDetail"
             app:destination="@id/fragmentProfileDetailFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragmentMyProfile"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.MyProfileFragment"
+        android:label="fragment_my_profile"
+        tools:layout="@layout/fragment_my_profile" />
 
     <fragment
         android:id="@+id/fragmentProfileDetailFragment"

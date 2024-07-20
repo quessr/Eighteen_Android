@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.editmedia.image
 
 import android.net.Uri
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,7 +28,11 @@ class EditImageFragment :
             ivBtnCheck.setOnClickListener {
                 val resultBitmap = binding.icvCropView.getCropAreaImageBitmap()
                 editMediaViewModel.setCropResultBitmap(resultBitmap)
-                findNavController().navigate(R.id.action_fragmentEditImage_to_fragmentEditImageResult)
+                val bundle = bundleOf(EDIT_MEDIA_POP_DESTINATION_ID_KEY to popDestinationId)
+                findNavController().navigate(
+                    R.id.action_fragmentEditImage_to_fragmentEditImageResult,
+                    bundle
+                )
             }
         }
     }

@@ -1,16 +1,12 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
-import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesBinding
+import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBinding
-import com.eighteen.eighteenandroid.databinding.ItemProfileDetailQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
@@ -35,7 +31,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    class Images(private val binding: ItemProfileDetailImagesBinding) :
+    class Images(private val binding: ItemProfileDetailImagesWithLikeBinding) :
         ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val profileImages = profileDetailModel as? ProfileDetailModel.ProfileImages
@@ -99,7 +95,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    class Qna(private val binding: ItemQnaBinding) : ProfileDetailViewHolder(binding) {
+    class Qna(val binding: ItemQnaBinding) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val qna = profileDetailModel as? ProfileDetailModel.Qna
             qna.let {
@@ -110,7 +106,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
     }
 
     class QnaToggle(
-        private val binding: ItemSeeMoreBinding,
+        val binding: ItemSeeMoreBinding,
         private val profileDetailViewModel: ProfileDetailViewModel
     ) :
         ProfileDetailViewHolder(binding) {

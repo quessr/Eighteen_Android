@@ -1,19 +1,26 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
+import android.content.Context
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.core.view.marginBottom
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
-import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesBinding
+import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
+import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
@@ -36,7 +43,7 @@ class ProfileDetailAdapter(
             }
 
             ITEM_TYPE_PROFILE_IMAGES -> {
-                val binding = inflaterBinding(ItemProfileDetailImagesBinding::inflate)
+                val binding = inflaterBinding(ItemProfileDetailImagesWithLikeBinding::inflate)
                 ProfileDetailViewHolder.Images(binding)
             }
 
@@ -66,7 +73,6 @@ class ProfileDetailAdapter(
             }
 
 
-
 //            ITEM_TYPE_QNA_LIST -> {
 //                val binding = inflaterBinding(ItemProfileDetailQnaBinding::inflate)
 //                ProfileDetailViewHolder.Qna(binding, lifecycleOwner, viewModel)
@@ -93,6 +99,37 @@ class ProfileDetailAdapter(
 
     override fun onBindViewHolder(holder: ProfileDetailViewHolder, position: Int) {
         holder.onBind(getItem(position))
+
+
+        if (holder is ProfileDetailViewHolder.Qna) {
+            Log.d("ProfileDetailAdapter", "itemCount $itemCount")
+
+            when {
+                position == 5 -> {
+                    // 첫 번째 Qna 항목의 상단에 radius를 적용
+                    holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_top)
+                }
+                position == itemCount - 1 && itemCount - 5 <= ProfileDetailViewModel.ITEM_COUNT_THRESHOLD  -> {
+                    // Qna 항목이 ITEM_COUNT_THRESHOLD 이하인 경우 마지막 Qna 항목의 하단에 radius를 적용
+                    holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_bottom)
+
+                    // marginBottom 설정
+                    val layoutParams = holder.binding.root.layoutParams as ViewGroup.MarginLayoutParams
+                    layoutParams.bottomMargin = holder.binding.root.context.dp2Px(80)
+                    holder.binding.root.layoutParams = layoutParams
+                    Log.d("ProfileDetailAdapter", "Applied rounded_bottom to last Qna item at position $position")
+                }
+                else -> {
+                    // 나머지 Qna 항목
+                    holder.binding.root.setBackgroundColor(Color.parseColor("#999999")) // 배경색 설정
+                    Log.d("ProfileDetailAdapter", "Applied background color to middle Qna item at position $position")
+                }
+            }
+        } else if (holder is ProfileDetailViewHolder.QnaToggle) {
+            // Qna 항목이 3개 이상인 경우 QnaToggle 항목의 하단에 radius를 적용
+            holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_bottom)
+            Log.d("ProfileDetailAdapter", "Applied rounded_bottom to QnaToggle at position $position")
+        }
     }
 
     companion object {

@@ -1,12 +1,9 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
-import androidx.core.view.marginBottom
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +13,6 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBin
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBinding
-import com.eighteen.eighteenandroid.databinding.ItemProfileDetailQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+    android:layout_height="wrap_content">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/badge_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/teen_container"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="16dp">
+        app:layout_constraintEnd_toStartOf="@+id/teen_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/badge_card"
+            android:id="@+id/iv_badge_card"
             android:layout_width="match_parent"
             android:layout_height="97dp"
             android:src="@drawable/shape_profile_card"
@@ -28,21 +28,43 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="3dp"
             android:text="배지"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/badge_card"
-            app:layout_constraintTop_toTopOf="@+id/badge_card" />
+            android:textSize="13dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_badge_count"
+            app:layout_constraintStart_toStartOf="@+id/iv_badge_card" />
 
         <TextView
             android:id="@+id/tv_badge_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginBottom="13dp"
             android:text="10개"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/badge_card"
-            app:layout_constraintTop_toBottomOf="@+id/tv_badge" />
+            android:textSize="13dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/badge_image"
+            app:layout_constraintStart_toStartOf="@+id/iv_badge_card" />
+
+        <ImageView
+            android:id="@+id/badge_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/bg_badge_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_badge_card"
+            app:layout_constraintStart_toStartOf="@id/iv_badge_card" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/iv_badge_card"
+            app:layout_constraintEnd_toEndOf="@id/iv_badge_card"
+            app:layout_constraintTop_toTopOf="@id/iv_badge_card" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -50,11 +72,11 @@
         android:id="@+id/teen_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/badge_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="16dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/badge_container"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_teen_card"
@@ -70,22 +92,42 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="3dp"
             android:text="TEEN"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/iv_teen_card"
-            app:layout_constraintTop_toTopOf="@+id/iv_teen_card" />
+            android:textSize="13dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_teen_award"
+            app:layout_constraintStart_toStartOf="@+id/iv_teen_card" />
 
         <TextView
             android:id="@+id/tv_teen_award"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginBottom="11dp"
             android:text="5월 2주차 우승"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/iv_teen_card"
-            app:layout_constraintTop_toBottomOf="@+id/tv_teen" />
+            android:textSize="13dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/teen_image"
+            app:layout_constraintStart_toStartOf="@+id/iv_teen_card" />
 
+        <ImageView
+            android:id="@+id/teen_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/bg_teen_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_teen_card"
+            app:layout_constraintStart_toStartOf="@id/iv_teen_card" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/iv_teen_card"
+            app:layout_constraintEnd_toEndOf="@id/iv_teen_card"
+            app:layout_constraintTop_toTopOf="@id/iv_teen_card" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -12,7 +13,7 @@
         style="@style/pretendard_regular_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="id name"
+        android:text="@string/profile_detail_id"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,7 +21,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="김 에스더"
+        android:text="@string/profile_detail_name"
         android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -44,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:text="서울 중학교, "
+        android:text="@string/profile_detail_school"
         app:layout_constraintBottom_toBottomOf="@+id/iv_school_icon"
         app:layout_constraintStart_toEndOf="@+id/iv_school_icon"
         app:layout_constraintTop_toTopOf="@+id/iv_school_icon" />
@@ -54,7 +55,7 @@
         style="@style/pretendard_regular_13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="18세"
+        android:text="@string/profile_detail_age"
         app:layout_constraintBottom_toBottomOf="@+id/tv_school"
         app:layout_constraintStart_toEndOf="@+id/tv_school"
         app:layout_constraintTop_toTopOf="@+id/tv_school" />

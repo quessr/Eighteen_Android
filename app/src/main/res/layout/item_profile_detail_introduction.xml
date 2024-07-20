@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="40dp">
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="7dp"
-        android:text="자기 소개"
+        android:text="@string/profile_detail_introduction_title"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,11 +24,11 @@
         android:layout_width="74dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text="INTP"
         android:textAlignment="center"
         app:chipCornerRadius="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_intro_label" />
+        app:layout_constraintTop_toBottomOf="@id/tv_intro_label"
+        tools:text="@string/profile_detail_personality_type" />
 
     <TextView
         android:id="@+id/tv_introduction"
@@ -36,10 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:lineSpacingMultiplier="1"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chip_personality_type" />
+        app:layout_constraintTop_toBottomOf="@id/chip_personality_type"
+        tools:text="@string/profile_detail_introduction_des" />
 
     <ImageView
         android:layout_width="match_parent"

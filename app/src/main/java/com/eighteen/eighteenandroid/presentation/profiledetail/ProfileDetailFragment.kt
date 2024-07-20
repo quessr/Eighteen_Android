@@ -43,6 +43,7 @@ class ProfileDetailFragment() :
         bind {
             profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             profileDetailRecyclerview.adapter = adapter
+            profileDetailRecyclerview.itemAnimator = null
         }
     }
 
@@ -56,7 +57,7 @@ class ProfileDetailFragment() :
 
 
     private fun setupInitialData() {
-        val qnaList = List(30) { index ->
+        val qnaList = List(10) { index ->
             ProfileDetailModel.Qna(
                 id = index.toString(),
                 question = "${index + 1} Question",

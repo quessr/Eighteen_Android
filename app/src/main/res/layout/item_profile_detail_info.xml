@@ -7,55 +7,55 @@
     android:layout_marginTop="29dp"
     android:layout_marginBottom="18dp">
 
-        <TextView
-            android:id="@+id/tv_id_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="id name"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_id_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="id name"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="김 에스더"
-            android:textColor="#000"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_id_name" />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="김 에스더"
+        android:textColor="#000"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_id_name" />
 
-        <ImageView
-            android:id="@+id/iv_school_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="2dp"
-            android:src="@drawable/ic_profile_detail_school"
-            app:layout_constraintBottom_toBottomOf="@id/tv_name"
-            app:layout_constraintStart_toEndOf="@+id/tv_name" />
+    <ImageView
+        android:id="@+id/iv_school_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_profile_detail_school"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintStart_toEndOf="@+id/tv_name" />
 
-        <TextView
-            android:id="@+id/tv_school"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:text="서울 중학교, "
-            android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_school_icon"
-            app:layout_constraintStart_toEndOf="@+id/iv_school_icon"
-            app:layout_constraintTop_toTopOf="@+id/iv_school_icon" />
+    <TextView
+        android:id="@+id/tv_school"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="서울 중학교, "
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_school_icon"
+        app:layout_constraintStart_toEndOf="@+id/iv_school_icon"
+        app:layout_constraintTop_toTopOf="@+id/iv_school_icon" />
 
-        <TextView
-            android:id="@+id/tv_age"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="18세"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_school"
-            app:layout_constraintStart_toEndOf="@+id/tv_school"
-            app:layout_constraintTop_toTopOf="@+id/tv_school" />
+    <TextView
+        android:id="@+id/tv_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="18세"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_school"
+        app:layout_constraintStart_toEndOf="@+id/tv_school"
+        app:layout_constraintTop_toTopOf="@+id/tv_school" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

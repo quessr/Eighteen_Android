@@ -24,6 +24,7 @@
 
         <TextView
             android:id="@+id/tv_badge"
+            style="@style/pretendard_regular_13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -31,20 +32,18 @@
             android:layout_marginBottom="3dp"
             android:text="배지"
             android:textColor="@color/white"
-            android:textSize="13dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_badge_count"
             app:layout_constraintStart_toStartOf="@+id/iv_badge_card" />
 
         <TextView
             android:id="@+id/tv_badge_count"
+            style="@style/pretendard_bold_13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="13dp"
             android:text="10개"
             android:textColor="@color/white"
-            android:textSize="13dp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/badge_image"
             app:layout_constraintStart_toStartOf="@+id/iv_badge_card" />
 
@@ -88,6 +87,7 @@
 
         <TextView
             android:id="@+id/tv_teen"
+            style="@style/pretendard_regular_13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -95,20 +95,18 @@
             android:layout_marginBottom="3dp"
             android:text="TEEN"
             android:textColor="@color/white"
-            android:textSize="13dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_teen_award"
             app:layout_constraintStart_toStartOf="@+id/iv_teen_card" />
 
         <TextView
             android:id="@+id/tv_teen_award"
+            style="@style/pretendard_bold_13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="11dp"
             android:text="5월 2주차 우승"
             android:textColor="@color/white"
-            android:textSize="13dp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/teen_image"
             app:layout_constraintStart_toStartOf="@+id/iv_teen_card" />
 

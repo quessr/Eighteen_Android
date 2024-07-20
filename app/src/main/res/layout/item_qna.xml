@@ -10,20 +10,22 @@
 
     <TextView
         android:id="@+id/question"
+        style="@style/pretendard_bold_16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
         android:text="Lorem ipsum dolor sit amet?"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/answer"
+        style="@style/pretendard_regular_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        android:lineSpacingMultiplier="1"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         android:textColor="@color/grey_02"
         app:layout_constraintStart_toStartOf="parent"

@@ -96,7 +96,9 @@
     <string name="my_profile_my_link">내 링크</string>
     <string name="my_profile_my_link_empty">등록된 링크가 없습니다.</string>
     <string name="my_profile_introduce_myself">자기 소개</string>
+    <string name="my_profile_introduce_empty">등록된 소개글이 없습니다.</string>
     <string name="my_profile_ten_of_qna">10문 10답</string>
+    <string name="my_profile_ten_of_qna_empty">등록된 문답이 없습니다.</string>
 
     <string name="time_min_sec">"%02d:%02d"</string>
 </resources>

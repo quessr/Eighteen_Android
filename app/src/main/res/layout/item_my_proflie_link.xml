@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="40dp">
 
     <TextView
         android:id="@+id/tvTitle"
         style="@style/pretendard_bold_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:text="@string/my_profile_my_link"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,6 @@
         android:id="@+id/llLinks"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
         android:background="@drawable/bg_rect_grey_03_r20"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
@@ -45,7 +44,6 @@
         style="@style/pretendard_regular_14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
         android:text="@string/my_profile_my_link_empty"
         android:textColor="@color/grey_02"
         app:layout_constraintEnd_toEndOf="parent"

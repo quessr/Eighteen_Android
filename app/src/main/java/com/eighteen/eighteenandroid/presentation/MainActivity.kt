@@ -44,8 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            val visibleNavigationIds = listOf(R.id.fragmentMain, R.id.fragmentMyProfile)
             binding.bottomNavigationBar.visibility =
-                if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
+                if (visibleNavigationIds.contains(destination.id)) View.VISIBLE else View.GONE
             binding.toolbar.root.visibility =
                 if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
         }

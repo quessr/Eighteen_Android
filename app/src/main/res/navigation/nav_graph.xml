@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMyProfile">
+    app:startDestination="@id/fragmentMain">
     <fragment
         android:id="@+id/fragmentLogin"
         android:name="com.eighteen.eighteenandroid.presentation.auth.LoginFragment"

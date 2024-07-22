@@ -42,8 +42,28 @@ class MyProfileFragment :
         }
     }
 
+    override fun onClickSetting() {
+        //TODO 설정화면 이동
+        Log.d("MyProfileFragment", "onClickSetting")
+    }
+
     override fun onClickEditMedia() {
         //TODO 미디어 편집화면 이동
         Log.d("MyProfileFragment", "onClickEditMedia")
+    }
+
+    override fun onClickEditSchool() {
+        //TODO 학교 편집 화면 이동
+        Log.d("MyProfileFragment", "onClickEditSchool")
+    }
+
+    override fun onClickBadge() {
+        //TODO 뱃지 화면 이동
+        Log.d("MyProfileFragment", "onClickBadge")
+    }
+
+    override fun onClickTeen() {
+        //TODO Teen 눌렀을 때
+        Log.d("MyProfileFragment", "onClickTeen")
     }
 }

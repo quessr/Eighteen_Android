@@ -4,6 +4,8 @@ data class Profile(
     val nickName: String,
     val age: Int,
     val school: School,
+    val badgeCount: Int?,
+    val teenDescription: String?,
     val medias: List<Media>,
     val id: String,
     val snsLinks: List<SnsLink>,

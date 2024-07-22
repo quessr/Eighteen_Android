@@ -91,7 +91,9 @@
     <string name="my_profile_title">내 프로필</string>
     <string name="my_profile_have_a_nice_day">%s 님\n오늘도 좋은 하루 보내세요!</string>
     <string name="my_profile_edit_image">사진 수정</string>
+    <string name="my_profile_age">%d세</string>
     <string name="my_profile_badge">배지</string>
+    <string name="my_profile_badge_count">%d개</string>
     <string name="my_profile_teen">TEEN</string>
     <string name="my_profile_my_link">내 링크</string>
     <string name="my_profile_my_link_empty">등록된 링크가 없습니다.</string>

@@ -65,6 +65,8 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                 nickName = "nickname",
                 school = School("school name", "address"),
                 age = 17,
+                badgeCount = 21,
+                teenDescription = "teen description",
                 medias = listOf(Media.Image(image1), Media.Image(image2), Media.Image(image3)),
                 id = "id",
                 description = "description",

@@ -4,7 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp">
+    android:paddingHorizontal="16dp"
+    android:paddingBottom="40dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clHeader"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/pretendard_bold_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/my_profile_title"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivBtnSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_setting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tvNickName"
@@ -14,7 +44,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clHeader"
         tools:text="김 에스더 님\n오늘도 좋은 하루 보내세요!" />
 
     <TextView
@@ -28,13 +58,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNickName" />
 
-    <ImageView
-        android:id="@+id/ivImage"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvImageContainer"
         android:layout_width="63dp"
         android:layout_height="73dp"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvNickName"
-        tools:background="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="@id/tvNickName">
+
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clSchool"
@@ -82,5 +121,103 @@
             app:tint="@color/grey_01" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--TODO badge 추가 -->
+    <!-- TODO 백그라운드 적용 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clBgBadge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_rect_main_color_r20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/clBgTeen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clSchool">
+
+        <TextView
+            android:id="@+id/tvBadgeTitle"
+            style="@style/pretendard_regular_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/my_profile_badge"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvBadgeCount"
+            style="@style/pretendard_bold_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/background_color"
+            app:layout_constraintStart_toStartOf="@id/tvBadgeTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvBadgeTitle"
+            tools:text="10개" />
+
+        <ImageView
+            android:id="@+id/ivBtnBadgeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="11dp"
+            android:src="@drawable/ic_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- TODO 백그라운드 적용 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clBgTeen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_rect_main_color_r20"
+        app:layout_constraintBottom_toBottomOf="@id/clBgBadge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/clBgBadge"
+        app:layout_constraintTop_toTopOf="@id/clBgBadge">
+
+        <TextView
+            android:id="@+id/tvTeenTitle"
+            style="@style/pretendard_regular_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/my_profile_teen"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTeenDescription"
+            style="@style/pretendard_bold_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/background_color"
+            app:layout_constraintStart_toStartOf="@id/tvTeenTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTeenTitle"
+            tools:text="5월 2주차 우승" />
+
+        <ImageView
+            android:id="@+id/ivBtnTeenMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="11dp"
+            android:src="@drawable/ic_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

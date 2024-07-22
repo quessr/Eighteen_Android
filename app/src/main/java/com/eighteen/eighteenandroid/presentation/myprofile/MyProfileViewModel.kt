@@ -29,7 +29,9 @@ class MyProfileViewModel : ViewModel() {
                 nickName = nickName,
                 age = age,
                 profileUrl = medias.firstOrNull()?.url,
-                school = school
+                school = school,
+                badgeCount = badgeCount,
+                teenDescription = teenDescription
             )
             val linkItem = MyProfileItem.Link(id = id, links = snsLinks)
             val introduceItem =

@@ -6,6 +6,7 @@ import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemMyProfileProfileBinding
+import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
 import com.eighteen.eighteenandroid.presentation.myprofile.MyProfileClickListener
 import com.eighteen.eighteenandroid.presentation.myprofile.model.MyProfileItem
 
@@ -17,7 +18,26 @@ class MyProfileProfileViewHolder(
     override fun onBind(model: MyProfileItem.Profile) {
         with(binding) {
             tvNickName.text = createNickString(nickName = model.nickName)
-
+            tvSchoolName.text = model.school.name
+            tvAge.text = context.getString(R.string.my_profile_age, model.age)
+            ImageLoader.get().loadUrl(ivImage, model.profileUrl)
+            tvBadgeCount.text = context.getString(R.string.my_profile_badge_count, model.badgeCount)
+            tvTeenDescription.text = model.teenDescription
+            tvBtnEditImage.setOnClickListener {
+                clickListener.onClickEditMedia()
+            }
+            ivBtnEditSchool.setOnClickListener {
+                clickListener.onClickEditSchool()
+            }
+            ivBtnSetting.setOnClickListener {
+                clickListener.onClickSetting()
+            }
+            ivBtnBadgeMore.setOnClickListener {
+                clickListener.onClickBadge()
+            }
+            ivBtnTeenMore.setOnClickListener {
+                clickListener.onClickTeen()
+            }
         }
     }
 

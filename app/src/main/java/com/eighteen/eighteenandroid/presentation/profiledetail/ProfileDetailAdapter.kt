@@ -1,7 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
@@ -68,12 +67,6 @@ class ProfileDetailAdapter(
                 ProfileDetailViewHolder.QnaToggle(binding, viewModel)
             }
 
-
-//            ITEM_TYPE_QNA_LIST -> {
-//                val binding = inflaterBinding(ItemProfileDetailQnaBinding::inflate)
-//                ProfileDetailViewHolder.Qna(binding, lifecycleOwner, viewModel)
-//            }
-
             else -> throw IllegalArgumentException("Invalid view type") // 코드 비교 해 볼것
         }
 
@@ -98,33 +91,32 @@ class ProfileDetailAdapter(
 
 
         if (holder is ProfileDetailViewHolder.Qna) {
-            Log.d("ProfileDetailAdapter", "itemCount $itemCount")
 
             when {
                 position == 5 -> {
                     // 첫 번째 Qna 항목의 상단에 radius를 적용
                     holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_top)
                 }
-                position == itemCount - 1 && itemCount - 5 <= ProfileDetailViewModel.ITEM_COUNT_THRESHOLD  -> {
+
+                position == itemCount - 1 && itemCount - 5 <= ProfileDetailViewModel.ITEM_COUNT_THRESHOLD -> {
                     // Qna 항목이 ITEM_COUNT_THRESHOLD 이하인 경우 마지막 Qna 항목의 하단에 radius를 적용
                     holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_bottom)
 
                     // marginBottom 설정
-                    val layoutParams = holder.binding.root.layoutParams as ViewGroup.MarginLayoutParams
+                    val layoutParams =
+                        holder.binding.root.layoutParams as ViewGroup.MarginLayoutParams
                     layoutParams.bottomMargin = holder.binding.root.context.dp2Px(80)
                     holder.binding.root.layoutParams = layoutParams
-                    Log.d("ProfileDetailAdapter", "Applied rounded_bottom to last Qna item at position $position")
                 }
+
                 else -> {
                     // 나머지 Qna 항목
                     holder.binding.root.setBackgroundColor(Color.parseColor("#999999")) // 배경색 설정
-                    Log.d("ProfileDetailAdapter", "Applied background color to middle Qna item at position $position")
                 }
             }
         } else if (holder is ProfileDetailViewHolder.QnaToggle) {
             // Qna 항목이 3개 이상인 경우 QnaToggle 항목의 하단에 radius를 적용
             holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_bottom)
-            Log.d("ProfileDetailAdapter", "Applied rounded_bottom to QnaToggle at position $position")
         }
     }
 
@@ -134,10 +126,9 @@ class ProfileDetailAdapter(
         private const val ITEM_TYPE_BADGE_AND_TEEN = 3
         private const val ITEM_TYPE_LIKE = 4
         private const val ITEM_TYPE_INTRODUCTION = 5
-        private const val ITEM_TYPE_QNA_LIST = 6
-        private const val ITEM_TYPE_QNA_LIST_TITLE = 7
-        private const val ITEM_TYPE_QNA = 8
-        private const val ITEM_TYPE_QNA_TOGGLE = 9
+        private const val ITEM_TYPE_QNA_LIST_TITLE = 6
+        private const val ITEM_TYPE_QNA = 7
+        private const val ITEM_TYPE_QNA_TOGGLE = 8
 
 
         private val diffUtil = object : DiffUtil.ItemCallback<ProfileDetailModel>() {

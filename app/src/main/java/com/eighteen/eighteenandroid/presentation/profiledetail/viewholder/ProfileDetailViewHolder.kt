@@ -67,28 +67,6 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-//    class Qna(
-//        private val binding: ItemProfileDetailQnaBinding,
-//        lifecycleOwner: LifecycleOwner,
-//        viewModel: ProfileDetailViewModel
-//    ) : ProfileDetailViewHolder(binding) {
-//        private val qnaAdapter = QuestionAnswerAdapter(lifecycleOwner, viewModel)
-//
-//        init {
-//            binding.recyclerView.isNestedScrollingEnabled = false
-//            binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-//            binding.recyclerView.adapter = qnaAdapter
-//        }
-//
-//        override fun onBind(profileDetailModel: ProfileDetailModel) {
-//            val qnaList = profileDetailModel as? ProfileDetailModel.QnaList
-//            qnaList?.let {
-//                Log.d("Qna", "Qna list size: ${it.qnas.size}")
-//                qnaAdapter.submitList(it.qnas)
-//            }
-//        }
-//    }
-
     class QnaTitle(private val binding: ItemQnaTitleBinding) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             super.onBind(profileDetailModel)

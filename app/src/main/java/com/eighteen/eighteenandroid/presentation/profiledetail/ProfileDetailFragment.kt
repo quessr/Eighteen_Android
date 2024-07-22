@@ -3,7 +3,6 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
@@ -13,7 +12,6 @@ import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFr
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
-import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -24,7 +22,6 @@ class ProfileDetailFragment() :
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
     private val profileDetailViewModel by viewModels<ProfileDetailViewModel>()
 
-    //    private lateinit var adapter: QuestionAnswerAdapter
     private lateinit var adapter: ProfileDetailAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,10 +93,7 @@ class ProfileDetailFragment() :
                 personalityType = "INTP",
                 introductionText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             ),
-//            ProfileDetailModel.QnaList(
-//                id = "5",
-//                qnas = qnaList
-//            ),
+
             ProfileDetailModel.QnaListTitle(id = "5"),
             ProfileDetailModel.QnaToggle(id = "6", isExpanded = true)
         )

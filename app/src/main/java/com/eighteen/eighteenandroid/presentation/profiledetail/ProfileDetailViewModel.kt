@@ -1,6 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,15 +28,6 @@ class ProfileDetailViewModel : ViewModel() {
         updateItems()
     }
 
-//    fun getItemCount(): Int {
-//        val itemList = _items.value
-//        return if (_showAllItems.value || itemList.isEmpty() || itemList.size <= ITEM_COUNT_THRESHOLD) {
-//            itemList.size
-//        } else {
-//            ITEM_COUNT_THRESHOLD
-//        }
-//    }
-
     private fun updateItems() {
         val currentItems = _items.value.toMutableList()
         val qnaIndex = currentItems.indexOfFirst { it is ProfileDetailModel.QnaToggle }
@@ -60,7 +50,8 @@ class ProfileDetailViewModel : ViewModel() {
 
 
             // 기존의 QnaToggle 항목이 있으면 제거합니다.
-            val existingToggleIndex = currentItems.indexOfFirst { it is ProfileDetailModel.QnaToggle }
+            val existingToggleIndex =
+                currentItems.indexOfFirst { it is ProfileDetailModel.QnaToggle }
             if (existingToggleIndex != -1) {
                 currentItems.removeAt(existingToggleIndex)
             }
@@ -69,9 +60,20 @@ class ProfileDetailViewModel : ViewModel() {
             if (qnaList.size > ITEM_COUNT_THRESHOLD) {
                 val insertIndex = qnaIndex + 1 + qnaItemsToShow.size
                 if (insertIndex <= currentItems.size) {
-                    currentItems.add(insertIndex, ProfileDetailModel.QnaToggle(id = "toggle", isExpanded = _showAllItems.value))
+                    currentItems.add(
+                        insertIndex,
+                        ProfileDetailModel.QnaToggle(
+                            id = "toggle",
+                            isExpanded = _showAllItems.value
+                        )
+                    )
                 } else {
-                    currentItems.add(ProfileDetailModel.QnaToggle(id = "toggle", isExpanded = _showAllItems.value))
+                    currentItems.add(
+                        ProfileDetailModel.QnaToggle(
+                            id = "toggle",
+                            isExpanded = _showAllItems.value
+                        )
+                    )
                 }
             }
 

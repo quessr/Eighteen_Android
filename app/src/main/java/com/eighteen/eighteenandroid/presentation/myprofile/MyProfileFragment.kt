@@ -66,4 +66,11 @@ class MyProfileFragment :
         //TODO Teen 눌렀을 때
         Log.d("MyProfileFragment", "onClickTeen")
     }
+
+    override fun onClickEditLink() {
+        //TODO 링크편집 dialog
+        Log.d("MyProfileFragment", "onClickEditLink")
+    }
+
+    //TODO 링크 직접 클릭 시 외부링크 연결?
 }

@@ -73,4 +73,9 @@ class MyProfileFragment :
     }
 
     //TODO 링크 직접 클릭 시 외부링크 연결?
+
+    override fun onClickEditIntroduce() {
+        //TODO 자기소개 편집
+        Log.d("MyProfileFragment", "onClickEditIntroduce")
+    }
 }

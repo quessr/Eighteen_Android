@@ -7,4 +7,5 @@ interface MyProfileClickListener {
     fun onClickBadge()
     fun onClickTeen()
     fun onClickEditLink()
+    fun onClickEditIntroduce()
 }

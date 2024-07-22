@@ -3,7 +3,9 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
@@ -45,9 +47,11 @@ class ProfileDetailFragment() :
     }
 
     private fun initViewModel() {
-        lifecycleScope.launch {
-            profileDetailViewModel.items.collectLatest { details ->
-                adapter.submitList(details)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                profileDetailViewModel.items.collectLatest { details ->
+                    adapter.submitList(details)
+                }
             }
         }
     }

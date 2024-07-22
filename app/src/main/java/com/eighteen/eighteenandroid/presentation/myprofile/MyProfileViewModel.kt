@@ -25,14 +25,16 @@ class MyProfileViewModel : ViewModel() {
     private fun asProfileItems(profile: Profile): List<MyProfileItem> {
         with(profile) {
             val profileItem = MyProfileItem.Profile(
+                id = id,
                 nickName = nickName,
                 age = age,
                 profileUrl = medias.firstOrNull()?.url,
                 school = school
             )
-            val linkItem = MyProfileItem.Link(links = snsLinks)
-            val introduceItem = MyProfileItem.Introduce(mbti = mbti, description = description)
-            val qnaItem = MyProfileItem.TenOfQna(qnas = qna)
+            val linkItem = MyProfileItem.Link(id = id, links = snsLinks)
+            val introduceItem =
+                MyProfileItem.Introduce(id = id, mbti = mbti, description = description)
+            val qnaItem = MyProfileItem.TenOfQna(id = id, qnas = qna)
             return listOf(profileItem, linkItem, introduceItem, qnaItem)
         }
     }

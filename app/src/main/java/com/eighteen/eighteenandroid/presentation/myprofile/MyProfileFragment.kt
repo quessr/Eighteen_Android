@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.myprofile
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -10,12 +11,14 @@ import kotlinx.coroutines.launch
 
 //TODO 뷰홀더 어댑터 ItemDecoration 생성
 class MyProfileFragment :
-    BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
+    BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate),
+    MyProfileClickListener {
 
     private val myProfileViewModel by viewModels<MyProfileViewModel>()
 
     override fun initView() {
         initStateFlow()
+        binding.rvProfile.adapter = MyProfileAdapter(clickListener = this)
     }
 
     private fun initStateFlow() {
@@ -30,5 +33,17 @@ class MyProfileFragment :
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myProfileViewModel.myProfileItemsStateFlow.collect {
+                    (binding.rvProfile.adapter as? MyProfileAdapter)?.submitList(it)
+                }
+            }
+        }
+    }
+
+    override fun onClickEditMedia() {
+        //TODO 미디어 편집화면 이동
+        Log.d("MyProfileFragment", "onClickEditMedia")
     }
 }

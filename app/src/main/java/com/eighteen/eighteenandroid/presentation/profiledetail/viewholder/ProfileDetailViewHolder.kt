@@ -10,7 +10,6 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBin
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
-import com.eighteen.eighteenandroid.presentation.profiledetail.ProfileDetailViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.ViewPagerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -85,7 +84,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
 
     class QnaToggle(
         val binding: ItemSeeMoreBinding,
-        private val profileDetailViewModel: ProfileDetailViewModel
+        private val toggleItems: (ProfileDetailModel.QnaToggle) -> Unit
     ) :
         ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
@@ -94,21 +93,12 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 binding.tvSeeMore.text = if (toggle.isExpanded) "접기" else "펼쳐서 보기"
                 binding.tvSeeMore.setOnClickListener(View.OnClickListener {
                     toggleItems(toggle)
-                    profileDetailViewModel.toggleItems()
                 })
                 binding.ivSeeMore.setOnClickListener(View.OnClickListener {
-                    profileDetailViewModel.toggleItems()
                     toggleItems(toggle)
                 })
             }
         }
-
-        private fun toggleItems(toggle: ProfileDetailModel.QnaToggle) {
-            val showItems = toggle.isExpanded
-            val updateToggle = toggle.copy(isExpanded = !showItems)
-            profileDetailViewModel.updateQnaToggle(updateToggle)
-        }
     }
-
 }
 

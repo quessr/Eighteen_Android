@@ -62,7 +62,10 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_QNA_TOGGLE -> {
                 val binding = inflaterBinding(ItemSeeMoreBinding::inflate)
-                ProfileDetailViewHolder.QnaToggle(binding, viewModel)
+                ProfileDetailViewHolder.QnaToggle(binding) { toggle ->
+                    viewModel.toggleItems()
+                    viewModel.updateQnaToggle(toggle.copy(isExpanded = !toggle.isExpanded))
+                }
             }
 
             else -> throw IllegalArgumentException("Invalid view type") // 코드 비교 해 볼것

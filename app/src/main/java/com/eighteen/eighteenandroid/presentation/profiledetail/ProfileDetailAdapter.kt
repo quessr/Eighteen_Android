@@ -28,10 +28,10 @@ class ProfileDetailAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
         val context = parent.context
-        val inflater = LayoutInflater.from(context)
+        val inflate = LayoutInflater.from(context)
 
         fun <VB : ViewBinding> inflaterBinding(bindingInflater: (LayoutInflater, ViewGroup, Boolean) -> VB) =
-            bindingInflater.invoke(inflater, parent, false)
+            bindingInflater.invoke(inflate, parent, false)
         return when (viewType) {
             ITEM_TYPE_PROFILE_INFO -> {
                 val binding = inflaterBinding(ItemProfileDetailInfoBinding::inflate)

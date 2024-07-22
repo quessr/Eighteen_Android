@@ -36,7 +36,7 @@ class ProfileDetailFragment() :
     }
 
     private fun setupAdapter() {
-        adapter = ProfileDetailAdapter(viewLifecycleOwner, profileDetailViewModel)
+        adapter = ProfileDetailAdapter(profileDetailViewModel)
         bind {
             profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             profileDetailRecyclerview.adapter = adapter

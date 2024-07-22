@@ -3,7 +3,6 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
@@ -20,7 +19,6 @@ import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDeta
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
 class ProfileDetailAdapter(
-    private val lifecycleOwner: LifecycleOwner,
     private val viewModel: ProfileDetailViewModel
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
@@ -81,7 +79,6 @@ class ProfileDetailAdapter(
             is ProfileDetailModel.QnaListTitle -> ITEM_TYPE_QNA_LIST_TITLE
             is ProfileDetailModel.Qna -> ITEM_TYPE_QNA
             is ProfileDetailModel.QnaToggle -> ITEM_TYPE_QNA_TOGGLE
-//            is ProfileDetailModel.QnaList -> ITEM_TYPE_QNA_LIST
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }

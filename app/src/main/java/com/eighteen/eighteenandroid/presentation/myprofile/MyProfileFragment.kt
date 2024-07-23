@@ -21,6 +21,7 @@ class MyProfileFragment :
         binding.rvProfile.run {
             adapter = MyProfileAdapter(clickListener = this@MyProfileFragment)
             itemAnimator = null
+            addItemDecoration(MyProfileItemDecoration())
         }
     }
 

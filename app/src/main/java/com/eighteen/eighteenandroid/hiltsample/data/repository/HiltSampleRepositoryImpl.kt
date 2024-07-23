@@ -12,8 +12,8 @@ class HiltSampleRepositoryImpl @Inject constructor(private val hiltSampleRemoteS
     override suspend fun fetchTestData(userId: String): Result<List<HiltSamplePost>> =
         runCatching {
             hiltSampleRemoteService.getData(userId = userId).mapper {
-                it.map { hiltSamplePostDao ->
-                    HiltSamplePostMapper.asHiltSamplePostUserCaseModel(hiltSamplePostDao)
+                it.map { hiltSamplePostResponse ->
+                    HiltSamplePostMapper.asHiltSamplePostUserCaseModel(hiltSamplePostResponse)
                 }
             }
         }

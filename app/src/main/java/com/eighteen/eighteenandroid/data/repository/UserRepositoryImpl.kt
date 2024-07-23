@@ -11,8 +11,8 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
     override suspend fun fetchUserData(): Result<List<User>> =
         runCatching {
             userService.getUserInfo().mapper {
-                it.map { userDao ->
-                    UserMapper.asUserCaseModel(userDao)
+                it.map { userResponse ->
+                    UserMapper.asUserCaseModel(userResponse)
                 }
             }
         }

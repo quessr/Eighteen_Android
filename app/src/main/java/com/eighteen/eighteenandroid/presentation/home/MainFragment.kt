@@ -1,21 +1,24 @@
 package com.eighteen.eighteenandroid.presentation.home
 
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
+import com.eighteen.eighteenandroid.R
+import com.eighteen.eighteenandroid.common.enums.Tag
+import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
+import com.eighteen.eighteenandroid.domain.model.AboutTeen
+import com.eighteen.eighteenandroid.domain.model.User
+import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
 import com.eighteen.eighteenandroid.presentation.common.setTagStyle
-import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
-import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.eighteen.eighteenandroid.presentation.home.adapter.TeenAdapter
-import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.common.showReportDialog
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
+import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
+import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
+import com.eighteen.eighteenandroid.presentation.home.adapter.Tournament
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
-import com.eighteen.eighteenandroid.presentation.common.showReportDialog
 
 /**
- *
  * @file MainFragment.kt
  * @date 05/08/2024
  * 메인화면
@@ -25,40 +28,157 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private val viewModel by viewModels<MainViewModel>()
 
     private var selectedChip: Chip? = null
+    private lateinit var mainAdapter: MainAdapter
 
     override fun initView() {
-        initViewPager()
         initChipGroup()
+        initMain()
     }
 
-    private fun initViewPager() {
-        requireContext().let { context ->
-            val todayTeenAdapter = TeenAdapter(context = context, showDialog = {showReportDialog()})
-            val anotherTeenAdapter = TeenAdapter(context = context, showDialog = {showReportDialog()})
+    private fun initMainAdapter() {
+        mainAdapter = MainAdapter(
+            context = requireContext(),
+            onTournamentClicks = { tournament: Tournament ->
+                // 토너먼트 클릭
+                when (tournament) {
+                    Tournament.Exercise -> {
+                        // 운동
+                    }
 
-            bind {
-                vpTodayTeen.run {
-                    clipToPadding = false
-                    clipChildren = false
-                    offscreenPageLimit = 1
-                    this.adapter = todayTeenAdapter
-                    registerOnPageChangeCallback(pageChangeCallback)
+                    Tournament.Study -> {
+
+                    }
                 }
-                vpAnotherTeen.run {
-                    clipToPadding = false
-                    clipChildren = false
-                    offscreenPageLimit = 1
-                    setPadding(10, 10, 10, 10)
-                    this.adapter = anotherTeenAdapter
-                }
+            },
+            onUserClicks = { user: User ->
+                // 유저 클릭
+                // TODO. 유저 상세로 이동
+            },
+            onAboutTeenClicks = { title ->
+                // About Teen 클릭
+                // TODO. About Teen 상세로 이동
+            },
+            onTournamentMoreClicks = {
+                // 토너먼트 더보기
+                // TODO. 토너먼트 더보기로 이동
+            },
+            showUserReportDialog = { user: User ->
+                showReportDialog(user)
             }
+        )
 
-            viewModel.userData.observe(viewLifecycleOwner) { userList ->
-                val randomUserList = userList.shuffled() // 또 다른 틴 - 랜덤 유저 목록
-                todayTeenAdapter.updateView(userList)
-                anotherTeenAdapter.updateView(randomUserList)
+        bind {
+            with(rvMain) {
+                adapter = mainAdapter
             }
         }
+
+//        livedata.observe() {
+        // page1 -> 10개
+
+        // current
+        // 전체 리스트를 주진 않고
+
+//            current + 10
+//        }
+
+        // 마지막 아이템을 만나면
+
+        // 데이터 함수 호출
+
+        // 라이브데이터 값 바꾸고
+
+        // 뷰 갱신
+    }
+
+    private fun initMain() {
+        initMainAdapter()
+        initData()
+    }
+
+    private fun initData() {
+        mainAdapter.updateView(
+            listOf(
+                MainItem.UserListView(
+                    listOf(
+                        User(
+                            userImage = "https://image.blip.kr/v1/file/021ec61ff1c9936943383b84236a0e69",
+                            userId = "1",
+                            userName = "김 에스더",
+                            userAge = "16",
+                            userSchoolName = "서울 중학교",
+                            tag = "운동"
+                        ),
+                        User(
+                            userImage = "https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg",
+                            userId = "2",
+                            userName = "김 에스더",
+                            userAge = "16",
+                            userSchoolName = "부천 중학교",
+                            tag = "스터디"
+                        ),
+                        User(
+                            userImage = "https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800",
+                            userId = "3",
+                            userName = "김 에스더",
+                            userAge = "16",
+                            userSchoolName = "인천 중학교",
+                            tag = "프로젝트"
+                        )
+                    )
+                ), // User List
+                MainItem.DividerView,
+                MainItem.HeaderView(getString(R.string.main_about_teen)),
+                MainItem.AboutTeenListView(
+                    listOf(
+                        AboutTeen("Teen", "친구들의 프로필을 투표해보세요!"),
+                        AboutTeen("토너먼트", "투표 결과를 한 눈에 볼 수 있어요!"),
+                        AboutTeen("채팅","채팅을 통해 친구들과 소통해보세요!"),
+                        AboutTeen("나만의 Teen","나만의 프로필을 등록해보세요!")
+                    )
+                ), // About Teen List
+                MainItem.DividerView,
+                MainItem.HeaderWithMoreView(getString(R.string.main_tournament_in_progress)),
+                MainItem.TournamentListView(
+                    listOf(
+                        Tournament.Exercise,
+                        Tournament.Study
+                    )
+                ), // Tournament List
+                MainItem.DividerView,
+                MainItem.HeaderView(getString(R.string.main_another_teen)),
+                MainItem.UserView(
+                    User(
+                        userImage = "https://image.blip.kr/v1/file/021ec61ff1c9936943383b84236a0e69",
+                        userId = "1",
+                        userName = "김 에스더",
+                        userAge = "16",
+                        userSchoolName = "서울 중학교",
+                        tag = "운동"
+                    )
+                ),
+                MainItem.UserView(
+                    User(
+                        userImage = "https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg",
+                        userId = "2",
+                        userName = "김 에스더",
+                        userAge = "16",
+                        userSchoolName = "서울 중학교",
+                        tag = "운동"
+                    )
+                ),
+                MainItem.UserView(
+                    User(
+                        userImage = "https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800",
+                        userId = "3",
+                        userName = "김 에스더",
+                        userAge = "16",
+                        userSchoolName = "서울 중학교",
+                        tag = "운동"
+                    )
+                )
+            )
+        )
     }
 
     private fun initChipGroup() {
@@ -79,23 +199,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         }
     }
 
-    private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            bind {
-                if (position == 0) {
-                    vpTodayTeen.setPadding(0, 0, 70, 0)
-                } else {
-                    vpTodayTeen.setPadding(70, 0, 70, 0)
-                }
-            }
-        }
-    }
-
-    private fun showReportDialog() {
+    private fun showReportDialog(user: User) {
         showReportDialog(
             context = requireContext(),
-            showDialog = { showDialogFragment(ReportDialogFragment()) }
+            showDialog = { showDialogFragment(ReportDialogFragment(user)) }
         )
     }
 

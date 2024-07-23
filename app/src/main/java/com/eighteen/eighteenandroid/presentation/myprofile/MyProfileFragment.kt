@@ -18,7 +18,10 @@ class MyProfileFragment :
 
     override fun initView() {
         initStateFlow()
-        binding.rvProfile.adapter = MyProfileAdapter(clickListener = this)
+        binding.rvProfile.run {
+            adapter = MyProfileAdapter(clickListener = this@MyProfileFragment)
+            itemAnimator = null
+        }
     }
 
     private fun initStateFlow() {
@@ -77,5 +80,14 @@ class MyProfileFragment :
     override fun onClickEditIntroduce() {
         //TODO 자기소개 편집
         Log.d("MyProfileFragment", "onClickEditIntroduce")
+    }
+
+    override fun onClickEditTenOfQna() {
+        //TODO 10문 10답 편집
+        Log.d("MyProfileFragment", "onClickEditTenOfQna")
+    }
+
+    override fun onClickExpandQna() {
+        myProfileViewModel.toggleQnaExpanded()
     }
 }

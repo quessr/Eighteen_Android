@@ -14,10 +14,10 @@ class MyProfileViewModel : ViewModel() {
         _myProfileItemsStateFlow.value = asProfileItems(profile = profile)
     }
 
-    fun setQnaExpanded(isExpanded: Boolean) {
+    fun toggleQnaExpanded() {
         _myProfileItemsStateFlow.value = myProfileItemsStateFlow.value.toMutableList().apply {
             replaceAll {
-                if (it is MyProfileItem.TenOfQna) it.copy(isExpanded = isExpanded) else it
+                if (it is MyProfileItem.TenOfQna) it.copy(isExpanded = !it.isExpanded) else it
             }
         }
     }

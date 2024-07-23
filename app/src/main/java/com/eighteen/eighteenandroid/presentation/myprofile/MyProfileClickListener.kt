@@ -8,4 +8,6 @@ interface MyProfileClickListener {
     fun onClickTeen()
     fun onClickEditLink()
     fun onClickEditIntroduce()
+    fun onClickEditTenOfQna()
+    fun onClickExpandQna()
 }

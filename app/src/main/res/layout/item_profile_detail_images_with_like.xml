@@ -14,6 +14,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:src="@drawable/bg_gradient_top"
+        app:layout_constraintTop_toTopOf="@+id/viewPager" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:src="@drawable/bg_gradient_bottom"
+        app:layout_constraintBottom_toBottomOf="@+id/viewPager" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="wrap_content"
@@ -65,12 +77,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="13dp"
+            android:text="@string/profile_detail_like_count"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_like"
-            android:text="@string/profile_detail_like_count"
             tools:text="@string/profile_detail_like_count" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

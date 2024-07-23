@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.DialogReportCompletedBinding
 import com.eighteen.eighteenandroid.databinding.DialogReportContentBinding
+import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 
 /**
@@ -13,7 +14,7 @@ import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
  * @date 06/03/2024
  * 신고사유 입력 다이얼로그
  */
-class ReportDialogFragment :
+class ReportDialogFragment(private val user: User) :
     BaseDialogFragment<DialogReportContentBinding>(DialogReportContentBinding::inflate) {
 
     override fun initView() {

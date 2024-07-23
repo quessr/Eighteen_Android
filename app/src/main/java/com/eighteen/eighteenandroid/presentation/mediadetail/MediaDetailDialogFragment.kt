@@ -58,7 +58,8 @@ class MediaDetailDialogFragment :
             ivBtnOption.setOnClickListener {
                 context?.let {
                     showReportDialog(it) {
-                        showDialogFragment(ReportDialogFragment())
+                        // TODO. 신고할 유저 정보 필요
+//                        showDialogFragment(ReportDialogFragment())
                     }
                 }
             }

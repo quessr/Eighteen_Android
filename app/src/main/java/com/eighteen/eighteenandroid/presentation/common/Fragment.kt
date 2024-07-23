@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.DialogReportSelectBinding
+import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.MainActivity
 
 fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = null) {
@@ -17,14 +18,14 @@ fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = n
 }
 
 // 신고하기 & 차단하기 다이얼로그
-fun showReportDialog(context: Context, showDialog: () -> Unit) {
+fun showReportDialog(context: Context, showDialog: (User) -> Unit) {
     val reportSelectBinding = DialogReportSelectBinding.inflate(LayoutInflater.from(context))
     val customAlertDialog = AlertDialog.Builder(context, R.style.CustomDialog)
         .setView(reportSelectBinding.root)
         .create()
     customAlertDialog.show()
     reportSelectBinding.txReport.setOnClickListener {
-        showDialog()
+        showDialog
         customAlertDialog.dismiss()
     }
 }

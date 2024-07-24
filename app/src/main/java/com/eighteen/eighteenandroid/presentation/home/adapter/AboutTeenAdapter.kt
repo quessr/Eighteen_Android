@@ -11,7 +11,7 @@ import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.About
 
 class AboutTeenAdapter: ListAdapter<AboutTeen, AboutTeenAdapter.AboutTeenViewHolder>(AboutTeenDiffCallBack()) {
 
-    inner class AboutTeenViewHolder(private val binding: ItemAboutTeenBinding): RecyclerView.ViewHolder(binding.root) {
+    class AboutTeenViewHolder(private val binding: ItemAboutTeenBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AboutTeen) {
             with(binding) {
                 tvAboutTeenTitle.text = item.title

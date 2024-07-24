@@ -29,15 +29,16 @@ class TeenAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemPopularTeenBinding.inflate(layoutInflater, parent,false)
 
-        return TeenViewHolder(itemBinding)
+        return TeenViewHolder(itemBinding, showUserReportSelectDialog)
     }
 
     override fun onBindViewHolder(holder: TeenViewHolder, position: Int) {
         holder.bind(getItem(position), context)
     }
 
-    inner class TeenViewHolder(
-        private val binding: ItemPopularTeenBinding
+    class TeenViewHolder(
+        private val binding: ItemPopularTeenBinding,
+        private val showUserReportSelectDialog: (User) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")

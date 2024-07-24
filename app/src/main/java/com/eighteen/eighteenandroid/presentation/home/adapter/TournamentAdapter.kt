@@ -10,7 +10,7 @@ import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.Tourn
 
 class TournamentAdapter: ListAdapter<Tournament, TournamentAdapter.TournamentViewHolder>(TournamentDiffCallBack()) {
 
-    inner class TournamentViewHolder(private val binding: ItemTournamentBinding): RecyclerView.ViewHolder(binding.root) {
+    class TournamentViewHolder(private val binding: ItemTournamentBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Tournament) {
             with(binding) {
                 when(item) {

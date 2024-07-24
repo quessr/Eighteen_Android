@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
 import com.eighteen.eighteenandroid.presentation.common.setTagStyle
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
@@ -203,7 +204,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             context = requireContext(),
             onReportClicked = {
                 // 신고 다이얼로그 보여주기
-                ReportDialogFragment.newInstance(user)
+                showDialogFragment(ReportDialogFragment.newInstance(user))
             },
             onBlockClicked = {}
         )

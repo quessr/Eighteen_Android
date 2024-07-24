@@ -24,12 +24,12 @@ fun showReportSelectDialog(context: Context, onReportClicked: () -> Unit, onBloc
         .create()
 
     customAlertDialog.show()
-    reportSelectBinding.txReport.setOnClickListener {
+    reportSelectBinding.reportContainer.setOnClickListener {
         onReportClicked()
         customAlertDialog.dismiss()
     }
 
-    reportSelectBinding.txBlock.setOnClickListener {
+    reportSelectBinding.blockContainer.setOnClickListener {
         onBlockClicked()
         customAlertDialog.dismiss()
     }

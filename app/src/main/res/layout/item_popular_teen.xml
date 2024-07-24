@@ -22,13 +22,17 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ic_teen_dummy" />
 
-            <View
-                android:id="@+id/view_main_teen_gradient"
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/bg_main_teen_gradient"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHeight_percent="0.7" />
+                android:layout_height="144dp"
+                android:src="@drawable/bg_gradient_top"
+                app:layout_constraintTop_toTopOf="@+id/img_today_teen" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                android:src="@drawable/bg_gradient_bottom"
+                app:layout_constraintBottom_toBottomOf="@+id/img_today_teen" />
 
             <TextView
                 android:id="@+id/tv_name"

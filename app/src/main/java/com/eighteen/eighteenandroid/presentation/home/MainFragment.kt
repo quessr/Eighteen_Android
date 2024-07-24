@@ -9,8 +9,7 @@ import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
 import com.eighteen.eighteenandroid.presentation.common.setTagStyle
-import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.showReportDialog
+import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
@@ -62,7 +61,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 // 토너먼트 더보기
                 // TODO. 토너먼트 더보기로 이동
             },
-            showUserReportDialog = { user: User ->
+            showUserReportSelectDialog = { user: User ->
                 showReportDialog(user)
             }
         )
@@ -200,9 +199,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun showReportDialog(user: User) {
-        showReportDialog(
+        showReportSelectDialog(
             context = requireContext(),
-            showDialog = { showDialogFragment(ReportDialogFragment(user)) }
+            onReportClicked = {
+                // 신고 다이얼로그 보여주기
+                ReportDialogFragment.newInstance(user)
+            },
+            onBlockClicked = {}
         )
     }
 

@@ -22,14 +22,14 @@ import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserD
  */
 class TeenAdapter(
     private val context: Context,
-    private val showDialog:(User) -> Unit
+    private val showUserReportSelectDialog:(User) -> Unit
 ) : ListAdapter<User, TeenAdapter.TeenViewHolder>(UserDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeenViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemPopularTeenBinding.inflate(layoutInflater, parent,false)
 
-        return TeenViewHolder(itemBinding, showDialog)
+        return TeenViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: TeenViewHolder, position: Int) {
@@ -37,8 +37,7 @@ class TeenAdapter(
     }
 
     inner class TeenViewHolder(
-        private val binding: ItemPopularTeenBinding,
-        private val showDialog: (User) -> Unit
+        private val binding: ItemPopularTeenBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
@@ -49,7 +48,7 @@ class TeenAdapter(
                 tvSchool.text = item.userSchoolName
                 initNavigation(binding.imgTodayTeen)
                 btnSetting.setOnClickListener {
-                    showDialog(item)
+                    showUserReportSelectDialog(item)
                 }
             }
         }

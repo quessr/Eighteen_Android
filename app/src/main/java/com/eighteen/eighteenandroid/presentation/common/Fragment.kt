@@ -10,22 +10,27 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.DialogReportSelectBinding
-import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.MainActivity
 
 fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = null) {
     dialogFragment.show(childFragmentManager, tag)
 }
 
-// 신고하기 & 차단하기 다이얼로그
-fun showReportDialog(context: Context, showDialog: (User) -> Unit) {
+/** 신고하기 & 차단하기 선택 다이얼로그 */
+fun showReportSelectDialog(context: Context, onReportClicked: () -> Unit, onBlockClicked: () -> Unit) {
     val reportSelectBinding = DialogReportSelectBinding.inflate(LayoutInflater.from(context))
     val customAlertDialog = AlertDialog.Builder(context, R.style.CustomDialog)
         .setView(reportSelectBinding.root)
         .create()
+
     customAlertDialog.show()
     reportSelectBinding.txReport.setOnClickListener {
-        showDialog
+        onReportClicked()
+        customAlertDialog.dismiss()
+    }
+
+    reportSelectBinding.txBlock.setOnClickListener {
+        onBlockClicked()
         customAlertDialog.dismiss()
     }
 }

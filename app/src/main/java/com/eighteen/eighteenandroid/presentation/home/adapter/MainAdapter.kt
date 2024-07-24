@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -26,7 +25,7 @@ class MainAdapter(
     private val onAboutTeenClicks: (String) -> Unit,
     private val onUserClicks: (User) -> Unit,
     private val onTournamentClicks: (Tournament) -> Unit,
-    private val showUserReportDialog: (User) -> Unit,
+    private val showUserReportSelectDialog: (User) -> Unit,
 ) : ListAdapter<MainItem, MainAdapter.CommonViewHolder>(MainItemDiffCallBack()) {
     companion object {
         const val HEADER = 1
@@ -62,18 +61,13 @@ class MainAdapter(
             }
 
             POPULAR_USER_LIST -> {
-                val itemBinding =
-                    ItemMainPopularTeenListviewBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.PopularUserListViewHolder(
-                    context,
-                    itemBinding,
-                    showUserReportDialog
-                )
+                val itemBinding = ItemMainPopularTeenListviewBinding.inflate(layoutInflater, parent, false)
+                CommonViewHolder.PopularUserListViewHolder(context, itemBinding, showUserReportSelectDialog)
             }
 
             USER_VIEW -> {
                 val itemBinding = ItemTeenBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.UserViewHolder(context, itemBinding, showUserReportDialog)
+                CommonViewHolder.UserViewHolder(context, itemBinding, showUserReportSelectDialog)
             }
 
             ABOUT_TEEN_LIST -> {
@@ -95,31 +89,31 @@ class MainAdapter(
     override fun onBindViewHolder(holder: CommonViewHolder, position: Int) {
         when (holder) {
             is CommonViewHolder.HeaderViewHolder -> {
-                holder.bind(getItem(position) as MainItem.HeaderView)
+                (getItem(position) as? MainItem.HeaderView)?.let { holder.bind(it) }
             }
 
             is CommonViewHolder.HeaderWithMoreViewHolder -> {
-                holder.bind(getItem(position) as MainItem.HeaderWithMoreView)
+                (getItem(position) as? MainItem.HeaderWithMoreView)?.let { holder.bind(it) }
             }
 
             is CommonViewHolder.PopularUserListViewHolder -> {
-                holder.bind(getItem(position) as MainItem.UserListView)
+                (getItem(position) as? MainItem.UserListView)?.let { holder.bind(it) }
             }
 
             is CommonViewHolder.UserViewHolder -> {
-                holder.bind(getItem(position) as MainItem.UserView)
+                (getItem(position) as? MainItem.UserView)?.let { holder.bind(it) }
             }
 
             is CommonViewHolder.AboutTeenListViewHolder -> {
-                holder.bind(getItem(position) as MainItem.AboutTeenListView)
+                (getItem(position) as? MainItem.AboutTeenListView)?.let { holder.bind(it) }
             }
 
             is CommonViewHolder.TournamentListViewHolder -> {
-                holder.bind(getItem(position) as MainItem.TournamentListView)
+                (getItem(position) as? MainItem.TournamentListView)?.let { holder.bind(it) }
             }
 
             is CommonViewHolder.DividerViewHolder -> {
-                holder.bind(getItem(position) as MainItem.DividerView)
+                (getItem(position) as? MainItem.DividerView)?.let { holder.bind(it) }
             }
 
             else -> throw IllegalArgumentException("Invalid ViewHolder")
@@ -178,12 +172,12 @@ class MainAdapter(
         class PopularUserListViewHolder(
             private val context: Context,
             private val binding: ItemMainPopularTeenListviewBinding,
-            private val showDialog: (User) -> Unit,
+            private val showUserReportSelectDialog: (User) -> Unit,
         ) : CommonViewHolder(binding) {
             override fun bind(item: MainItem) {
                 val userListView = item as? MainItem.UserListView
                 with(binding) {
-                    val teenAdapter = TeenAdapter(context, showDialog)
+                    val teenAdapter = TeenAdapter(context, showUserReportSelectDialog)
 
                     rvMainTeenPopularList.adapter = teenAdapter
 
@@ -195,7 +189,7 @@ class MainAdapter(
         class UserViewHolder(
             private val context: Context,
             private val binding: ItemTeenBinding,
-            private val showDialog: (User) -> Unit,
+            private val showUserReportSelectDialog: (User) -> Unit,
         ) : CommonViewHolder(binding) {
             @SuppressLint("SetTextI18n")
             override fun bind(item: MainItem) {
@@ -218,7 +212,7 @@ class MainAdapter(
 
                         }
                         btnSetting.setOnClickListener {
-
+                            showUserReportSelectDialog(user)
                         }
                     }
                 }

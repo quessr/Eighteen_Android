@@ -12,8 +12,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.databinding.FragmentMediaDetailDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
-import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.showReportDialog
+import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import kotlinx.coroutines.launch
 
@@ -57,10 +56,15 @@ class MediaDetailDialogFragment :
             }
             ivBtnOption.setOnClickListener {
                 context?.let {
-                    showReportDialog(it) {
-                        // TODO. 신고할 유저 정보 필요
-//                        showDialogFragment(ReportDialogFragment())
-                    }
+                    showReportSelectDialog(
+                        context = it,
+                        onReportClicked = {
+                            // 신고 다이얼로그 보여주기
+                            // TODO. 유저 정보 필요
+//                            ReportDialogFragment.newInstance(user)
+                        },
+                        onBlockClicked = {}
+                    )
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.dialog
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.eighteen.eighteenandroid.R
@@ -14,7 +15,7 @@ import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
  * @date 06/03/2024
  * 신고사유 입력 다이얼로그
  */
-class ReportDialogFragment(private val user: User) : BaseDialogFragment<DialogReportContentBinding>(DialogReportContentBinding::inflate) {
+class ReportDialogFragment : BaseDialogFragment<DialogReportContentBinding>(DialogReportContentBinding::inflate) {
 
     override fun initView() {
         bind {
@@ -42,9 +43,15 @@ class ReportDialogFragment(private val user: User) : BaseDialogFragment<DialogRe
 
     companion object {
         const val TAG = "ReportDialogFragment"
+        const val KEY_USER_ID = "USER_ID"
+        const val KEY_USER_NAME = "USER_NAME"
 
         fun newInstance(user: User): ReportDialogFragment {
-            return ReportDialogFragment(user)
+            val bundle = Bundle().apply {
+                putString(KEY_USER_ID, user.userId)
+                putString(KEY_USER_NAME, user.userName)
+            }
+            return ReportDialogFragment().apply { arguments = bundle }
         }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
@@ -174,11 +175,16 @@ class MainAdapter(
             private val binding: ItemMainPopularTeenListviewBinding,
             private val showUserReportSelectDialog: (User) -> Unit,
         ) : CommonViewHolder(binding) {
+            private val snapHelper = PagerSnapHelper()
+
             override fun bind(item: MainItem) {
                 val userListView = item as? MainItem.UserListView
-                with(binding) {
-                    val teenAdapter = TeenAdapter(context, showUserReportSelectDialog)
 
+                with(binding) {
+                    // SnapHelper 설정
+                    snapHelper.attachToRecyclerView(rvMainTeenPopularList)
+
+                    val teenAdapter = TeenAdapter(context, showUserReportSelectDialog)
                     rvMainTeenPopularList.adapter = teenAdapter
 
                     teenAdapter.submitList(userListView?.userList)

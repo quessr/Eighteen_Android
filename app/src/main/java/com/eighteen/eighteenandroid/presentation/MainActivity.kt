@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomNavigationBar.isVisible = destination.id == R.id.fragmentMain
-            binding.toolbar.root.isVisible = destination.id == R.id.fragmentMain
         }
     }
 }

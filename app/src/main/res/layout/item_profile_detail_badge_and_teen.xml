@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/badge_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/teen_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_badge_card"
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:src="@drawable/shape_profile_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_badge"
+            style="@style/pretendard_regular_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/profile_detail_badge"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/tv_badge_count"
+            app:layout_constraintStart_toStartOf="@+id/iv_badge_card" />
+
+        <TextView
+            android:id="@+id/tv_badge_count"
+            style="@style/pretendard_bold_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="13dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/badge_image"
+            app:layout_constraintStart_toStartOf="@+id/iv_badge_card"
+            tools:text="@string/profile_detail_badge_count" />
+
+        <ImageView
+            android:id="@+id/badge_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/bg_badge_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_badge_card"
+            app:layout_constraintStart_toStartOf="@id/iv_badge_card" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/iv_badge_card"
+            app:layout_constraintEnd_toEndOf="@id/iv_badge_card"
+            app:layout_constraintTop_toTopOf="@id/iv_badge_card" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/teen_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/badge_container"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_teen_card"
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:src="@drawable/shape_profile_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teen"
+            style="@style/pretendard_regular_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/profile_detail_teen"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/tv_teen_award"
+            app:layout_constraintStart_toStartOf="@+id/iv_teen_card" />
+
+        <TextView
+            android:id="@+id/tv_teen_award"
+            style="@style/pretendard_bold_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="11dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/teen_image"
+            app:layout_constraintStart_toStartOf="@+id/iv_teen_card"
+            tools:text="@string/profile_detail_teen_award" />
+
+        <ImageView
+            android:id="@+id/teen_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/bg_teen_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_teen_card"
+            app:layout_constraintStart_toStartOf="@id/iv_teen_card" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/iv_teen_card"
+            app:layout_constraintEnd_toEndOf="@id/iv_teen_card"
+            app:layout_constraintTop_toTopOf="@id/iv_teen_card" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,8 @@
     <string name="terms_of_service">서비스 약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>
     <string name="confirm">확인</string>
+    <string name="add_external_link">외부 링크 추가</string>
+    <string name="remove">삭제</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>

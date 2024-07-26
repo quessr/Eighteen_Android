@@ -100,6 +100,10 @@ open class PlayerManager(
         player.seekTo(positionMs)
     }
 
+    fun setVolume(isVolumeOn: Boolean) {
+        player.volume = if (isVolumeOn) DEFAULT_VOLUME else 0f
+    }
+
     private fun release() {
         targetMediaInfo = null
         player.release()
@@ -108,4 +112,8 @@ open class PlayerManager(
     protected data class PlayingInfo(
         val positionMs: Long = 0L
     )
+
+    companion object {
+        private const val DEFAULT_VOLUME = 1f
+    }
 }

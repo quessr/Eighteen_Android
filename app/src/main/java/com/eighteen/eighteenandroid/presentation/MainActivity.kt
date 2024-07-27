@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     val permissionManager = PermissionManager(this)
 
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     private fun initStateFlow() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.myProfileStateFlow.collect {
+                loginViewModel.myProfileStateFlow.collect {
                     //TODO placeholder 추가
                     if (it.isSuccess()) {
                         Glide.with(this@MainActivity).asBitmap()

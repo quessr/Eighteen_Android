@@ -1,12 +1,14 @@
 package com.eighteen.eighteenandroid.presentation.myprofile
 
 import android.util.Log
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eighteen.eighteenandroid.databinding.FragmentMyProfileBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.myprofile.editlink.EditLinkDialogFragment
 import kotlinx.coroutines.launch
@@ -15,6 +17,7 @@ class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate),
     MyProfileClickListener {
 
+    private val loginViewModel by activityViewModels<LoginViewModel>()
     private val myProfileViewModel by viewModels<MyProfileViewModel>()
 
     override fun initView() {
@@ -29,7 +32,7 @@ class MyProfileFragment :
     private fun initStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.myProfileStateFlow.collect {
+                loginViewModel.myProfileStateFlow.collect {
                     if (it.isSuccess()) {
                         it.data?.let { profile ->
                             myProfileViewModel.setProfile(profile)

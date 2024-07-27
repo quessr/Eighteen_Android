@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val myProfileUseCase: MyProfileUseCase) :
+class LoginViewModel @Inject constructor(private val myProfileUseCase: MyProfileUseCase) :
     ViewModel() {
     private val _myProfileStateFlow = MutableStateFlow<ModelState<Profile>>(ModelState.Empty())
     val myProfileStateFlow = _myProfileStateFlow.asStateFlow()
@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(private val myProfileUseCase: MyProfileU
                 async { myProfileUseCase.invoke(loginResultInfo.accessToken) }.await()
 
             myProfileResult.onSuccess {
-                this@MainViewModel.loginResultInfo = loginResultInfo
+                this@LoginViewModel.loginResultInfo = loginResultInfo
                 _myProfileStateFlow.value = ModelState.Success(it)
             }.onFailure {
                 _myProfileStateFlow.value = ModelState.Error(throwable = it)

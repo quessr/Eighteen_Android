@@ -9,13 +9,10 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseDialogFragment<T : ViewBinding>(private val bindingFactory: (LayoutInflater) -> T) :
     DialogFragment() {
-
-    protected val mainViewModel by activityViewModels<MainViewModel>()
 
     private var _binding: T? = null
     val binding get() = _binding!!

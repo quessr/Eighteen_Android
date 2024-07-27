@@ -1,5 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.editlink
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -36,6 +39,14 @@ class EditLinkDialogFragment :
         }
         initAddPageView()
         initStateFlow()
+        initDialogWindow()
+    }
+
+    private fun initDialogWindow() {
+        dialog?.window?.run {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
     }
 
     private fun initAddPageView() {

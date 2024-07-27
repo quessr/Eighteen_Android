@@ -66,12 +66,12 @@ class MainActivity : AppCompatActivity() {
     private fun initStateFlow() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.loginStateFlow.collect {
+                mainViewModel.myProfileStateFlow.collect {
                     //TODO placeholder 추가
                     if (it.isSuccess()) {
                         Glide.with(this@MainActivity).asBitmap()
                             .placeholder(R.drawable.ic_launcher_background).circleCrop()
-                            .load(it.data?.profile?.medias?.firstOrNull()?.url)
+                            .load(it.data?.medias?.firstOrNull()?.url)
                             .into(object : CustomTarget<Bitmap>() {
                                 override fun onResourceReady(
                                     resource: Bitmap,

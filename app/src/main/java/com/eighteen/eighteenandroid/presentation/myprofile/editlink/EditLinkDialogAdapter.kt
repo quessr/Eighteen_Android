@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.eighteen.eighteenandroid.databinding.ItemLinkBinding
 import com.eighteen.eighteenandroid.domain.model.SnsLink
+import com.eighteen.eighteenandroid.presentation.myprofile.editlink.viewholder.EditLinkViewHolder
 
 class EditLinkDialogAdapter(
     private val onClickRemove: (Int) -> Unit

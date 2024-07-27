@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.myprofile.editlink
+package com.eighteen.eighteenandroid.presentation.myprofile.editlink.viewholder
 
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +7,7 @@ import com.eighteen.eighteenandroid.domain.model.SnsLink
 
 class EditLinkViewHolder(
     private val binding: ItemLinkBinding,
-    private val onClickRemove: (Int) -> Unit = {}
+    private val onClickRemove: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(data: SnsLink, position: Int) {

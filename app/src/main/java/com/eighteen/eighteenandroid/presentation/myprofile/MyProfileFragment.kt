@@ -7,9 +7,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eighteen.eighteenandroid.databinding.FragmentMyProfileBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.myprofile.editlink.EditLinkDialogFragment
 import kotlinx.coroutines.launch
 
-//TODO 뷰홀더 어댑터 ItemDecoration 생성
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate),
     MyProfileClickListener {
@@ -28,9 +29,9 @@ class MyProfileFragment :
     private fun initStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.loginStateFlow.collect {
+                mainViewModel.myProfileStateFlow.collect {
                     if (it.isSuccess()) {
-                        it.data?.profile?.let { profile ->
+                        it.data?.let { profile ->
                             myProfileViewModel.setProfile(profile)
                         }
                     }
@@ -72,8 +73,8 @@ class MyProfileFragment :
     }
 
     override fun onClickEditLink() {
-        //TODO 링크편집 dialog
-        Log.d("MyProfileFragment", "onClickEditLink")
+        val editLinkDialogFragment = EditLinkDialogFragment()
+        showDialogFragment(dialogFragment = editLinkDialogFragment)
     }
 
     //TODO 링크 직접 클릭 시 외부링크 연결?

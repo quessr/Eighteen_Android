@@ -3,9 +3,9 @@ package com.eighteen.eighteenandroid.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.Profile
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
-import com.eighteen.eighteenandroid.presentation.model.LoginModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -17,11 +17,18 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val myProfileUseCase: MyProfileUseCase) :
     ViewModel() {
+    private val _myProfileStateFlow = MutableStateFlow<ModelState<Profile>>(ModelState.Empty())
+    val myProfileStateFlow = _myProfileStateFlow.asStateFlow()
 
-    private val _loginStateFlow = MutableStateFlow<ModelState<LoginModel>>(ModelState.Empty())
-    val loginStateFlow = _loginStateFlow.asStateFlow()
+    //TODO token 모델 설계
+    private var loginResultInfo: LoginResultInfo? = null
 
     private var loginJob: Job? = null
+
+    init {
+        //TODO test 임시 호출 코드 제거
+        requestLogin()
+    }
 
     fun requestLogin() {
         if (loginJob?.isCompleted == false) return
@@ -35,14 +42,10 @@ class MainViewModel @Inject constructor(private val myProfileUseCase: MyProfileU
                 async { myProfileUseCase.invoke(loginResultInfo.accessToken) }.await()
 
             myProfileResult.onSuccess {
-                val loginModel = LoginModel(
-                    accessToken = loginResultInfo.accessToken,
-                    refreshToken = loginResultInfo.refreshToken,
-                    profile = it
-                )
-                _loginStateFlow.value = ModelState.Success(loginModel)
+                this@MainViewModel.loginResultInfo = loginResultInfo
+                _myProfileStateFlow.value = ModelState.Success(it)
             }.onFailure {
-                _loginStateFlow.value = ModelState.Error(throwable = it)
+                _myProfileStateFlow.value = ModelState.Error(throwable = it)
             }
         }
     }

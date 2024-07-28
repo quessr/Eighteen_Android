@@ -42,9 +42,10 @@ class EditLinkDialogFragment :
                 dismissNow()
             }
             rvLinks.addItemDecoration(EditLinkItemDecoration())
-            rvLinks.adapter = EditLinkDialogAdapter(onClickRemove = {
-                editLinkViewModel.requestRemoveLink(it)
-            })
+            rvLinks.adapter = EditLinkDialogAdapter(
+                onClickRemove = editLinkViewModel::requestRemoveLink,
+                findAdapterPosition = rvLinks::getChildAdapterPosition
+            )
             rvLinks.itemAnimator = null
             tvBtnAddLink.setOnClickListener {
                 editLinkViewModel.moveAddPage()

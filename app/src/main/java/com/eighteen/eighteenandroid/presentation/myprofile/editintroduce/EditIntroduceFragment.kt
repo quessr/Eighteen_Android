@@ -82,7 +82,6 @@ class EditIntroduceFragment :
                     //gone으로 할 경우 editText의 크기가 0dp가 되는 현상 발생, 원인 모르겠음
                     binding.clEditDescriptionContainer.visibility =
                         if (it == EditIntroducePage.DESCIRPTION) View.VISIBLE else View.INVISIBLE
-                    binding.etEditDescription.setText("")
                     updateNextButton()
                 }
             }
@@ -106,6 +105,7 @@ class EditIntroduceFragment :
         when (editIntroduceViewModel.pageStateFlow.value) {
             EditIntroducePage.MBTI -> {
                 editIntroduceViewModel.moveNextPage()
+                binding.etEditDescription.setText("")
             }
             EditIntroducePage.DESCIRPTION -> {
                 editIntroduceViewModel.requestEditIntroduce(

@@ -15,7 +15,7 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
     private val _pageStateFlow = MutableStateFlow(EditIntroducePage.MBTI)
     val pageStateFlow = _pageStateFlow.asStateFlow()
 
-    private val mbtis = listOf(
+    private val mbtiList = listOf(
         Mbti.EXTROVERSION,
         Mbti.INTROVERSION,
         Mbti.SENSING,
@@ -25,8 +25,10 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
         Mbti.JUDGING,
         Mbti.PERCEIVING
     )
-    private val _mbtiModelsStateFlow = MutableStateFlow(mbtis.map { EditMbtiModel(mbti = it) })
+    private val _mbtiModelsStateFlow = MutableStateFlow(mbtiList.map { EditMbtiModel(mbti = it) })
     val mbtiModelsStateFlow = _mbtiModelsStateFlow.asStateFlow()
+
+    val selectedMbti get() = mbtiModelsStateFlow.value.filter { it.isSelected }
 
     fun moveNextPage() {
         if (pageStateFlow.value == EditIntroducePage.MBTI) _pageStateFlow.value =
@@ -39,8 +41,21 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
     }
 
     fun toggleMbtiSelected(mbti: Mbti) {
-        _mbtiModelsStateFlow.value = _mbtiModelsStateFlow.value.toMutableList().apply {
-            replaceAll { if (it.mbti == mbti) it.copy(isSelected = !it.isSelected) else it }
+        val idx = mbtiList.indexOf(mbti)
+        val pairIdx = idx + if (idx % 2 == 0) 1 else -1
+        val pairMbti = mbtiList.getOrNull(pairIdx) ?: return
+        _mbtiModelsStateFlow.value = mbtiModelsStateFlow.value.toMutableList().apply {
+            replaceAll {
+                when (it.mbti) {
+                    mbti -> it.copy(isSelected = !it.isSelected)
+                    pairMbti -> it.copy(isSelected = false)
+                    else -> it
+                }
+            }
         }
+    }
+
+    fun requestEditIntroduce(description: String) {
+        //TODO api 호출
     }
 }

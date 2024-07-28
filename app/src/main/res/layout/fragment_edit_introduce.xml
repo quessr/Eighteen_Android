@@ -99,11 +99,11 @@
         <EditText
             android:id="@+id/etEditDescription"
             style="@style/TextField"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="140dp"
             android:gravity="top|start"
             android:hint="@string/my_profile_edit_introduce_description_hint"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:textColorHint="@color/grey_01"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

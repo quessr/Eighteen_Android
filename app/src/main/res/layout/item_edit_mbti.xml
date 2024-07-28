@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_rect_stroke_w2_grey_03_r20"
+    android:background="@drawable/bg_edit_introduce_mbti_item_selector"
     android:paddingVertical="18dp">
 
     <TextView

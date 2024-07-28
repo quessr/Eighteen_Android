@@ -13,7 +13,7 @@ class EditIntroduceMbtiViewHolder(
 
     fun onBind(editMbtiModel: EditMbtiModel) {
         with(binding) {
-            //TODO 선택, 미션택 배경 확인
+            root.isSelected = editMbtiModel.isSelected
             tvMbti.text = editMbtiModel.mbti.alp.toString()
             val description =
                 root.context.getString(editMbtiModel.mbti.getDescriptionStringRes())

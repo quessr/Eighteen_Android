@@ -23,6 +23,8 @@
     <string name="mbti_feeling">감정형</string>
     <string name="mbti_judging">판단형 (체계적)</string>
     <string name="mbti_perceiving">인식형 (융통성)</string>
+    <string name="completed">완료</string>
+    <string name="pass">건너뛰기</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>

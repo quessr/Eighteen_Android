@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditIntroduceBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
@@ -26,10 +27,7 @@ class EditIntroduceFragment :
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            when (editIntroduceViewModel.pageStateFlow.value) {
-                EditIntroducePage.MBTI -> findNavController().popBackStack()
-                EditIntroducePage.DESCIRPTION -> editIntroduceViewModel.movePrevPage()
-            }
+            onClickBack()
         }
     }
 
@@ -39,6 +37,15 @@ class EditIntroduceFragment :
     }
 
     override fun initView() {
+        bind {
+            tvBtnNext.setOnClickListener {
+                onClickMoveNext()
+            }
+            ivBtnBack.setOnClickListener {
+                onClickBack()
+            }
+        }
+        updateNextButton()
         initMbtiView()
         initDescriptionView()
         initStateFlow()
@@ -57,6 +64,7 @@ class EditIntroduceFragment :
                     verticalBetweenMarginPx = betweenMarginPx
                 )
             )
+            rvMbti.itemAnimator = null
         }
     }
 
@@ -71,8 +79,11 @@ class EditIntroduceFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editIntroduceViewModel.pageStateFlow.collect {
                     binding.clEditMbtiContainer.isVisible = it == EditIntroducePage.MBTI
-                    binding.clEditDescriptionContainer.isVisible =
-                        it == EditIntroducePage.DESCIRPTION
+                    //gone으로 할 경우 editText의 크기가 0dp가 되는 현상 발생, 원인 모르겠음
+                    binding.clEditDescriptionContainer.visibility =
+                        if (it == EditIntroducePage.DESCIRPTION) View.VISIBLE else View.INVISIBLE
+                    binding.etEditDescription.setText("")
+                    updateNextButton()
                 }
             }
         }
@@ -80,6 +91,7 @@ class EditIntroduceFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editIntroduceViewModel.mbtiModelsStateFlow.collect {
                     (binding.rvMbti.adapter as? EditIntroduceMbtiAdapter)?.submitList(it)
+                    updateNextButton()
                 }
             }
         }
@@ -88,6 +100,38 @@ class EditIntroduceFragment :
     override fun onDestroyView() {
         onBackPressedCallback.remove()
         super.onDestroyView()
+    }
+
+    private fun onClickMoveNext() {
+        when (editIntroduceViewModel.pageStateFlow.value) {
+            EditIntroducePage.MBTI -> {
+                editIntroduceViewModel.moveNextPage()
+            }
+            EditIntroducePage.DESCIRPTION -> {
+                editIntroduceViewModel.requestEditIntroduce(
+                    binding.etEditDescription.text.toString()
+                )
+            }
+        }
+    }
+
+    private fun onClickBack() {
+        when (editIntroduceViewModel.pageStateFlow.value) {
+            EditIntroducePage.MBTI -> findNavController().popBackStack()
+            EditIntroducePage.DESCIRPTION -> editIntroduceViewModel.movePrevPage()
+        }
+    }
+
+    private fun updateNextButton() {
+        val buttonTextRes = when (editIntroduceViewModel.pageStateFlow.value) {
+            EditIntroducePage.MBTI -> {
+                //TODO mbti 다 선택됐을 때 string 문의
+                if (editIntroduceViewModel.selectedMbti.size == 4) R.string.completed
+                else R.string.pass
+            }
+            EditIntroducePage.DESCIRPTION -> R.string.completed
+        }
+        binding.tvBtnNext.text = getString(buttonTextRes)
     }
 
     companion object {

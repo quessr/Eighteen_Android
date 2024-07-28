@@ -6,6 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMyProfileBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.LoginViewModel
@@ -83,8 +85,7 @@ class MyProfileFragment :
     //TODO 링크 직접 클릭 시 외부링크 연결?
 
     override fun onClickEditIntroduce() {
-        //TODO 자기소개 편집
-        Log.d("MyProfileFragment", "onClickEditIntroduce")
+        findNavController().navigate(R.id.action_fragmentMyProfile_to_fragmentEditIntroduce)
     }
 
     override fun onClickEditTenOfQna() {

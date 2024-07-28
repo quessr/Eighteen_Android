@@ -57,8 +57,17 @@
         android:id="@+id/fragmentMyProfile"
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.MyProfileFragment"
         android:label="fragment_my_profile"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_fragmentMyProfile_to_fragmentEditIntroduce"
+            app:destination="@id/fragmentEditIntroduce" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/fragmentEditIntroduce"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.EditIntroduceFragment"
+        android:label="fragment_edit_introduce"
+        tools:layout="@layout/fragment_edit_introduce" />
     <fragment
         android:id="@+id/fragmentProfileDetailFragment"
         android:name="com.eighteen.eighteenandroid.presentation.profileDetail.ProfileDetailFragment"

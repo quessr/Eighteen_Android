@@ -15,6 +15,14 @@
     <string name="confirm">확인</string>
     <string name="add_external_link">외부 링크 추가</string>
     <string name="remove">삭제</string>
+    <string name="mbti_extroversion">외향형</string>
+    <string name="mbti_introversion">내향형</string>
+    <string name="mbti_sensing">감각형</string>
+    <string name="mbti_intuition">직관형</string>
+    <string name="mbti_thinking">사고형</string>
+    <string name="mbti_feeling">감정형</string>
+    <string name="mbti_judging">판단형 (체계적)</string>
+    <string name="mbti_perceiving">인식형 (융통성)</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>
@@ -103,6 +111,10 @@
     <string name="my_profile_add_link_name_hint">제목</string>
     <string name="my_profile_introduce_myself">자기 소개</string>
     <string name="my_profile_introduce_empty">등록된 소개글이 없습니다.</string>
+    <string name="my_profile_edit_introduce_title">자기소개 정보 수정</string>
+    <string name="my_profile_edit_introduce_mbti_description">당신의 mbti가 무엇인가요?</string>
+    <string name="my_profile_edit_introduce_description_description">당신에 대한 소개 글을 적어주세요.</string>
+    <string name="my_profile_edit_introduce_description_hint">간단한 자기 소개글을 작성해주세요\nex) 저의 취미는 운동이에요</string>
     <string name="my_profile_ten_of_qna">10문 10답</string>
     <string name="my_profile_ten_of_qna_empty">등록된 문답이 없습니다.</string>
 

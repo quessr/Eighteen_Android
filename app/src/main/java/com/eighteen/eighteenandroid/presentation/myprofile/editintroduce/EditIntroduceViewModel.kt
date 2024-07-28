@@ -5,6 +5,7 @@ import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditMbtiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -16,19 +17,22 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
     val pageStateFlow = _pageStateFlow.asStateFlow()
 
     private val mbtiList = listOf(
-        Mbti.EXTROVERSION,
-        Mbti.INTROVERSION,
-        Mbti.SENSING,
-        Mbti.INTUITION,
-        Mbti.THINKING,
-        Mbti.FEELING,
-        Mbti.JUDGING,
-        Mbti.PERCEIVING
+        Mbti.MbtiType.Energy.Extroversion,
+        Mbti.MbtiType.Energy.Introversion,
+        Mbti.MbtiType.Information.Sensing,
+        Mbti.MbtiType.Information.Intuition,
+        Mbti.MbtiType.Decision.Thinking,
+        Mbti.MbtiType.Decision.Feeling,
+        Mbti.MbtiType.Lifestyle.Judging,
+        Mbti.MbtiType.Lifestyle.Perceiving
     )
-    private val _mbtiModelsStateFlow = MutableStateFlow(mbtiList.map { EditMbtiModel(mbti = it) })
+    private val _mbtiModelsStateFlow =
+        MutableStateFlow(mbtiList.map { EditMbtiModel(mbtiType = it) })
     val mbtiModelsStateFlow = _mbtiModelsStateFlow.asStateFlow()
 
     val selectedMbti get() = mbtiModelsStateFlow.value.filter { it.isSelected }
+
+    private var requestEditIntroduceJob: Job? = null
 
     fun moveNextPage() {
         if (pageStateFlow.value == EditIntroducePage.MBTI) _pageStateFlow.value =
@@ -40,15 +44,15 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
             EditIntroducePage.MBTI
     }
 
-    fun toggleMbtiSelected(mbti: Mbti) {
-        val idx = mbtiList.indexOf(mbti)
+    fun toggleMbtiSelected(mbtiType: Mbti.MbtiType) {
+        val idx = mbtiList.indexOf(mbtiType)
         val pairIdx = idx + if (idx % 2 == 0) 1 else -1
-        val pairMbti = mbtiList.getOrNull(pairIdx) ?: return
+        val pairMbtiType = mbtiList.getOrNull(pairIdx) ?: return
         _mbtiModelsStateFlow.value = mbtiModelsStateFlow.value.toMutableList().apply {
             replaceAll {
-                when (it.mbti) {
-                    mbti -> it.copy(isSelected = !it.isSelected)
-                    pairMbti -> it.copy(isSelected = false)
+                when (it.mbtiType) {
+                    mbtiType -> it.copy(isSelected = !it.isSelected)
+                    pairMbtiType -> it.copy(isSelected = false)
                     else -> it
                 }
             }
@@ -56,6 +60,7 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
     }
 
     fun requestEditIntroduce(description: String) {
-        //TODO api 호출
+        if (requestEditIntroduceJob?.isCompleted == false) return
+
     }
 }

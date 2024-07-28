@@ -9,7 +9,7 @@ import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditMbtiModel
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.viewholder.EditIntroduceMbtiViewHolder
 
-class EditIntroduceMbtiAdapter(private val onClickItem: (Mbti) -> Unit) :
+class EditIntroduceMbtiAdapter(private val onClickItem: (Mbti.MbtiType) -> Unit) :
     ListAdapter<EditMbtiModel, EditIntroduceMbtiViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditIntroduceMbtiViewHolder {
         val binding =

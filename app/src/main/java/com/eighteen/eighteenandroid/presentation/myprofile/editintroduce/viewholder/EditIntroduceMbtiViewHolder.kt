@@ -8,18 +8,18 @@ import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.E
 
 class EditIntroduceMbtiViewHolder(
     private val binding: ItemEditMbtiBinding,
-    private val onClick: (Mbti) -> Unit
+    private val onClick: (Mbti.MbtiType) -> Unit
 ) : ViewHolder(binding.root) {
 
     fun onBind(editMbtiModel: EditMbtiModel) {
         with(binding) {
             root.isSelected = editMbtiModel.isSelected
-            tvMbti.text = editMbtiModel.mbti.alp.toString()
+            tvMbti.text = editMbtiModel.mbtiType.alp.toString()
             val description =
-                root.context.getString(editMbtiModel.mbti.getDescriptionStringRes())
+                root.context.getString(editMbtiModel.mbtiType.getDescriptionStringRes())
             tvMbtiDescription.text = description
             root.setOnClickListener {
-                onClick(editMbtiModel.mbti)
+                onClick(editMbtiModel.mbtiType)
             }
         }
     }

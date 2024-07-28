@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.Profile
+import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,6 +48,28 @@ class LoginViewModel @Inject constructor(private val myProfileUseCase: MyProfile
             }.onFailure {
                 _myProfileStateFlow.value = ModelState.Error(throwable = it)
             }
+        }
+    }
+
+    fun addSnsLink(snsLink: SnsLink) {
+        if (_myProfileStateFlow.value !is ModelState.Success) return
+        _myProfileStateFlow.value = _myProfileStateFlow.value.run {
+            val updatedSnsLinks = data?.snsLinks?.toMutableList()?.apply {
+                add(snsLink)
+            } ?: emptyList()
+            val updatedProfile = data?.copy(snsLinks = updatedSnsLinks)
+            ModelState.Success(updatedProfile)
+        }
+    }
+
+    fun removeSnsLinkAt(idx: Int) {
+        if (_myProfileStateFlow.value !is ModelState.Success) return
+        _myProfileStateFlow.value = _myProfileStateFlow.value.run {
+            val updatedSnsLinks = data?.snsLinks?.toMutableList()?.apply {
+                removeAt(idx)
+            } ?: emptyList()
+            val updatedProfile = data?.copy(snsLinks = updatedSnsLinks)
+            ModelState.Success(updatedProfile)
         }
     }
 }

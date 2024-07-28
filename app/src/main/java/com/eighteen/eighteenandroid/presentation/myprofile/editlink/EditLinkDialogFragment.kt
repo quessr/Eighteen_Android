@@ -2,24 +2,31 @@ package com.eighteen.eighteenandroid.presentation.myprofile.editlink
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.KeyEvent.ACTION_DOWN
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditLinkDialogBinding
+import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
+import com.eighteen.eighteenandroid.presentation.LoginViewModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.myprofile.editlink.model.EditLinkPage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-//TODO back pressed dispatchers
+@AndroidEntryPoint
 class EditLinkDialogFragment :
     BaseDialogFragment<FragmentEditLinkDialogBinding>(FragmentEditLinkDialogBinding::inflate) {
 
+    private val loginViewModel by activityViewModels<LoginViewModel>()
     private val editLinkViewModel by viewModels<EditLinkViewModel>()
 
     override fun initView() {
@@ -29,9 +36,8 @@ class EditLinkDialogFragment :
                 dismissNow()
             }
             rvLinks.addItemDecoration(EditLinkItemDecoration())
-
             rvLinks.adapter = EditLinkDialogAdapter(onClickRemove = {
-                //TODO 링크 제거 api
+                editLinkViewModel.requestRemoveLink(it)
             })
             tvBtnAddLink.setOnClickListener {
                 editLinkViewModel.moveAddPage()
@@ -39,25 +45,21 @@ class EditLinkDialogFragment :
         }
         initAddPageView()
         initStateFlow()
-        initDialogWindow()
     }
 
-    private fun initDialogWindow() {
-        dialog?.window?.run {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
-    }
 
     private fun initAddPageView() {
         with(binding) {
-            ivBtnClose.setOnClickListener {
+            ivAddBtnBack.setOnClickListener {
                 editLinkViewModel.movePrevPage()
                 etAddLinkUrl.addTextChangedListener {
                     setAddLinkCheckButtonEnabled(isEnabled = it.isNullOrBlank().not())
                 }
                 ivAddBtnCheck.setOnClickListener {
-                    //TODO 링크 추가 api
+                    val snsLink = SnsLink(
+                        linkUrl = etAddLinkUrl.text.toString(),
+                        name = etAddLinkName.text.toString().takeIf { it.isNotEmpty() })
+                    editLinkViewModel.requestAddLink(snsLink = snsLink)
                 }
             }
         }
@@ -82,5 +84,86 @@ class EditLinkDialogFragment :
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                loginViewModel.myProfileStateFlow.collect {
+                    val snsLinks = it.data?.snsLinks ?: emptyList()
+                    (binding.rvLinks.adapter as? EditLinkDialogAdapter)?.submitList(snsLinks)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                editLinkViewModel.addLinkResultStateFlow.collect {
+                    when (it) {
+                        is ModelState.Loading -> {
+                            //TODO 로딩 처리
+                        }
+                        is ModelState.Success -> {
+                            it.data?.getContentIfNotHandled()?.let { snsLink ->
+                                loginViewModel.addSnsLink(snsLink = snsLink)
+                                if (editLinkViewModel.editLinkPageStateFlow.value == EditLinkPage.ADD) editLinkViewModel.movePrevPage()
+                            }
+                        }
+                        is ModelState.Error -> {
+                            //TODO error 처리
+                        }
+                        is ModelState.Empty -> {
+                            //do nothing
+                        }
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                editLinkViewModel.removeLinkResultState.collect {
+                    when (it) {
+                        is ModelState.Loading -> {
+                            //TODO 로딩 처리
+                        }
+                        is ModelState.Success -> {
+                            it.data?.getContentIfNotHandled()?.let { idx ->
+                                loginViewModel.removeSnsLinkAt(idx = idx)
+                            }
+                        }
+                        is ModelState.Error -> {
+                            //TODO error 처리
+                        }
+                        is ModelState.Empty -> {
+                            //do nothing
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initDialogWindow()
+    }
+
+    private fun initDialogWindow() {
+        dialog?.run {
+            window?.run {
+                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+            setOnKeyListener { _, keyCode, event ->
+                if (keyCode == android.view.KeyEvent.KEYCODE_BACK && event.action == ACTION_DOWN) {
+                    handleBackKeyEvent()
+                    return@setOnKeyListener true
+                }
+                false
+            }
+        }
+    }
+
+    private fun handleBackKeyEvent() {
+        if (editLinkViewModel.editLinkPageStateFlow.value == EditLinkPage.MAIN) dismissNow()
+        else editLinkViewModel.movePrevPage()
     }
 }

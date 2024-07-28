@@ -39,8 +39,11 @@ class EditLinkDialogFragment :
             rvLinks.adapter = EditLinkDialogAdapter(onClickRemove = {
                 editLinkViewModel.requestRemoveLink(it)
             })
+            rvLinks.itemAnimator = null
             tvBtnAddLink.setOnClickListener {
                 editLinkViewModel.moveAddPage()
+                binding.etAddLinkUrl.setText("")
+                binding.etAddLinkName.setText("")
             }
         }
         initAddPageView()
@@ -93,6 +96,7 @@ class EditLinkDialogFragment :
                 loginViewModel.myProfileStateFlow.collect {
                     val snsLinks = it.data?.snsLinks ?: emptyList()
                     (binding.rvLinks.adapter as? EditLinkDialogAdapter)?.submitList(snsLinks)
+                    setAddExternalLinkButtonEnabled(isEnabled = snsLinks.size < MAXIMUM_LINK_SIZE)
                 }
             }
         }
@@ -144,6 +148,20 @@ class EditLinkDialogFragment :
         }
     }
 
+    private fun setAddExternalLinkButtonEnabled(isEnabled: Boolean) {
+        with(binding.tvBtnAddLink) {
+            this.isEnabled = isEnabled
+            val textColor =
+                ContextCompat.getColor(context, if (isEnabled) R.color.grey_02 else R.color.grey_03)
+            setTextColor(textColor)
+            val drawable = ContextCompat.getDrawable(
+                context,
+                if (isEnabled) R.drawable.ic_add_external_link else R.drawable.ic_add_external_link_disabled
+            )
+            setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         initDialogWindow()
@@ -168,5 +186,10 @@ class EditLinkDialogFragment :
     private fun handleBackKeyEvent() {
         if (editLinkViewModel.editLinkPageStateFlow.value == EditLinkPage.MAIN) dismissNow()
         else editLinkViewModel.movePrevPage()
+    }
+
+    companion object {
+        //TODO 글로벌 변수 고려
+        private const val MAXIMUM_LINK_SIZE = 3
     }
 }

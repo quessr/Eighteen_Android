@@ -30,6 +30,12 @@ class EditLinkDialogFragment :
     private val editLinkViewModel by viewModels<EditLinkViewModel>()
 
     override fun initView() {
+        initMainPageView()
+        initAddPageView()
+        initStateFlow()
+    }
+
+    private fun initMainPageView() {
         with(binding) {
             tvTitle.text = getString(R.string.my_profile_my_link)
             ivBtnClose.setOnClickListener {
@@ -46,10 +52,7 @@ class EditLinkDialogFragment :
                 binding.etAddLinkName.setText("")
             }
         }
-        initAddPageView()
-        initStateFlow()
     }
-
 
     private fun initAddPageView() {
         with(binding) {

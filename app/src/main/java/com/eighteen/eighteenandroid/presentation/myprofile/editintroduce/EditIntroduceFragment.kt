@@ -47,7 +47,6 @@ class EditIntroduceFragment :
         }
         updateNextButton()
         initMbtiView()
-        initDescriptionView()
         initStateFlow()
     }
 
@@ -65,12 +64,6 @@ class EditIntroduceFragment :
                 )
             )
             rvMbti.itemAnimator = null
-        }
-    }
-
-    private fun initDescriptionView() {
-        bind {
-
         }
     }
 

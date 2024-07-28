@@ -52,16 +52,19 @@ class EditLinkDialogFragment :
         with(binding) {
             ivAddBtnBack.setOnClickListener {
                 editLinkViewModel.movePrevPage()
-                etAddLinkUrl.addTextChangedListener {
-                    setAddLinkCheckButtonEnabled(isEnabled = it.isNullOrBlank().not())
-                }
-                ivAddBtnCheck.setOnClickListener {
-                    val snsLink = SnsLink(
-                        linkUrl = etAddLinkUrl.text.toString(),
-                        name = etAddLinkName.text.toString().takeIf { it.isNotEmpty() })
-                    editLinkViewModel.requestAddLink(snsLink = snsLink)
-                }
             }
+            etAddLinkUrl.addTextChangedListener {
+                setAddLinkCheckButtonEnabled(isEnabled = it.isNullOrBlank().not())
+            }
+            ivAddBtnCheck.setOnClickListener {
+                val snsLink = SnsLink(
+                    linkUrl = etAddLinkUrl.text.toString(),
+                    name = etAddLinkName.text.toString().takeIf { it.isNotEmpty() })
+                editLinkViewModel.requestAddLink(snsLink = snsLink)
+            }
+            setAddLinkCheckButtonEnabled(
+                isEnabled = etAddLinkUrl.text.toString().isBlank().not()
+            )
         }
     }
 

@@ -1,17 +1,25 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.editlink
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.SnsLink
+import com.eighteen.eighteenandroid.domain.usecase.AddSnsLinkUseCase
+import com.eighteen.eighteenandroid.domain.usecase.RemoveSnsLinkUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import com.eighteen.eighteenandroid.presentation.myprofile.editlink.model.EditLinkPage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditLinkViewModel @Inject constructor(): ViewModel() {
+class EditLinkViewModel @Inject constructor(
+    private val addSnsLinkUseCase: AddSnsLinkUseCase,
+    private val removeSnsLinkUseCase: RemoveSnsLinkUseCase
+) : ViewModel() {
     private val _editLinkPageStateFlow = MutableStateFlow(EditLinkPage.MAIN)
     val editLinkPageStateFlow = _editLinkPageStateFlow.asStateFlow()
 
@@ -22,6 +30,9 @@ class EditLinkViewModel @Inject constructor(): ViewModel() {
     private val _addLinkResultStateFlow =
         MutableStateFlow<ModelState<Event<SnsLink>>>(ModelState.Empty())
     val addLinkResultStateFlow = _addLinkResultStateFlow.asStateFlow()
+
+    private var addSnsLinkJob: Job? = null
+    private var removeSnsLinkJob: Job? = null
 
     fun moveAddPage() {
         _editLinkPageStateFlow.value = EditLinkPage.ADD
@@ -34,10 +45,26 @@ class EditLinkViewModel @Inject constructor(): ViewModel() {
     }
 
     fun requestRemoveLink(idx: Int) {
-        //TODO 링크 제거 api
+        if (removeSnsLinkJob?.isCompleted == false) return
+        removeSnsLinkJob = viewModelScope.launch {
+            _removeLinkResultStateFlow.value = ModelState.Loading()
+            removeSnsLinkUseCase.invoke(idx = idx).onSuccess {
+                _removeLinkResultStateFlow.value = ModelState.Success(Event(idx))
+            }.onFailure {
+                _removeLinkResultStateFlow.value = ModelState.Error(throwable = it)
+            }
+        }
     }
 
     fun requestAddLink(snsLink: SnsLink) {
-        //TODO 링크 추가 api
+        if (addSnsLinkJob?.isCompleted == false) return
+        addSnsLinkJob = viewModelScope.launch {
+            _addLinkResultStateFlow.value = ModelState.Loading()
+            addSnsLinkUseCase.invoke(snsLink = snsLink).onSuccess {
+                _addLinkResultStateFlow.value = ModelState.Success(Event(it))
+            }.onFailure {
+                _addLinkResultStateFlow.value = ModelState.Error(throwable = it)
+            }
+        }
     }
 }

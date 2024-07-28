@@ -76,4 +76,14 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
             )
         )
     }
+
+    //TODO api 호출 구현 필요
+    override suspend fun addSnsLink(snsLink: SnsLink): Result<SnsLink> {
+        return Result.success(snsLink)
+    }
+
+    //TODO api 호출 구현 필요
+    override suspend fun removeSnsLink(idx: Int): Result<Unit> {
+        return Result.success(Unit)
+    }
 }

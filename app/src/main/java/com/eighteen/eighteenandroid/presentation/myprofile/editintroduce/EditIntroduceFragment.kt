@@ -9,13 +9,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.eighteen.eighteenandroid.databinding.FragmentEditIntroduceBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.common.dp2Px
+import com.eighteen.eighteenandroid.presentation.common.recyclerview.GridMarginItemDecoration
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-//TODO mbti item decoration
 @AndroidEntryPoint
 class EditIntroduceFragment :
     BaseFragment<FragmentEditIntroduceBinding>(FragmentEditIntroduceBinding::inflate) {
@@ -46,6 +48,15 @@ class EditIntroduceFragment :
         bind {
             rvMbti.adapter =
                 EditIntroduceMbtiAdapter(onClickItem = editIntroduceViewModel::toggleMbtiSelected)
+            val betweenMarginPx = root.context.dp2Px(MARGIN_BETWEEN_MBTI_ITEM_PX)
+            rvMbti.layoutManager = GridLayoutManager(root.context, SPAN_COUNT_MBTI_ITEM)
+            rvMbti.addItemDecoration(
+                GridMarginItemDecoration(
+                    spanCount = SPAN_COUNT_MBTI_ITEM,
+                    horizontalBetweenMarginPx = betweenMarginPx,
+                    verticalBetweenMarginPx = betweenMarginPx
+                )
+            )
         }
     }
 
@@ -77,5 +88,10 @@ class EditIntroduceFragment :
     override fun onDestroyView() {
         onBackPressedCallback.remove()
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val SPAN_COUNT_MBTI_ITEM = 2
+        private const val MARGIN_BETWEEN_MBTI_ITEM_PX = 16
     }
 }

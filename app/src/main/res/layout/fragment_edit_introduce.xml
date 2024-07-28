@@ -64,13 +64,11 @@
             android:id="@+id/rvMbti"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvEditMbtiDescription"
             app:layout_constraintVertical_bias="0.25"
-            app:spanCount="2"
             tools:itemCount="8"
             tools:listitem="@layout/item_edit_mbti" />
     </androidx.constraintlayout.widget.ConstraintLayout>

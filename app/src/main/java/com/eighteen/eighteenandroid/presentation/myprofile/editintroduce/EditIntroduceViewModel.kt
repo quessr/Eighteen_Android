@@ -1,18 +1,25 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.editintroduce
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.Mbti
+import com.eighteen.eighteenandroid.domain.model.createMbtiOrNull
+import com.eighteen.eighteenandroid.domain.usecase.EditIntroduceUseCase
+import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.livedata.Event
+import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroduceModel
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditMbtiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//TODO api 호출 추가
 @HiltViewModel
-class EditIntroduceViewModel @Inject constructor() : ViewModel() {
+class EditIntroduceViewModel @Inject constructor(private val editIntroduceUseCase: EditIntroduceUseCase) :
+    ViewModel() {
     private val _pageStateFlow = MutableStateFlow(EditIntroducePage.MBTI)
     val pageStateFlow = _pageStateFlow.asStateFlow()
 
@@ -30,7 +37,12 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
         MutableStateFlow(mbtiList.map { EditMbtiModel(mbtiType = it) })
     val mbtiModelsStateFlow = _mbtiModelsStateFlow.asStateFlow()
 
-    val selectedMbti get() = mbtiModelsStateFlow.value.filter { it.isSelected }
+    val selectedMbtiType
+        get() = mbtiModelsStateFlow.value.filter { it.isSelected }.map { it.mbtiType }
+
+    private val _editIntroduceResultStateFlow =
+        MutableStateFlow<ModelState<Event<EditIntroduceModel>>>(ModelState.Empty())
+    val editIntroduceResultStateFlow = _editIntroduceResultStateFlow.asStateFlow()
 
     private var requestEditIntroduceJob: Job? = null
 
@@ -61,6 +73,24 @@ class EditIntroduceViewModel @Inject constructor() : ViewModel() {
 
     fun requestEditIntroduce(description: String) {
         if (requestEditIntroduceJob?.isCompleted == false) return
-
+        requestEditIntroduceJob = viewModelScope.launch {
+            _editIntroduceResultStateFlow.value = ModelState.Loading()
+            val mbti = createMbtiOrNull(selectedMbtiType)
+            editIntroduceUseCase.invoke(
+                description = description,
+                mbti = mbti
+            ).onSuccess {
+                _editIntroduceResultStateFlow.value = ModelState.Success(
+                    Event(
+                        EditIntroduceModel(
+                            mbti = mbti,
+                            description = description
+                        )
+                    )
+                )
+            }.onFailure {
+                _editIntroduceResultStateFlow.value = ModelState.Error(throwable = it)
+            }
+        }
     }
 }

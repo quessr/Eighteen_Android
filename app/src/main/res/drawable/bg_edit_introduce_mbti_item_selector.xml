@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- TODO 선택된 경우 색상 확인(문의 중) -->
+<?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/bg_rect_stroke_w2_main_color_r20" android:state_selected="true" />
     <item android:drawable="@drawable/bg_rect_stroke_w2_grey_03_r20" android:state_selected="false" />

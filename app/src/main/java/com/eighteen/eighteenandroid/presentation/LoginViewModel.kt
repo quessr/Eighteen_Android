@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.domain.model.Profile
 import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
@@ -69,6 +70,14 @@ class LoginViewModel @Inject constructor(private val myProfileUseCase: MyProfile
                 removeAt(idx)
             } ?: emptyList()
             val updatedProfile = data?.copy(snsLinks = updatedSnsLinks)
+            ModelState.Success(updatedProfile)
+        }
+    }
+
+    fun editIntroduce(mbti: Mbti?, description: String?) {
+        if (_myProfileStateFlow.value !is ModelState.Success) return
+        _myProfileStateFlow.value = myProfileStateFlow.value.run {
+            val updatedProfile = data?.copy(mbti = mbti, description = description)
             ModelState.Success(updatedProfile)
         }
     }

@@ -6,6 +6,7 @@ import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
 import com.eighteen.eighteenandroid.data.mapper.UserMapper
 import com.eighteen.eighteenandroid.data.mapper.mapper
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.domain.model.Media
 import com.eighteen.eighteenandroid.domain.model.Profile
 import com.eighteen.eighteenandroid.domain.model.Qna
@@ -70,7 +71,7 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                 medias = listOf(Media.Image(image1), Media.Image(image2), Media.Image(image3)),
                 id = "id",
                 description = "description",
-                mbti = "mbti",
+                mbti = null,
                 qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
                 snsLinks = listOf(SnsLink("https://www.google.co.kr", "test"))
             )
@@ -84,6 +85,14 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
 
     //TODO api 호출 구현 필요
     override suspend fun removeSnsLink(idx: Int): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    //TODO api 호출 구현 필요
+    override suspend fun editIntroduce(
+        description: String?,
+        selectedMbti: Mbti?
+    ): Result<Unit> {
         return Result.success(Unit)
     }
 }

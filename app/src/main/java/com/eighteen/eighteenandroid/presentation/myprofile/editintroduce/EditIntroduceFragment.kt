@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditIntroduceBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.LoginViewModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.recyclerview.GridMarginItemDecoration
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
@@ -24,6 +27,8 @@ class EditIntroduceFragment :
     BaseFragment<FragmentEditIntroduceBinding>(FragmentEditIntroduceBinding::inflate) {
 
     private val editIntroduceViewModel by viewModels<EditIntroduceViewModel>()
+
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -87,6 +92,33 @@ class EditIntroduceFragment :
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                editIntroduceViewModel.editIntroduceResultStateFlow.collect {
+                    when (it) {
+                        is ModelState.Loading -> {
+                            //TODO 로딩처리
+                        }
+                        is ModelState.Success -> {
+                            it.data?.getContentIfNotHandled()?.let {
+                                loginViewModel.editIntroduce(
+                                    mbti = it.mbti,
+                                    description = it.description
+                                )
+                            }
+                            findNavController().popBackStack()
+                        }
+                        is ModelState.Error -> {
+                            //TODO 에러처리
+                        }
+                        is ModelState.Empty -> {
+                            //do nothing
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -119,7 +151,7 @@ class EditIntroduceFragment :
         val buttonTextRes = when (editIntroduceViewModel.pageStateFlow.value) {
             EditIntroducePage.MBTI -> {
                 //TODO mbti 다 선택됐을 때 string 문의
-                if (editIntroduceViewModel.selectedMbti.size == 4) R.string.completed
+                if (editIntroduceViewModel.selectedMbtiType.size == 4) R.string.completed
                 else R.string.pass
             }
             EditIntroducePage.DESCIRPTION -> R.string.completed

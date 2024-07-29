@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.viewholder
 
+import androidx.core.view.isVisible
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemMyProfileIntroduceBinding
 import com.eighteen.eighteenandroid.presentation.myprofile.MyProfileClickListener
@@ -15,8 +16,10 @@ class MyProfileIntroduceViewHolder(
                 clickListener.onClickEditIntroduce()
             }
             tvMbti.text = model.mbti
+            tvMbti.isVisible = model.mbti != null
             tvDescription.text =
-                model.description ?: context.getString(R.string.my_profile_introduce_empty)
+                model.description?.takeIf { it.isNotEmpty() }
+                    ?: context.getString(R.string.my_profile_introduce_empty)
         }
     }
 }

@@ -38,7 +38,7 @@ sealed interface MyProfileItem {
 
     data class Introduce(
         override val id: String,
-        val mbti: String,
+        val mbti: String?,
         val description: String?
     ) : MyProfileItem {
         override fun areItemsTheSame(other: MyProfileItem) =

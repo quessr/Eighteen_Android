@@ -1,11 +1,21 @@
 package com.eighteen.eighteenandroid.domain.model
 
+import com.eighteen.eighteenandroid.common.safeLet
+
 data class Mbti(
     val energy: MbtiType.Energy,
     val information: MbtiType.Information,
     val decision: MbtiType.Decision,
     val lifestyle: MbtiType.Lifestyle
 ) {
+    val mbtiString
+        get() = listOf(
+            energy,
+            information,
+            decision,
+            lifestyle
+        ).joinToString("") { it.alp.toString() }
+
     sealed interface MbtiType {
         val alp: Char
 
@@ -47,6 +57,28 @@ data class Mbti(
             object Perceiving : Lifestyle {
                 override val alp: Char = 'P'
             }
+        }
+    }
+}
+
+fun createMbtiOrNull(mbtiTypeList: List<Mbti.MbtiType>): Mbti? {
+    mbtiTypeList.run {
+        val energy = filterIsInstance<Mbti.MbtiType.Energy>().firstOrNull()
+        val information = filterIsInstance<Mbti.MbtiType.Information>().firstOrNull()
+        val decision = filterIsInstance<Mbti.MbtiType.Decision>().firstOrNull()
+        val lifestyle = filterIsInstance<Mbti.MbtiType.Lifestyle>().firstOrNull()
+        return safeLet(
+            energy,
+            information,
+            decision,
+            lifestyle
+        ) { e, i, d, l ->
+            Mbti(
+                energy = e,
+                information = i,
+                decision = d,
+                lifestyle = l
+            )
         }
     }
 }

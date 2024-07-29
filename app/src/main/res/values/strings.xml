@@ -119,6 +119,12 @@
     <string name="my_profile_edit_introduce_description_hint">간단한 자기 소개글을 작성해주세요\nex) 저의 취미는 운동이에요</string>
     <string name="my_profile_ten_of_qna">10문 10답</string>
     <string name="my_profile_ten_of_qna_empty">등록된 문답이 없습니다.</string>
+    <string name="my_profile_edit_ten_of_qna_title">10문 10답 정보 수정</string>
+    <string name="my_profile_edit_ten_of_qna_description">나를 소개할 수 있는\n질문을 선택해서 답해주세요 :)</string>
+    <string name="my_profile_edit_ten_of_qna_min_count">*최소 3개</string>
+    <string name="my_profile_edit_ten_of_qna_save">저장 하기</string>
+    <string name="my_profile_edit_ten_of_qna_add">질문 추가하기</string>
+    <string name="my_profile_edit_ten_of_qna_hint">질문에 관한 간단한 답을 작성해주세요</string>
 
     <string name="time_min_sec">"%02d:%02d"</string>
 </resources>

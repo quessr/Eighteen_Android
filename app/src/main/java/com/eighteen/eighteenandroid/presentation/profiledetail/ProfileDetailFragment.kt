@@ -1,12 +1,16 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
@@ -14,6 +18,7 @@ import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFr
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
+import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -29,6 +34,7 @@ class ProfileDetailFragment() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
+        setupRecyclerViewScrollListener()
         initViewModel()
         setupInitialData()
     }
@@ -56,6 +62,38 @@ class ProfileDetailFragment() :
         }
     }
 
+    private fun setupRecyclerViewScrollListener() {
+        bind {
+            profileDetailRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val viewPagerPosition = findViewPagerPosition()
+                    val viewHolder =
+                        recyclerView.findViewHolderForAdapterPosition(viewPagerPosition) as? ProfileDetailViewHolder.Images
+
+                    if (viewHolder != null) {
+                        val viewPagerBottom = viewHolder.itemView.bottom
+                        val headerBottom = binding.header.bottom
+                        if (headerBottom <= viewPagerBottom) {
+                            binding.header.setBackgroundColor(Color.TRANSPARENT)
+                            binding.ivClose.setColorFilter(Color.WHITE)
+                            binding.ivMore.setColorFilter(Color.WHITE)
+                        } else {
+                            binding.header.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
+                            binding.ivClose.setColorFilter(Color.BLACK)
+                            binding.ivMore.setColorFilter(Color.BLACK)
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    private fun findViewPagerPosition(): Int {
+        // ViewPager2가 포함된 아이템의 위치를 반환
+        return profileDetailViewModel.items.value?.indexOfFirst { it is ProfileDetailModel.ProfileImages }
+            ?: -1
+    }
 
     private fun setupInitialData() {
         val qnaList = List(10) { index ->

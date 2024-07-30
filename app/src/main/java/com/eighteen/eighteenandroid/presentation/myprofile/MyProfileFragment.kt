@@ -89,8 +89,7 @@ class MyProfileFragment :
     }
 
     override fun onClickEditTenOfQna() {
-        //TODO 10문 10답 편집
-        Log.d("MyProfileFragment", "onClickEditTenOfQna")
+        findNavController().navigate(R.id.action_fragmentMyPRofile_to_fragmentEditTenOfQna)
     }
 
     override fun onClickExpandQna() {

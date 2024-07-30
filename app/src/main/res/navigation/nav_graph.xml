@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_fragmentMyProfile_to_fragmentEditIntroduce"
             app:destination="@id/fragmentEditIntroduce" />
+        <action
+            android:id="@+id/action_fragmentMyPRofile_to_fragmentEditTenOfQna"
+            app:destination="@id/fragmentEditTenOfQna" />
     </fragment>
 
     <fragment
@@ -68,6 +71,12 @@
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.EditIntroduceFragment"
         android:label="fragment_edit_introduce"
         tools:layout="@layout/fragment_edit_introduce" />
+    <fragment
+        android:id="@+id/fragmentEditTenOfQna"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.EditTenOfQnaFragment"
+        android:label="fragment_edit_ten_of_qna"
+        tools:layout="@layout/fragment_edit_ten_of_qna" />
+
     <fragment
         android:id="@+id/fragmentProfileDetailFragment"
         android:name="com.eighteen.eighteenandroid.presentation.profileDetail.ProfileDetailFragment"

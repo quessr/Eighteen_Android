@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="48dp"
         android:background="@drawable/bg_rect_black_r20"
         android:paddingHorizontal="28dp"
         android:paddingVertical="13dp"

@@ -25,6 +25,7 @@ class EditTenOfQnaFragment :
                     //TODO open dialog
                 }
             )
+            rvQnas.addItemDecoration(EditTenOfQnaItemDecoration())
             ivBtnBack.setOnClickListener {
                 findNavController().popBackStack()
             }

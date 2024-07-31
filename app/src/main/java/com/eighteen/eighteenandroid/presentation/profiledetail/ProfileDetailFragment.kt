@@ -15,6 +15,8 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.common.showReportDialog
+import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
@@ -59,6 +61,16 @@ class ProfileDetailFragment() :
 
     override fun initView() {
         initNavigation()
+
+        bind {
+            ivMore.setOnClickListener {
+                context?.let {
+                    showReportDialog(it) {
+                        showDialogFragment(ReportDialogFragment())
+                    }
+                }
+            }
+        }
     }
 
     private fun setupAdapter() {

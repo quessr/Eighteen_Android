@@ -18,7 +18,7 @@ class EditTenOfQnaItemDecoration : ItemDecoration() {
         super.getItemOffsets(outRect, view, parent, state)
         val adapter = (parent.adapter as? EditTenOfQnaAdapter) ?: return
         val adapterPosition = parent.getChildAdapterPosition(view)
-        val currentModel = adapter.currentList[adapterPosition]
+        val currentModel = adapter.currentList.getOrNull(adapterPosition) ?: return
         val prevModel = adapter.currentList.getOrNull(adapterPosition - 1)
         val context = parent.context
         when (currentModel) {
@@ -45,8 +45,8 @@ class EditTenOfQnaItemDecoration : ItemDecoration() {
         prev: EditTenOfQnaModel
     ): Int {
         val offsetDp = when (prev) {
-            is EditTenOfQnaModel.Title -> 42
-            is EditTenOfQnaModel.Input -> 10
+            is EditTenOfQnaModel.Title -> 40
+            is EditTenOfQnaModel.Input -> 20
             else -> 0
         }
         return context.dp2Px(offsetDp)
@@ -54,7 +54,7 @@ class EditTenOfQnaItemDecoration : ItemDecoration() {
 
     private fun getTopOffsetAddItem(context: Context, prev: EditTenOfQnaModel): Int {
         val offsetDp = when (prev) {
-            is EditTenOfQnaModel.Title -> 42
+            is EditTenOfQnaModel.Title -> 40
             is EditTenOfQnaModel.Input -> 35
             else -> 0
         }

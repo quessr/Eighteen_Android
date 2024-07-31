@@ -2,13 +2,13 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
@@ -44,7 +44,11 @@ class ProfileDetailFragment() :
         super.onViewStateRestored(savedInstanceState)
 
         // ViewModel의 currentPosition 값을 복원
-        profileDetailViewModel.restoreCurrentPosition(savedInstanceState?.getInt(CURRENT_POSITION_KEY))
+        profileDetailViewModel.restoreCurrentPosition(
+            savedInstanceState?.getInt(
+                CURRENT_POSITION_KEY
+            )
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -93,7 +97,12 @@ class ProfileDetailFragment() :
                             binding.ivClose.setColorFilter(Color.WHITE)
                             binding.ivMore.setColorFilter(Color.WHITE)
                         } else {
-                            binding.header.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
+                            binding.header.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.background_color
+                                )
+                            )
                             binding.ivClose.setColorFilter(Color.BLACK)
                             binding.ivMore.setColorFilter(Color.BLACK)
                         }
@@ -160,10 +169,11 @@ class ProfileDetailFragment() :
 
     private fun initNavigation() {
         bind {
-//            btnGoMain.setOnClickListener {
-//                val navController =
-//                    Navigation.findNavController(requireActivity().findViewById(R.id.fragment_container_view))
-//                navController.navigate(R.id.action_fragmentProfileDetail_to_fragmentMain)
+            ivClose.setOnClickListener {
+                val navController =
+                    Navigation.findNavController(requireActivity().findViewById(R.id.fragment_container_view))
+                navController.navigate(R.id.action_fragmentProfileDetail_to_fragmentMain)
+            }
         }
     }
 

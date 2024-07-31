@@ -12,7 +12,8 @@ sealed class ProfileDetailModel {
 
     data class ProfileImages(
         override val id: String,
-        val imageUrl: List<String>
+        val imageUrl: List<String>,
+        var currentPosition: Int = 0
     ) : ProfileDetailModel()
 
     data class Like(

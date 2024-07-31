@@ -37,7 +37,9 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_PROFILE_IMAGES -> {
                 val binding = inflaterBinding(ItemProfileDetailImagesWithLikeBinding::inflate)
-                ProfileDetailViewHolder.Images(binding)
+                ProfileDetailViewHolder.Images(binding) { currentPosition ->
+                    viewModel.setCurrentPosition(currentPosition)
+                }
             }
 
             ITEM_TYPE_BADGE_AND_TEEN -> {
@@ -89,6 +91,14 @@ class ProfileDetailAdapter(
     override fun onBindViewHolder(holder: ProfileDetailViewHolder, position: Int) {
         holder.onBind(getItem(position))
 
+        if (holder is ProfileDetailViewHolder.Images) {
+            val profileImages = getItem(position) as? ProfileDetailModel.ProfileImages
+            profileImages.let {
+//                holder.binding.viewPager.setCurrentItem(it?.currentPosition ?: 0, false) // 저장된 위치로 설정
+                holder.binding.viewPager.setCurrentItem(viewModel.currentPosition.value, false) // 저장된 위치로 설정
+            }
+        }
+
 
         if (holder is ProfileDetailViewHolder.Qna) {
 
@@ -99,7 +109,7 @@ class ProfileDetailAdapter(
                 }
 
                 position == itemCount - 1 && itemCount - 5 <= ProfileDetailViewModel.ITEM_COUNT_THRESHOLD -> {
-                    // Qna 항목이 ITEM_COUNT_THRESHOLD 이하인 경우 마지막 Qna 항목의 하단에 radius를 적용
+                    // Qna 항목이 ITEM_COUNT_THRESHOLD 이하인 경우 마지막 Qna 항목의 하단에 radius 적용
                     holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_bottom)
 
                     // marginBottom 설정

@@ -3,6 +3,8 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
@@ -10,6 +12,7 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBin
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
+import com.eighteen.eighteenandroid.presentation.profiledetail.ProfileDetailViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.ViewPagerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,7 +33,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    class Images(private val binding: ItemProfileDetailImagesWithLikeBinding) :
+    class Images(val binding: ItemProfileDetailImagesWithLikeBinding, private val onPageChangeCallback: (Int) -> Unit) :
         ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val profileImages = profileDetailModel as? ProfileDetailModel.ProfileImages
@@ -38,6 +41,14 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 val adapter = ViewPagerAdapter(it.imageUrl)
                 binding.viewPager.adapter = adapter
                 TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
+
+                binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트
+                        onPageChangeCallback(position)
+                    }
+                })
             }
         }
     }

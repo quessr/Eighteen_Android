@@ -2,6 +2,7 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -37,6 +38,19 @@ class ProfileDetailFragment() :
         setupRecyclerViewScrollListener()
         initViewModel()
         setupInitialData()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        // ViewModel의 currentPosition 값을 복원
+        profileDetailViewModel.restoreCurrentPosition(savedInstanceState?.getInt(CURRENT_POSITION_KEY))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // ViewModel의 currentPosition 값을 저장
+        outState.putInt(CURRENT_POSITION_KEY, profileDetailViewModel.currentPosition.value)
     }
 
     override fun initView() {
@@ -185,6 +199,10 @@ class ProfileDetailFragment() :
      */
     private fun openMediaDetailDialogFragment() {
         showDialogFragment(MediaDetailDialogFragment())
+    }
+
+    companion object {
+        private const val CURRENT_POSITION_KEY = "CURRENT_POSITION_KEY"
     }
 }
 

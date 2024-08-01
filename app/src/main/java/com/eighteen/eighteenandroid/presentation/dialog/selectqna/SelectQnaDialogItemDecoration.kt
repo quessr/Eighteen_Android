@@ -16,7 +16,7 @@ class SelectQnaDialogItemDecoration : ItemDecoration() {
         }
         val heightPx = context.dp2Px(DIVIDER_HEIGHT_DP)
         val left = parent.paddingStart.toFloat()
-        for (i in 0 until parent.childCount) {
+        for (i in 0 until parent.childCount - 1) {
             val child = parent.getChildAt(i)
             val right = (parent.width - child.paddingEnd).toFloat()
             val top = child.bottom.toFloat()

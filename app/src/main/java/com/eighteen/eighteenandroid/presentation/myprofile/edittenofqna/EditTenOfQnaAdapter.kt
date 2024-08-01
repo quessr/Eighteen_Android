@@ -18,7 +18,7 @@ class EditTenOfQnaAdapter(
     private val getInput: (QnaType) -> String,
     private val setInput: (QnaType, String) -> Unit,
     private val onClickRemove: (QnaType) -> Unit,
-    private val onClickAdd: () -> Unit
+    private val onClickAdd: () -> Unit,
 ) : ListAdapter<EditTenOfQnaModel, ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

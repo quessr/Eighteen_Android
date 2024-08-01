@@ -40,7 +40,7 @@ class EditTenOfQnaViewModel @Inject constructor() : ViewModel() {
     fun addQna(qnaType: QnaType) {
         val updatedInputList =
             inputModels.toMutableList().apply {
-                add(EditTenOfQnaModel.Input(qna = qnaType))
+                add(EditTenOfQnaModel.Input(qna = qnaType, position = size + 1))
             }
         _editTenOfQnaModelStateFlow.value = createUiModels(inputs = updatedInputList)
     }
@@ -51,8 +51,6 @@ class EditTenOfQnaViewModel @Inject constructor() : ViewModel() {
             addAll(inputs)
             if (inputs.size < MAXIMUM_QNA_COUNT) add(EditTenOfQnaModel.Add)
         }
-
-    fun getInputs() = _editTenOfQnaModelStateFlow.value.filterIsInstance<EditTenOfQnaModel.Input>()
 
     companion object {
         private const val MAXIMUM_QNA_COUNT = 10

@@ -125,6 +125,7 @@
     <string name="my_profile_edit_ten_of_qna_save">저장 하기</string>
     <string name="my_profile_edit_ten_of_qna_add">질문 추가하기</string>
     <string name="my_profile_edit_ten_of_qna_hint">질문에 관한 간단한 답을 작성해주세요</string>
+    <string name="my_profile_edit_ten_of_qna_select_title">마음에 드는 질문을 선택해주세요</string>
 
     <string name="time_min_sec">"%02d:%02d"</string>
 </resources>

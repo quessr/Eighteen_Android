@@ -18,10 +18,9 @@ sealed interface EditTenOfQnaModel {
 
     }
 
-    data class Input(val qna: QnaType) : EditTenOfQnaModel {
-        override fun areItemsTheSame(other: EditTenOfQnaModel): Boolean = other is Input
+    data class Input(val qna: QnaType, val position: Int) : EditTenOfQnaModel {
+        override fun areItemsTheSame(other: EditTenOfQnaModel): Boolean = this == other
 
-        override fun areContentsTheSame(other: EditTenOfQnaModel): Boolean =
-            other is Input && other.qna == this.qna
+        override fun areContentsTheSame(other: EditTenOfQnaModel): Boolean = this == other
     }
 }

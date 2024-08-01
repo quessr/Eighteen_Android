@@ -15,7 +15,8 @@ class EditTenOfQnaInputViewHolder(
     fun onBind(model: EditTenOfQnaModel.Input) {
         //TODO 질문 내용 추가 후 텍스트 적용
         with(binding) {
-            tvQuestion.text = model.qna.name
+            val questionText = "${model.position}. ${model.qna.name}"
+            tvQuestion.text = questionText
             etAnswer.setText(getInput(model.qna))
             etAnswer.addTextChangedListener {
                 setInput(model.qna, it?.toString() ?: "")

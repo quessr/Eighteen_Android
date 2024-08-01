@@ -54,7 +54,7 @@ class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val in
     private fun createUiModels(inputs: List<EditTenOfQnaModel.Input>) =
         mutableListOf<EditTenOfQnaModel>().apply {
             add(EditTenOfQnaModel.Title)
-            addAll(inputs)
+            addAll(inputs.mapIndexed { idx, input -> input.copy(position = idx + 1) })
             if (inputs.size < MAXIMUM_QNA_COUNT) add(EditTenOfQnaModel.Add)
         }
 

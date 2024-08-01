@@ -11,6 +11,7 @@ import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.SelectQnaDialogFragment
+import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.model.EditTenOfQnaModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ class EditTenOfQnaFragment :
             ivBtnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
-            tvBtnSave.setOnClickListener{
+            tvBtnSave.setOnClickListener {
 
             }
         }
@@ -62,6 +63,8 @@ class EditTenOfQnaFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editTenOfQnaViewModel.editTenOfQnaModelStateFlow.collect {
                     (binding.rvQnas.adapter as? EditTenOfQnaAdapter)?.submitList(it)
+                    binding.tvBtnSave.isEnabled =
+                        it.filterIsInstance<EditTenOfQnaModel.Input>().size >= MINIMUM_QNA_COUNT
                 }
             }
         }
@@ -79,5 +82,6 @@ class EditTenOfQnaFragment :
 
     companion object {
         private const val REQUEST_KEY_SELECT_DIALOG = "request_key_select_dialog"
+        private const val MINIMUM_QNA_COUNT = 3
     }
 }

@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="48dp"
-        android:background="@drawable/bg_btn_sign_up_next_selector"
+        android:background="@drawable/bg_btn_selector"
         android:gravity="center"
         android:paddingHorizontal="30dp"
         android:paddingVertical="13dp"

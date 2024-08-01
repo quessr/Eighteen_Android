@@ -1,21 +1,27 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.eighteen.eighteenandroid.domain.model.Qna
 import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.model.EditTenOfQnaModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-class EditTenOfQnaViewModel @Inject constructor() : ViewModel() {
+class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val initQnas: List<Qna>) :
+    ViewModel() {
     private val qnaAnswerInputMap = mutableMapOf<QnaType, String>()
     private val _editTenOfQnaModelStateFlow = MutableStateFlow(
-        listOf(
-            EditTenOfQnaModel.Title,
-            EditTenOfQnaModel.Add
-        )
+        createUiModels(inputs = initQnas.mapIndexed { idx, qna ->
+            setInput(qna.question, qna.answer)
+            EditTenOfQnaModel.Input(
+                qna = qna.question,
+                position = idx + 1
+            )
+        })
     )
     val editTenOfQnaModelStateFlow = _editTenOfQnaModelStateFlow.asStateFlow()
 
@@ -51,6 +57,22 @@ class EditTenOfQnaViewModel @Inject constructor() : ViewModel() {
             addAll(inputs)
             if (inputs.size < MAXIMUM_QNA_COUNT) add(EditTenOfQnaModel.Add)
         }
+
+    @AssistedFactory
+    interface EditTenOfQnaAssistedFactory {
+        fun create(initQnas: List<Qna>): EditTenOfQnaViewModel
+    }
+
+    class Factory(
+        private val assistedFactory: EditTenOfQnaAssistedFactory,
+        private val initQnas: List<Qna>
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return assistedFactory.create(initQnas) as T
+        }
+    }
+
 
     companion object {
         private const val MAXIMUM_QNA_COUNT = 10

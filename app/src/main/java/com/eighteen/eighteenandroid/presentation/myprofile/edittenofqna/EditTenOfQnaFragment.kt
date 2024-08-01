@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna
 
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -9,17 +10,30 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditTenOfQnaBinding
 import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.SelectQnaDialogFragment
 import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.model.EditTenOfQnaModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-//TODO 내 정보와 동기화
 @AndroidEntryPoint
 class EditTenOfQnaFragment :
     BaseFragment<FragmentEditTenOfQnaBinding>(FragmentEditTenOfQnaBinding::inflate) {
-    private val editTenOfQnaViewModel by viewModels<EditTenOfQnaViewModel>()
+
+    private val loginViewModel by activityViewModels<LoginViewModel>()
+
+    @Inject
+    lateinit var editTenOfQnaAssistedFactory: EditTenOfQnaViewModel.EditTenOfQnaAssistedFactory
+
+    private val editTenOfQnaViewModel by viewModels<EditTenOfQnaViewModel>(factoryProducer = {
+        EditTenOfQnaViewModel.Factory(
+            assistedFactory = editTenOfQnaAssistedFactory,
+            initQnas = loginViewModel.myProfileStateFlow.value.data?.qna?: emptyList()
+        )
+    })
+
     override fun initView() {
         bind {
             rvQnas.adapter = EditTenOfQnaAdapter(

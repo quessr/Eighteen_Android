@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.domain.model.Profile
+import com.eighteen.eighteenandroid.domain.model.Qna
 import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -78,6 +79,14 @@ class LoginViewModel @Inject constructor(private val myProfileUseCase: MyProfile
         if (_myProfileStateFlow.value !is ModelState.Success) return
         _myProfileStateFlow.value = myProfileStateFlow.value.run {
             val updatedProfile = data?.copy(mbti = mbti, description = description)
+            ModelState.Success(updatedProfile)
+        }
+    }
+
+    fun editQnas(qnas: List<Qna>) {
+        if (_myProfileStateFlow.value !is ModelState.Success) return
+        _myProfileStateFlow.value = myProfileStateFlow.value.run {
+            val updatedProfile = data?.copy(qna = qnas)
             ModelState.Success(updatedProfile)
         }
     }

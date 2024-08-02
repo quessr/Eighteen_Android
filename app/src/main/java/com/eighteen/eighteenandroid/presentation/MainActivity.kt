@@ -4,10 +4,10 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -56,10 +56,8 @@ class MainActivity : AppCompatActivity() {
         // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val visibleNavigationIds = listOf(R.id.fragmentMain, R.id.fragmentMyProfile)
-            binding.bottomNavigationBar.visibility =
-                if (visibleNavigationIds.contains(destination.id)) View.VISIBLE else View.GONE
-            binding.toolbar.root.visibility =
-                if (destination.id == R.id.fragmentMain) View.VISIBLE else View.GONE
+            binding.bottomNavigationBar.isVisible = visibleNavigationIds.contains(destination.id)
+            binding.toolbar.root.visibility = destination.id == R.id.fragmentMain
         }
     }
 

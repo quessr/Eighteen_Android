@@ -71,7 +71,6 @@
 
     <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
-
     <string name="sign_up_completed_title">등록이 완료되었어요!\n이제 A-TEEN을 시작해보세요 :)</string>
 
     <string name="main_about_teen">About A-Teen</string>
@@ -128,4 +127,26 @@
     <string name="my_profile_edit_ten_of_qna_select_title">마음에 드는 질문을 선택해주세요</string>
 
     <string name="time_min_sec">"%02d:%02d"</string>
+
+    <!--프로필 디테일-->
+    <string name="profile_detail_see_more">펼쳐서 보기</string>
+    <string name="profile_detail_qna_title">10문 10답</string>
+    <string name="profile_detail_question">Lorem ipsum dolor sit amet?</string>
+    <string name="profile_detail_answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="profile_detail_introduction_title">자기 소개</string>
+    <string name="profile_detail_introduction_des">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="profile_detail_personality_type">INTP</string>
+    <string name="profile_detail_id">id name</string>
+    <string name="profile_detail_name">김 에스더</string>
+    <string name="profile_detail_school">서울 중학교, </string>
+    <string name="profile_detail_age">18세</string>
+    <string name="profile_detail_like_count">11</string>
+    <string name="profile_detail_badge">배지</string>
+    <string name="profile_detail_badge_count">10개</string>
+    <string name="profile_detail_teen">TEEN</string>
+    <string name="profile_detail_teen_award">5월 2주차 우승</string>
+
+
+
+
 </resources>

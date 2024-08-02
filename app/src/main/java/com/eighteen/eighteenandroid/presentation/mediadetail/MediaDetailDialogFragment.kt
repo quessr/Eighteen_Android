@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentMediaDetailDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
@@ -62,6 +63,9 @@ class MediaDetailDialogFragment :
                     }
                 }
             }
+            ivBtnSound.setOnClickListener {
+                mediaDetailViewModel.toggleVolume()
+            }
         }
         bindMediaPager()
         initObservers()
@@ -93,9 +97,10 @@ class MediaDetailDialogFragment :
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mediaDetailViewModel.mediasStateFlow.collect {
+                mediaDetailViewModel.mediaDetailStateFlow.collect {
+                    setVolume(isVolumeOn = it.isVolumeOn)
                     binding.vpMedias.run {
-                        (adapter as? MediaDetailPagerAdapter)?.submitList(it) {
+                        (adapter as? MediaDetailPagerAdapter)?.submitList(it.medias) {
                             val lastPosition = mediaDetailViewModel.selectedIndex
                             doOnLayout {
                                 setCurrentItem(lastPosition, false)
@@ -105,6 +110,13 @@ class MediaDetailDialogFragment :
                 }
             }
         }
+    }
+
+    private fun setVolume(isVolumeOn: Boolean) {
+        val drawableRes =
+            if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
+        binding.ivBtnSound.setImageResource(drawableRes)
+        viewPagerPlayerManager?.setVolume(isVolumeOn = isVolumeOn)
     }
 
     override fun onDestroyView() {

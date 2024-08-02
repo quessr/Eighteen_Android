@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val visibleNavigationIds = listOf(R.id.fragmentMain, R.id.fragmentMyProfile)
             binding.bottomNavigationBar.isVisible = visibleNavigationIds.contains(destination.id)
-            binding.toolbar.root.visibility = destination.id == R.id.fragmentMain
+            binding.toolbar.root.isVisible = destination.id == R.id.fragmentMain
         }
     }
 

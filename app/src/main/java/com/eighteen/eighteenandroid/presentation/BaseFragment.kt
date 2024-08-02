@@ -43,5 +43,4 @@ abstract class BaseFragment<T : ViewBinding>(private val bindingFactory: (Layout
     protected inline fun bind(block: T.() -> Unit) {
         binding.apply(block)
     }
-
 }

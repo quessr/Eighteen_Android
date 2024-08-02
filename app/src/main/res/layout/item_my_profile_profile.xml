@@ -121,7 +121,6 @@
             app:tint="@color/grey_01" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- TODO 백그라운드 적용 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clBgBadge"
         android:layout_width="0dp"
@@ -160,6 +159,16 @@
             tools:text="10개" />
 
         <ImageView
+            android:id="@+id/ivBgBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:src="@drawable/bg_badge_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvBadgeCount"
+            app:layout_constraintTop_toBottomOf="@id/tvBadgeCount" />
+
+        <ImageView
             android:id="@+id/ivBtnBadgeMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -170,8 +179,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- TODO 백그라운드 적용 -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clBgTeen"
@@ -208,6 +215,16 @@
             app:layout_constraintStart_toStartOf="@id/tvTeenTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTeenTitle"
             tools:text="5월 2주차 우승" />
+
+        <ImageView
+            android:id="@+id/ivBgTeen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:src="@drawable/bg_teen_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvTeenDescription"
+            app:layout_constraintTop_toBottomOf="@id/tvTeenDescription" />
 
         <ImageView
             android:id="@+id/ivBtnTeenMore"

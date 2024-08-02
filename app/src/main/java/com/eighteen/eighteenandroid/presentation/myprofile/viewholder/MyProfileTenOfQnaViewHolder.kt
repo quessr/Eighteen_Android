@@ -72,9 +72,8 @@ class MyProfileTenOfQnaViewHolder(
     }
 
     private fun createStateTextView(isExpanded: Boolean) = TextView(context).apply {
-        //TODO drawable 파일 머지 후 적용
         val moreDrawable =
-            ContextCompat.getDrawable(context, R.drawable.ic_more)
+            ContextCompat.getDrawable(context, R.drawable.question_answer_more)
         moreDrawable?.let {
             DrawableCompat.setTint(it, ContextCompat.getColor(context, R.color.grey_01))
         }
@@ -87,8 +86,7 @@ class MyProfileTenOfQnaViewHolder(
         compoundDrawablePadding = context.dp2Px(13)
         setTextAppearance(R.style.pretendard_regular_14)
         setTextColor(ContextCompat.getColor(context, R.color.grey_02))
-        //TODO str res 적용
-        text = if (isExpanded) "접기" else "펼치기"
+        text = context.getString(if (isExpanded) R.string.fold else R.string.view_expand)
         gravity = Gravity.CENTER
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             val marginTop = context.dp2Px(12)

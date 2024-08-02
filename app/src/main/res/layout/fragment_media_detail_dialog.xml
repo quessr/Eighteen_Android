@@ -28,6 +28,16 @@
             app:tint="@color/white" />
 
         <ImageView
+            android:id="@+id/ivBtnSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="11dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivBtnOption"
+            app:layout_constraintEnd_toStartOf="@id/ivBtnOption"
+            app:layout_constraintTop_toTopOf="@id/ivBtnOption"
+            app:tint="@color/white" />
+
+        <ImageView
             android:id="@+id/ivBtnOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

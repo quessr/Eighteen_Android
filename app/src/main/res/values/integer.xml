@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- sign up-->
+    <integer name="sign_up_enter_id_max_length">11</integer>
+    <integer name="sign_up_enter_nickname_max_length">8</integer>
+</resources>

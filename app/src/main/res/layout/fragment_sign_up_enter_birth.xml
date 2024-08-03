@@ -1,17 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="16dp">
 
     <TextView
-        android:id="@+id/tvTest"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTitle"
+        style="@style/pretendard_bold_20"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="생년월일 입력 페이지"
-        android:textSize="64sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="13dp"
+        android:text="@string/sign_up_enter_birth_title"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvBtnSelectBirth"
+        style="@style/pretendard_regular_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        app:drawableEndCompat="@drawable/ic_more_bottom"
+        app:drawableTint="@color/grey_01"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        tools:text="@string/sign_up_enter_birth_select_birth" />
+
+    <TextView
+        android:id="@+id/tvBtnSeeTermsOfService"
+        style="@style/pretendard_regular_13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="87dp"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:text="@string/sign_up_enter_birth_see_terms_of_service"
+        android:textColor="@color/grey_01"
+        app:drawableEndCompat="@drawable/ic_more_small"
+        app:drawableTint="@color/grey_01"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBtnSelectBirth" />
 </androidx.constraintlayout.widget.ConstraintLayout>

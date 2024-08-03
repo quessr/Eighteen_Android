@@ -130,10 +130,10 @@ class ProfileDetailFragment() :
         val image3 =
             "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
         val testMedias = listOf(
-            MediaDetailMediaModel.Video("1", "https://picsum.photos/id/23/200/300", video1),
-            MediaDetailMediaModel.Video("2", "https://picsum.photos/id/24/200/300", video2),
+            MediaDetailMediaModel.Video("1", video1),
+            MediaDetailMediaModel.Video("2", video2),
             MediaDetailMediaModel.Image("3", image1),
-            MediaDetailMediaModel.Video("4", "https://picsum.photos/id/25/200/300", video3),
+            MediaDetailMediaModel.Video("4", video3),
             MediaDetailMediaModel.Image("5", image2),
             MediaDetailMediaModel.Image("6", image3),
         )

@@ -71,6 +71,7 @@ class EditVideoFragment :
         }
     }
 
+    @OptIn(UnstableApi::class)
     private fun setVideo(uriString: String) {
         val mediaInfo = MediaInfo(id = uriString, mediaUrl = uriString, mediaView = binding.mvVideo)
         playerManager?.play(mediaInfo = mediaInfo)

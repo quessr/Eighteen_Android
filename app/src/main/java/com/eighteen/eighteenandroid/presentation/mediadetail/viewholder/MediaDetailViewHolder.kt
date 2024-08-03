@@ -24,13 +24,13 @@ sealed class MediaDetailViewHolder(
         private var videoModel: MediaDetailMediaModel.Video? = null
         override fun onBind(mediaDetailMediaModel: MediaDetailMediaModel) {
             videoModel = mediaDetailMediaModel as? MediaDetailMediaModel.Video
-            binding.mvMedia.setThumbnailUrl(url = mediaDetailMediaModel.imageUrl)
+            binding.mvMedia.setThumbnailUrl(url = mediaDetailMediaModel.mediaUrl)
         }
 
         @OptIn(UnstableApi::class)
         override fun getMediaInfo() = MediaInfo(
             id = videoModel?.id,
-            mediaUrl = videoModel?.videoUrl ?: "",
+            mediaUrl = videoModel?.mediaUrl ?: "",
             mediaView = binding.mvMedia
         )
     }
@@ -40,7 +40,7 @@ sealed class MediaDetailViewHolder(
 
         override fun onBind(mediaDetailMediaModel: MediaDetailMediaModel) {
             ImageLoader.get()
-                .loadUrl(imageView = binding.ivImage, url = mediaDetailMediaModel.imageUrl)
+                .loadUrl(imageView = binding.ivImage, url = mediaDetailMediaModel.mediaUrl)
         }
     }
 }

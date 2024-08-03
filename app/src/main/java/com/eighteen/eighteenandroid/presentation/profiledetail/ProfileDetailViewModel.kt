@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import androidx.lifecycle.ViewModel
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ class ProfileDetailViewModel : ViewModel() {
 
     private val _currentPosition = MutableStateFlow(0)
     val currentPosition: StateFlow<Int> get() = _currentPosition
+
 
 
     companion object {
@@ -105,5 +107,21 @@ class ProfileDetailViewModel : ViewModel() {
     fun updateQnaItems(qnaItems: List<ProfileDetailModel.Qna>) {
         _qnaItems.value = qnaItems
         updateItems()
+    }
+
+    fun toggleLike() {
+        val currentItems = _items.value.toMutableList()
+        val profileImagesIndex = currentItems.indexOfFirst { it is ProfileDetailModel.ProfileImages }
+
+        if (profileImagesIndex != -1) {
+            val profileImages = currentItems[profileImagesIndex] as ProfileDetailModel.ProfileImages
+            val isCurrentLiked = profileImages.isLiked
+            val updateProfileImages = profileImages.copy(
+                likeCount = if (isCurrentLiked) profileImages.likeCount -1 else profileImages.likeCount + 1,
+                isLiked = !isCurrentLiked
+            )
+            currentItems[profileImagesIndex] = updateProfileImages
+            _items.value = currentItems
+        }
     }
 }

@@ -147,7 +147,8 @@ class ProfileDetailFragment() :
                     "https://cdn.hankooki.com/news/photo/202309/107376_146623_1695826504.jpg",
                     "https://cdn.dailycc.net/news/photo/202312/766253_670987_1515.png",
                     "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
-                )
+                ),
+                likeCount = 100
             ),
             ProfileDetailModel.ProfileInfo(
                 id = "1",
@@ -160,11 +161,6 @@ class ProfileDetailFragment() :
                 badgeCount = 10,
                 teenAward = "5월 2주차 우승",
             ),
-//            ProfileDetailModel.Like(
-//                id = "3",
-//                likeCount = 100
-//            ),
-
             ProfileDetailModel.Introduction(
                 id = "4",
                 personalityType = "INTP",

@@ -37,9 +37,13 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_PROFILE_IMAGES -> {
                 val binding = inflaterBinding(ItemProfileDetailImagesWithLikeBinding::inflate)
-                ProfileDetailViewHolder.Images(binding) { currentPosition ->
-                    viewModel.setCurrentPosition(currentPosition)
-                }
+                ProfileDetailViewHolder.Images(
+                    binding,
+                    onPageChangeCallback = { currentPosition ->
+                        viewModel.setCurrentPosition(currentPosition)
+                    }, onLikeClickCallback = {
+                        viewModel.toggleLike()
+                    })
             }
 
             ITEM_TYPE_BADGE_AND_TEEN -> {
@@ -94,8 +98,15 @@ class ProfileDetailAdapter(
         if (holder is ProfileDetailViewHolder.Images) {
             val profileImages = getItem(position) as? ProfileDetailModel.ProfileImages
             profileImages.let {
-//                holder.binding.viewPager.setCurrentItem(it?.currentPosition ?: 0, false) // 저장된 위치로 설정
-                holder.binding.viewPager.setCurrentItem(viewModel.currentPosition.value, false) // 저장된 위치로 설정
+                holder.binding.viewPager.setCurrentItem(
+                    viewModel.currentPosition.value,
+                    false
+                ) // 저장된 위치로 설정
+
+//                holder.binding.tvLike.text = it?.likeCount.toString()
+//                holder.binding.ivLike.setImageResource(
+//                    if (it?.isLiked == true) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
+//                )
             }
         }
 

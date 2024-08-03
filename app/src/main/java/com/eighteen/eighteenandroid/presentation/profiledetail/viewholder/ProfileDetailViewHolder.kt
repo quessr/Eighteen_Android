@@ -3,8 +3,8 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailInfoBinding
@@ -12,7 +12,6 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBin
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
-import com.eighteen.eighteenandroid.presentation.profiledetail.ProfileDetailViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.ViewPagerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -33,10 +32,15 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    class Images(val binding: ItemProfileDetailImagesWithLikeBinding, private val onPageChangeCallback: (Int) -> Unit) :
+    class Images(
+        val binding: ItemProfileDetailImagesWithLikeBinding,
+        private val onPageChangeCallback: (Int) -> Unit,
+        private val onLikeClickCallback: () -> Unit
+    ) :
         ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val profileImages = profileDetailModel as? ProfileDetailModel.ProfileImages
+
             profileImages?.let {
                 val adapter = ViewPagerAdapter(it.imageUrl)
                 binding.viewPager.adapter = adapter
@@ -49,6 +53,15 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                         onPageChangeCallback(position)
                     }
                 })
+
+                binding.ivLike.setImageResource(
+                    if (it.isLiked) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
+                )
+                binding.tvLike.text = profileImages.likeCount.toString()
+
+                binding.ivLike.setOnClickListener {
+                    onLikeClickCallback()
+                }
             }
         }
     }

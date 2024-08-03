@@ -73,6 +73,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_like"
             style="@style/pretendard_regular_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

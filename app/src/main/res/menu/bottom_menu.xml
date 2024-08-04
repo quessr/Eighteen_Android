@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/btn_bottom_main"
+        android:id="@+id/fragmentMain"
         android:enabled="true"
         android:icon="@drawable/menu_home_selected"
         android:title="@string/menu_main" />
@@ -25,7 +25,7 @@
         android:title="@string/menu_chat" />
 
     <item
-        android:id="@+id/btn_bottom_profile"
+        android:id="@+id/fragmentMyProfile"
         android:enabled="true"
         android:title="@string/menu_profile" />
 </menu>

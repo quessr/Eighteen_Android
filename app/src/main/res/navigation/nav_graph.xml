@@ -32,7 +32,16 @@
         android:id="@+id/fragmentEditImage"
         android:name="com.eighteen.eighteenandroid.presentation.editmedia.image.EditImageFragment"
         android:label="fragment_edit_image"
-        tools:layout="@layout/fragment_edit_image" />
+        tools:layout="@layout/fragment_edit_image">
+        <action
+            android:id="@+id/action_fragmentEditImage_to_fragmentEditImageResult"
+            app:destination="@id/fragmentEditImageResult" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentEditImageResult"
+        android:name="com.eighteen.eighteenandroid.presentation.editmedia.image.EditImageResultFragment"
+        android:label="fragment_edit_image_result"
+        tools:layout="@layout/fragment_edit_image_result" />
     <fragment
         android:id="@+id/fragmentEditVideo"
         android:name="com.eighteen.eighteenandroid.presentation.editmedia.video.EditVideoFragment"
@@ -52,6 +61,30 @@
             android:id="@+id/action_fragmentMain_to_fragmentProfileDetail"
             app:destination="@id/fragmentProfileDetailFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragmentMyProfile"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.MyProfileFragment"
+        android:label="fragment_my_profile"
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_fragmentMyProfile_to_fragmentEditIntroduce"
+            app:destination="@id/fragmentEditIntroduce" />
+        <action
+            android:id="@+id/action_fragmentMyPRofile_to_fragmentEditTenOfQna"
+            app:destination="@id/fragmentEditTenOfQna" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentEditIntroduce"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.EditIntroduceFragment"
+        android:label="fragment_edit_introduce"
+        tools:layout="@layout/fragment_edit_introduce" />
+    <fragment
+        android:id="@+id/fragmentEditTenOfQna"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.EditTenOfQnaFragment"
+        android:label="fragment_edit_ten_of_qna"
+        tools:layout="@layout/fragment_edit_ten_of_qna" />
 
     <fragment
         android:id="@+id/fragmentProfileDetailFragment"

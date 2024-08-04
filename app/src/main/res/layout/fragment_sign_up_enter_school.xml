@@ -73,5 +73,4 @@
             tools:itemCount="10"
             tools:listitem="@layout/item_sign_up_school_search_result" />
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

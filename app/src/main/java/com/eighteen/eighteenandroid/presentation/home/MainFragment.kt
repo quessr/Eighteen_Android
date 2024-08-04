@@ -30,6 +30,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private var selectedChip: Chip? = null
     private lateinit var mainAdapter: MainAdapter
 
+    private var userList = listOf<User>()
+    private var aboutTeenList = listOf<AboutTeen>()
+    private var tournamentList = listOf<Tournament>()
+
     override fun initView() {
         initChipGroup()
         initMain()
@@ -38,6 +42,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun initMainAdapter() {
         mainAdapter = MainAdapter(
             context = requireContext(),
+            viewModel,
+            savePosition = { pos ->
+                viewModel.savedPosition = pos
+            },
             onTournamentClicks = { tournament: Tournament ->
                 // 토너먼트 클릭
                 when (tournament) {
@@ -94,38 +102,87 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun initMain() {
         initMainAdapter()
         initData()
+        initUserListObserver()
+    }
+
+    private fun initUserListObserver() {
+//        viewModel.mainItems.observe(viewLifecycleOwner) {
+//            mainAdapter.updateView(it)
+//        }
+
+        viewModel.userData.observe(viewLifecycleOwner) {
+            userList = it
+            updateMain()
+        }
+    }
+
+    private fun updateMain() {
+        mainAdapter.updateView(
+            listOf(
+                MainItem.UserListView(
+                    userList
+                ), // User List
+                MainItem.DividerView,
+                MainItem.HeaderView(getString(R.string.main_about_teen)),
+                MainItem.AboutTeenListView(
+//                    aboutTeenList
+                    listOf(
+                        AboutTeen("Teen", "친구들의 프로필을 투표해보세요!"),
+                        AboutTeen("토너먼트", "투표 결과를 한 눈에 볼 수 있어요!"),
+                        AboutTeen("채팅","채팅을 통해 친구들과 소통해보세요!"),
+                        AboutTeen("나만의 Teen","나만의 프로필을 등록해보세요!")
+                    )
+                ), // About Teen List
+                MainItem.DividerView,
+                MainItem.HeaderWithMoreView(getString(R.string.main_tournament_in_progress)),
+                MainItem.TournamentListView(
+//                    tournamentList
+                    listOf(
+                        Tournament.Exercise,
+                        Tournament.Study
+                    )
+                ), // Tournament List
+                MainItem.DividerView,
+                MainItem.HeaderView(getString(R.string.main_another_teen)),
+                MainItem.UserView(
+                    User(
+                        userImage = "https://image.blip.kr/v1/file/021ec61ff1c9936943383b84236a0e69",
+                        userId = "1",
+                        userName = "김 에스더",
+                        userAge = "16",
+                        userSchoolName = "서울 중학교",
+                        tag = "운동"
+                    )
+                ),
+                MainItem.UserView(
+                    User(
+                        userImage = "https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg",
+                        userId = "2",
+                        userName = "김 에스더",
+                        userAge = "16",
+                        userSchoolName = "서울 중학교",
+                        tag = "운동"
+                    )
+                ),
+                MainItem.UserView(
+                    User(
+                        userImage = "https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800",
+                        userId = "3",
+                        userName = "김 에스더",
+                        userAge = "16",
+                        userSchoolName = "서울 중학교",
+                        tag = "운동"
+                    )
+                )
+            )
+        )
     }
 
     private fun initData() {
         mainAdapter.updateView(
             listOf(
                 MainItem.UserListView(
-                    listOf(
-                        User(
-                            userImage = "https://image.blip.kr/v1/file/021ec61ff1c9936943383b84236a0e69",
-                            userId = "1",
-                            userName = "김 에스더",
-                            userAge = "16",
-                            userSchoolName = "서울 중학교",
-                            tag = "운동"
-                        ),
-                        User(
-                            userImage = "https://cdn.newsculture.press/news/photo/202308/529742_657577_5726.jpg",
-                            userId = "2",
-                            userName = "김 에스더",
-                            userAge = "16",
-                            userSchoolName = "부천 중학교",
-                            tag = "스터디"
-                        ),
-                        User(
-                            userImage = "https://mblogthumb-phinf.pstatic.net/MjAyMTEwMzFfMTY1/MDAxNjM1NjUzMTI2NjI3.xXYQteLLoWLKcR9YnXS0Hk_y-DInauMzF25g7FxlcScg.2Y-neBBMVoP2IhcwzX2Zy2HB2d8EnM_cY76FVLuk_1Yg.JPEG.ssun2415/IMG_4148.jpg?type=w800",
-                            userId = "3",
-                            userName = "김 에스더",
-                            userAge = "16",
-                            userSchoolName = "인천 중학교",
-                            tag = "프로젝트"
-                        )
-                    )
+                    emptyList()
                 ), // User List
                 MainItem.DividerView,
                 MainItem.HeaderView(getString(R.string.main_about_teen)),

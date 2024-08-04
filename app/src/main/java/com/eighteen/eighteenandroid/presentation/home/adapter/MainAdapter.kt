@@ -18,10 +18,13 @@ import com.eighteen.eighteenandroid.databinding.ItemMainPopularTeenListviewBindi
 import com.eighteen.eighteenandroid.databinding.ItemMainTournamentListviewBinding
 import com.eighteen.eighteenandroid.databinding.ItemTeenBinding
 import com.eighteen.eighteenandroid.domain.model.User
+import com.eighteen.eighteenandroid.presentation.home.MainViewModel
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.MainItemDiffCallBack
 
 class MainAdapter(
     private val context: Context,
+    private val mainViewModel: MainViewModel,
+    private val savePosition: (Int) -> Unit,
     private val onTournamentMoreClicks: () -> Unit,
     private val onAboutTeenClicks: (String) -> Unit,
     private val onUserClicks: (User) -> Unit,
@@ -63,7 +66,7 @@ class MainAdapter(
 
             POPULAR_USER_LIST -> {
                 val itemBinding = ItemMainPopularTeenListviewBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.PopularUserListViewHolder(context, itemBinding, showUserReportSelectDialog)
+                CommonViewHolder.PopularUserListViewHolder(context, mainViewModel, itemBinding, showUserReportSelectDialog, savePosition)
             }
 
             USER_VIEW -> {
@@ -172,8 +175,10 @@ class MainAdapter(
 
         class PopularUserListViewHolder(
             private val context: Context,
+            private val mainViewModel: MainViewModel,
             private val binding: ItemMainPopularTeenListviewBinding,
             private val showUserReportSelectDialog: (User) -> Unit,
+            private val savePosition: (Int) -> Unit
         ) : CommonViewHolder(binding) {
             private val snapHelper = PagerSnapHelper()
 
@@ -186,6 +191,23 @@ class MainAdapter(
 
                     val teenAdapter = TeenAdapter(context, showUserReportSelectDialog)
                     rvMainTeenPopularList.adapter = teenAdapter
+
+                    rvMainTeenPopularList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                            super.onScrollStateChanged(recyclerView, newState)
+                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                val layoutManager = recyclerView.layoutManager
+                                val centerView = snapHelper.findSnapView(layoutManager)
+                                val pos = centerView?.let { layoutManager?.getPosition(it) }
+                                pos?.let {
+                                    // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
+                                    savePosition(pos)
+                                }
+                            }
+                        }
+                    })
+
+                    rvMainTeenPopularList.scrollToPosition(mainViewModel.savedPosition)
 
                     teenAdapter.submitList(userListView?.userList)
                 }

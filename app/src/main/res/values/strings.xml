@@ -61,6 +61,8 @@
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
     <string name="sign_up_completed_title">등록이 완료되었어요!\n이제 A-TEEN을 시작해보세요 :)</string>
 
+    <string name="edit_media_crop_image_complete">등록 완료</string>
+
     <string name="main_about_teen">About A-Teen</string>
     <string name="about_teen_title">Teen</string>
     <string name="about_teen_detail">친구들의 프로필을\n투표해보세요!</string>

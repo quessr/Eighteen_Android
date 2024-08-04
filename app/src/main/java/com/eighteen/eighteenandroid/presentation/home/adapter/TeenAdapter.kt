@@ -1,16 +1,18 @@
 package com.eighteen.eighteenandroid.presentation.home.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.databinding.TodayTeenItemBinding
+import com.eighteen.eighteenandroid.databinding.ItemPopularTeenBinding
 import com.eighteen.eighteenandroid.domain.model.User
+import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserDiffCallBack
 
 /**
  *
@@ -20,44 +22,39 @@ import com.eighteen.eighteenandroid.domain.model.User
  */
 class TeenAdapter(
     private val context: Context,
-    private val showDialog:() -> Unit
-) : RecyclerView.Adapter<TeenAdapter.ViewHolder>() {
+    private val showUserReportSelectDialog:(User) -> Unit
+) : ListAdapter<User, TeenAdapter.TeenViewHolder>(UserDiffCallBack()) {
 
-    private var userList: MutableList<User> = mutableListOf()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeenViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val itemBinding = ItemPopularTeenBinding.inflate(layoutInflater, parent,false)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = TodayTeenItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding = binding, showDialog = showDialog)
+        return TeenViewHolder(itemBinding, showUserReportSelectDialog)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = userList[position]
-        holder.bind(user, context)
+    override fun onBindViewHolder(holder: TeenViewHolder, position: Int) {
+        holder.bind(getItem(position), context)
     }
 
-    override fun getItemCount(): Int {
-        return userList.size
-    }
-
-    // 또 다른 틴 스크롤
-    class ViewHolder(
-        private val binding: TodayTeenItemBinding,
-        private val showDialog: () -> Unit
+    class TeenViewHolder(
+        private val binding: ItemPopularTeenBinding,
+        private val showUserReportSelectDialog: (User) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        @SuppressLint("SetTextI18n")
         fun bind(item: User, context: Context) {
             binding.run {
                 Glide.with(context).load(item.userImage).into(imgTodayTeen)
-                txName.text = item.userName
-                txAge.text = item.userAge
-                txSchool.text = item.userSchoolName
+                tvName.text = "${item.userName}, ${item.userAge}"
+                tvSchool.text = item.userSchoolName
                 initNavigation(binding.imgTodayTeen)
                 btnSetting.setOnClickListener {
-                    showDialog()
+                    showUserReportSelectDialog(item)
                 }
             }
         }
 
-        // fragmentMain에서 fragmentProfileDetail로 네비게이션 진행
+        /** 유저 상세로 이동 Navigation */
         private fun initNavigation(profileImageView: ImageView) {
             profileImageView.setOnClickListener { view ->
                 val navController = Navigation.findNavController(view)
@@ -65,13 +62,5 @@ class TeenAdapter(
             }
         }
 
-    }
-
-    fun updateView(newList: List<User>) {
-        val diffUtil = DiffUtilCallback(userList, newList)
-        val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(diffUtil)
-        userList.clear()
-        userList.addAll(newList)
-        diffResult.dispatchUpdatesTo(this)
     }
 }

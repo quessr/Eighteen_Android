@@ -18,15 +18,21 @@ fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = n
     dialogFragment.show(childFragmentManager, tag)
 }
 
-// 신고하기 & 차단하기 다이얼로그
-fun showReportDialog(context: Context, showDialog: () -> Unit) {
+/** 신고하기 & 차단하기 선택 다이얼로그 */
+fun showReportSelectDialog(context: Context, onReportClicked: () -> Unit, onBlockClicked: () -> Unit) {
     val reportSelectBinding = DialogReportSelectBinding.inflate(LayoutInflater.from(context))
     val customAlertDialog = AlertDialog.Builder(context, R.style.CustomDialog)
         .setView(reportSelectBinding.root)
         .create()
+
     customAlertDialog.show()
-    reportSelectBinding.txReport.setOnClickListener {
-        showDialog()
+    reportSelectBinding.reportContainer.setOnClickListener {
+        onReportClicked()
+        customAlertDialog.dismiss()
+    }
+
+    reportSelectBinding.blockContainer.setOnClickListener {
+        onBlockClicked()
         customAlertDialog.dismiss()
     }
 }

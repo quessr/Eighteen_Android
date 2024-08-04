@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="SpUsage">
 
     <style name="pretendard_regular_20">
         <item name="android:fontFamily">@font/pretendard_regular</item>
-        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="pretendard_regular_16">
         <item name="android:fontFamily">@font/pretendard_regular</item>
-        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="pretendard_regular_14">
         <item name="android:fontFamily">@font/pretendard_regular</item>
-        <item name="android:textSize" tools:ignore="SpUsage">14dp</item>
+        <item name="android:textSize">14dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
 
     </style>
 
     <style name="pretendard_regular_13">
         <item name="android:fontFamily">@font/pretendard_regular</item>
-        <item name="android:textSize" tools:ignore="SpUsage">13dp</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="pretendard_regular_12">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="pretendard_bold_32">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">32dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="pretendard_bold_20">
         <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="pretendard_bold_16">
         <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="pretendard_bold_14">
         <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize" tools:ignore="SpUsage">14dp</item>
+        <item name="android:textSize">14dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="pretendard_bold_13">
         <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize" tools:ignore="SpUsage">13dp</item>
+        <item name="android:textSize">13dp</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 </resources>

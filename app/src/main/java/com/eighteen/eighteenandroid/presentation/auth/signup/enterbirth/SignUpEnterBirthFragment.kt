@@ -5,9 +5,18 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterBirthBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.common.WebViewUrl
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.DatePickerDialogFragment
+import java.util.Calendar
 
 class SignUpEnterBirthFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterBirthBinding>(FragmentSignUpEnterBirthBinding::inflate) {
+
+    override val onMovePrevPageAction: () -> Unit = {
+        signUpViewModelContentInterface.nickName = ""
+        super.onMovePrevPageAction.invoke()
+    }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpEnterBirth_to_fragmentSignUpEnterSchool)
     }
@@ -20,9 +29,48 @@ class SignUpEnterBirthFragment :
     )
 
     override fun initView() {
-        //fixme 네비게이션 테스트 코드 삭제
-        binding.tvTest.setOnClickListener {
-            onMoveNextPageAction.invoke()
+        setCalendar(calendar = signUpViewModelContentInterface.birth)
+        bind {
+            tvBtnSelectBirth.setOnClickListener {
+                showDialogFragment(
+                    DatePickerDialogFragment.newInstance(
+                        requestKey = DATE_PICKER_REQUEST_KEY,
+                        title = getString(R.string.sign_up_enter_birth_select_birth)
+                    )
+                )
+            }
+            tvBtnSeeTermsOfService.setOnClickListener {
+                signUpViewModelContentInterface.actionOpenWebViewFragment(url = WebViewUrl.TERMS_OF_SERVICE)
+            }
         }
+        initFragmentResultListener()
+    }
+
+    private fun initFragmentResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            DATE_PICKER_REQUEST_KEY,
+            viewLifecycleOwner,
+            object : DatePickerDialogFragment.DatePickerResultListener() {
+                override fun onConfirmResult(year: Int, month: Int, day: Int) {
+                    val calendar = Calendar.getInstance().apply { set(year, month, day) }
+                    setCalendar(calendar = calendar)
+                    signUpViewModelContentInterface.birth = calendar
+                }
+            })
+    }
+
+    private fun setCalendar(calendar: Calendar?) {
+        binding.tvBtnSelectBirth.text = calendar?.let {
+            "${it.get(Calendar.YEAR)}년 ${it.get(Calendar.MONTH)}월 ${it.get(Calendar.DATE)}일"
+        } ?: getString(R.string.sign_up_enter_birth_select_birth)
+        signUpViewModelContentInterface.setNextButtonModel(
+            signUpNextButtonModel = signUpNextButtonModel.copy(
+                isEnabled = calendar != null
+            )
+        )
+    }
+
+    companion object {
+        private const val DATE_PICKER_REQUEST_KEY = "date_picker_request_key"
     }
 }

@@ -8,15 +8,59 @@
     <string name="main_today_teen">오늘의 인기 Teen</string>
     <string name="tag_exercise">운동</string>
     <string name="tag_beauty">외모</string>
+    <string name="login">로그인</string>
+    <string name="korea">대한민국</string>
+    <string name="terms_of_service">서비스 약관</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="confirm">확인</string>
 
     <!-- 로그인/회원가입 -->
+    <string name="sign_up_login_title">가입하기</string>
+    <string name="sign_up_login_tip">프로필을 만들어 나의 사진을 자랑하고\nTEEN에서 경쟁해보세요</string>
+    <string name="sign_up_login_with_phone_number">전화번호로 회원가입</string>
+    <string name="sign_up_login_notice_agreed">대한민국에서 위치한 계정으로 계속하면\n당사의 서비스 약관의 동의하고\n개인정보 처리방침을 읽었음을 인정하는 것입니다.</string>
+    <string name="sign_up_login_check_has_account">이미 계정이 있으신가요?</string>
+
     <string name="sign_up_next">다음으로</string>
     <string name="sign_up_pass">건너뛰기</string>
     <string name="sign_up_start">시작하기</string>
+
+    <string name="sign_up_enter_phone_number_title">번호를 입력해주세요</string>
+    <string name="sign_up_enter_phone_number_get_auth_code">인증 코드 받기</string>
+
+    <string name="sign_up_enter_auth_code_title">6자리 코드 입력</string>
+    <string name="sign_up_enter_auth_code_resend_tip">코드를 받지 못하셨나요? 다시 전송해보세요!</string>
+    <string name="sign_up_enter_auth_code_resend">다시 전송하기</string>
+
+    <string name="sign_up_terms_of_service_title">사용 약관</string>
+    <string name="sign_up_terms_of_service_agree_all">모두 동의</string>
+    <string name="sign_up_terms_of_service_agree_terms_of_service">서비스 약관에 동의 (필수)</string>
+    <string name="sign_up_terms_of_service_agree_privacy_policy">개인 정보 수집 및 사용에 동의 (필수)</string>
+    <string name="sign_up_terms_of_service_agree_notification">인기 콘텐츠 및 알림 수신 동의 (선택)</string>
+    <string name="sign_up_terms_of_service_agree_notification_description">A-TEEN에서 인기 콘텐츠 및 프로모션에 대한 알림을 받습니다. 언제든지 설정을 검토하고 편집할 수 있습니다. 동의를 하지 않아도 A-TEEN 서비스 사용이 제한되지 않습니다.</string>
+    <string name="sign_up_terms_of_service_see_detail">세부 정보 보기</string>
+
+    <string name="sign_up_enter_id_title">반가워요! :)\n사용하실 아이디를 입력해주세요</string>
+    <string name="sign_up_enter_id_error_wrong_input">소문자 알파벳 또는 숫자만 입력하실 수 있습니다.</string>
+    <string name="sign_up_enter_id_error_length">4~11자리만 입력하실 수 있습니다.</string>
+    <string name="sign_up_enter_id_tip">소문자 알파벳 또는 숫자 (4~11자리)\n아이디는 이후에 변경할 수 없습니다.</string>
+    <string name="sign_up_enter_id_error_duplicated">중복된 아이디 입니다.</string>
+
+    <string name="sign_up_enter_nickname_title">A-TEEN에서 쓰일\n이름 혹은 닉네임을 알려주세요</string>
+    <string name="sign_up_enter_nickname_error_wrong_input">한글/영어/숫자만 입력하실 수 있습니다.</string>
+    <string name="sign_up_enter_nickname_error_length">2~8자리만 입력하실 수 있습니다.</string>
+    <string name="sign_up_enter_nickname_tip">특수문자를 제외한 한글/영어/숫자 (2~8자리)\n* 추후 언제든 수정 가능합니다.</string>
+
+    <string name="sign_up_enter_birth_title">당신의\n생년월일을 알려주세요!</string>
+    <string name="sign_up_enter_birth_select_birth">태어난 날을 선택해주세요</string>
+    <string name="sign_up_enter_birth_see_terms_of_service">서비스 약관 바로 보기</string>
+
+    <string name="sign_up_enter_school_title">다니고 있는\n학교를 알려주세요</string>
+
     <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
+    <string name="sign_up_completed_title">등록이 완료되었어요!\n이제 A-TEEN을 시작해보세요 :)</string>
 
-    <!--프로필 메인-->
     <string name="main_about_teen">About A-Teen</string>
     <string name="about_teen_title">Teen</string>
     <string name="about_teen_detail">친구들의 프로필을\n투표해보세요!</string>

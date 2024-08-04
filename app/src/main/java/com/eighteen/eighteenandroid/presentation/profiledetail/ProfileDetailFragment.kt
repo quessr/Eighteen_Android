@@ -12,10 +12,9 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
-import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailModel
+import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 class ProfileDetailFragment() :
@@ -131,15 +130,14 @@ class ProfileDetailFragment() :
         val image3 =
             "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
         val testMedias = listOf(
-            MediaDetailModel.Video("1", "https://picsum.photos/id/23/200/300", video1),
-            MediaDetailModel.Video("2", "https://picsum.photos/id/24/200/300", video2),
-            MediaDetailModel.Image("3", image1),
-            MediaDetailModel.Video("4", "https://picsum.photos/id/25/200/300", video3),
-            MediaDetailModel.Image("5", image2),
-            MediaDetailModel.Image("6", image3),
+            MediaDetailMediaModel.Video("1", video1),
+            MediaDetailMediaModel.Video("2", video2),
+            MediaDetailMediaModel.Image("3", image1),
+            MediaDetailMediaModel.Video("4", video3),
+            MediaDetailMediaModel.Image("5", image2),
+            MediaDetailMediaModel.Image("6", image3),
         )
-        val testFlow = flowOf(testMedias)
-        mediaDetailViewModel.setMediasFlow(testFlow)
+        mediaDetailViewModel.setMedias(medias = testMedias)
     }
 
     /**
@@ -149,6 +147,3 @@ class ProfileDetailFragment() :
         showDialogFragment(MediaDetailDialogFragment())
     }
 }
-
-
-

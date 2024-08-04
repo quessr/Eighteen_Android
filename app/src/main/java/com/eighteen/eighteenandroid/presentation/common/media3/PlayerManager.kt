@@ -2,9 +2,11 @@ package com.eighteen.eighteenandroid.presentation.common.media3
 
 import android.content.Context
 import androidx.annotation.CallSuper
+import androidx.annotation.OptIn
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 
 /**
@@ -47,9 +49,10 @@ open class PlayerManager(
         release()
     }
 
+    @OptIn(UnstableApi::class)
     open fun play(mediaInfo: MediaInfo) {
         player.repeatMode = mediaInfo.repeatMode
-        if (mediaInfo.id == targetMediaInfo?.id) {
+        if (mediaInfo.id == targetMediaInfo?.id && mediaInfo.resizeMode == targetMediaInfo?.resizeMode) {
             player.play()
             return
         }
@@ -63,6 +66,7 @@ open class PlayerManager(
         }
         player.prepare()
         player.play()
+        mediaInfo.mediaView.playerView.resizeMode = mediaInfo.resizeMode
         mediaInfo.mediaView.setPlayer(player)
     }
 
@@ -100,6 +104,10 @@ open class PlayerManager(
         player.seekTo(positionMs)
     }
 
+    fun setVolume(isVolumeOn: Boolean) {
+        player.volume = if (isVolumeOn) DEFAULT_VOLUME else 0f
+    }
+
     private fun release() {
         targetMediaInfo = null
         player.release()
@@ -108,4 +116,8 @@ open class PlayerManager(
     protected data class PlayingInfo(
         val positionMs: Long = 0L
     )
+
+    companion object {
+        private const val DEFAULT_VOLUME = 1f
+    }
 }

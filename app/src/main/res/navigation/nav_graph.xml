@@ -63,6 +63,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragmentChat"
+        android:name="com.eighteen.eighteenandroid.presentation.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+
+    <fragment
         android:id="@+id/fragmentMyProfile"
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.MyProfileFragment"
         android:label="fragment_my_profile"

@@ -1,3 +1,36 @@
+import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
+import java.util.Locale
+
+//https://github.com/google/dagger/issues/4049#issuecomment-1837479042 참고
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        afterEvaluate {
+            project.tasks.getByName("ksp${variant.name.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            }}Kotlin") {
+                val dataBindingTask =
+                    try {
+                        val taskName = "dataBindingGenBaseClasses${variant.name.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        }}"
+                        project.tasks.getByName(taskName) as DataBindingGenBaseClassesTask
+                    } catch (e: UnknownTaskException) {
+                        return@getByName
+                    }
+
+                project.tasks.getByName("ksp${variant.name.capitalize()}Kotlin") {
+                    (this as AbstractKotlinCompileTool<*>).setSource(dataBindingTask.sourceOutFolder)
+                }
+            }
+        }
+    }
+}
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")

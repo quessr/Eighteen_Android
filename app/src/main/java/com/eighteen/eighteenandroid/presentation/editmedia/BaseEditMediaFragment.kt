@@ -19,6 +19,5 @@ abstract class BaseEditMediaFragment<VB : ViewBinding>(bindingFactory: (LayoutIn
 
     companion object {
         const val EDIT_MEDIA_POP_DESTINATION_ID_KEY = "edit_media_pop_destination_id_key"
-        const val EDIT_MEDIA_RESULT_KEY = "edit_media_result_key"
     }
 }

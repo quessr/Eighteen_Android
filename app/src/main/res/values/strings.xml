@@ -13,6 +13,20 @@
     <string name="terms_of_service">서비스 약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>
     <string name="confirm">확인</string>
+    <string name="add_external_link">외부 링크 추가</string>
+    <string name="remove">삭제</string>
+    <string name="mbti_extroversion">외향형</string>
+    <string name="mbti_introversion">내향형</string>
+    <string name="mbti_sensing">감각형</string>
+    <string name="mbti_intuition">직관형</string>
+    <string name="mbti_thinking">사고형</string>
+    <string name="mbti_feeling">감정형</string>
+    <string name="mbti_judging">판단형 (체계적)</string>
+    <string name="mbti_perceiving">인식형 (융통성)</string>
+    <string name="completed">완료</string>
+    <string name="pass">건너뛰기</string>
+    <string name="view_expand">펼쳐서 보기</string>
+    <string name="fold">접기</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>
@@ -61,6 +75,8 @@
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
     <string name="sign_up_completed_title">등록이 완료되었어요!\n이제 A-TEEN을 시작해보세요 :)</string>
 
+    <string name="edit_media_crop_image_complete">등록 완료</string>
+
     <string name="main_about_teen">About A-Teen</string>
     <string name="about_teen_title">Teen</string>
     <string name="about_teen_detail">친구들의 프로필을\n투표해보세요!</string>
@@ -86,6 +102,34 @@
     <string name="report_completed_content">해당 프로필은\n더이상 표시되지 않아요</string>
     <string name="report_completed_button_title">알겠어요!</string>
 
+    <!-- 내 프로필 -->
+    <string name="my_profile_title">내 프로필</string>
+    <string name="my_profile_have_a_nice_day">%s 님\n오늘도 좋은 하루 보내세요!</string>
+    <string name="my_profile_edit_image">사진 수정</string>
+    <string name="my_profile_age">%d세</string>
+    <string name="my_profile_badge">배지</string>
+    <string name="my_profile_badge_count">%d개</string>
+    <string name="my_profile_teen">TEEN</string>
+    <string name="my_profile_my_link">내 링크</string>
+    <string name="my_profile_my_link_empty">등록된 링크가 없습니다.</string>
+    <string name="my_profile_add_link_url_hint">http://example.com</string>
+    <string name="my_profile_add_link_name_hint">제목</string>
+    <string name="my_profile_introduce_myself">자기 소개</string>
+    <string name="my_profile_introduce_empty">등록된 소개글이 없습니다.</string>
+    <string name="my_profile_edit_introduce_title">자기소개 정보 수정</string>
+    <string name="my_profile_edit_introduce_mbti_description">당신의 mbti가 무엇인가요?</string>
+    <string name="my_profile_edit_introduce_description_description">당신에 대한 소개 글을 적어주세요.</string>
+    <string name="my_profile_edit_introduce_description_hint">간단한 자기 소개글을 작성해주세요\nex) 저의 취미는 운동이에요</string>
+    <string name="my_profile_ten_of_qna">10문 10답</string>
+    <string name="my_profile_ten_of_qna_empty">등록된 문답이 없습니다.</string>
+    <string name="my_profile_edit_ten_of_qna_title">10문 10답 정보 수정</string>
+    <string name="my_profile_edit_ten_of_qna_description">나를 소개할 수 있는\n질문을 선택해서 답해주세요 :)</string>
+    <string name="my_profile_edit_ten_of_qna_min_count">*최소 3개</string>
+    <string name="my_profile_edit_ten_of_qna_save">저장 하기</string>
+    <string name="my_profile_edit_ten_of_qna_add">질문 추가하기</string>
+    <string name="my_profile_edit_ten_of_qna_hint">질문에 관한 간단한 답을 작성해주세요</string>
+    <string name="my_profile_edit_ten_of_qna_select_title">마음에 드는 질문을 선택해주세요</string>
+
     <string name="time_min_sec">"%02d:%02d"</string>
 
     <!--프로필 디테일-->
@@ -105,8 +149,6 @@
     <string name="profile_detail_badge_count">10개</string>
     <string name="profile_detail_teen">TEEN</string>
     <string name="profile_detail_teen_award">5월 2주차 우승</string>
-
-
 
 
 </resources>

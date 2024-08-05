@@ -4,10 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpChatRoom"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvChatRoom"
         android:layout_width="match_parent"
         android:layout_height="85dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

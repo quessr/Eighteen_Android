@@ -10,8 +10,9 @@
         android:layout_width="42dp"
         android:layout_height="49dp"
         android:layout_marginVertical="18dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="33dp"
         app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -70,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="33dp"
         android:textColor="@color/grey_01"
         app:layout_constraintBottom_toTopOf="@id/tvCount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="33dp"
         android:layout_marginBottom="18dp"
         android:background="@drawable/bg_oval_main_color"
         android:gravity="center"
@@ -95,4 +96,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTime"
         tools:text="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/grey_03"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

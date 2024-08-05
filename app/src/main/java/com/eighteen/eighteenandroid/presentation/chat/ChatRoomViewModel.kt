@@ -1,22 +1,39 @@
 package com.eighteen.eighteenandroid.presentation.chat
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.ChatRoom
+import com.eighteen.eighteenandroid.presentation.chat.model.ChatRoomsModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor() : ViewModel() {
-    private val _chatRoomsStateFlow =
+    private val chatRoomsStateFlow =
         MutableStateFlow<ModelState<List<ChatRoom>>>(ModelState.Empty())
-
-    val chatRoomsStateFlow = _chatRoomsStateFlow.asStateFlow()
+    private val keywordStateFlow = MutableStateFlow("")
 
     private val swipeStateMap = HashMap<String, Boolean>()
+
+    val chatRoomWithKeywordStateFlow =
+        combine(chatRoomsStateFlow, keywordStateFlow) { chatRoom, keyword ->
+            val filteredChatRooms =
+                chatRoom.data?.filter { it.name.contains(keyword, true) } ?: emptyList()
+            chatRoom.copyWithData(
+                ChatRoomsModel(
+                    keyword = keyword,
+                    chatRooms = filteredChatRooms
+                )
+            )
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ModelState.Empty())
 
     fun getSwipeState(chatRoomId: String) = swipeStateMap[chatRoomId] ?: false
 
@@ -29,10 +46,18 @@ class ChatRoomViewModel @Inject constructor() : ViewModel() {
         swipeStateMap.remove(chatRoomId)
     }
 
+    fun setKeyword(keyword: String) {
+        keywordStateFlow.value = keyword
+    }
+
     init {
         //TODO test 데이터 제거
-        _chatRoomsStateFlow.value = ModelState.Success(List(50) {
-            ChatRoom("$it", 123, 124, Date(), Date(), it, "message $it", Date())
-        })
+        viewModelScope.launch {
+            delay(2000)
+            chatRoomsStateFlow.value = ModelState.Success(data = List(50) {
+                ChatRoom("$it", 123, 124, Date(), Date(), it, "message $it", Date(), name = "$it")
+            })
+        }
+
     }
 }

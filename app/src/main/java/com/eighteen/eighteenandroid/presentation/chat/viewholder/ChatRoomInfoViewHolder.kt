@@ -15,8 +15,7 @@ class ChatRoomInfoViewHolder(private val binding: ItemChatRoomInfoBinding) :
                 ivChatRoomThumbnail,
                 "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
             )
-            //TODO 상대 이름 추가
-            tvName.text = model.receiverNo.toString()
+            tvName.text = model.name
             tvLastChat.text = model.message
             tvCount.text = model.unreadMessageCount.toString()
             //TODO 시간포맷 적용

@@ -10,5 +10,6 @@ data class ChatRoom(
     val updatedAt: Date,
     val unreadMessageCount: Int,
     val message: String,
-    val messageCreatedAt: Date
+    val messageCreatedAt: Date,
+    val name: String
 )

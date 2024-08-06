@@ -1,7 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import androidx.lifecycle.ViewModel
-import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +18,9 @@ class ProfileDetailViewModel : ViewModel() {
     private val _currentPosition = MutableStateFlow(0)
     val currentPosition: StateFlow<Int> get() = _currentPosition
 
+    private val _mediaItems = MutableStateFlow<List<ProfileDetailModel.MediaItem>>(emptyList())
+    val mediaItems: StateFlow<List<ProfileDetailModel.MediaItem>> get() = _mediaItems
+
 
 
     companion object {
@@ -27,6 +29,10 @@ class ProfileDetailViewModel : ViewModel() {
 
     fun setItems(newItems: List<ProfileDetailModel>) {
         _items.value = newItems
+    }
+
+    fun setMediaItems(mediaItems: List<ProfileDetailModel.MediaItem>) {
+        _mediaItems.value = mediaItems
     }
 
     fun setCurrentPosition(position: Int) {

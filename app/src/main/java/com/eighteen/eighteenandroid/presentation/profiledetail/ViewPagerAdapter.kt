@@ -5,10 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
+import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 
-class ViewPagerAdapter(private val items: List<String>) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
+class ViewPagerAdapter(
+    private val items: List<ProfileDetailModel.MediaItem>,
+) :
+    RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewPagerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.page_item, parent, false)
         return ViewPagerViewHolder(view)
@@ -20,11 +25,12 @@ class ViewPagerAdapter(private val items: List<String>) : RecyclerView.Adapter<V
         holder.bind(items[position])
     }
 
-    class ViewPagerViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ViewPagerViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.ImageView)
 
-        fun bind(url: String) {
-            ImageLoader.get().loadUrl(imageView = imageView, url = url)
+        fun bind(mediaItem: ProfileDetailModel.MediaItem) {
+            ImageLoader.get().loadUrl(imageView, mediaItem.url)
         }
     }
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
@@ -15,13 +16,14 @@ import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
+import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
 class ProfileDetailAdapter(
-    private val viewModel: ProfileDetailViewModel
+    private val viewModel: ProfileDetailViewModel,
+    private val onInitPlayerManager: (ViewPager2) -> Unit
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
         val context = parent.context
@@ -43,7 +45,8 @@ class ProfileDetailAdapter(
                         viewModel.setCurrentPosition(currentPosition)
                     }, onLikeClickCallback = {
                         viewModel.toggleLike()
-                    })
+                    }
+                ).also { holder -> onInitPlayerManager(holder.binding.viewPager) }
             }
 
             ITEM_TYPE_BADGE_AND_TEEN -> {

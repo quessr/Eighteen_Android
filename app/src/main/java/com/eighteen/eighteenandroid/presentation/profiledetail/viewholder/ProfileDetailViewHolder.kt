@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -35,14 +36,14 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
     class Images(
         val binding: ItemProfileDetailImagesWithLikeBinding,
         private val onPageChangeCallback: (Int) -> Unit,
-        private val onLikeClickCallback: () -> Unit
+        private val onLikeClickCallback: () -> Unit,
     ) :
         ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val profileImages = profileDetailModel as? ProfileDetailModel.ProfileImages
 
             profileImages?.let {
-                val adapter = ViewPagerAdapter(it.imageUrl)
+                val adapter = ViewPagerAdapter(it.mediaItems)
                 binding.viewPager.adapter = adapter
                 TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
 
@@ -51,6 +52,9 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                         super.onPageSelected(position)
                         // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트
                         onPageChangeCallback(position)
+
+                        // 현재 페이지의 isVideo 값(동영상 여부)에 따라 ivPlay 가시성 설정
+                        binding.ivPlay.isVisible = it.mediaItems[position].isVideo
                     }
                 })
 

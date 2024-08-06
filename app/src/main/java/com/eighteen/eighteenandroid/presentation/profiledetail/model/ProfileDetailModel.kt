@@ -10,9 +10,14 @@ sealed class ProfileDetailModel {
         val school: String,
     ) : ProfileDetailModel()
 
+    data class MediaItem(
+        val url: String,
+        val isVideo: Boolean
+    )
+
     data class ProfileImages(
         override val id: String,
-        val imageUrl: List<String>,
+        val mediaItems: List<MediaItem>,
         var currentPosition: Int = 0,
         val likeCount: Int,
         val isLiked: Boolean = false

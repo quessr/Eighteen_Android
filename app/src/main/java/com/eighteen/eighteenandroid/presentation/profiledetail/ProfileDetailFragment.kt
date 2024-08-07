@@ -27,7 +27,9 @@ import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMe
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.view.clicks
 
 class ProfileDetailFragment() :
     BaseFragment<FragmentProfileDetailBinding>(FragmentProfileDetailBinding::inflate) {
@@ -35,8 +37,6 @@ class ProfileDetailFragment() :
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
     private val profileDetailViewModel by viewModels<ProfileDetailViewModel>()
 
-    private lateinit var adapter: ProfileDetailAdapter
-    private lateinit var viewPagerPlayerManager: ViewPagerPlayerManager
     private lateinit var mediaItems: List<ProfileDetailModel.MediaItem>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,29 +92,7 @@ class ProfileDetailFragment() :
     }
 
     private fun setupAdapter() {
-//        adapter = ProfileDetailAdapter(profileDetailViewModel)
-        adapter = ProfileDetailAdapter(profileDetailViewModel) { viewPager2 ->
-            initPlayerManager(viewPager2)
-        }
-
-        bind {
-            profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            profileDetailRecyclerview.adapter = adapter
-            profileDetailRecyclerview.itemAnimator = null
-        }
-    }
-
-    private fun initPlayerManager(viewPager2: ViewPager2) {
-        viewPagerPlayerManager = context?.let {
-            ViewPagerPlayerManager(
-                viewPager2 = viewPager2,
-                lifecycleOwner = viewLifecycleOwner,
-                context = it
-            )
-        }!!
-
-        // ViewPager2의 페이지 변경 이벤트를 감지하여 ivMute의 가시성 조절
-        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        val pageCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val mediaItems = profileDetailViewModel.mediaItems.value
@@ -123,14 +101,24 @@ class ProfileDetailFragment() :
                     binding.ivMute.isVisible = mediaItem.isVideo
                 }
             }
-        })
+        }
+
+
+        bind {
+            profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+            profileDetailRecyclerview.adapter =
+                ProfileDetailAdapter(profileDetailViewModel, viewLifecycleOwner, pageCallback)
+            profileDetailRecyclerview.itemAnimator = null
+        }
     }
 
     private fun initViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 profileDetailViewModel.items.collectLatest { details ->
-                    adapter.submitList(details)
+                    (binding.profileDetailRecyclerview.adapter as? ProfileDetailAdapter)?.submitList(
+                        details
+                    )
                 }
             }
         }
@@ -138,7 +126,8 @@ class ProfileDetailFragment() :
 
     private fun setupRecyclerViewScrollListener() {
         bind {
-            profileDetailRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            profileDetailRecyclerview.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val viewPagerPosition = findViewPagerPosition()

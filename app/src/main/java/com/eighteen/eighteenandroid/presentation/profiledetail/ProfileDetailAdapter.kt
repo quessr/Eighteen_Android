@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
@@ -22,7 +23,8 @@ import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.Profil
 
 class ProfileDetailAdapter(
     private val viewModel: ProfileDetailViewModel,
-    private val onInitPlayerManager: (ViewPager2) -> Unit
+    private val lifecycleOwner: LifecycleOwner,
+    private val pageCallbackForMute: ViewPager2.OnPageChangeCallback
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
@@ -45,8 +47,9 @@ class ProfileDetailAdapter(
                         viewModel.setCurrentPosition(currentPosition)
                     }, onLikeClickCallback = {
                         viewModel.toggleLike()
-                    }
-                ).also { holder -> onInitPlayerManager(holder.binding.viewPager) }
+                    }, lifecycleOwner = lifecycleOwner,
+                    pageCallbackForMute = pageCallbackForMute
+                )
             }
 
             ITEM_TYPE_BADGE_AND_TEEN -> {
@@ -99,18 +102,10 @@ class ProfileDetailAdapter(
         holder.onBind(getItem(position))
 
         if (holder is ProfileDetailViewHolder.Images) {
-            val profileImages = getItem(position) as? ProfileDetailModel.ProfileImages
-            profileImages.let {
                 holder.binding.viewPager.setCurrentItem(
                     viewModel.currentPosition.value,
                     false
                 ) // 저장된 위치로 설정
-
-//                holder.binding.tvLike.text = it?.likeCount.toString()
-//                holder.binding.ivLike.setImageResource(
-//                    if (it?.isLiked == true) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
-//                )
-            }
         }
 
 

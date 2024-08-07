@@ -1,9 +1,12 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
@@ -13,6 +16,7 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBin
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
+import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
 import com.eighteen.eighteenandroid.presentation.profiledetail.ViewPagerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -37,8 +41,29 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         val binding: ItemProfileDetailImagesWithLikeBinding,
         private val onPageChangeCallback: (Int) -> Unit,
         private val onLikeClickCallback: () -> Unit,
-    ) :
-        ProfileDetailViewHolder(binding) {
+        private val lifecycleOwner: LifecycleOwner,
+        private val pageCallbackForMute: ViewPager2.OnPageChangeCallback
+    ) : ProfileDetailViewHolder(binding) {
+        private val viewPagerPlayerManager: ViewPagerPlayerManager = ViewPagerPlayerManager(
+            viewPager2 = binding.viewPager,
+            lifecycleOwner = lifecycleOwner,
+            context = binding.root.context
+        )
+
+        init {
+            binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    Log.d("ProfileDetailViewHolder", "onPageSelected")
+                    // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트
+                    onPageChangeCallback(position)
+                }
+            })
+
+            binding.viewPager.registerOnPageChangeCallback(pageCallbackForMute)
+            binding.viewPager.offscreenPageLimit = 5
+        }
+
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val profileImages = profileDetailModel as? ProfileDetailModel.ProfileImages
 
@@ -46,17 +71,6 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 val adapter = ViewPagerAdapter(it.mediaItems)
                 binding.viewPager.adapter = adapter
                 TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
-
-                binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트
-                        onPageChangeCallback(position)
-
-                        // 현재 페이지의 isVideo 값(동영상 여부)에 따라 ivPlay 가시성 설정
-                        binding.ivPlay.isVisible = it.mediaItems[position].isVideo
-                    }
-                })
 
                 binding.ivLike.setImageResource(
                     if (it.isLiked) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
@@ -113,8 +127,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
     class QnaToggle(
         val binding: ItemSeeMoreBinding,
         private val toggleItems: (ProfileDetailModel.QnaToggle) -> Unit
-    ) :
-        ProfileDetailViewHolder(binding) {
+    ) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val toggle = profileDetailModel as? ProfileDetailModel.QnaToggle
             toggle?.let {

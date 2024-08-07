@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentChatBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import kotlinx.coroutines.launch
 
 //TODO 채팅방 입장, 나가기 dialog, 나가기
@@ -20,7 +21,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
             rvChatRooms.adapter = ChatRoomsAdapter(
                 setSwipeState = chatRoomViewModel::setSwipeState,
                 getSwipeState = chatRoomViewModel::getSwipeState,
-                onClickExit = ::onClickExit
+                onClickExit = ::onClickExitBtn
             )
             rvChatRooms.itemAnimator = null
             root.setOnClickListener {
@@ -34,6 +35,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
             }
         }
         initStateFlow()
+        initFragmentResultListener()
     }
 
     private fun initStateFlow() {
@@ -62,7 +64,27 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
         }
     }
 
-    private fun onClickExit(chatRoomId: String) {
-        //TODO 나가기 dialog
+    private fun onClickExitBtn(chatRoomId: String) {
+        val exitDialog = ChatRoomExitDialogFragment.newInstance(
+            requestKey = REQUEST_KEY_CHAT_ROOM_EXIT,
+            id = chatRoomId
+        )
+        showDialogFragment(exitDialog)
+    }
+
+    private fun initFragmentResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            REQUEST_KEY_CHAT_ROOM_EXIT,
+            viewLifecycleOwner,
+            object : ChatRoomExitDialogFragment.ResultListener() {
+                override fun onConfirm(id: String) {
+                    chatRoomViewModel.exitChatRoom(chatRoomId = id)
+                }
+            }
+        )
+    }
+
+    companion object {
+        private const val REQUEST_KEY_CHAT_ROOM_EXIT = "REQUEST_KEY_CHAT_ROOM_EXIT"
     }
 }

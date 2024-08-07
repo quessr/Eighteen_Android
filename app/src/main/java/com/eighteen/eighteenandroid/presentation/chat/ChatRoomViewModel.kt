@@ -43,7 +43,12 @@ class ChatRoomViewModel @Inject constructor() : ViewModel() {
 
     fun exitChatRoom(chatRoomId: String) {
         //TODO 채팅창 나가기 api 호출
+        if (chatRoomsStateFlow.value !is ModelState.Success) return
         swipeStateMap.remove(chatRoomId)
+        chatRoomsStateFlow.value =
+            ModelState.Success(chatRoomsStateFlow.value.data?.toMutableList()?.apply {
+                removeIf { it.chatRoomId == chatRoomId }
+            })
     }
 
     fun setKeyword(keyword: String) {

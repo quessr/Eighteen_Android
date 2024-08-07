@@ -1,6 +1,11 @@
 package com.eighteen.eighteenandroid.presentation.home
 
+import android.view.View
+import android.widget.ImageView
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
@@ -13,8 +18,10 @@ import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
+import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapterListener
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
 import com.eighteen.eighteenandroid.presentation.home.adapter.Tournament
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,45 +41,19 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private var aboutTeenList = listOf<AboutTeen>()
     private var tournamentList = listOf<Tournament>()
 
+    private lateinit var mainAdapterListener: MainAdapterListener
+
     override fun initView() {
         initChipGroup()
         initMain()
     }
 
     private fun initMainAdapter() {
+        initMainAdapterListener()
+
         mainAdapter = MainAdapter(
             context = requireContext(),
-            viewModel,
-            savePosition = { pos ->
-                viewModel.savedPosition = pos
-            },
-            onTournamentClicks = { tournament: Tournament ->
-                // 토너먼트 클릭
-                when (tournament) {
-                    Tournament.Exercise -> {
-                        // 운동
-                    }
-
-                    Tournament.Study -> {
-
-                    }
-                }
-            },
-            onUserClicks = { user: User ->
-                // 유저 클릭
-                // TODO. 유저 상세로 이동
-            },
-            onAboutTeenClicks = { title ->
-                // About Teen 클릭
-                // TODO. About Teen 상세로 이동
-            },
-            onTournamentMoreClicks = {
-                // 토너먼트 더보기
-                // TODO. 토너먼트 더보기로 이동
-            },
-            showUserReportSelectDialog = { user: User ->
-                showReportDialog(user)
-            }
+            listener = mainAdapterListener
         )
 
         bind {
@@ -97,6 +78,90 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         // 라이브데이터 값 바꾸고
 
         // 뷰 갱신
+    }
+
+    private fun initMainAdapterListener() {
+        mainAdapterListener = object : MainAdapterListener {
+            /**
+             * 유저 클릭, 상세로 이동
+             */
+            override fun onUserClicks(user: User) {
+                findNavController().navigate(R.id.action_fragmentMain_to_fragmentProfileDetail)   // 유저 상세로 이동
+            }
+
+            /**
+             * 유저 좋아요 클릭
+             */
+            override fun onUserLikeClicks(user: User) {
+                // TODO. User Like API 호출
+            }
+
+            /**
+             * 유저 채팅 버튼 클릭
+             */
+            override fun onUserChatClicks(user: User) {
+//                findNavController().navigate(R.id.action_fragmentMain_to_fragmentChat)
+            }
+
+            /**
+             * 유저 더보기 클릭 -> 신고, 차단 다이얼로그 보여지기
+             */
+            override fun onUserMoreClicks(itemView: View, user: User) {
+                // TODO. 차단이나 신고에 의한 UserID 필요
+                showReportSelectDialog(
+                    itemView,
+                    onReportClicked = {
+                        showDialogFragment(ReportDialogFragment.newInstance(user))
+                    },
+                    onBlockClicked = {}
+                )
+            }
+
+            /**
+             * About Teen 테마 선택
+             */
+            override fun onAboutTeenClicks(title: String) {
+                val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_bar)
+
+                when(title) {
+                    "Teen" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_teen
+                    "채팅" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_chat
+                    "토너먼트" -> {}
+                    "나만의 Teen" -> bottomNavigationView.selectedItemId = R.id.fragmentMyProfile
+                }
+            }
+
+            /**
+             * 토너먼트 클릭
+             */
+            override fun onTournamentClicks(tournament: Tournament) {
+                when(tournament) {
+                    is Tournament.Exercise -> {}
+                    is Tournament.Study -> {}
+                }
+            }
+
+            /**
+             * 토너먼트 더보기 클릭
+             */
+            override fun onTournamentMoreClicks() {
+//                findNavController().navigate(R.id.action_fragmentMain_to_fragmentTournament)
+            }
+
+            /**
+             * 이전에 보던 인기 Teen 유저로 이동
+             */
+            override fun scrollToPreviousUser(recyclerView: RecyclerView) {
+                recyclerView.smoothScrollToPosition(viewModel.savedPosition)
+            }
+
+            /**
+             * 인기 Teen 현재 보고있는 유저 위치 저장
+             */
+            override fun saveUserPosition(position: Int) {
+                viewModel.savedPosition = position
+            }
+        }
     }
 
     private fun initMain() {
@@ -255,16 +320,4 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             }
         }
     }
-
-    private fun showReportDialog(user: User) {
-        showReportSelectDialog(
-            context = requireContext(),
-            onReportClicked = {
-                // 신고 다이얼로그 보여주기
-                showDialogFragment(ReportDialogFragment.newInstance(user))
-            },
-            onBlockClicked = {}
-        )
-    }
-
 }

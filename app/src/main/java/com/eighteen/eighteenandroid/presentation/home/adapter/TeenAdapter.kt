@@ -22,14 +22,14 @@ import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserD
  */
 class TeenAdapter(
     private val context: Context,
-    private val showUserReportSelectDialog:(User) -> Unit
+    private val mainAdapterListener: MainAdapterListener
 ) : ListAdapter<User, TeenAdapter.TeenViewHolder>(UserDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeenViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemPopularTeenBinding.inflate(layoutInflater, parent,false)
 
-        return TeenViewHolder(itemBinding, showUserReportSelectDialog)
+        return TeenViewHolder(itemBinding, mainAdapterListener)
     }
 
     override fun onBindViewHolder(holder: TeenViewHolder, position: Int) {
@@ -38,29 +38,24 @@ class TeenAdapter(
 
     class TeenViewHolder(
         private val binding: ItemPopularTeenBinding,
-        private val showUserReportSelectDialog: (User) -> Unit
+        private val mainAdapterListener: MainAdapterListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: User, context: Context) {
+        fun bind(user: User, context: Context) {
             binding.run {
-                Glide.with(context).load(item.userImage).into(imgTodayTeen)
-                tvName.text = "${item.userName}, ${item.userAge}"
-                tvSchool.text = item.userSchoolName
-                initNavigation(binding.imgTodayTeen)
+                Glide.with(context).load(user.userImage).into(imgTodayTeen)
+                tvName.text = "${user.userName}, ${user.userAge}"
+                tvSchool.text = user.userSchoolName
+
+                binding.imgTodayTeen.setOnClickListener {
+                    mainAdapterListener.onUserClicks(user)
+                }
+
                 btnSetting.setOnClickListener {
-                    showUserReportSelectDialog(item)
+                    mainAdapterListener.onUserMoreClicks(btnSetting, user)
                 }
             }
         }
-
-        /** 유저 상세로 이동 Navigation */
-        private fun initNavigation(profileImageView: ImageView) {
-            profileImageView.setOnClickListener { view ->
-                val navController = Navigation.findNavController(view)
-                navController.navigate(R.id.action_fragmentMain_to_fragmentProfileDetail)
-            }
-        }
-
     }
 }

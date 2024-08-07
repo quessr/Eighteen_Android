@@ -5,6 +5,7 @@ import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
@@ -152,7 +153,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 이전에 보던 인기 Teen 유저로 이동
              */
             override fun scrollToPreviousUser(recyclerView: RecyclerView) {
-                recyclerView.smoothScrollToPosition(viewModel.savedPosition)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                layoutManager.scrollToPositionWithOffset(viewModel.savedPosition, 0)
+
+                // 부드러운 스크롤을 위해 post 사용
+                recyclerView.post {
+                    val targetView = layoutManager.findViewByPosition(viewModel.savedPosition)
+                    if (targetView != null) {
+                        val offset = recyclerView.width / 2 - targetView.width / 2
+                        layoutManager.scrollToPositionWithOffset(viewModel.savedPosition, offset)
+                    }
+                }
             }
 
             /**

@@ -207,26 +207,26 @@ class MainAdapter(
                     snapHelper.attachToRecyclerView(rvMainTeenPopularList)
 
                     val teenAdapter = TeenAdapter(context, listener)
-                    rvMainTeenPopularList.adapter = teenAdapter
+                    with(rvMainTeenPopularList) {
+                        adapter = teenAdapter
 
-                    rvMainTeenPopularList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                            super.onScrollStateChanged(recyclerView, newState)
-                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                val layoutManager = recyclerView.layoutManager
-                                val centerView = snapHelper.findSnapView(layoutManager)
-                                val pos = centerView?.let { layoutManager?.getPosition(it) }
-                                pos?.let {
-                                    // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
-                                    if(it > 0) listener.saveUserPosition(it)
+                        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                                super.onScrollStateChanged(recyclerView, newState)
+                                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                    val layoutManager = recyclerView.layoutManager
+                                    val centerView = snapHelper.findSnapView(layoutManager)
+                                    val pos = centerView?.let { layoutManager?.getPosition(it) }
+                                    pos?.let {
+                                        // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
+                                        listener.saveUserPosition(it)
+                                    }
                                 }
                             }
-                        }
-                    })
-
-                    listener.scrollToPreviousUser(rvMainTeenPopularList)
-
+                        })
+                    }
                     teenAdapter.submitList(userListView?.userList)
+                    listener.scrollToPreviousUser(rvMainTeenPopularList)
                 }
             }
         }

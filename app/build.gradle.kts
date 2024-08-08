@@ -157,4 +157,8 @@ dependencies {
 
     //ffmpeg
     implementation("com.arthenica:ffmpeg-kit-full:6.0-2")
+
+    // Flow Binding
+    val flowbinding_version = "1.2.0"
+    implementation("io.github.reactivecircus.flowbinding:flowbinding-android:${flowbinding_version}")
 }

@@ -4,12 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemPopularTeenBinding
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserDiffCallBack
@@ -20,10 +17,10 @@ import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserD
  * @date 05/08/2024
  * 오늘의 Teen & 또다른 Teen 목록에 대한 RecyclerView Adapter
  */
-class TeenAdapter(
+class PopularUserAdapter(
     private val context: Context,
     private val mainAdapterListener: MainAdapterListener
-) : ListAdapter<User, TeenAdapter.TeenViewHolder>(UserDiffCallBack()) {
+) : ListAdapter<User, PopularUserAdapter.TeenViewHolder>(UserDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeenViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -48,8 +45,16 @@ class TeenAdapter(
                 tvName.text = "${user.userName}, ${user.userAge}"
                 tvSchool.text = user.userSchoolName
 
-                binding.imgTodayTeen.setOnClickListener {
+                imgTodayTeen.setOnClickListener {
                     mainAdapterListener.onUserClicks(user)
+                }
+
+                btnChat.setOnClickListener {
+                    mainAdapterListener.onUserChatClicks(user)
+                }
+
+                btnLike.setOnClickListener {
+                    mainAdapterListener.onUserLikeClicks(user)
                 }
 
                 btnSetting.setOnClickListener {

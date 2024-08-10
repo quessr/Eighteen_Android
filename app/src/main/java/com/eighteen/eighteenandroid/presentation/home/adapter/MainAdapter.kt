@@ -1,6 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.home.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,7 @@ import com.eighteen.eighteenandroid.databinding.ItemMainPopularTeenListviewBindi
 import com.eighteen.eighteenandroid.databinding.ItemMainTournamentListviewBinding
 import com.eighteen.eighteenandroid.databinding.ItemTeenBinding
 import com.eighteen.eighteenandroid.domain.model.User
-import com.eighteen.eighteenandroid.presentation.home.MainViewModel
+import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.MainItemDiffCallBack
 
 interface MainAdapterListener {
@@ -49,6 +48,9 @@ interface MainAdapterListener {
 
     /** 이전에 보여진 유저 포지션 저장*/
     fun saveUserPosition(position: Int)
+
+    /** 현재 메인화면 스크롤 포지션 저장*/
+    fun saveScrollPosition(position: Int)
 }
 class MainAdapter(
     private val context: Context,
@@ -124,7 +126,7 @@ class MainAdapter(
             }
 
             is CommonViewHolder.UserViewHolder -> {
-                (getItem(position) as? MainItem.UserView)?.let { holder.bind(it) }
+                (getItem(position) as? MainItem.UserView)?.let { holder.bind(it, itemCount, position) }
             }
 
             is CommonViewHolder.AboutTeenListViewHolder -> {
@@ -159,12 +161,10 @@ class MainAdapter(
         binding: ViewBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        abstract fun bind(item: MainItem)
-
         class HeaderViewHolder(
             private val binding: ItemMainHeaderBinding
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val headerView = item as? MainItem.HeaderView ?: return
                 with(binding) {
                     tvHeader.text = headerView.text
@@ -177,7 +177,7 @@ class MainAdapter(
             private val binding: ItemMainHeaderMoreBinding,
             private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val headerMoreView = item as? MainItem.HeaderWithMoreView ?: return
                 with(binding) {
                     tvHeader.text = headerMoreView.text
@@ -199,16 +199,16 @@ class MainAdapter(
         ) : CommonViewHolder(binding) {
             private val snapHelper = PagerSnapHelper()
 
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val userListView = item as? MainItem.UserListView
 
                 with(binding) {
                     // SnapHelper 설정
                     snapHelper.attachToRecyclerView(rvMainTeenPopularList)
 
-                    val teenAdapter = TeenAdapter(context, listener)
+                    val popularUserAdapter = PopularUserAdapter(context, listener)
                     with(rvMainTeenPopularList) {
-                        adapter = teenAdapter
+                        adapter = popularUserAdapter
 
                         addOnScrollListener(object : RecyclerView.OnScrollListener() {
                             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -225,7 +225,7 @@ class MainAdapter(
                             }
                         })
                     }
-                    teenAdapter.submitList(userListView?.userList)
+                    popularUserAdapter.submitList(userListView?.userList)
                     listener.scrollToPreviousUser(rvMainTeenPopularList)
                 }
             }
@@ -236,18 +236,22 @@ class MainAdapter(
             private val binding: ItemTeenBinding,
             private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            @SuppressLint("SetTextI18n")
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem, itemCount: Int, position: Int) {
+                if(itemCount -1 == position) {
+                    itemView.setPadding(0, 0, 0, context.dp2Px(60))
+                }
                 val userView = item as? MainItem.UserView
                 with(binding) {
                     userView?.let {
                         val user = it.user
+                        val userName = "${user.userName}, ${user.userAge}"
                         tvSchool.text = user.userSchoolName
-                        tvName.text = "${user.userName}, ${user.userAge}"
+                        tvName.text = userName
                         Glide.with(context).load(user.userImage).into(imgTodayTeen) // 프로필 이미지
 
                         imgTodayTeen.setOnClickListener {
                             listener.onUserClicks(user)
+                            listener.saveScrollPosition(position)   // 현재 메인화면 스크롤 position 저장
                         }
                         btnChat.setOnClickListener {
                             listener.onUserChatClicks(user)
@@ -267,7 +271,7 @@ class MainAdapter(
             private val binding: ItemMainAboutTeenListviewBinding,
             private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 with(binding) {
                     val aboutTeenListView = item as? MainItem.AboutTeenListView
 
@@ -282,7 +286,7 @@ class MainAdapter(
             private val binding: ItemMainTournamentListviewBinding,
             private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val tournamentListView = item as? MainItem.TournamentListView
                 with(binding) {
                     val tournamentAdapter = TournamentAdapter(listener)
@@ -298,7 +302,7 @@ class MainAdapter(
         class DividerViewHolder(
             private val binding: ItemDividerBinding
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 // ...
             }
         }

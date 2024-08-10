@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_today_teen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_teen_dummy" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                android:src="@drawable/bg_gradient_top"
+                app:layout_constraintTop_toTopOf="@+id/img_today_teen" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                android:src="@drawable/bg_gradient_bottom"
+                app:layout_constraintBottom_toBottomOf="@+id/img_today_teen" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/pretendard_bold_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/tv_school"
+                app:layout_constraintStart_toStartOf="@id/tv_school"
+                tools:text="김 에스더, 16" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_school"
+                style="@style/pretendard_regular_13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="12dp"
+                android:drawableStart="@drawable/ic_profile_school"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/btn_setting"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="서울 중학교" />
+
+            <ImageButton
+                android:id="@+id/btn_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:src="@drawable/ic_profile_chat_btn"
+                app:layout_constraintBottom_toTopOf="@id/btn_like"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:src="@drawable/ic_profile_like_btn"
+                app:layout_constraintBottom_toTopOf="@id/btn_setting"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="26dp"
+                android:background="#00ff0000"
+                android:padding="12dp"
+                android:src="@drawable/ic_profile_setting_btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/btn_like"
+                app:layout_constraintStart_toStartOf="@id/btn_like" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,14 +50,13 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         val navController = navHostFragment.navController
+
         // 바텀 네비게이션과 NavController 연결
         binding.bottomNavigationBar.setupWithNavController(navController)
 
         // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val visibleNavigationIds = listOf(R.id.fragmentMain, R.id.fragmentMyProfile)
-            binding.bottomNavigationBar.isVisible = visibleNavigationIds.contains(destination.id)
-            binding.toolbar.root.isVisible = destination.id == R.id.fragmentMain
+            binding.bottomNavigationBar.isVisible = destination.id == R.id.fragmentMain
         }
     }
 

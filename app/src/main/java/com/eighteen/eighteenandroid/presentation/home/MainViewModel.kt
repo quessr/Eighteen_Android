@@ -5,10 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide.init
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
+import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,20 +21,55 @@ class MainViewModel @Inject constructor(
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-    init {
-        fetchUserData()
-    }
+    var savedPosition = 0
 
     private val _userData = MutableLiveData<List<User>>()
     val userData: LiveData<List<User>> = _userData
 
-    private fun fetchUserData() {
+    private val _mainItems = MutableLiveData<List<MainItem>>()
+    val mainItems: LiveData<List<MainItem>>
+        get() = _mainItems
+
+    init {
+        updateMain()
+    }
+
+    private fun updateMain() {
+        val items = mutableListOf<MainItem>()
+
+        // 둘 중 하나 에러나면 다시 전체 가져오기
+
         viewModelScope.launch {
-            userUseCase.invoke().onSuccess {
-                _userData.value = it
-            }.onFailure { e ->
-                Log.e(TAG, e.toString())
-            }
+            fetchUserData()
+//            val userDataState = fetchUserData().await()
+//            val aboutTeenDataState = fetchUserData().await()
+            // 토너먼트
+            // 1페이지
+
+//            if( userDataState is ModelState.Success && aboutTeenDataState is ModelState.Success ) {
+//
+//                // updateMain
+//            } else {
+//                // 에러화면
+//            }
+
+            _mainItems.value = items
+        }
+    }
+
+    /*fun 무한_스크롤() {
+        val items = mainItems.value // 기존 데이터
+        items.add(새로 받아온 놈들)
+        _mainItems.value = items
+    }*/
+
+    private suspend fun fetchUserData() = viewModelScope.async {
+        userUseCase.invoke().onSuccess {
+//            ModelState.Success(it)
+            _userData.value = it
+        }.onFailure { e ->
+            Log.e(TAG, e.toString())
+//            ModelState.Error(e)
         }
     }
 

@@ -22,33 +22,13 @@ fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = n
     dialogFragment.show(childFragmentManager, tag)
 }
 
-/** 신고하기 & 차단하기 선택 다이얼로그 */
-fun showReportSelectDialog(context: Context, onReportClicked: () -> Unit, onBlockClicked: () -> Unit) {
-    val reportSelectBinding = DialogReportSelectBinding.inflate(LayoutInflater.from(context))
-    val customAlertDialog = AlertDialog.Builder(context, R.style.CustomDialog)
-        .setView(reportSelectBinding.root)
-        .create()
-
-    customAlertDialog.show()
-    reportSelectBinding.reportContainer.setOnClickListener {
-        onReportClicked()
-        customAlertDialog.dismiss()
-    }
-
-    reportSelectBinding.blockContainer.setOnClickListener {
-        onBlockClicked()
-        customAlertDialog.dismiss()
-    }
-}
-
-/** 신고하기 & 차단하기 아이템 앵커뷰 */
-fun showReportSelectDialog(itemView: View, onReportClicked: () -> Unit, onBlockClicked: () -> Unit) {
+/** 신고하기 & 차단하기 아이템 앵커뷰 Left */
+fun showReportSelectDialogLeft(itemView: View, onReportClicked: () -> Unit, onBlockClicked: () -> Unit) {
     val reportSelectDialogView = LayoutInflater.from(itemView.context).inflate(R.layout.dialog_report_select, null)
-    val displayMetrics = itemView.context.resources.displayMetrics
 
     val popupWindow = PopupWindow(
         reportSelectDialogView,
-        (displayMetrics.density * 145).toInt(),
+        (itemView.context.dp2Px(145)),
         LinearLayout.LayoutParams.WRAP_CONTENT,
         true
     )
@@ -68,17 +48,43 @@ fun showReportSelectDialog(itemView: View, onReportClicked: () -> Unit, onBlockC
     reportSelectDialogView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     val popupWidth = reportSelectDialogView.measuredWidth
 
-    // X 오프셋 계산 (버튼 왼쪽에 표시)
-    val xOffset = -popupWidth - itemView.width -(displayMetrics.density * 18.5).toInt()
-
-    // Y 오프셋 계산 (버튼과 상단을 맞춤)
-    val yOffset = -itemView.height
+    val xOffset = -popupWidth - itemView.width - (itemView.context.dp2Px(18))
+    val yOffset = - (itemView.height * 2)
 
     // 팝업 창 표시
-    popupWindow.showAsDropDown(itemView, xOffset, yOffset - itemView.height)
+    popupWindow.showAsDropDown(itemView, xOffset, yOffset)
+}
+
+/** 신고하기 & 차단하기 아이템 앵커뷰 Left */
+fun showReportSelectDialogBottom(itemView: View, onReportClicked: () -> Unit, onBlockClicked: () -> Unit) {
+    val reportSelectDialogView = LayoutInflater.from(itemView.context).inflate(R.layout.dialog_report_select, null)
+
+    val popupWindow = PopupWindow(
+        reportSelectDialogView,
+        (itemView.context.dp2Px(145)),
+        LinearLayout.LayoutParams.WRAP_CONTENT,
+        true
+    )
+
+    // 팝업 메뉴 아이템에 대한 클릭 리스너 설정
+    reportSelectDialogView.findViewById<LinearLayoutCompat>(R.id.report_container).setOnClickListener {
+        onReportClicked()
+        popupWindow.dismiss()
+    }
+
+    reportSelectDialogView.findViewById<LinearLayoutCompat>(R.id.block_container).setOnClickListener {
+        onBlockClicked()
+        popupWindow.dismiss()
+    }
+
+    // 팝업 뷰의 크기 측정
+    reportSelectDialogView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    val popupWidth = reportSelectDialogView.measuredWidth
+
+    val xOffset = -popupWidth
 
     // 팝업 창 표시
-//    popupWindow.showAsDropDown(itemView)
+    popupWindow.showAsDropDown(itemView, xOffset, 0)
 }
 
 fun <T : Parcelable> Fragment.getNavigationResult(key: String) =

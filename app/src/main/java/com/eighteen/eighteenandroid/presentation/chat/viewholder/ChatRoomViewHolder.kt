@@ -6,20 +6,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemChatRoomBinding
 import com.eighteen.eighteenandroid.domain.model.ChatRoom
-import com.eighteen.eighteenandroid.presentation.chat.ChatRoomAdapter
+import com.eighteen.eighteenandroid.presentation.chat.ChatAdapter
 
 class ChatRoomViewHolder(
     private val binding: ItemChatRoomBinding,
     private val setSwipeState: (String, Boolean) -> Unit,
     private val getSwipeState: (String) -> Boolean,
-    private val onClickExit: (String) -> Unit
+    private val onClickExit: (String) -> Unit,
+    private val onClickChatRoom: (String) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var targetModel: ChatRoom? = null
 
     fun onCreateViewHolder() {
         with(binding.rvChatRoom) {
-            adapter = ChatRoomAdapter(onClickExit = onClickExit)
+            adapter = ChatAdapter(onClickExit = onClickExit, onClickChatRoom = onClickChatRoom)
             val snapHelper = object : PagerSnapHelper() {
                 override fun findSnapView(layoutManager: RecyclerView.LayoutManager?): View? {
                     val exitViewWidth = resources.getDimensionPixelOffset(R.dimen.chat_exit_width)
@@ -40,7 +41,7 @@ class ChatRoomViewHolder(
         targetModel = model
         val position = if (getSwipeState(model.chatRoomId)) 1 else 0
         with(binding.rvChatRoom) {
-            (adapter as? ChatRoomAdapter)?.setData(chatRoom = model)
+            (adapter as? ChatAdapter)?.setData(chatRoom = model)
             scrollToPosition(position)
         }
     }

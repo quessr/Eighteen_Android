@@ -10,8 +10,11 @@ import com.eighteen.eighteenandroid.domain.model.ChatRoom
 import com.eighteen.eighteenandroid.presentation.chat.viewholder.ChatRoomExitViewHolder
 import com.eighteen.eighteenandroid.presentation.chat.viewholder.ChatRoomInfoViewHolder
 
-class ChatRoomAdapter(private val onClickExit: (String) -> Unit) :
-    Adapter<RecyclerView.ViewHolder>() {
+class ChatAdapter(
+    private val onClickExit: (String) -> Unit,
+    private val onClickChatRoom: (String) -> Unit
+) : Adapter<RecyclerView.ViewHolder>() {
+
     private var chatRoom: ChatRoom? = null
     fun setData(chatRoom: ChatRoom) {
         this.chatRoom = chatRoom
@@ -22,7 +25,7 @@ class ChatRoomAdapter(private val onClickExit: (String) -> Unit) :
         val layoutInflater = LayoutInflater.from(parent.context)
         return if (viewType == ITEM_TYPE_INFO) {
             val binding = ItemChatRoomInfoBinding.inflate(layoutInflater, parent, false)
-            ChatRoomInfoViewHolder(binding = binding)
+            ChatRoomInfoViewHolder(binding = binding, onClick = onClickChatRoom)
         } else {
             val binding = ItemChatRoomExitBinding.inflate(layoutInflater, parent, false)
             ChatRoomExitViewHolder(binding = binding, onClickExit = onClickExit)

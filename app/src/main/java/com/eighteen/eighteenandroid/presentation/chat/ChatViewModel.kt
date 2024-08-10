@@ -16,7 +16,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatRoomViewModel @Inject constructor() : ViewModel() {
+class ChatViewModel @Inject constructor() : ViewModel() {
     private val chatRoomsStateFlow =
         MutableStateFlow<ModelState<List<ChatRoom>>>(ModelState.Empty())
     private val keywordStateFlow = MutableStateFlow("")

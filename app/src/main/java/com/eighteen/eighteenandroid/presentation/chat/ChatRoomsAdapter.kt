@@ -11,7 +11,8 @@ import com.eighteen.eighteenandroid.presentation.chat.viewholder.ChatRoomViewHol
 class ChatRoomsAdapter(
     private val setSwipeState: (String, Boolean) -> Unit,
     private val getSwipeState: (String) -> Boolean,
-    private val onClickExit: (String) -> Unit
+    private val onClickExit: (String) -> Unit,
+    private val onClickChatRoom: (String) -> Unit
 ) : ListAdapter<ChatRoom, ChatRoomViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomViewHolder {
         val binding =
@@ -20,7 +21,8 @@ class ChatRoomsAdapter(
             binding = binding,
             setSwipeState = setSwipeState,
             getSwipeState = getSwipeState,
-            onClickExit = onClickExit
+            onClickExit = onClickExit,
+            onClickChatRoom = onClickChatRoom
         ).apply {
             onCreateViewHolder()
         }

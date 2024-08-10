@@ -5,11 +5,16 @@ import com.eighteen.eighteenandroid.databinding.ItemChatRoomInfoBinding
 import com.eighteen.eighteenandroid.domain.model.ChatRoom
 import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
 
-class ChatRoomInfoViewHolder(private val binding: ItemChatRoomInfoBinding) :
-    ViewHolder(binding.root) {
+class ChatRoomInfoViewHolder(
+    private val binding: ItemChatRoomInfoBinding,
+    private val onClick: (String) -> Unit
+) : ViewHolder(binding.root) {
 
     fun onBind(model: ChatRoom) {
         with(binding) {
+            root.setOnClickListener {
+                onClick.invoke(model.chatRoomId)
+            }
             //TODO 이미지 추가
             ImageLoader.get().loadUrl(
                 ivChatRoomThumbnail,

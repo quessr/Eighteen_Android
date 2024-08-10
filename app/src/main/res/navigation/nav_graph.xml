@@ -66,8 +66,18 @@
         android:id="@+id/fragmentChat"
         android:name="com.eighteen.eighteenandroid.presentation.chat.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
 
+        <action
+            android:id="@+id/action_fragmentChat_to_fragmentChatRoom"
+            app:destination="@id/fragmentChatRoom" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentChatRoom"
+        android:name="com.eighteen.eighteenandroid.presentation.chat.chatroom.ChatRoomFragment"
+        android:label="fragment_chat_room"
+        tools:layout="@layout/fragment_chat_room" />
     <fragment
         android:id="@+id/fragmentMyProfile"
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.MyProfileFragment"

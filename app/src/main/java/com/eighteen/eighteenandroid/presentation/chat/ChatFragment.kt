@@ -1,37 +1,41 @@
 package com.eighteen.eighteenandroid.presentation.chat
 
+import android.os.Bundle
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentChatBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.chat.chatroom.ChatRoomFragment.Companion.ARGUMENT_CHAT_ROOM_ID_KEY
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import kotlinx.coroutines.launch
 
-//TODO 채팅방 입장, 나가기 dialog, 나가기
 class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
 
-    private val chatRoomViewModel by viewModels<ChatRoomViewModel>()
+    private val chatViewModel by viewModels<ChatViewModel>()
     override fun initView() {
         bind {
             rvChatRooms.adapter = ChatRoomsAdapter(
-                setSwipeState = chatRoomViewModel::setSwipeState,
-                getSwipeState = chatRoomViewModel::getSwipeState,
-                onClickExit = ::onClickExitBtn
+                setSwipeState = chatViewModel::setSwipeState,
+                getSwipeState = chatViewModel::getSwipeState,
+                onClickExit = ::onClickExitBtn,
+                onClickChatRoom = ::onClickChatRoom
             )
             rvChatRooms.itemAnimator = null
             root.setOnClickListener {
                 hideKeyboardAndRemoveCurrentFocus()
             }
             etSearch.setText(
-                chatRoomViewModel.chatRoomWithKeywordStateFlow.value.data?.keyword ?: ""
+                chatViewModel.chatRoomWithKeywordStateFlow.value.data?.keyword ?: ""
             )
             etSearch.addTextChangedListener {
-                chatRoomViewModel.setKeyword(it?.run { toString() } ?: "")
+                chatViewModel.setKeyword(it?.run { toString() } ?: "")
             }
         }
         initStateFlow()
@@ -41,7 +45,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
     private fun initStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                chatRoomViewModel.chatRoomWithKeywordStateFlow.collect {
+                chatViewModel.chatRoomWithKeywordStateFlow.collect {
                     when (it) {
                         is ModelState.Loading -> {
                             //TODO 로딩
@@ -78,10 +82,17 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
             viewLifecycleOwner,
             object : ChatRoomExitDialogFragment.ResultListener() {
                 override fun onConfirm(id: String) {
-                    chatRoomViewModel.exitChatRoom(chatRoomId = id)
+                    chatViewModel.exitChatRoom(chatRoomId = id)
                 }
             }
         )
+    }
+
+    private fun onClickChatRoom(chatRoomId: String) {
+        val bundle = Bundle().apply {
+            putString(ARGUMENT_CHAT_ROOM_ID_KEY, chatRoomId)
+        }
+        findNavController().navigate(R.id.action_fragmentChat_to_fragmentChatRoom, bundle)
     }
 
     companion object {

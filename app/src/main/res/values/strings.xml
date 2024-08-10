@@ -30,6 +30,7 @@
     <string name="exit">나가기</string>
     <string name="no">아니요</string>
     <string name="yes">네</string>
+    <string name="send">보내기</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>
@@ -157,4 +158,5 @@
     <string name="chat_search_friend">친구를 검색해보세요</string>
     <string name="chat_empty_message">아직 도착한\n메시지가 없어요!</string>
     <string name="chat_exit_dialog_title">채팅방에서 나가시겠습니까?</string>
+    <string name="chat_room_input_hint">메시지를 보내보세요</string>
 </resources>

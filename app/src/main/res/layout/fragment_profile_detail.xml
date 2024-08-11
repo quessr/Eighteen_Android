@@ -71,7 +71,7 @@
         android:elevation="50dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_vote"
+            android:id="@+id/cl_like"
             android:layout_width="176dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
@@ -84,7 +84,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/iv_empty_heart"
+                android:id="@+id/iv_heart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_empty_heart"
@@ -97,10 +97,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
-                android:text="@string/profile_detail_vote"
+                android:text="@string/profile_detail_like"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_empty_heart"
+                app:layout_constraintStart_toEndOf="@id/iv_heart"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,7 +117,7 @@
             app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_social_links"
-            app:layout_constraintStart_toEndOf="@id/cl_vote"
+            app:layout_constraintStart_toEndOf="@id/cl_like"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView

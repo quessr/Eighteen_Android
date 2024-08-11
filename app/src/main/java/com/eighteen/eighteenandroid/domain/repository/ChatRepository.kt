@@ -4,7 +4,7 @@ import com.eighteen.eighteenandroid.domain.model.ChatMessage
 import com.eighteen.eighteenandroid.domain.model.ChatRoom
 
 interface ChatRepository {
-    suspend fun requestEnterChatRoom(
+    suspend fun requestChatMessages(
         chatRoomId: String,
         requestTime: String
     ): Result<List<ChatMessage>>

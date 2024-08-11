@@ -1,8 +1,10 @@
 package com.eighteen.eighteenandroid.data.repository.di
 
+import com.eighteen.eighteenandroid.data.repository.ChatRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.MessageRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.SchoolRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.UserRepositoryImpl
+import com.eighteen.eighteenandroid.domain.repository.ChatRepository
 import com.eighteen.eighteenandroid.domain.repository.MessageRepository
 import com.eighteen.eighteenandroid.domain.repository.SchoolRepository
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
@@ -26,4 +28,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSchoolRepository(schoolRepositoryImpl: SchoolRepositoryImpl): SchoolRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository
 }

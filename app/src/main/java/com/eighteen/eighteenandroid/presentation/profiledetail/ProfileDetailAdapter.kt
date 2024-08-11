@@ -103,7 +103,7 @@ class ProfileDetailAdapter(
 
         if (holder is ProfileDetailViewHolder.Images) {
                 holder.binding.viewPager.setCurrentItem(
-                    viewModel.currentPosition.value,
+                    viewModel.currentPosition,
                     false
                 ) // 저장된 위치로 설정
         }

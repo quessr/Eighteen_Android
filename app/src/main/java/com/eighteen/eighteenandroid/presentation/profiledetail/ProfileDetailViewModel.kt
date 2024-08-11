@@ -16,8 +16,8 @@ class ProfileDetailViewModel : ViewModel() {
     private val _qnaItems = MutableStateFlow<List<ProfileDetailModel.Qna>>(emptyList())
     val qnaItems: StateFlow<List<ProfileDetailModel.Qna>> get() = _qnaItems
 
-    private val _currentPosition = MutableStateFlow(0)
-    val currentPosition: StateFlow<Int> get() = _currentPosition
+    private var _currentPosition = 0
+    val currentPosition: Int get() = _currentPosition
 
     private val _mediaItems = MutableStateFlow<List<ProfileDetailModel.MediaItem>>(emptyList())
     val mediaItems: StateFlow<List<ProfileDetailModel.MediaItem>> get() = _mediaItems
@@ -34,11 +34,11 @@ class ProfileDetailViewModel : ViewModel() {
     }
 
     fun setCurrentPosition(position: Int) {
-        _currentPosition.value = position
+        _currentPosition = position
     }
 
     fun restoreCurrentPosition(position: Int?) {
-        _currentPosition.value = position ?: 0
+        _currentPosition = position ?: 0
     }
 
     fun toggleItems() {

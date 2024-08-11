@@ -59,7 +59,7 @@ class ProfileDetailFragment() :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // ViewModel의 currentPosition 값을 저장
-        outState.putInt(CURRENT_POSITION_KEY, profileDetailViewModel.currentPosition.value)
+        outState.putInt(CURRENT_POSITION_KEY, profileDetailViewModel.currentPosition)
     }
 
     override fun initView() {

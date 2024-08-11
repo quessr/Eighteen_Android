@@ -2,6 +2,7 @@ package com.eighteen.eighteenandroid.presentation.chat
 
 import android.os.Bundle
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -10,15 +11,30 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentChatBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.chat.chatroom.ChatRoomFragment.Companion.ARGUMENT_CHAT_ROOM_ID_KEY
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
-    private val chatViewModel by viewModels<ChatViewModel>()
+    @Inject
+    lateinit var chatAssistedFactory: ChatViewModel.ChatAssistedFactory
+
+    //TODO senderNo 대응하는 필드 확인(현재 임시로 적용)
+    private val chatViewModel by viewModels<ChatViewModel>(factoryProducer = {
+        ChatViewModel.Factory(
+            assistedFactory = chatAssistedFactory,
+            senderNo = 1
+        )
+    })
+
     override fun initView() {
         bind {
             rvChatRooms.adapter = ChatRoomsAdapter(

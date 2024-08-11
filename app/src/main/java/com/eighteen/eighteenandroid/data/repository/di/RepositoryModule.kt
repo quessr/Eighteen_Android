@@ -1,9 +1,9 @@
 package com.eighteen.eighteenandroid.data.repository.di
 
-import com.eighteen.eighteenandroid.data.repository.ChatRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.MessageRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.SchoolRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.UserRepositoryImpl
+import com.eighteen.eighteenandroid.data.repository.mock.MockChatRepositoryImpl
 import com.eighteen.eighteenandroid.domain.repository.ChatRepository
 import com.eighteen.eighteenandroid.domain.repository.MessageRepository
 import com.eighteen.eighteenandroid.domain.repository.SchoolRepository
@@ -29,7 +29,8 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindSchoolRepository(schoolRepositoryImpl: SchoolRepositoryImpl): SchoolRepository
 
+    //fixme mock repository 사용 중
     @Binds
     @Singleton
-    abstract fun bindChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository
+    abstract fun bindChatRepository(chatRepositoryImpl: MockChatRepositoryImpl): ChatRepository
 }

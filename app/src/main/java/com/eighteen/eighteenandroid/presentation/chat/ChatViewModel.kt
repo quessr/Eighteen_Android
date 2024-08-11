@@ -1,27 +1,33 @@
 package com.eighteen.eighteenandroid.presentation.chat
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.ChatRoom
+import com.eighteen.eighteenandroid.domain.usecase.GetChatRoomsUseCase
 import com.eighteen.eighteenandroid.presentation.chat.model.ChatRoomsModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.Date
-import javax.inject.Inject
 
-@HiltViewModel
-class ChatViewModel @Inject constructor() : ViewModel() {
+class ChatViewModel @AssistedInject constructor(
+    private val getChatRoomsUseCase: GetChatRoomsUseCase,
+    @Assisted private val senderNo: Int
+) : ViewModel() {
     private val chatRoomsStateFlow =
         MutableStateFlow<ModelState<List<ChatRoom>>>(ModelState.Empty())
     private val keywordStateFlow = MutableStateFlow("")
 
     private val swipeStateMap = HashMap<String, Boolean>()
+
+    private var getChatRoomsJob: Job? = null
 
     val chatRoomWithKeywordStateFlow =
         combine(chatRoomsStateFlow, keywordStateFlow) { chatRoom, keyword ->
@@ -34,6 +40,22 @@ class ChatViewModel @Inject constructor() : ViewModel() {
                 )
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ModelState.Empty())
+
+    init {
+        requestChatRooms()
+    }
+
+    private fun requestChatRooms() {
+        if (getChatRoomsJob?.isCompleted == false) return
+        getChatRoomsJob = viewModelScope.launch {
+            chatRoomsStateFlow.value = ModelState.Loading()
+            getChatRoomsUseCase.invoke(senderNo = senderNo).onSuccess {
+                chatRoomsStateFlow.value = ModelState.Success(it)
+            }.onFailure {
+                chatRoomsStateFlow.value = ModelState.Error(throwable = it)
+            }
+        }
+    }
 
     fun getSwipeState(chatRoomId: String) = swipeStateMap[chatRoomId] ?: false
 
@@ -55,14 +77,18 @@ class ChatViewModel @Inject constructor() : ViewModel() {
         keywordStateFlow.value = keyword
     }
 
-    init {
-        //TODO test 데이터 제거
-        viewModelScope.launch {
-            delay(2000)
-            chatRoomsStateFlow.value = ModelState.Success(data = List(50) {
-                ChatRoom("$it", 123, 124, Date(), Date(), it, "message $it", Date(), name = "$it")
-            })
-        }
+    @AssistedFactory
+    interface ChatAssistedFactory {
+        fun create(senderNo: Int): ChatViewModel
+    }
 
+    class Factory(
+        private val assistedFactory: ChatAssistedFactory,
+        private val senderNo: Int
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return assistedFactory.create(senderNo) as T
+        }
     }
 }

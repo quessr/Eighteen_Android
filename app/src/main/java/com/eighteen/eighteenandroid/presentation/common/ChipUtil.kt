@@ -12,9 +12,11 @@ fun createChip(context: Context, tag: String): Chip {
     chip.text = tag
     chip.setChipBackgroundColorResource(android.R.color.white)
 
-    // TODO: 추후 태그 문자열의 길이가 길어지는 경우도 대응해야함
-    val params = ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT)
+    val params = ViewGroup.LayoutParams(context.dp2Px(78), ViewGroup.LayoutParams.WRAP_CONTENT)
     chip.layoutParams = params
+
+    val dp24 = context.dp2Px(24)
+    chip.setPadding(dp24, dp24, dp24, dp24)
     return chip
 }
 

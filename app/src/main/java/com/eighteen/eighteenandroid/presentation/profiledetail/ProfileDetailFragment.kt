@@ -18,8 +18,6 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
-import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
@@ -95,7 +93,7 @@ class ProfileDetailFragment() :
     }
 
     private fun setupAdapter() {
-        val pageCallback = object : ViewPager2.OnPageChangeCallback() {
+        val onPageChangeCallbackForVisibilitySoundIcon = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val mediaItems = profileDetailViewModel.mediaItems.value
@@ -110,7 +108,13 @@ class ProfileDetailFragment() :
         bind {
             profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             profileDetailRecyclerview.adapter =
-                ProfileDetailAdapter(profileDetailViewModel, viewLifecycleOwner, pageCallback)
+                ProfileDetailAdapter(
+                    profileDetailViewModel,
+                    viewLifecycleOwner,
+                    onPageChangeCallbackForVisibilitySoundIcon,
+                    onPageChangeCallbackForImagePosition = { currentPosition ->
+                        profileDetailViewModel.setCurrentPosition(currentPosition)
+                    }, onLikeChangeCallback = { profileDetailViewModel.toggleLike() })
             profileDetailRecyclerview.itemAnimator = null
         }
     }

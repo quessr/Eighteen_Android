@@ -2,7 +2,6 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
 import android.util.Log
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -39,10 +38,10 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
 
     class Images(
         val binding: ItemProfileDetailImagesWithLikeBinding,
-        private val onPageChangeCallback: (Int) -> Unit,
-        private val onLikeClickCallback: () -> Unit,
         private val lifecycleOwner: LifecycleOwner,
-        private val pageCallbackForMute: ViewPager2.OnPageChangeCallback
+        private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
+        private val onPageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
+        private val onLikeClickCallback: () -> Unit
     ) : ProfileDetailViewHolder(binding) {
         private val viewPagerPlayerManager: ViewPagerPlayerManager = ViewPagerPlayerManager(
             viewPager2 = binding.viewPager,
@@ -56,11 +55,11 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                     super.onPageSelected(position)
                     Log.d("ProfileDetailViewHolder", "onPageSelected")
                     // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트
-                    onPageChangeCallback(position)
+                    onPageChangeCallbackForImagePosition(position)
                 }
             })
 
-            binding.viewPager.registerOnPageChangeCallback(pageCallbackForMute)
+            binding.viewPager.registerOnPageChangeCallback(onPageCallbackForVisibilitySoundIcon)
             binding.viewPager.offscreenPageLimit = 5
         }
 

@@ -17,14 +17,15 @@ import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
-import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
 class ProfileDetailAdapter(
     private val viewModel: ProfileDetailViewModel,
     private val lifecycleOwner: LifecycleOwner,
-    private val pageCallbackForMute: ViewPager2.OnPageChangeCallback
+    private val pageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
+    private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
+    private val onLikeChangeCallback: () -> Unit
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
@@ -43,12 +44,10 @@ class ProfileDetailAdapter(
                 val binding = inflaterBinding(ItemProfileDetailImagesWithLikeBinding::inflate)
                 ProfileDetailViewHolder.Images(
                     binding,
-                    onPageChangeCallback = { currentPosition ->
-                        viewModel.setCurrentPosition(currentPosition)
-                    }, onLikeClickCallback = {
-                        viewModel.toggleLike()
-                    }, lifecycleOwner = lifecycleOwner,
-                    pageCallbackForMute = pageCallbackForMute
+                    onPageChangeCallbackForImagePosition = onPageChangeCallbackForImagePosition,
+                    onLikeClickCallback = onLikeChangeCallback,
+                    lifecycleOwner = lifecycleOwner,
+                    onPageCallbackForVisibilitySoundIcon = pageCallbackForVisibilitySoundIcon
                 )
             }
 
@@ -102,10 +101,10 @@ class ProfileDetailAdapter(
         holder.onBind(getItem(position))
 
         if (holder is ProfileDetailViewHolder.Images) {
-                holder.binding.viewPager.setCurrentItem(
-                    viewModel.currentPosition,
-                    false
-                ) // 저장된 위치로 설정
+            holder.binding.viewPager.setCurrentItem(
+                viewModel.currentPosition,
+                false
+            ) // 저장된 위치로 설정
         }
 
 

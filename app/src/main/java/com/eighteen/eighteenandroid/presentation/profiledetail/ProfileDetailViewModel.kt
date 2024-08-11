@@ -1,6 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.lifecycle.ViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,11 +9,9 @@ class ProfileDetailViewModel : ViewModel() {
     private val _items = MutableStateFlow<List<ProfileDetailModel>>(emptyList())
     val items: StateFlow<List<ProfileDetailModel>> get() = _items
 
-    private val _showAllItems = MutableStateFlow(false)
-    val showAllItems: StateFlow<Boolean> get() = _showAllItems
+    private var showAllItems = false
 
-    private val _qnaItems = MutableStateFlow<List<ProfileDetailModel.Qna>>(emptyList())
-    val qnaItems: StateFlow<List<ProfileDetailModel.Qna>> get() = _qnaItems
+    private var qnaItems = emptyList<ProfileDetailModel.Qna>()
 
     private var _currentPosition = 0
     val currentPosition: Int get() = _currentPosition
@@ -37,12 +34,8 @@ class ProfileDetailViewModel : ViewModel() {
         _currentPosition = position
     }
 
-    fun restoreCurrentPosition(position: Int?) {
-        _currentPosition = position ?: 0
-    }
-
     fun toggleItems() {
-        _showAllItems.value = !_showAllItems.value
+        showAllItems = !showAllItems
         updateItems()
     }
 
@@ -52,8 +45,8 @@ class ProfileDetailViewModel : ViewModel() {
         val qnaTitleIndex = currentItems.indexOfFirst { it is ProfileDetailModel.QnaListTitle }
 
         if (qnaIndex != -1) {
-            val qnaList = _qnaItems.value
-            val showAll = _showAllItems.value
+            val qnaList = qnaItems
+            val showAll = showAllItems
             val qnaItemsToShow = if (showAll) qnaList else qnaList.take(ITEM_COUNT_THRESHOLD)
 
             currentItems.removeAll { it is ProfileDetailModel.Qna }
@@ -81,14 +74,14 @@ class ProfileDetailViewModel : ViewModel() {
                         insertIndex,
                         ProfileDetailModel.QnaToggle(
                             id = "toggle",
-                            isExpanded = _showAllItems.value
+                            isExpanded = showAllItems
                         )
                     )
                 } else {
                     currentItems.add(
                         ProfileDetailModel.QnaToggle(
                             id = "toggle",
-                            isExpanded = _showAllItems.value
+                            isExpanded = showAllItems
                         )
                     )
                 }
@@ -107,7 +100,7 @@ class ProfileDetailViewModel : ViewModel() {
     }
 
     fun updateQnaItems(qnaItems: List<ProfileDetailModel.Qna>) {
-        _qnaItems.value = qnaItems
+        this.qnaItems = qnaItems
         updateItems()
     }
 

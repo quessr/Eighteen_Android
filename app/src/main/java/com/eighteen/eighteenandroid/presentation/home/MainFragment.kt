@@ -1,6 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.home
 
 import android.view.View
+import android.view.animation.AlphaAnimation
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -45,6 +47,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private var tournamentList = listOf<Tournament>()
 
     private lateinit var mainAdapterListener: MainAdapterListener
+
+    val fadeIn = AlphaAnimation(0f, 1f).apply { duration = 200 }
+    val fadeOut = AlphaAnimation(1f, 0f).apply { duration = 200 }
+    var isTop = true
 
     override fun initView() {
         initChipGroup()
@@ -95,11 +101,42 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             with(rvMain) {
                 adapter = mainAdapter
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+
+                        // 스크롤이 위로 되면 (dy < 0) 버튼 숨기기, 아래로 스크롤 시( dy > 0 ) 버튼 보여주기
+                        if (dy > 0 && btnScrollTop.visibility == View.GONE) {
+                            btnScrollTop.startAnimation(fadeIn)
+                            btnScrollTop.visibility = View.VISIBLE
+                        }
+                    }
+
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
 
-                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                            viewModel.pageScrollPosition = getCenterItemPosition(recyclerView)
+                        if (!canScrollVertically(-1)) {
+                            isTop = true
+                        } else {
+                            isTop = false
+                        }
+
+                        when(newState) {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
+                                viewModel.pageScrollPosition = getCenterItemPosition(recyclerView)
+
+                                if(isTop && btnScrollTop.isVisible) {
+                                    btnScrollTop.startAnimation(fadeOut)
+                                    btnScrollTop.visibility = View.GONE
+                                } else {
+                                    if(!btnScrollTop.isVisible) {
+                                        btnScrollTop.visibility = View.VISIBLE
+                                        btnScrollTop.startAnimation(fadeIn)
+                                    }
+                                }
+                            }
+
+                            else -> {}
                         }
                     }
                 })
@@ -107,6 +144,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
             // Top 버튼
             btnScrollTop.throttleClick(viewLifecycleOwner.lifecycleScope) {
+                appbarLayout.setExpanded(true, true)
                 rvMain.smoothScrollToPosition(0)
             }
         }
@@ -247,6 +285,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun updateMain() {
         mainAdapter.updateView(
             listOf(
+                MainItem.HeaderView(resources.getString(R.string.main_today_teen)),
                 MainItem.UserListView(
                     userList
                 ), // User List

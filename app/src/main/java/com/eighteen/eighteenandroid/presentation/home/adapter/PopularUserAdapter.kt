@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eighteen.eighteenandroid.databinding.ItemPopularTeenBinding
 import com.eighteen.eighteenandroid.domain.model.User
+import com.eighteen.eighteenandroid.presentation.common.dp2Px
+import com.eighteen.eighteenandroid.presentation.common.getScreenWidth
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserDiffCallBack
 
 /**
@@ -40,6 +42,11 @@ class PopularUserAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(user: User, context: Context) {
+            val layoutParams = itemView.layoutParams
+            layoutParams.width = context.getScreenWidth() - context.dp2Px(60)
+            layoutParams.height = context.getScreenWidth() - context.dp2Px(60)
+            itemView.layoutParams = layoutParams
+
             binding.run {
                 Glide.with(context).load(user.userImage).into(imgTodayTeen)
                 tvName.text = "${user.userName}, ${user.userAge}"

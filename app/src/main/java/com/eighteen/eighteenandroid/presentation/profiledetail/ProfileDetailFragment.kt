@@ -43,23 +43,6 @@ class ProfileDetailFragment() :
         observeMediaItems()
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        // ViewModel의 currentPosition 값을 복원
-        profileDetailViewModel.restoreCurrentPosition(
-            savedInstanceState?.getInt(
-                CURRENT_POSITION_KEY
-            )
-        )
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // ViewModel의 currentPosition 값을 저장
-        outState.putInt(CURRENT_POSITION_KEY, profileDetailViewModel.currentPosition)
-    }
-
     override fun initView() {
         initNavigation()
 

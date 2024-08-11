@@ -13,6 +13,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentChatBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.chat.chatroom.ChatRoomFragment.Companion.ARGUMENT_CHAT_ROOM_ID_KEY
+import com.eighteen.eighteenandroid.presentation.chat.chatroom.ChatRoomFragment.Companion.ARGUMENT_SENDER_ID_KEY
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
@@ -28,10 +29,12 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
     lateinit var chatAssistedFactory: ChatViewModel.ChatAssistedFactory
 
     //TODO senderNo 대응하는 필드 확인(현재 임시로 적용)
+    private val senderNo = 1
+
     private val chatViewModel by viewModels<ChatViewModel>(factoryProducer = {
         ChatViewModel.Factory(
             assistedFactory = chatAssistedFactory,
-            senderNo = 1
+            senderNo = senderNo
         )
     })
 
@@ -107,6 +110,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::infl
     private fun onClickChatRoom(chatRoomId: String) {
         val bundle = Bundle().apply {
             putString(ARGUMENT_CHAT_ROOM_ID_KEY, chatRoomId)
+            putInt(ARGUMENT_SENDER_ID_KEY, senderNo)
         }
         findNavController().navigate(R.id.action_fragmentChat_to_fragmentChatRoom, bundle)
     }

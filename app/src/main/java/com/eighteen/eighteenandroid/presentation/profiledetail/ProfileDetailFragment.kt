@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -76,16 +77,17 @@ class ProfileDetailFragment() :
     }
 
     private fun setupAdapter() {
-        val onPageChangeCallbackForVisibilitySoundIcon = object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val mediaItems = profileDetailViewModel.mediaItems.value
-                if (mediaItems.isNotEmpty() && position < mediaItems.size) {
-                    val mediaItem = mediaItems[position]
-                    binding.ivSound.isVisible = mediaItem.isVideo
+        val onPageChangeCallbackForVisibilitySoundIcon =
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    val mediaItems = profileDetailViewModel.mediaItems.value
+                    if (mediaItems.isNotEmpty() && position < mediaItems.size) {
+                        val mediaItem = mediaItems[position]
+                        binding.ivSound.isVisible = mediaItem.isVideo
+                    }
                 }
             }
-        }
 
 
         bind {
@@ -114,16 +116,20 @@ class ProfileDetailFragment() :
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            profileDetailViewModel.isLike.collect { isLiked ->
-                binding.ivHeart.setImageResource(
-                    if (isLiked) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
-                )
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                profileDetailViewModel.isLike.collect { isLiked ->
+                    binding.ivHeart.setImageResource(
+                        if (isLiked) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
+                    )
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            mediaDetailViewModel.mediaDetailStateFlow.collect {
-                setVolume(isVolumeOn = it.isVolumeOn)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mediaDetailViewModel.mediaDetailStateFlow.collect {
+                    setVolume(isVolumeOn = it.isVolumeOn)
+                }
             }
         }
     }
@@ -245,8 +251,7 @@ class ProfileDetailFragment() :
     private fun initNavigation() {
         bind {
             ivClose.setOnClickListener {
-                val navController =
-                    Navigation.findNavController(requireActivity().findViewById(R.id.fragment_container_view))
+                val navController = findNavController()
                 navController.navigate(R.id.action_fragmentProfileDetail_to_fragmentMain)
             }
         }

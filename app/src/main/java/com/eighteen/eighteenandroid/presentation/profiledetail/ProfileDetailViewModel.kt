@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
+import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.lifecycle.ViewModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,10 +24,6 @@ class ProfileDetailViewModel : ViewModel() {
 
     private val _isLike = MutableStateFlow(false)
     val isLike: StateFlow<Boolean> get() = _isLike
-
-    companion object {
-        const val ITEM_COUNT_THRESHOLD = 2
-    }
 
     fun setItems(newItems: List<ProfileDetailModel>) {
         _items.value = newItems
@@ -96,7 +93,6 @@ class ProfileDetailViewModel : ViewModel() {
                     )
                 }
             }
-
             _items.value = currentItems
         }
     }
@@ -117,19 +113,25 @@ class ProfileDetailViewModel : ViewModel() {
 
     fun toggleLike() {
         val currentItems = _items.value.toMutableList()
-        val profileImagesIndex = currentItems.indexOfFirst { it is ProfileDetailModel.ProfileImages }
+        val profileImages = currentItems.filterIsInstance<ProfileDetailModel.ProfileImages>().firstOrNull()
 
-        if (profileImagesIndex != -1) {
-            val profileImages = currentItems[profileImagesIndex] as ProfileDetailModel.ProfileImages
-            val isCurrentLiked = profileImages.isLiked
-            val updateProfileImages = profileImages.copy(
+        profileImages?.let {item ->
+            val isCurrentLiked = item.isLiked
+            val updateProfileImages = item.copy(
                 likeCount = if (isCurrentLiked) profileImages.likeCount -1 else profileImages.likeCount + 1,
                 isLiked = !isCurrentLiked
             )
-            currentItems[profileImagesIndex] = updateProfileImages
-            _items.value = currentItems
+            val index = currentItems.indexOf(item)
+            if (index != -1) {
+                currentItems[index] = updateProfileImages
+                _items.value = currentItems
 
-            _isLike.value = updateProfileImages.isLiked
+                _isLike.value = updateProfileImages.isLiked
+            }
         }
+    }
+
+    companion object {
+        const val ITEM_COUNT_THRESHOLD = 2
     }
 }

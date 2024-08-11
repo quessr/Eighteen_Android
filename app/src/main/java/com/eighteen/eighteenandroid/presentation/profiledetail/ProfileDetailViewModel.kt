@@ -21,7 +21,8 @@ class ProfileDetailViewModel : ViewModel() {
     private val _mediaItems = MutableStateFlow<List<ProfileDetailModel.MediaItem>>(emptyList())
     val mediaItems: StateFlow<List<ProfileDetailModel.MediaItem>> get() = _mediaItems
 
-
+    private val _isLike = MutableStateFlow(false)
+    val isLike: StateFlow<Boolean> get() = _isLike
 
     companion object {
         const val ITEM_COUNT_THRESHOLD = 2
@@ -67,7 +68,6 @@ class ProfileDetailViewModel : ViewModel() {
             } else {
                 currentItems.addAll(qnaItemsToShow)
             }
-
 
             // 기존의 QnaToggle 항목이 있으면 제거합니다.
             val existingToggleIndex =
@@ -128,6 +128,8 @@ class ProfileDetailViewModel : ViewModel() {
             )
             currentItems[profileImagesIndex] = updateProfileImages
             _items.value = currentItems
+
+            _isLike.value = updateProfileImages.isLiked
         }
     }
 }

@@ -17,9 +17,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.showReportDialog
+import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
@@ -27,9 +26,7 @@ import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMe
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import reactivecircus.flowbinding.android.view.clicks
 
 class ProfileDetailFragment() :
     BaseFragment<FragmentProfileDetailBinding>(FragmentProfileDetailBinding::inflate) {
@@ -70,11 +67,14 @@ class ProfileDetailFragment() :
 
         bind {
             ivMore.setOnClickListener {
-                context?.let {
-                    showReportDialog(it) {
-                        showDialogFragment(ReportDialogFragment())
-                    }
-                }
+//                context?.let {
+//                    showReportSelectDialog(it) {
+//                        showDialogFragment(ReportDialogFragment())
+//                    }
+//                }
+            }
+            clLike.setOnClickListener {
+                profileDetailViewModel.toggleLike()
             }
         }
     }
@@ -120,6 +120,13 @@ class ProfileDetailFragment() :
                         details
                     )
                 }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            profileDetailViewModel.isLike.collect { isLiked ->
+                binding.ivHeart.setImageResource(
+                    if (isLiked) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
+                )
             }
         }
     }

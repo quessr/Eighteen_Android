@@ -23,6 +23,9 @@ class ChatRoomFragment : BaseFragment<FragmentChatRoomBinding>(FragmentChatRoomB
             ivBtnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
+            ivBtnOption.setOnClickListener {
+                //TODO 신고하기 dialog
+            }
         }
     }
 

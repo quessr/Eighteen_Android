@@ -23,7 +23,7 @@ sealed interface ChatRoomMessageModel {
         ) : Message
     }
 
-    data class Notification(@DrawableRes val iconDrawableRes: Int, val message: String) :
+    data class Notification(@DrawableRes val iconDrawableRes: Int? = null, val message: String) :
         ChatRoomMessageModel
 
     data class Time(val timeString: String) : ChatRoomMessageModel

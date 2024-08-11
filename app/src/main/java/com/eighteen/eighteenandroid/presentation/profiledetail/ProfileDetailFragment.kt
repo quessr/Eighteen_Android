@@ -76,6 +76,9 @@ class ProfileDetailFragment() :
             clLike.setOnClickListener {
                 profileDetailViewModel.toggleLike()
             }
+            ivSound.setOnClickListener {
+                mediaDetailViewModel.toggleVolume()
+            }
         }
     }
 
@@ -85,7 +88,7 @@ class ProfileDetailFragment() :
                 profileDetailViewModel.mediaItems.collectLatest { mediaItems ->
                     val hasVideo = mediaItems.any { it.isVideo }
                     Log.d("ProfileDetailFragment", "hasVideo : $hasVideo")
-                    binding.ivMute.isVisible = hasVideo
+                    binding.ivSound.isVisible = hasVideo
                 }
             }
         }
@@ -98,7 +101,7 @@ class ProfileDetailFragment() :
                 val mediaItems = profileDetailViewModel.mediaItems.value
                 if (mediaItems.isNotEmpty() && position < mediaItems.size) {
                     val mediaItem = mediaItems[position]
-                    binding.ivMute.isVisible = mediaItem.isVideo
+                    binding.ivSound.isVisible = mediaItem.isVideo
                 }
             }
         }
@@ -122,11 +125,18 @@ class ProfileDetailFragment() :
                 }
             }
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             profileDetailViewModel.isLike.collect { isLiked ->
                 binding.ivHeart.setImageResource(
                     if (isLiked) R.drawable.ic_full_heart else R.drawable.ic_empty_heart
                 )
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            mediaDetailViewModel.mediaDetailStateFlow.collect {
+                setVolume(isVolumeOn = it.isVolumeOn)
             }
         }
     }
@@ -148,6 +158,7 @@ class ProfileDetailFragment() :
                             binding.header.setBackgroundColor(Color.TRANSPARENT)
                             binding.ivClose.setColorFilter(Color.WHITE)
                             binding.ivMore.setColorFilter(Color.WHITE)
+                            binding.ivSound.setColorFilter(Color.WHITE)
                         } else {
                             binding.header.setBackgroundColor(
                                 ContextCompat.getColor(
@@ -157,6 +168,7 @@ class ProfileDetailFragment() :
                             )
                             binding.ivClose.setColorFilter(Color.BLACK)
                             binding.ivMore.setColorFilter(Color.BLACK)
+                            binding.ivSound.setColorFilter(Color.BLACK)
                         }
                     }
                 }
@@ -168,6 +180,12 @@ class ProfileDetailFragment() :
         // ViewPager2가 포함된 아이템의 위치를 반환
         return profileDetailViewModel.items.value?.indexOfFirst { it is ProfileDetailModel.ProfileImages }
             ?: -1
+    }
+
+    private fun setVolume(isVolumeOn: Boolean) {
+        val drawableRes =
+            if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
+        binding.ivSound.setImageResource(drawableRes)
     }
 
     private fun setupInitialData() {

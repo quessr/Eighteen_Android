@@ -29,7 +29,7 @@ class ChatMessageItemDecoration : ItemDecoration() {
             is ChatRoomMessageModel.Time -> getChatRoomTimeItemTopOffset()
             is ChatRoomMessageModel.Notification -> getChatRoomNotificationItemTopOffset(prevItem = prevItem)
         }
-        outRect.top = topOffset
+        outRect.top = context.dp2Px(topOffset)
         if (adapterPosition == adapter.itemCount - 1) outRect.bottom = context.dp2Px(18)
     }
 

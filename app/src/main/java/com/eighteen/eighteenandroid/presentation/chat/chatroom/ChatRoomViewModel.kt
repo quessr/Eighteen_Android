@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.chat.chatroom
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import com.eighteen.eighteenandroid.domain.usecase.GetChatMessagesUseCase
 import com.eighteen.eighteenandroid.presentation.chat.chatroom.model.ChatRoomMessageModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -118,7 +120,12 @@ class ChatRoomViewModel @AssistedInject constructor(
         return items
     }
 
+    fun requestSendMessage(message: String) {
+        //TODO 메시지 전송
+        Log.d("ChatRoomViewModel", "send message : $message")
+    }
 
+    @AssistedFactory
     interface ChatRoomAssistedFactory {
         fun create(chatRoomId: String, senderId: Int): ChatRoomViewModel
     }

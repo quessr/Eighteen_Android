@@ -15,9 +15,9 @@ class MockChatRepositoryImpl @Inject constructor() : ChatRepository {
         val calendar = Calendar.getInstance()
         List(50) {
             ChatMessage(
-                senderNo = 1,
-                receiverNo = 6,
-                message = "message $it".repeat(it % 10),
+                senderNo = if (it % 3 == 0) 1 else 6,
+                receiverNo = if (it % 3 == 0) 6 else 1,
+                message = "message $it".repeat((it % 10) + 1),
                 createdAt = calendar.time,
                 updatedAt = Date()
             ).apply {

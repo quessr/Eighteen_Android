@@ -31,7 +31,7 @@
         android:background="@drawable/bg_chat_message_receive"
         android:paddingHorizontal="24dp"
         android:paddingVertical="8dp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/cvProfileImageContainer"
         app:layout_constraintTop_toTopOf="parent"

@@ -53,7 +53,14 @@ class ChatRoomFragment : BaseFragment<FragmentChatRoomBinding>(FragmentChatRoomB
                             //TODO 로딩처리
                         }
                         is ModelState.Success -> {
-                            (binding.rvChat.adapter as? ChatMessagesAdapter)?.submitList(it.data)
+                            (binding.rvChat.adapter as? ChatMessagesAdapter)?.submitList(it.data) {
+                                if (chatRoomViewModel.isInitialized.not()) {
+                                    it.data?.let { models ->
+                                        binding.rvChat.scrollToPosition(models.lastIndex)
+                                        chatRoomViewModel.isInitialized = true
+                                    }
+                                }
+                            }
 
                         }
                         is ModelState.Error -> {

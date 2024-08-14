@@ -35,6 +35,7 @@ class ChatRoomViewModel @AssistedInject constructor(
     val chatRoomMessagesStateFlow = _chatRoomMessagesStateFlow.asStateFlow()
 
     private var getChatMessagesJob: Job? = null
+    var isInitialized = false
 
     init {
         requestChatMessages()
@@ -71,7 +72,7 @@ class ChatRoomViewModel @AssistedInject constructor(
             return isSameYear && isSameYearOfDay
         }
 
-        fun createTimeItemIfOtherDayOrNull(
+        fun createTimeItemIfAnotherDayOrNull(
             calendar: Calendar?,
             other: Calendar?
         ): ChatRoomMessageModel.Time? {
@@ -87,7 +88,7 @@ class ChatRoomViewModel @AssistedInject constructor(
         val items = mutableListOf<ChatRoomMessageModel>().apply {
             newData.forEach {
                 val next = it.createdAt?.toCalendar()
-                createTimeItemIfOtherDayOrNull(lastDateCalendar, next)?.let { timeItem ->
+                createTimeItemIfAnotherDayOrNull(lastDateCalendar, next)?.let { timeItem ->
                     add(timeItem)
                 }
                 val messageTime = it.createdAt?.toTimeString(HOUR_MINUTE_FORMAT_STRING) ?: ""
@@ -110,7 +111,7 @@ class ChatRoomViewModel @AssistedInject constructor(
             val prevFirstDateCalendar =
                 prevItem.filterIsInstance<ChatRoomMessageModel.Message>()
                     .firstOrNull { it.createdAt != null }?.createdAt?.toCalendar() ?: return@apply
-            createTimeItemIfOtherDayOrNull(
+            createTimeItemIfAnotherDayOrNull(
                 lastDateCalendar,
                 prevFirstDateCalendar
             )?.let { timeItem ->

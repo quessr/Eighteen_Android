@@ -31,6 +31,7 @@
     <string name="no">아니요</string>
     <string name="yes">네</string>
     <string name="send">보내기</string>
+    <string name="ok_like">좋아요!</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>
@@ -49,6 +50,9 @@
     <string name="sign_up_enter_auth_code_title">6자리 코드 입력</string>
     <string name="sign_up_enter_auth_code_resend_tip">코드를 받지 못하셨나요? 다시 전송해보세요!</string>
     <string name="sign_up_enter_auth_code_resend">다시 전송하기</string>
+    <string name="sign_up_enter_auth_code_sign_up_dialog_title">인증이 완료되었어요!</string>
+    <string name="sign_up_enter_auth_code_sign_up_dialog_content">A-TEEN에 정보를 입력하여\n가입을 마저 완료해보세요.</string>
+
 
     <string name="sign_up_terms_of_service_title">사용 약관</string>
     <string name="sign_up_terms_of_service_agree_all">모두 동의</string>

@@ -21,7 +21,9 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.clearFocus
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showKeyboard
+import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -68,6 +70,7 @@ class SignUpEnterAuthCodeFragment :
         }
         initStateFlow()
         collectRemainTimeFlow()
+        initFragmentResultListener()
     }
 
     override fun onResume() {
@@ -197,8 +200,12 @@ class SignUpEnterAuthCodeFragment :
                             Log.d("SignUpEnterAuthCodeFragment", "confirm loading")
                         }
                         is ModelState.Success -> {
-                            //TODO 확인팝업 적용(팝업 디자인 수정 후 작업 예정)
-                            findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
+                            //TODO 인증 완료 분기처리
+                            //case 1. 이미 있는 회원일 경우(로그인)
+                            //TODO 로그인 dialog 추가
+
+                            //case 2. 처음 가입한 경우(회원가입)
+                            showSignUpDialogFragment()
                         }
                         is ModelState.Error -> {
                             //TODO 에러처리
@@ -213,6 +220,20 @@ class SignUpEnterAuthCodeFragment :
         }
     }
 
+    private fun showSignUpDialogFragment() {
+        val title = getString(R.string.sign_up_enter_auth_code_sign_up_dialog_title)
+        val content = getString(R.string.sign_up_enter_auth_code_sign_up_dialog_content)
+        val buttonText = getString(R.string.ok_like)
+        val dialogFragment =
+            PopUpDialog.newInstance(
+                requestKey = REQUEST_KEY_SIGN_UP_DIALOG,
+                title = title,
+                content = content,
+                buttonText = buttonText
+            )
+        showDialogFragment(dialogFragment = dialogFragment)
+    }
+
     private fun collectRemainTimeFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -223,8 +244,24 @@ class SignUpEnterAuthCodeFragment :
         }
     }
 
+    private fun initFragmentResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            REQUEST_KEY_SIGN_UP_DIALOG,
+            viewLifecycleOwner,
+            object : PopUpDialog.PopUpDialogFragmentResultListener() {
+                override fun onConfirm() {
+                    findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
+                }
+            })
+    }
+
     override fun onDestroyView() {
         signUpEnterAuthCodeViewModel.clear()
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val REQUEST_KEY_SIGN_UP_DIALOG = "REQUEST_KEY_SIGN_UP_DIALOG"
+        private const val REQUEST_KEY_LOGIN_DIALOG = "REQUEST_KEY_LOGIN_DIALOG"
     }
 }

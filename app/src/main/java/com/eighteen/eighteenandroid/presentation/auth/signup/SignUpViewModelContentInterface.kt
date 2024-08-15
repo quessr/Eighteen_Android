@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup
 
+import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
@@ -18,6 +19,7 @@ interface SignUpViewModelContentInterface {
     var nickName: String
     var birth: Calendar?
     var school: School?
+    var tag: Tag?
     val mediasStateFlow: StateFlow<List<SignUpMedia>>
     val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>>
     fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)

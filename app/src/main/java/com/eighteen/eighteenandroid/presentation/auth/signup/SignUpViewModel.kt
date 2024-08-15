@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.School
@@ -56,6 +57,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     override var nickName: String = ""
     override var birth: Calendar? = null
     override var school: School? = null
+    override var tag: Tag? = null
 
     private val _mediasStateFlow = MutableStateFlow<List<SignUpMedia>>(emptyList())
     override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow.asStateFlow()

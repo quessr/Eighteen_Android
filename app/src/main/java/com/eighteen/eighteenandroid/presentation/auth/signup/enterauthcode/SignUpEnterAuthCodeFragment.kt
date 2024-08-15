@@ -24,6 +24,7 @@ import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCur
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showKeyboard
 import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.TwoButtonPopUpDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -202,7 +203,7 @@ class SignUpEnterAuthCodeFragment :
                         is ModelState.Success -> {
                             //TODO 인증 완료 분기처리
                             //case 1. 이미 있는 회원일 경우(로그인)
-                            //TODO 로그인 dialog 추가
+                            //showLoginDialogFragment()
 
                             //case 2. 처음 가입한 경우(회원가입)
                             showSignUpDialogFragment()
@@ -234,6 +235,22 @@ class SignUpEnterAuthCodeFragment :
         showDialogFragment(dialogFragment = dialogFragment)
     }
 
+    private fun showLoginDialogFragment() {
+        val title = getString(R.string.sign_up_enter_auth_code_login_dialog_title)
+        val content = getString(R.string.sign_up_enter_auth_code_login_dialog_content)
+        val confirmButtonText = getString(R.string.ok_like)
+        val rejectButtonText = getString(R.string.no)
+
+        val dialogFragment = TwoButtonPopUpDialogFragment.newInstance(
+            requestKey = REQUEST_KEY_LOGIN_DIALOG,
+            title = title,
+            content = content,
+            confirmButtonText = confirmButtonText,
+            rejectButtonText = rejectButtonText
+        )
+        showDialogFragment(dialogFragment = dialogFragment)
+    }
+
     private fun collectRemainTimeFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -251,6 +268,16 @@ class SignUpEnterAuthCodeFragment :
             object : PopUpDialogFragment.PopUpDialogFragmentResultListener() {
                 override fun onConfirm() {
                     findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
+                }
+            })
+
+        childFragmentManager.setFragmentResultListener(
+            REQUEST_KEY_LOGIN_DIALOG,
+            viewLifecycleOwner,
+            object : TwoButtonPopUpDialogFragment.TowButtonPopUpDialogFragmentResultListener() {
+                override fun onConfirm() {
+                    //TODO 로그인 상태로 변경
+                    findNavController().popBackStack()
                 }
             })
     }

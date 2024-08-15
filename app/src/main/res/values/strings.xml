@@ -52,7 +52,8 @@
     <string name="sign_up_enter_auth_code_resend">다시 전송하기</string>
     <string name="sign_up_enter_auth_code_sign_up_dialog_title">인증이 완료되었어요!</string>
     <string name="sign_up_enter_auth_code_sign_up_dialog_content">A-TEEN에 정보를 입력하여\n가입을 마저 완료해보세요.</string>
-
+    <string name="sign_up_enter_auth_code_login_dialog_title">이미 가입된 사용자에요!</string>
+    <string name="sign_up_enter_auth_code_login_dialog_content">바로 로그인 할까요?</string>
 
     <string name="sign_up_terms_of_service_title">사용 약관</string>
     <string name="sign_up_terms_of_service_agree_all">모두 동의</string>

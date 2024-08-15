@@ -51,7 +51,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     override val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>> =
         _signUpResultStateFlow.asStateFlow()
 
-    override var phoneNumber: String = "01077777777"
+    override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
     override var birth: Calendar? = null

@@ -99,7 +99,10 @@ class ProfileDetailFragment() :
                     onPageChangeCallbackForVisibilitySoundIcon,
                     onPageChangeCallbackForImagePosition = { currentPosition ->
                         profileDetailViewModel.setCurrentPosition(currentPosition)
-                    }, onLikeChangeCallback = { profileDetailViewModel.toggleLike() })
+                    }, onLikeChangeCallback = { profileDetailViewModel.toggleLike() },
+                    onQnaToggleCallback = { profileDetailViewModel.toggleItems() },
+                    currentPosition = profileDetailViewModel.currentPosition
+                )
             profileDetailRecyclerview.itemAnimator = null
         }
     }
@@ -258,7 +261,7 @@ class ProfileDetailFragment() :
     }
 
     //TODO pageChangeCallback position 업데이트 추가
-    //TODO 샘플코드 제거 미디어 모델 flow형태로 변환 후 전달
+//TODO 샘플코드 제거 미디어 모델 flow형태로 변환 후 전달
     private fun initMediaDetailFlow() = viewLifecycleOwner.lifecycleScope.launch {
         val video1 =
             "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"

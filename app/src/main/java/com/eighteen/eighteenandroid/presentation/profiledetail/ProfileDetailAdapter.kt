@@ -25,7 +25,9 @@ class ProfileDetailAdapter(
     private val lifecycleOwner: LifecycleOwner,
     private val pageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
     private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
-    private val onLikeChangeCallback: () -> Unit
+    private val onLikeChangeCallback: () -> Unit,
+    private val onQnaToggleCallback: () -> Unit,
+    private val currentPosition: Int
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
@@ -73,10 +75,14 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_QNA_TOGGLE -> {
                 val binding = inflaterBinding(ItemSeeMoreBinding::inflate)
-                ProfileDetailViewHolder.QnaToggle(binding) { toggle ->
-                    viewModel.toggleItems()
-                    viewModel.updateQnaToggle(toggle.copy(isExpanded = !toggle.isExpanded))
-                }
+//                ProfileDetailViewHolder.QnaToggle(binding) { toggle ->
+//                    viewModel.toggleItems()
+//                    viewModel.updateQnaToggle(toggle.copy(isExpanded = !toggle.isExpanded))
+//                }
+                ProfileDetailViewHolder.QnaToggle(
+                    binding,
+                    onQnaToggleCallback = onQnaToggleCallback
+                )
             }
 
             else -> throw IllegalArgumentException("Invalid view type") // 코드 비교 해 볼것
@@ -101,10 +107,11 @@ class ProfileDetailAdapter(
         holder.onBind(getItem(position))
 
         if (holder is ProfileDetailViewHolder.Images) {
-            holder.binding.viewPager.setCurrentItem(
-                viewModel.currentPosition,
-                false
-            ) // 저장된 위치로 설정
+//            holder.binding.viewPager.setCurrentItem(
+//                viewModel.currentPosition,
+//                false
+//            )
+            holder.binding.viewPager.currentItem = currentPosition // 구성 변경시 ViewPager의 위치 유지
         }
 
 
@@ -166,5 +173,4 @@ class ProfileDetailAdapter(
 
         }
     }
-
 }

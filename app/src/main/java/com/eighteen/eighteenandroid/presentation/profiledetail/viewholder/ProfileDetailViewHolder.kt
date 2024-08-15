@@ -54,7 +54,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     Log.d("ProfileDetailViewHolder", "onPageSelected")
-                    // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트
+                    // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트 (스크롤시 ViewPager의 위치 유지)
                     onPageChangeCallbackForImagePosition(position)
                 }
             })
@@ -125,17 +125,20 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
 
     class QnaToggle(
         val binding: ItemSeeMoreBinding,
-        private val toggleItems: (ProfileDetailModel.QnaToggle) -> Unit
+//        private val toggleItems: (ProfileDetailModel.QnaToggle) -> Unit
+        private val onQnaToggleCallback: () -> Unit
     ) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val toggle = profileDetailModel as? ProfileDetailModel.QnaToggle
             toggle?.let {
                 binding.tvSeeMore.text = if (toggle.isExpanded) "접기" else "펼쳐서 보기"
                 binding.tvSeeMore.setOnClickListener(View.OnClickListener {
-                    toggleItems(toggle)
+//                    toggleItems(toggle)
+                    onQnaToggleCallback()
                 })
                 binding.ivSeeMore.setOnClickListener(View.OnClickListener {
-                    toggleItems(toggle)
+//                    toggleItems(toggle)
+                    onQnaToggleCallback()
                 })
             }
         }

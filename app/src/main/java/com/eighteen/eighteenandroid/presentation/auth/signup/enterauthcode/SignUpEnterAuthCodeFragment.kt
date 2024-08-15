@@ -23,7 +23,7 @@ import com.eighteen.eighteenandroid.presentation.common.clearFocus
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showKeyboard
-import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialog
+import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -225,7 +225,7 @@ class SignUpEnterAuthCodeFragment :
         val content = getString(R.string.sign_up_enter_auth_code_sign_up_dialog_content)
         val buttonText = getString(R.string.ok_like)
         val dialogFragment =
-            PopUpDialog.newInstance(
+            PopUpDialogFragment.newInstance(
                 requestKey = REQUEST_KEY_SIGN_UP_DIALOG,
                 title = title,
                 content = content,
@@ -248,7 +248,7 @@ class SignUpEnterAuthCodeFragment :
         childFragmentManager.setFragmentResultListener(
             REQUEST_KEY_SIGN_UP_DIALOG,
             viewLifecycleOwner,
-            object : PopUpDialog.PopUpDialogFragmentResultListener() {
+            object : PopUpDialogFragment.PopUpDialogFragmentResultListener() {
                 override fun onConfirm() {
                     findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
                 }

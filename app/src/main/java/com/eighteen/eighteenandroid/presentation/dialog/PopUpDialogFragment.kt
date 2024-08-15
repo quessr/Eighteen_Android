@@ -13,7 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import com.eighteen.eighteenandroid.databinding.FragmentPopUpDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 
-class PopUpDialog :
+class PopUpDialogFragment :
     BaseDialogFragment<FragmentPopUpDialogBinding>(FragmentPopUpDialogBinding::inflate) {
     override fun initView() {
         arguments?.let {
@@ -72,7 +72,7 @@ class PopUpDialog :
             content: String? = null,
             @ColorRes buttonColorRes: Int = -1,
             buttonText: String? = null
-        ) = PopUpDialog().apply {
+        ) = PopUpDialogFragment().apply {
             arguments = Bundle().apply {
                 putString(ARGUMENT_REQUEST_KEY_KEY, requestKey)
                 putString(ARGUMENT_TITLE_KEY, title)

@@ -215,8 +215,10 @@ class SignUpEnterAuthCodeFragment :
 
     private fun collectRemainTimeFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
-            signUpEnterAuthCodeViewModel.remainTimeFlow.collect {
-                binding.tvRemainTime.text = it
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpEnterAuthCodeViewModel.remainTimeFlow.collect {
+                    binding.tvRemainTime.text = it
+                }
             }
         }
     }

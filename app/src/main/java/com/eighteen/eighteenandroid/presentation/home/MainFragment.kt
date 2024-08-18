@@ -281,7 +281,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
             override fun startAutoScroll(rvMainTeenPopularList: RecyclerView) {
                 isAutoScrolling = true
-                autoScrollJob = lifecycleScope.launch {
+                autoScrollJob = viewLifecycleOwner.lifecycleScope.launch {
                     val smoothScroller = object : LinearSmoothScroller(requireContext()) {
                         override fun getVerticalSnapPreference(): Int {
                             return SNAP_TO_START
@@ -498,15 +498,5 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        mainAdapterListener.stopAutoScroll()
-        super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        mainAdapterListener.stopAutoScroll()
-        super.onDestroyView()
     }
 }

@@ -13,10 +13,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.DialogReportSelectBinding
 import com.eighteen.eighteenandroid.presentation.MainActivity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = null) {
     dialogFragment.show(childFragmentManager, tag)
@@ -140,5 +146,18 @@ fun Fragment.showKeyboard(view: View) {
         val inputManager =
             (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
         inputManager?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+}
+
+fun <T> Fragment.collectInLifecycle(
+    flow: Flow<T>,
+    lifecycle: LifecycleOwner = viewLifecycleOwner,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    action: (T) -> Unit
+) = lifecycle.lifecycleScope.launch {
+    repeatOnLifecycle(state = state) {
+        flow.collect {
+            action.invoke(it)
+        }
     }
 }

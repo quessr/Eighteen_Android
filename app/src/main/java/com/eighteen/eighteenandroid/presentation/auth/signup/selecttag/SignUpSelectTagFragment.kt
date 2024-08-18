@@ -9,12 +9,13 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpSelectTagBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import kotlinx.coroutines.launch
 
 class SignUpSelectTagFragment :
     BaseSignUpContentFragment<FragmentSignUpSelectTagBinding>(FragmentSignUpSelectTagBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.school = null
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.ENTER_SCHOOL)
         super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {
@@ -45,6 +46,19 @@ class SignUpSelectTagFragment :
                         signUpNextButtonModel = signUpNextButtonModel.copy(
                             isEnabled = it.any { tagModel -> tagModel.isSelected })
                     )
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpViewModelContentInterface.pageClearEvent.collect {
+                    if (it.peekContent() == SignUpPage.SELECT_TAG) {
+                        it.getContentIfNotHandled()?.run {
+                            signUpViewModelContentInterface.tag = null
+                            signUpSelectTagViewModel.clear()
+                            binding.rvTags.scrollToPosition(0)
+                        }
+                    }
                 }
             }
         }

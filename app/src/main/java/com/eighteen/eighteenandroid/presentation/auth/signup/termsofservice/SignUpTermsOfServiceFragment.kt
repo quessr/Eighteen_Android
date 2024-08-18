@@ -9,18 +9,18 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpTermsOfServiceBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.WebViewUrl
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import kotlinx.coroutines.launch
 
 /**
  * 약관 동의 페이지
  */
+//TODO 선택 동의 어떻게 처리하는지?
 class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTermsOfServiceBinding>(
     FragmentSignUpTermsOfServiceBinding::inflate
 ) {
-    override val onMovePrevPageAction: () -> Unit = {
-        findNavController().popBackStack()
-    }
     override val onMoveNextPageAction: () -> Unit = {
         findNavController().navigate(R.id.action_fragmentSignUpTermsOfService_to_fragmentSignUpEnterId)
     }
@@ -65,6 +65,13 @@ class SignUpTermsOfServiceFragment : BaseSignUpContentFragment<FragmentSignUpTer
                             isEnabled = it.isCheckedRequiredAll
                         )
                     )
+                }
+            }
+        }
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.TERMS_OF_SERVICE) {
+                it.getContentIfNotHandled()?.run {
+                    signUpTermsOfServiceViewModel.clear()
                 }
             }
         }

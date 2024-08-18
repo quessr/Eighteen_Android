@@ -17,6 +17,10 @@ class SignUpSelectTagViewModel : ViewModel() {
             tags.map { SignUpTagModel(isSelected = tag == it, tag = it) }
     }
 
+    fun clear() {
+        _signUpTagModelsStateFlow.value = tags.map { SignUpTagModel(isSelected = false, tag = it) }
+    }
+
     companion object {
         private val tags = listOf(Tag.BEAUTY, Tag.EXERCISE, Tag.STUDY, Tag.ART, Tag.GAME, Tag.ETC)
     }

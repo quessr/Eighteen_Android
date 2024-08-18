@@ -13,6 +13,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.model.Sig
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
 import com.eighteen.eighteenandroid.presentation.common.mediapicker.MediaPicker
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class SignUpAddMediasFragment :
     BaseSignUpContentFragment<FragmentSignUpAddMediasBinding>(FragmentSignUpAddMediasBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.clearMediaResultStateFlow()
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.ADD_MEDIAS)
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.SELECT_TAG)
         super.onMovePrevPageAction()
     }
 
@@ -81,6 +83,18 @@ class SignUpAddMediasFragment :
                     }
                 }
 
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpViewModelContentInterface.pageClearEvent.collect {
+                    if (it.peekContent() == SignUpPage.ADD_MEDIAS) {
+                        it.getContentIfNotHandled()?.run {
+                            signUpViewModelContentInterface.clearMediaResultStateFlow()
+                        }
+                    }
+                }
             }
         }
     }

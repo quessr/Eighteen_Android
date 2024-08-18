@@ -11,8 +11,10 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterPhoneNumberBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.clearFocus
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,11 +38,6 @@ class SignUpEnterPhoneNumberFragment :
         SignUpNextButtonModel(isVisible = false)
 
     private val signUpEnterPhoneNumberViewModel by viewModels<SignUpEnterPhoneNumberViewModel>()
-
-    override fun onResume() {
-        super.onResume()
-        binding.etInput.setText(signUpViewModelContentInterface.phoneNumber)
-    }
 
     override fun initView() = bind {
         initStateFlow()
@@ -80,6 +77,15 @@ class SignUpEnterPhoneNumberFragment :
                             //do nothing
                         }
                     }
+                }
+            }
+        }
+
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent){
+            if(it.peekContent() == SignUpPage.ENTER_PHONE_NUMBER){
+                it.getContentIfNotHandled()?.run{
+                    signUpViewModelContentInterface.phoneNumber = ""
+                    binding.etInput.setText("")
                 }
             }
         }

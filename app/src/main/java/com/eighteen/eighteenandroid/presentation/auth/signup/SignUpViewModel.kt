@@ -14,6 +14,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
@@ -51,6 +52,12 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         MutableStateFlow<ModelState<LoginResultInfo>>(ModelState.Empty())
     override val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>> =
         _signUpResultStateFlow.asStateFlow()
+
+    private val _pageClearEventStateFlow =
+        MutableStateFlow(Event(SignUpPage.NOTHING))
+
+    override val pageClearEvent: StateFlow<Event<SignUpPage>> =
+        _pageClearEventStateFlow.asStateFlow()
 
     override var phoneNumber: String = ""
     override var id: String = ""
@@ -123,6 +130,10 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
                 }
             }
         }
+    }
+
+    override fun setPageClearEvent(page: SignUpPage) {
+        _pageClearEventStateFlow.value = Event(page)
     }
 
     override fun onCleared() {

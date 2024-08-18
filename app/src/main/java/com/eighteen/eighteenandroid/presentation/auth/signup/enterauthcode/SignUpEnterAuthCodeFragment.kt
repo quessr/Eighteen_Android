@@ -18,6 +18,7 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterAuthCodeBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.clearFocus
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 class SignUpEnterAuthCodeFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterAuthCodeBinding>(FragmentSignUpEnterAuthCodeBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.phoneNumber = ""
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.ENTER_PHONE_NUMBER)
         super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {

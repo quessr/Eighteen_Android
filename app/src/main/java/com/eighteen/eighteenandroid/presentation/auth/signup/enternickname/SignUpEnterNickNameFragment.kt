@@ -12,6 +12,8 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterNicknameBindi
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.model.SignUpEnterNickNameStatus
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import kotlinx.coroutines.launch
 
 class SignUpEnterNickNameFragment :
@@ -21,7 +23,7 @@ class SignUpEnterNickNameFragment :
     }
 
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.id = ""
+        signUpViewModelContentInterface.setPageClearEvent(SignUpPage.ENTER_ID)
         super.onMovePrevPageAction.invoke()
     }
     override val progress: Int = 40
@@ -41,10 +43,10 @@ class SignUpEnterNickNameFragment :
             }
             etInput.setText(signUpViewModelContentInterface.nickName)
         }
-        initEnterNickNameModelStateFlow()
+        initStateFlow()
     }
 
-    private fun initEnterNickNameModelStateFlow() {
+    private fun initStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 signUpEnterNickNameViewModel.signUpEnterNickNameModel.collect {
@@ -67,6 +69,15 @@ class SignUpEnterNickNameFragment :
                             signUpNextButtonModel = signUpNextButtonModel.copy(isEnabled = it.status is SignUpEnterNickNameStatus.Success)
                         )
                     }
+                }
+            }
+        }
+
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.ENTER_NICK_NAME) {
+                it.getContentIfNotHandled()?.run {
+                    signUpViewModelContentInterface.nickName = ""
+                    binding.etInput.setText("")
                 }
             }
         }

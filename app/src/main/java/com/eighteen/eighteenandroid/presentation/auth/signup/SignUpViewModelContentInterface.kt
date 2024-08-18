@@ -6,7 +6,9 @@ import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Calendar
 
@@ -22,9 +24,11 @@ interface SignUpViewModelContentInterface {
     var tag: Tag?
     val mediasStateFlow: StateFlow<List<SignUpMedia>>
     val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>>
+    val pageClearEvent: StateFlow<Event<SignUpPage>>
     fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)
     fun setEditMediaAction(editMediaAction: SignUpEditMediaAction)
     fun clearMediaResultStateFlow()
     fun actionOpenWebViewFragment(url: String)
     fun requestSignUp()
+    fun setPageClearEvent(page: SignUpPage)
 }

@@ -13,6 +13,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterSchoolBinding
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 class SignUpEnterSchoolFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterSchoolBinding>(FragmentSignUpEnterSchoolBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.birth = null
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.ENTER_BIRTH)
         super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {
@@ -53,9 +54,8 @@ class SignUpEnterSchoolFragment :
             updateSearchResultVisibility()
         }
         addTextChangedListener {
-            val keyword = it?.toString() ?: ""
-            if (keyword != signUpViewModelContentInterface.school?.name) clearSelectedSchool()
-            if (keyword.isBlank()) return@addTextChangedListener
+            val keyword = it?.toString()
+            if (keyword.isNullOrBlank()) return@addTextChangedListener
             textChangeJob?.cancel()
             textChangeJob = viewLifecycleOwner.lifecycleScope.launch {
                 delay(SEARCH_DEBOUNCE_MIL_SEC)
@@ -94,11 +94,6 @@ class SignUpEnterSchoolFragment :
         binding.etInput.clearFocus()
     }
 
-    private fun clearSelectedSchool() {
-        signUpViewModelContentInterface.school = null
-        updateButtonModel()
-    }
-
     private fun updateButtonModel() {
         signUpViewModelContentInterface.setNextButtonModel(
             signUpNextButtonModel = signUpNextButtonModel.copy(
@@ -129,6 +124,20 @@ class SignUpEnterSchoolFragment :
                         }
                         is ModelState.Empty -> {
                             //do nothing
+                        }
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpViewModelContentInterface.pageClearEvent.collect {
+                    if (it.peekContent() == SignUpPage.ENTER_SCHOOL) {
+                        it.getContentIfNotHandled()?.run {
+                            binding.etInput.setText("")
+                            signUpViewModelContentInterface.school = null
+                            updateButtonModel()
                         }
                     }
                 }

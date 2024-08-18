@@ -12,13 +12,19 @@ import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterIdBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.enterid.model.SignUpEnterIdStatus
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignUpEnterIdFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterIdBinding>(FragmentSignUpEnterIdBinding::inflate) {
+    override val onMovePrevPageAction: () -> Unit = {
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.TERMS_OF_SERVICE)
+        super.onMovePrevPageAction.invoke()
+    }
     override val onMoveNextPageAction: () -> Unit = {
         signUpEnterIdViewModel.checkIdValidation()
     }
@@ -39,11 +45,10 @@ class SignUpEnterIdFragment :
             }
             etInput.setText(signUpViewModelContentInterface.id)
         }
-        initEnterIdModelStateFlow()
-        initCheckValidationStateFlow()
+        initStateFlow()
     }
 
-    private fun initEnterIdModelStateFlow() {
+    private fun initStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 signUpEnterIdViewModel.signUpEnterIdModel.collect {
@@ -69,9 +74,7 @@ class SignUpEnterIdFragment :
                 }
             }
         }
-    }
 
-    private fun initCheckValidationStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 signUpEnterIdViewModel.checkIdValidationEventStateFlow.collect {
@@ -93,6 +96,15 @@ class SignUpEnterIdFragment :
                             //do nothing
                         }
                     }
+                }
+            }
+        }
+
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.ENTER_ID) {
+                it.getContentIfNotHandled()?.run {
+                    signUpViewModelContentInterface.id = ""
+                    binding.etInput.setText("")
                 }
             }
         }

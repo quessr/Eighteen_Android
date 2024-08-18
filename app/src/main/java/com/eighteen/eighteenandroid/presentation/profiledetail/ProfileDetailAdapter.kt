@@ -74,10 +74,6 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_QNA_TOGGLE -> {
                 val binding = inflaterBinding(ItemSeeMoreBinding::inflate)
-//                ProfileDetailViewHolder.QnaToggle(binding) { toggle ->
-//                    viewModel.toggleItems()
-//                    viewModel.updateQnaToggle(toggle.copy(isExpanded = !toggle.isExpanded))
-//                }
                 ProfileDetailViewHolder.QnaToggle(
                     binding,
                     onQnaToggleCallback = onQnaToggleCallback
@@ -147,11 +143,10 @@ class ProfileDetailAdapter(
         private const val ITEM_TYPE_PROFILE_INFO = 1
         private const val ITEM_TYPE_PROFILE_IMAGES = 2
         private const val ITEM_TYPE_BADGE_AND_TEEN = 3
-        private const val ITEM_TYPE_LIKE = 4
-        private const val ITEM_TYPE_INTRODUCTION = 5
-        private const val ITEM_TYPE_QNA_LIST_TITLE = 6
-        private const val ITEM_TYPE_QNA = 7
-        private const val ITEM_TYPE_QNA_TOGGLE = 8
+        private const val ITEM_TYPE_INTRODUCTION = 4
+        private const val ITEM_TYPE_QNA_LIST_TITLE = 5
+        private const val ITEM_TYPE_QNA = 6
+        private const val ITEM_TYPE_QNA_TOGGLE = 7
 
 
         private val diffUtil = object : DiffUtil.ItemCallback<ProfileDetailModel>() {

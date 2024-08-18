@@ -1,5 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.home
 
+import android.os.Handler
+import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.animation.AlphaAnimation
 import androidx.core.view.isVisible
@@ -7,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
@@ -51,6 +56,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     val fadeIn = AlphaAnimation(0f, 1f).apply { duration = 200 }
     val fadeOut = AlphaAnimation(1f, 0f).apply { duration = 200 }
     var isTop = true
+
+    private val handler =  Handler(Looper.getMainLooper())
+    private var autoScrollRunnable: Runnable? = null
 
     override fun initView() {
         initChipGroup()
@@ -173,6 +181,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 유저 클릭, 상세로 이동
              */
             override fun onUserClicks(user: User) {
+                stopAutoScroll()
                 findNavController().navigate(R.id.action_fragmentMain_to_fragmentProfileDetail)   // 유저 상세로 이동
             }
 
@@ -180,6 +189,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 유저 좋아요 클릭
              */
             override fun onUserLikeClicks(user: User) {
+                stopAutoScroll()
                 // TODO. User Like API 호출
             }
 
@@ -187,6 +197,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 유저 채팅 버튼 클릭
              */
             override fun onUserChatClicks(user: User) {
+                stopAutoScroll()
 //                findNavController().navigate(R.id.action_fragmentMain_to_fragmentChat)
             }
 
@@ -194,6 +205,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 유저 더보기 클릭 -> 신고, 차단 다이얼로그 보여지기
              */
             override fun onUserMoreClicks(itemView: View, user: User) {
+                stopAutoScroll()
                 // TODO. 차단이나 신고에 의한 UserID 필요
                 showReportSelectDialogLeft(
                     itemView,
@@ -249,6 +261,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                         val offset = recyclerView.width / 2 - targetView.width / 2
                         layoutManager.scrollToPositionWithOffset(viewModel.popularUserPosition, offset)
                     }
+
+                    stopAutoScroll()
+                    startAutoScroll(recyclerView)
                 }
             }
 
@@ -261,6 +276,43 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
             override fun saveScrollPosition(position: Int) {
                 viewModel.pageScrollPosition = position
+            }
+
+            override fun startAutoScroll(rvMainTeenPopularList: RecyclerView) {
+                val smoothScroller = object : LinearSmoothScroller(requireContext()) {
+                    override fun getVerticalSnapPreference(): Int {
+                        return SNAP_TO_START
+                    }
+
+                    override fun getHorizontalSnapPreference(): Int {
+                        return SNAP_TO_START
+                    }
+
+                    // 스크롤 속도 조정 (이 값을 조정하여 더 부드럽게 또는 빠르게 할 수 있음)
+                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                        return 80f / displayMetrics.densityDpi
+                    }
+                }
+
+                autoScrollRunnable = Runnable {
+
+                    val itemCount = rvMainTeenPopularList.adapter?.itemCount ?: 0
+
+                    if (itemCount > 0) {
+                        viewModel.popularUserPosition = (viewModel.popularUserPosition + 1) % itemCount
+                        smoothScroller.targetPosition = viewModel.popularUserPosition
+                        rvMainTeenPopularList.layoutManager?.startSmoothScroll(smoothScroller)
+//                        rvMainTeenPopularList.smoothScrollToPosition(viewModel.popularUserPosition)
+                    }
+                }
+
+                handler.postDelayed(autoScrollRunnable!!, 4500)
+            }
+
+            override fun stopAutoScroll() {
+                autoScrollRunnable?.let {
+                    handler.removeCallbacks(it)
+                }
             }
         }
     }

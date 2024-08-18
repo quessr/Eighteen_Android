@@ -1,6 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.home.adapter
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +53,10 @@ interface MainAdapterListener {
 
     /** 현재 메인화면 스크롤 포지션 저장*/
     fun saveScrollPosition(position: Int)
+
+    fun startAutoScroll(rvMainTeenPopularList: RecyclerView)
+
+    fun stopAutoScroll()
 }
 class MainAdapter(
     private val context: Context,
@@ -213,18 +219,29 @@ class MainAdapter(
                         addOnScrollListener(object : RecyclerView.OnScrollListener() {
                             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                                 super.onScrollStateChanged(recyclerView, newState)
-                                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                    val layoutManager = recyclerView.layoutManager
-                                    val centerView = snapHelper.findSnapView(layoutManager)
-                                    val pos = centerView?.let { layoutManager?.getPosition(it) }
-                                    pos?.let {
-                                        // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
-                                        listener.saveUserPosition(it)
+                                when(newState) {
+                                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                                        // 사용자가 스크롤 중
+                                        listener.stopAutoScroll()
+                                    }
+
+                                    RecyclerView.SCROLL_STATE_IDLE -> {
+                                        // 스크롤이 멈춘 후 자동 스크롤 재개
+                                        val layoutManager = recyclerView.layoutManager
+                                        val centerView = snapHelper.findSnapView(layoutManager)
+                                        val pos = centerView?.let { layoutManager?.getPosition(it) }
+                                        pos?.let {
+                                            // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
+                                            listener.saveUserPosition(it)
+                                            listener.stopAutoScroll()
+                                            listener.startAutoScroll(rvMainTeenPopularList)
+                                        }
                                     }
                                 }
                             }
                         })
                     }
+
                     popularUserAdapter.submitList(userListView?.userList)
                     listener.scrollToPreviousUser(rvMainTeenPopularList)
                 }

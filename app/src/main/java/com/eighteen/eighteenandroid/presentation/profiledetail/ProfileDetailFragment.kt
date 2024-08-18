@@ -290,8 +290,7 @@ class ProfileDetailFragment() :
     private fun initNavigation() {
         bind {
             ivClose.setOnClickListener {
-                val navController = findNavController()
-                navController.navigate(R.id.action_fragmentProfileDetail_to_fragmentMain)
+                findNavController().popBackStack()
             }
         }
     }

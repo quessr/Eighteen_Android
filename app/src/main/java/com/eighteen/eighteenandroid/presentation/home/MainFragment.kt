@@ -32,6 +32,7 @@ import com.eighteen.eighteenandroid.presentation.home.adapter.Tournament
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -57,8 +58,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     val fadeOut = AlphaAnimation(1f, 0f).apply { duration = 200 }
     var isTop = true
 
-    private val handler =  Handler(Looper.getMainLooper())
-    private var autoScrollRunnable: Runnable? = null
+    private var autoScrollJob: Job? = null
+    private var isAutoScrolling = false
 
     override fun initView() {
         initChipGroup()
@@ -279,40 +280,40 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             }
 
             override fun startAutoScroll(rvMainTeenPopularList: RecyclerView) {
-                val smoothScroller = object : LinearSmoothScroller(requireContext()) {
-                    override fun getVerticalSnapPreference(): Int {
-                        return SNAP_TO_START
+                isAutoScrolling = true
+                autoScrollJob = lifecycleScope.launch {
+                    val smoothScroller = object : LinearSmoothScroller(requireContext()) {
+                        override fun getVerticalSnapPreference(): Int {
+                            return SNAP_TO_START
+                        }
+
+                        override fun getHorizontalSnapPreference(): Int {
+                            return SNAP_TO_START
+                        }
+
+                        // 스크롤 속도 조정 (이 값을 조정하여 더 부드럽게 또는 빠르게 할 수 있음)
+                        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                            return 80f / displayMetrics.densityDpi
+                        }
                     }
 
-                    override fun getHorizontalSnapPreference(): Int {
-                        return SNAP_TO_START
-                    }
+                    while (isAutoScrolling) {
+                        delay(4500)
 
-                    // 스크롤 속도 조정 (이 값을 조정하여 더 부드럽게 또는 빠르게 할 수 있음)
-                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                        return 80f / displayMetrics.densityDpi
+                        val itemCount = rvMainTeenPopularList.adapter?.itemCount ?: 0
+
+                        if (itemCount > 0) {
+                            viewModel.popularUserPosition = (viewModel.popularUserPosition + 1) % itemCount
+                            smoothScroller.targetPosition = viewModel.popularUserPosition
+                            rvMainTeenPopularList.layoutManager?.startSmoothScroll(smoothScroller)
+                        }
                     }
                 }
-
-                autoScrollRunnable = Runnable {
-
-                    val itemCount = rvMainTeenPopularList.adapter?.itemCount ?: 0
-
-                    if (itemCount > 0) {
-                        viewModel.popularUserPosition = (viewModel.popularUserPosition + 1) % itemCount
-                        smoothScroller.targetPosition = viewModel.popularUserPosition
-                        rvMainTeenPopularList.layoutManager?.startSmoothScroll(smoothScroller)
-//                        rvMainTeenPopularList.smoothScrollToPosition(viewModel.popularUserPosition)
-                    }
-                }
-
-                handler.postDelayed(autoScrollRunnable!!, 4500)
             }
 
             override fun stopAutoScroll() {
-                autoScrollRunnable?.let {
-                    handler.removeCallbacks(it)
-                }
+                isAutoScrolling = false
+                autoScrollJob?.cancel()
             }
         }
     }
@@ -497,5 +498,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        mainAdapterListener.stopAutoScroll()
+        super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        mainAdapterListener.stopAutoScroll()
+        super.onDestroyView()
     }
 }

@@ -3,9 +3,6 @@ package com.eighteen.eighteenandroid.presentation.auth.signup.enterphonenumber
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterPhoneNumberBinding
@@ -17,7 +14,6 @@ import com.eighteen.eighteenandroid.presentation.common.clearFocus
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
  * 휴대폰 번호 입력 페이지
@@ -59,31 +55,27 @@ class SignUpEnterPhoneNumberFragment :
     }
 
     private fun initStateFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterPhoneNumberViewModel.sendMessageResultStateFlow.collect {
-                    when (it) {
-                        is ModelState.Loading -> {
-                            //TODO 로딩 처리
-                        }
-                        is ModelState.Success -> {
-                            signUpViewModelContentInterface.phoneNumber = it.data ?: ""
-                            onMoveNextPageAction.invoke()
-                        }
-                        is ModelState.Error -> {
-                            //TODO 에러처리
-                        }
-                        is ModelState.Empty -> {
-                            //do nothing
-                        }
-                    }
+        collectInLifecycle(signUpEnterPhoneNumberViewModel.sendMessageResultStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩 처리
+                }
+                is ModelState.Success -> {
+                    signUpViewModelContentInterface.phoneNumber = it.data ?: ""
+                    onMoveNextPageAction.invoke()
+                }
+                is ModelState.Error -> {
+                    //TODO 에러처리
+                }
+                is ModelState.Empty -> {
+                    //do nothing
                 }
             }
         }
 
-        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent){
-            if(it.peekContent() == SignUpPage.ENTER_PHONE_NUMBER){
-                it.getContentIfNotHandled()?.run{
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.ENTER_PHONE_NUMBER) {
+                it.getContentIfNotHandled()?.run {
                     signUpViewModelContentInterface.phoneNumber = ""
                     binding.etInput.setText("")
                 }

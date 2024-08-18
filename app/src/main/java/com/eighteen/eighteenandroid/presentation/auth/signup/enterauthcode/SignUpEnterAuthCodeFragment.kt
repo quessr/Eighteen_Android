@@ -10,9 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterAuthCodeBinding
@@ -21,13 +18,13 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextBut
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.clearFocus
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showKeyboard
 import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.TwoButtonPopUpDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
  * 인증 코드 입력 페이지
@@ -170,53 +167,46 @@ class SignUpEnterAuthCodeFragment :
         }
 
     private fun initStateFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterAuthCodeViewModel.sendMessageResultStateFlow.collect {
-                    when (it) {
-                        is ModelState.Loading -> {
-                            //TODO 로딩 처리
-                            Log.d("SignUpEnterAuthCodeFragment", "send loading")
-                        }
-                        is ModelState.Success -> {
-                            //do nothing
-                        }
-                        is ModelState.Error -> {
-                            //TODO 에러처리
-                            Log.d("SignUpEnterAuthCodeFragment", "send error ${it.throwable}")
+        collectInLifecycle(signUpEnterAuthCodeViewModel.sendMessageResultStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩 처리
+                    Log.d("SignUpEnterAuthCodeFragment", "send loading")
+                }
+                is ModelState.Success -> {
+                    //do nothing
+                }
+                is ModelState.Error -> {
+                    //TODO 에러처리
+                    Log.d("SignUpEnterAuthCodeFragment", "send error ${it.throwable}")
 
-                        }
-                        is ModelState.Empty -> {
-                            //do nothing
-                        }
-                    }
+                }
+                is ModelState.Empty -> {
+                    //do nothing
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterAuthCodeViewModel.confirmMessageResultStateFlow.collect {
-                    when (it) {
-                        is ModelState.Loading -> {
-                            //TODO 로딩 처리
-                            Log.d("SignUpEnterAuthCodeFragment", "confirm loading")
-                        }
-                        is ModelState.Success -> {
-                            //TODO 인증 완료 분기처리
-                            //case 1. 이미 있는 회원일 경우(로그인)
-                            //showLoginDialogFragment()
 
-                            //case 2. 처음 가입한 경우(회원가입)
-                            showSignUpDialogFragment()
-                        }
-                        is ModelState.Error -> {
-                            //TODO 에러처리
-                            Log.d("SignUpEnterAuthCodeFragment", "confirm error ${it.throwable}")
-                        }
-                        is ModelState.Empty -> {
-                            //do nothing
-                        }
-                    }
+        collectInLifecycle(signUpEnterAuthCodeViewModel.confirmMessageResultStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩 처리
+                    Log.d("SignUpEnterAuthCodeFragment", "confirm loading")
+                }
+                is ModelState.Success -> {
+                    //TODO 인증 완료 분기처리
+                    //case 1. 이미 있는 회원일 경우(로그인)
+                    //showLoginDialogFragment()
+
+                    //case 2. 처음 가입한 경우(회원가입)
+                    showSignUpDialogFragment()
+                }
+                is ModelState.Error -> {
+                    //TODO 에러처리
+                    Log.d("SignUpEnterAuthCodeFragment", "confirm error ${it.throwable}")
+                }
+                is ModelState.Empty -> {
+                    //do nothing
                 }
             }
         }
@@ -253,12 +243,8 @@ class SignUpEnterAuthCodeFragment :
     }
 
     private fun collectRemainTimeFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterAuthCodeViewModel.remainTimeFlow.collect {
-                    binding.tvRemainTime.text = it
-                }
-            }
+        collectInLifecycle(signUpEnterAuthCodeViewModel.remainTimeFlow) {
+            binding.tvRemainTime.text = it
         }
     }
 

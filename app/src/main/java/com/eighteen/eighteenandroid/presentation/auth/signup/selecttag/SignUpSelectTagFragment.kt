@@ -1,16 +1,13 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.selecttag
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpSelectTagBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
-import kotlinx.coroutines.launch
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 
 class SignUpSelectTagFragment :
     BaseSignUpContentFragment<FragmentSignUpSelectTagBinding>(FragmentSignUpSelectTagBinding::inflate) {
@@ -38,27 +35,20 @@ class SignUpSelectTagFragment :
     }
 
     private fun initStateFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpSelectTagViewModel.signUpModelStateFlow.collect {
-                    (binding.rvTags.adapter as? SignUpSelectTagAdapter)?.submitList(it)
-                    signUpViewModelContentInterface.setNextButtonModel(
-                        signUpNextButtonModel = signUpNextButtonModel.copy(
-                            isEnabled = it.any { tagModel -> tagModel.isSelected })
-                    )
-                }
-            }
+        collectInLifecycle(signUpSelectTagViewModel.signUpModelStateFlow) {
+            (binding.rvTags.adapter as? SignUpSelectTagAdapter)?.submitList(it)
+            signUpViewModelContentInterface.setNextButtonModel(
+                signUpNextButtonModel = signUpNextButtonModel.copy(
+                    isEnabled = it.any { tagModel -> tagModel.isSelected })
+            )
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpViewModelContentInterface.pageClearEvent.collect {
-                    if (it.peekContent() == SignUpPage.SELECT_TAG) {
-                        it.getContentIfNotHandled()?.run {
-                            signUpViewModelContentInterface.tag = null
-                            signUpSelectTagViewModel.clear()
-                            binding.rvTags.scrollToPosition(0)
-                        }
-                    }
+
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.SELECT_TAG) {
+                it.getContentIfNotHandled()?.run {
+                    signUpViewModelContentInterface.tag = null
+                    signUpSelectTagViewModel.clear()
+                    binding.rvTags.scrollToPosition(0)
                 }
             }
         }

@@ -1,9 +1,5 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias
 
-import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.safeLet
@@ -14,9 +10,9 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMed
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
 import com.eighteen.eighteenandroid.presentation.common.mediapicker.MediaPicker
-import kotlinx.coroutines.launch
 
 class SignUpAddMediasFragment :
     BaseSignUpContentFragment<FragmentSignUpAddMediasBinding>(FragmentSignUpAddMediasBinding::inflate) {
@@ -56,7 +52,6 @@ class SignUpAddMediasFragment :
         }
 
         override fun onClickMedia() {
-            Log.d("TESTLOG", "onClickMedia")
             //TODO 미디어 클릭 시
         }
     }
@@ -74,26 +69,17 @@ class SignUpAddMediasFragment :
     }
 
     private fun initStateFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpViewModelContentInterface.mediasStateFlow.collect {
-                    (binding.rvMedias.adapter as? SignUpMediasAdapter)?.run {
-                        val mediaItemModels = createSignUpMediaItemModels(it)
-                        submitList(mediaItemModels)
-                    }
-                }
-
+        collectInLifecycle(signUpViewModelContentInterface.mediasStateFlow) {
+            (binding.rvMedias.adapter as? SignUpMediasAdapter)?.run {
+                val mediaItemModels = createSignUpMediaItemModels(it)
+                submitList(mediaItemModels)
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpViewModelContentInterface.pageClearEvent.collect {
-                    if (it.peekContent() == SignUpPage.ADD_MEDIAS) {
-                        it.getContentIfNotHandled()?.run {
-                            signUpViewModelContentInterface.clearMediaResultStateFlow()
-                        }
-                    }
+        collectInLifecycle(signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.ADD_MEDIAS) {
+                it.getContentIfNotHandled()?.run {
+                    signUpViewModelContentInterface.clearMediaResultStateFlow()
                 }
             }
         }

@@ -3,9 +3,6 @@ package com.eighteen.eighteenandroid.presentation.auth.signup.enternickname
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterNicknameBinding
@@ -14,7 +11,6 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.enternickname.model
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
-import kotlinx.coroutines.launch
 
 class SignUpEnterNickNameFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterNicknameBinding>(FragmentSignUpEnterNicknameBinding::inflate) {
@@ -47,29 +43,25 @@ class SignUpEnterNickNameFragment :
     }
 
     private fun initStateFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterNickNameViewModel.signUpEnterNickNameModel.collect {
-                    bind {
-                        when (it.status) {
-                            is SignUpEnterNickNameStatus.Error -> {
-                                tvErrorMessage.isVisible = true
-                                tvErrorMessage.text = resources.getString(it.status.errorStringRes)
-                                etInput.setBackgroundResource(R.drawable.bg_rect_stroke_w2_red_r10)
-                            }
-                            else -> {
-                                tvErrorMessage.isVisible = false
-                                etInput.setBackgroundResource(R.drawable.bg_text_field)
-                            }
-                        }
-                        val countText =
-                            "${it.inputString.length}/${resources.getInteger(R.integer.sign_up_enter_nickname_max_length)}"
-                        tvCount.text = countText
-                        signUpViewModelContentInterface.setNextButtonModel(
-                            signUpNextButtonModel = signUpNextButtonModel.copy(isEnabled = it.status is SignUpEnterNickNameStatus.Success)
-                        )
+        collectInLifecycle(signUpEnterNickNameViewModel.signUpEnterNickNameModel) {
+            bind {
+                when (it.status) {
+                    is SignUpEnterNickNameStatus.Error -> {
+                        tvErrorMessage.isVisible = true
+                        tvErrorMessage.text = resources.getString(it.status.errorStringRes)
+                        etInput.setBackgroundResource(R.drawable.bg_rect_stroke_w2_red_r10)
+                    }
+                    else -> {
+                        tvErrorMessage.isVisible = false
+                        etInput.setBackgroundResource(R.drawable.bg_text_field)
                     }
                 }
+                val countText =
+                    "${it.inputString.length}/${resources.getInteger(R.integer.sign_up_enter_nickname_max_length)}"
+                tvCount.text = countText
+                signUpViewModelContentInterface.setNextButtonModel(
+                    signUpNextButtonModel = signUpNextButtonModel.copy(isEnabled = it.status is SignUpEnterNickNameStatus.Success)
+                )
             }
         }
 

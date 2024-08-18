@@ -11,7 +11,7 @@ sealed class ProfileDetailModel {
     ) : ProfileDetailModel()
 
     data class MediaItem(
-        val url: String,
+        val url: String?,
         val isVideo: Boolean
     )
 

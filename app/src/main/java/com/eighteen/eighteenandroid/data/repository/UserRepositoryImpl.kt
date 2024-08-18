@@ -3,7 +3,7 @@ package com.eighteen.eighteenandroid.data.repository
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SchoolRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SignUpRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
-import com.eighteen.eighteenandroid.data.mapper.UserMapper
+import com.eighteen.eighteenandroid.data.mapper.ProfileDetailMapper
 import com.eighteen.eighteenandroid.data.mapper.mapper
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.Mbti
@@ -55,6 +55,33 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                 )
             )
         }
+
+    override suspend fun fetchUserDetailInfo(id: String): Result<Profile> = runCatching {
+        userService.postProfileDetailInfo(id).mapper { profileDetailResponse ->
+            ProfileDetailMapper.asProfileDetailModel(profileDetailResponse = profileDetailResponse)
+        }
+//        val image1 =
+//            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+//        val image2 =
+//            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
+//        val image3 =
+//            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
+//        return Result.success(
+//            Profile(
+//                nickName = "nickname",
+//                school = School("school name", "address"),
+//                age = 17,
+//                badgeCount = 21,
+//                teenDescription = "teen description",
+//                medias = listOf(Media.Image(image1), Media.Image(image2), Media.Image(image3)),
+//                id = "id",
+//                description = "description",
+//                mbti = null,
+//                qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
+//                snsLinks = listOf(SnsLink("https://www.google.co.kr", "test"))
+//            )
+//        )
+    }
 
     override suspend fun postCheckIdValidation(id: String): Result<Unit?> {
         //TODO id 체크 api 추가

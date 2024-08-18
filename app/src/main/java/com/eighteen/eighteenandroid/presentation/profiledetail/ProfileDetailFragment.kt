@@ -10,28 +10,46 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
+import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileDetailFragment() :
     BaseFragment<FragmentProfileDetailBinding>(FragmentProfileDetailBinding::inflate) {
 
+    @Inject
+    lateinit var getUserDetailInfoUseCase: GetUserDetailInfoUseCase
+
     private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
-    private val profileDetailViewModel by viewModels<ProfileDetailViewModel>()
+
+    @Inject
+    lateinit var assistedFactory: ProfileDetailViewModel.ProfileDetailAssistedFactory
+    private val profileDetailViewModel by viewModels<ProfileDetailViewModel>(
+        factoryProducer = {
+            ProfileDetailViewModel.Factory(
+                assistedFactory = assistedFactory,
+                getUserDetailInfoUseCase = getUserDetailInfoUseCase,
+                userId = "@Tester"
+            )
+        }
+    )
 
     private lateinit var mediaItems: List<ProfileDetailModel.MediaItem>
 
@@ -94,14 +112,12 @@ class ProfileDetailFragment() :
             profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             profileDetailRecyclerview.adapter =
                 ProfileDetailAdapter(
-                    profileDetailViewModel,
                     viewLifecycleOwner,
                     onPageChangeCallbackForVisibilitySoundIcon,
                     onPageChangeCallbackForImagePosition = { currentPosition ->
                         profileDetailViewModel.setCurrentPosition(currentPosition)
                     }, onLikeChangeCallback = { profileDetailViewModel.toggleLike() },
                     onQnaToggleCallback = { profileDetailViewModel.toggleItems() },
-                    currentPosition = profileDetailViewModel.currentPosition
                     getCurrentPosition = { profileDetailViewModel.currentPosition }
                 )
             profileDetailRecyclerview.itemAnimator = null
@@ -112,9 +128,28 @@ class ProfileDetailFragment() :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 profileDetailViewModel.items.collectLatest { details ->
-                    (binding.profileDetailRecyclerview.adapter as? ProfileDetailAdapter)?.submitList(
-                        details
-                    )
+                    when (details) {
+                        is ModelState.Loading -> {
+                            //TODO Loading 처리
+                        }
+
+                        is ModelState.Success -> {
+                            bind {
+                                (profileDetailRecyclerview.adapter as? ProfileDetailAdapter)?.submitList(
+                                    details.data
+                                )
+                            }
+
+                        }
+
+                        is ModelState.Error -> {
+                            //TODO Error 처리
+                        }
+
+                        is ModelState.Empty -> {
+                            //do nothing
+                        }
+                    }
                 }
             }
         }
@@ -175,7 +210,7 @@ class ProfileDetailFragment() :
 
     private fun findViewPagerPosition(): Int {
         // ViewPager2가 포함된 아이템의 위치를 반환
-        return profileDetailViewModel.items.value?.indexOfFirst { it is ProfileDetailModel.ProfileImages }
+        return profileDetailViewModel.items.value.data?.indexOfFirst { it is ProfileDetailModel.ProfileImages }
             ?: -1
     }
 
@@ -246,7 +281,7 @@ class ProfileDetailFragment() :
             ProfileDetailModel.QnaListTitle(id = "5"),
             ProfileDetailModel.QnaToggle(id = "6", isExpanded = true)
         )
-        profileDetailViewModel.setItems(initialData)
+//        profileDetailViewModel.setItems(initialData)
         profileDetailViewModel.setMediaItems(mediaItems)
         profileDetailViewModel.updateQnaItems(qnaList)
         initMediaDetailFlow()
@@ -292,9 +327,5 @@ class ProfileDetailFragment() :
      */
     private fun openMediaDetailDialogFragment() {
         showDialogFragment(MediaDetailDialogFragment())
-    }
-
-    companion object {
-        private const val CURRENT_POSITION_KEY = "CURRENT_POSITION_KEY"
     }
 }

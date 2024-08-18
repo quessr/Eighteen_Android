@@ -4,6 +4,7 @@ import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import com.eighteen.eighteenandroid.domain.usecase.AddSnsLinkUseCase
 import com.eighteen.eighteenandroid.domain.usecase.CheckIdValidationUseCase
 import com.eighteen.eighteenandroid.domain.usecase.EditIntroduceUseCase
+import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
 import com.eighteen.eighteenandroid.domain.usecase.RemoveSnsLinkUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
@@ -21,6 +22,11 @@ object UserUseCaseModule {
     @Singleton
     fun provideUserUseCase(repository: UserRepository): UserUseCase =
         UserUseCase(repository = repository)
+
+    @Provides
+    @Singleton
+    fun provideUserDetailInfoUseCase(repository: UserRepository): GetUserDetailInfoUseCase =
+        GetUserDetailInfoUseCase(repository = repository)
 
     @Provides
     @Singleton

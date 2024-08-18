@@ -102,6 +102,7 @@ class ProfileDetailFragment() :
                     }, onLikeChangeCallback = { profileDetailViewModel.toggleLike() },
                     onQnaToggleCallback = { profileDetailViewModel.toggleItems() },
                     currentPosition = profileDetailViewModel.currentPosition
+                    getCurrentPosition = { profileDetailViewModel.currentPosition }
                 )
             profileDetailRecyclerview.itemAnimator = null
         }

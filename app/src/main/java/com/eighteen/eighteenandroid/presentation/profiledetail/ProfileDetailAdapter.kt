@@ -21,13 +21,12 @@ import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDeta
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
 class ProfileDetailAdapter(
-    private val viewModel: ProfileDetailViewModel,
     private val lifecycleOwner: LifecycleOwner,
     private val pageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
     private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
     private val onLikeChangeCallback: () -> Unit,
     private val onQnaToggleCallback: () -> Unit,
-    private val currentPosition: Int
+    private val getCurrentPosition: () -> Int
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
@@ -107,11 +106,10 @@ class ProfileDetailAdapter(
         holder.onBind(getItem(position))
 
         if (holder is ProfileDetailViewHolder.Images) {
-//            holder.binding.viewPager.setCurrentItem(
-//                viewModel.currentPosition,
-//                false
-//            )
-            holder.binding.viewPager.currentItem = currentPosition // 구성 변경시 ViewPager의 위치 유지
+            holder.binding.viewPager.setCurrentItem(
+                getCurrentPosition(),
+                false
+            )// 구성 변경시 ViewPager의 위치 유지
         }
 
 

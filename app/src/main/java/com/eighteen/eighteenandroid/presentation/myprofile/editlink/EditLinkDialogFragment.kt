@@ -173,7 +173,6 @@ class EditLinkDialogFragment :
 
     private fun initDialogWindow() {
         dialog?.run {
-            isCancelable = false
             window?.run {
                 setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

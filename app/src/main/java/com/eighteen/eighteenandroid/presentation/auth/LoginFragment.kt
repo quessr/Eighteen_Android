@@ -22,6 +22,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             tvBtnLogin.setOnClickListener {
                 //TODO 로그인 플로우 이동
             }
+            ivBtnClose.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 

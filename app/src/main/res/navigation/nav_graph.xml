@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentProfileDetail"
             app:destination="@id/fragmentProfileDetailFragment" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentLogin"
+            app:destination="@id/fragmentLogin" />
     </fragment>
 
     <fragment

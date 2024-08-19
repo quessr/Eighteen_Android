@@ -69,6 +69,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             ivBtnBack.setOnClickListener {
                 signUpViewModel.actionToPrevPage()
             }
+            ivBtnClose.setOnClickListener {
+                findNavController().popBackStack(R.id.fragmentLogin, true)
+            }
             root.setOnClickListener {
                 hideKeyboardAndRemoveCurrentFocus()
             }

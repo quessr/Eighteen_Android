@@ -12,6 +12,7 @@ import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.getScreenWidth
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.UserDiffCallBack
+import kotlin.math.roundToInt
 
 /**
  *
@@ -43,8 +44,9 @@ class PopularUserAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(user: User, context: Context) {
             val layoutParams = itemView.layoutParams
-            layoutParams.width = context.getScreenWidth() - context.dp2Px(60)
-            layoutParams.height = context.getScreenWidth() - context.dp2Px(60)
+            val itemWidth = context.getScreenWidth() - (context.getScreenWidth() * 0.07 * 2).roundToInt()
+            layoutParams.width = itemWidth          // 0.85
+            layoutParams.height = itemWidth * 100 / 85  // 1
             itemView.layoutParams = layoutParams
 
             binding.run {

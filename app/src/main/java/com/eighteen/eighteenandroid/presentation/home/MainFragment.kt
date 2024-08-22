@@ -1,17 +1,16 @@
 package com.eighteen.eighteenandroid.presentation.home
 
-import android.os.Handler
-import android.os.Looper
+import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.animation.AlphaAnimation
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.LinearSmoothScroller.SNAP_TO_START
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
@@ -128,6 +127,20 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                             isTop = true
                         } else {
                             isTop = false
+                        }
+
+                        val layoutManager = (layoutManager as? LinearLayoutManager)
+
+//                        Log.i("MainScrollStateChanged", "findLastVisible = ${layoutManager?.findLastVisibleItemPosition().toString()}")
+//                        Log.i("MainScrollStateChanged", "findFirstVisible = ${layoutManager?.findFirstVisibleItemPosition().toString()}")
+//                        Log.i("MainScrollStateChanged", "findLastCompletely = ${layoutManager?.findLastCompletelyVisibleItemPosition()}")
+//                        Log.i("MainScrollStateChanged", "findFirstCompletely = ${layoutManager?.findFirstCompletelyVisibleItemPosition()}")
+
+                        val firstVisiblePosition = layoutManager?.findFirstVisibleItemPosition()
+                        if(firstVisiblePosition != null) {
+                            if(firstVisiblePosition > 1) {
+                                mainAdapterListener.stopAutoScroll()
+                            }
                         }
 
                         when(newState) {
@@ -251,21 +264,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             /**
              * 이전에 보던 인기 Teen 유저로 이동
              */
-            override fun scrollToPreviousUser(recyclerView: RecyclerView) {
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                layoutManager.scrollToPositionWithOffset(viewModel.popularUserPosition, 0)
+            override fun scrollToPreviousUser() {
+                val popularUserListViewHolder = getMainChildViewHolder<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
+                val rvPopularUserList = popularUserListViewHolder?.binding?.rvMainTeenPopularList
 
-                // 부드러운 스크롤을 위해 post 사용
-                recyclerView.post {
-                    val targetView = layoutManager.findViewByPosition(viewModel.popularUserPosition)
-                    if (targetView != null) {
-                        val offset = recyclerView.width / 2 - targetView.width / 2
-                        layoutManager.scrollToPositionWithOffset(viewModel.popularUserPosition, offset)
-                    }
+                val layoutManager = rvPopularUserList?.layoutManager as? LinearLayoutManager
+                layoutManager?.scrollToPositionWithOffset(viewModel.popularUserPosition, 0)
 
-                    stopAutoScroll()
-                    startAutoScroll(recyclerView)
+                val targetView = layoutManager?.findViewByPosition(viewModel.popularUserPosition)
+                targetView?.let {
+                    val offset = rvPopularUserList.width / 2 - it.width / 2
+                    layoutManager.scrollToPositionWithOffset(viewModel.popularUserPosition, offset)
                 }
+
+                stopAutoScroll()
+                startAutoScroll()
             }
 
             /**
@@ -279,33 +292,23 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 viewModel.pageScrollPosition = position
             }
 
-            override fun startAutoScroll(rvMainTeenPopularList: RecyclerView) {
+            override fun startAutoScroll() {
                 isAutoScrolling = true
                 autoScrollJob = viewLifecycleOwner.lifecycleScope.launch {
-                    val smoothScroller = object : LinearSmoothScroller(requireContext()) {
-                        override fun getVerticalSnapPreference(): Int {
-                            return SNAP_TO_START
-                        }
-
-                        override fun getHorizontalSnapPreference(): Int {
-                            return SNAP_TO_START
-                        }
-
-                        // 스크롤 속도 조정 (이 값을 조정하여 더 부드럽게 또는 빠르게 할 수 있음)
-                        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                            return 80f / displayMetrics.densityDpi
-                        }
-                    }
+                    val smoothScroller = linearSmoothScroller(requireContext())
 
                     while (isAutoScrolling) {
                         delay(4500)
 
-                        val itemCount = rvMainTeenPopularList.adapter?.itemCount ?: 0
+                        val popularUserListViewHolder = getMainChildViewHolder<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
+
+                        val rvPopularUserList = popularUserListViewHolder?.binding?.rvMainTeenPopularList
+                        val itemCount = rvPopularUserList?.adapter?.itemCount ?: 0
 
                         if (itemCount > 0) {
                             viewModel.popularUserPosition = (viewModel.popularUserPosition + 1) % itemCount
                             smoothScroller.targetPosition = viewModel.popularUserPosition
-                            rvMainTeenPopularList.layoutManager?.startSmoothScroll(smoothScroller)
+                            rvPopularUserList?.layoutManager?.startSmoothScroll(smoothScroller)
                         }
                     }
                 }
@@ -315,6 +318,35 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 isAutoScrolling = false
                 autoScrollJob?.cancel()
             }
+        }
+    }
+
+    private fun linearSmoothScroller(context: Context) = object : LinearSmoothScroller(context) {
+        override fun getVerticalSnapPreference(): Int {
+            return SNAP_TO_START
+        }
+
+        override fun getHorizontalSnapPreference(): Int {
+            return SNAP_TO_START
+        }
+
+        // 스크롤 속도: 80f
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+            return 80f / displayMetrics.densityDpi
+        }
+    }
+
+    /**
+     * Get main RV child view holder
+     * @param T: ViewHolder 타입
+     * @return
+     */
+    private inline fun<reified T: RecyclerView.ViewHolder> getMainChildViewHolder(): T? {
+        return binding.rvMain.run {
+            children.map {
+                val adapterPosition = getChildAdapterPosition(it)
+                findViewHolderForAdapterPosition(adapterPosition)
+            }.filterIsInstance<T>().firstOrNull()
         }
     }
 

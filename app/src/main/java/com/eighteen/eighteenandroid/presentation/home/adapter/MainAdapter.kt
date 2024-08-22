@@ -1,11 +1,10 @@
 package com.eighteen.eighteenandroid.presentation.home.adapter
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -46,7 +45,7 @@ interface MainAdapterListener {
     fun onTournamentMoreClicks()
 
     /** 이전에 보여진 유저 스크롤 */
-    fun scrollToPreviousUser(recyclerView: RecyclerView)
+    fun scrollToPreviousUser()
 
     /** 이전에 보여진 유저 포지션 저장*/
     fun saveUserPosition(position: Int)
@@ -54,7 +53,7 @@ interface MainAdapterListener {
     /** 현재 메인화면 스크롤 포지션 저장*/
     fun saveScrollPosition(position: Int)
 
-    fun startAutoScroll(rvMainTeenPopularList: RecyclerView)
+    fun startAutoScroll()
 
     fun stopAutoScroll()
 }
@@ -200,7 +199,7 @@ class MainAdapter(
 
         class PopularUserListViewHolder(
             private val context: Context,
-            private val binding: ItemMainPopularTeenListviewBinding,
+            val binding: ItemMainPopularTeenListviewBinding,
             private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
             private val snapHelper = PagerSnapHelper()
@@ -234,7 +233,7 @@ class MainAdapter(
                                             // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
                                             listener.saveUserPosition(it)
                                             listener.stopAutoScroll()
-                                            listener.startAutoScroll(rvMainTeenPopularList)
+                                            listener.startAutoScroll()
                                         }
                                     }
                                 }
@@ -242,8 +241,11 @@ class MainAdapter(
                         })
                     }
 
-                    popularUserAdapter.submitList(userListView?.userList)
-                    listener.scrollToPreviousUser(rvMainTeenPopularList)
+                    popularUserAdapter.submitList(userListView?.userList) {
+                        rvMainTeenPopularList.doOnLayout {
+                            listener.scrollToPreviousUser()
+                        }
+                    }
                 }
             }
         }

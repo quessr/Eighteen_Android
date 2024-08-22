@@ -8,18 +8,27 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemTournamentBinding
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.TournamentDiffCallBack
 
-class TournamentAdapter: ListAdapter<Tournament, TournamentAdapter.TournamentViewHolder>(TournamentDiffCallBack()) {
+class TournamentAdapter(
+    private val listener: MainAdapterListener
+): ListAdapter<Tournament, TournamentAdapter.TournamentViewHolder>(TournamentDiffCallBack()) {
 
-    class TournamentViewHolder(private val binding: ItemTournamentBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Tournament) {
+    class TournamentViewHolder(
+        private val binding: ItemTournamentBinding,
+        private val listener: MainAdapterListener
+    ): RecyclerView.ViewHolder(binding.root) {
+        fun bind(tournament: Tournament) {
             with(binding) {
-                when(item) {
+                when(tournament) {
                     is Tournament.Exercise -> {
                         ivTournament.setImageResource(R.drawable.bg_tournament_exercise)
                     }
                     is Tournament.Study -> {
                         ivTournament.setImageResource(R.drawable.bg_tournament_study)
                     }
+                }
+
+                root.setOnClickListener {
+                    listener.onTournamentClicks(tournament)
                 }
             }
         }
@@ -29,7 +38,7 @@ class TournamentAdapter: ListAdapter<Tournament, TournamentAdapter.TournamentVie
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemBinding = ItemTournamentBinding.inflate(layoutInflater, parent, false)
 
-        return TournamentViewHolder(itemBinding)
+        return TournamentViewHolder(itemBinding, listener)
     }
 
     override fun onBindViewHolder(holder: TournamentViewHolder, position: Int) {

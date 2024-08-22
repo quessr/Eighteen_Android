@@ -4,6 +4,8 @@
     android:layout_width="200dp"
     android:layout_height="wrap_content"
     android:textAlignment="center"
-    app:chipCornerRadius="16dp"
+    app:chipCornerRadius="20dp"
+    android:textSize="14sp"
+    android:fontFamily="@font/pretendard_regular"
     app:chipStrokeColor="@color/black"
     app:chipStrokeWidth="1dp" />

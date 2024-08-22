@@ -29,13 +29,8 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="144dp"
-                android:src="@drawable/bg_gradient_top"
-                app:layout_constraintTop_toTopOf="@+id/img_today_teen" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="144dp"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.7"
                 android:src="@drawable/bg_gradient_bottom"
                 app:layout_constraintBottom_toBottomOf="@+id/img_today_teen" />
 

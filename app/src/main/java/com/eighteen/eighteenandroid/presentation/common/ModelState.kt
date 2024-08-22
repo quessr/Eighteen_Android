@@ -12,4 +12,10 @@ sealed interface ModelState<T> {
     class Error<T>(override val data: T? = null, val throwable: Throwable) : ModelState<T>
 
     fun isSuccess() = this is Success
+    fun <T> copyWithData(data: T? = null) = when (this) {
+        is Success -> Success(data)
+        is Loading -> Loading(data)
+        is Error -> Error(data, throwable)
+        is Empty -> Empty()
+    }
 }

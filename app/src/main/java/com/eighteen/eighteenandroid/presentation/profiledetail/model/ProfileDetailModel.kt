@@ -10,19 +10,22 @@ sealed class ProfileDetailModel {
         val school: String,
     ) : ProfileDetailModel()
 
+    data class MediaItem(
+        val url: String?,
+        val isVideo: Boolean
+    )
+
     data class ProfileImages(
         override val id: String,
-        val imageUrl: List<String>
-    ) : ProfileDetailModel()
-
-    data class Like(
-        override val id: String,
-        val likeCount: Int
+        val mediaItems: List<MediaItem>,
+        var currentPosition: Int = 0,
+        val likeCount: Int,
+        val isLiked: Boolean = false
     ) : ProfileDetailModel()
 
     data class BadgeAndTeen(
         override val id: String,
-        val badgeCount: Int,
+        val badgeCount: Int?,
         val teenAward: String
     ) : ProfileDetailModel()
 
@@ -34,8 +37,8 @@ sealed class ProfileDetailModel {
 
     data class Qna(
         override val id: String,
-        val question: String,
-        val answer: String
+        val question: String?,
+        val answer: String?
     ) : ProfileDetailModel()
 
     data class QnaListTitle(

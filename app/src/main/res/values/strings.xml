@@ -153,6 +153,7 @@
     <string name="profile_detail_badge_count">10개</string>
     <string name="profile_detail_teen">TEEN</string>
     <string name="profile_detail_teen_award">5월 2주차 우승</string>
+    <string name="profile_detail_like">좋아요</string>
 
     <!-- Chat -->
     <string name="chat_search_friend">친구를 검색해보세요</string>

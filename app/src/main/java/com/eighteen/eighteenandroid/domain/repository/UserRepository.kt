@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.domain.model.User
 
 interface UserRepository {
     suspend fun fetchUserData(): Result<List<User>>
+    suspend fun fetchUserDetailInfo(id: String): Result<Profile>
     suspend fun postCheckIdValidation(id: String): Result<Unit?>
     suspend fun postSignUp(signUpInfo: SignUpInfo): Result<LoginResultInfo>
     suspend fun getMyProfile(accessToken: String): Result<Profile>

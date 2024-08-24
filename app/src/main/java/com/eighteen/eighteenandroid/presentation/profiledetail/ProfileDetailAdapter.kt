@@ -1,11 +1,13 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailBadgeAndTeenBinding
 import com.eighteen.eighteenandroid.databinding.ItemProfileDetailImagesWithLikeBinding
@@ -19,9 +21,13 @@ import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDeta
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
 class ProfileDetailAdapter(
-    private val viewModel: ProfileDetailViewModel
+    private val lifecycleOwner: LifecycleOwner,
+    private val pageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
+    private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
+    private val onLikeChangeCallback: () -> Unit,
+    private val onQnaToggleCallback: () -> Unit,
+    private val getCurrentPosition: () -> Int
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
         val context = parent.context
@@ -37,7 +43,13 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_PROFILE_IMAGES -> {
                 val binding = inflaterBinding(ItemProfileDetailImagesWithLikeBinding::inflate)
-                ProfileDetailViewHolder.Images(binding)
+                ProfileDetailViewHolder.Images(
+                    binding,
+                    onPageChangeCallbackForImagePosition = onPageChangeCallbackForImagePosition,
+                    onLikeClickCallback = onLikeChangeCallback,
+                    lifecycleOwner = lifecycleOwner,
+                    onPageCallbackForVisibilitySoundIcon = pageCallbackForVisibilitySoundIcon
+                )
             }
 
             ITEM_TYPE_BADGE_AND_TEEN -> {
@@ -62,10 +74,10 @@ class ProfileDetailAdapter(
 
             ITEM_TYPE_QNA_TOGGLE -> {
                 val binding = inflaterBinding(ItemSeeMoreBinding::inflate)
-                ProfileDetailViewHolder.QnaToggle(binding) { toggle ->
-                    viewModel.toggleItems()
-                    viewModel.updateQnaToggle(toggle.copy(isExpanded = !toggle.isExpanded))
-                }
+                ProfileDetailViewHolder.QnaToggle(
+                    binding,
+                    onQnaToggleCallback = onQnaToggleCallback
+                )
             }
 
             else -> throw IllegalArgumentException("Invalid view type") // 코드 비교 해 볼것
@@ -89,6 +101,13 @@ class ProfileDetailAdapter(
     override fun onBindViewHolder(holder: ProfileDetailViewHolder, position: Int) {
         holder.onBind(getItem(position))
 
+        if (holder is ProfileDetailViewHolder.Images) {
+            holder.binding.viewPager.setCurrentItem(
+                getCurrentPosition(),
+                false
+            )// 구성 변경시 ViewPager의 위치 유지
+        }
+
 
         if (holder is ProfileDetailViewHolder.Qna) {
 
@@ -99,7 +118,7 @@ class ProfileDetailAdapter(
                 }
 
                 position == itemCount - 1 && itemCount - 5 <= ProfileDetailViewModel.ITEM_COUNT_THRESHOLD -> {
-                    // Qna 항목이 ITEM_COUNT_THRESHOLD 이하인 경우 마지막 Qna 항목의 하단에 radius를 적용
+                    // Qna 항목이 ITEM_COUNT_THRESHOLD 이하인 경우 마지막 Qna 항목의 하단에 radius 적용
                     holder.binding.root.setBackgroundResource(R.drawable.bg_qna_rounded_bottom)
 
                     // marginBottom 설정
@@ -111,7 +130,12 @@ class ProfileDetailAdapter(
 
                 else -> {
                     // 나머지 Qna 항목
-                    holder.binding.root.setBackgroundColor(Color.parseColor("#999999")) // 배경색 설정
+                    holder.binding.root.setBackgroundColor(
+                        ContextCompat.getColor(
+                            holder.binding.root.context,
+                            R.color.grey_03
+                        )
+                    ) // 배경색 설정
                 }
             }
         } else if (holder is ProfileDetailViewHolder.QnaToggle) {
@@ -124,11 +148,10 @@ class ProfileDetailAdapter(
         private const val ITEM_TYPE_PROFILE_INFO = 1
         private const val ITEM_TYPE_PROFILE_IMAGES = 2
         private const val ITEM_TYPE_BADGE_AND_TEEN = 3
-        private const val ITEM_TYPE_LIKE = 4
-        private const val ITEM_TYPE_INTRODUCTION = 5
-        private const val ITEM_TYPE_QNA_LIST_TITLE = 6
-        private const val ITEM_TYPE_QNA = 7
-        private const val ITEM_TYPE_QNA_TOGGLE = 8
+        private const val ITEM_TYPE_INTRODUCTION = 4
+        private const val ITEM_TYPE_QNA_LIST_TITLE = 5
+        private const val ITEM_TYPE_QNA = 6
+        private const val ITEM_TYPE_QNA_TOGGLE = 7
 
 
         private val diffUtil = object : DiffUtil.ItemCallback<ProfileDetailModel>() {
@@ -148,5 +171,4 @@ class ProfileDetailAdapter(
 
         }
     }
-
 }

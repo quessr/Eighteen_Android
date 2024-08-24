@@ -1,41 +1,135 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.eighteen.eighteenandroid.domain.model.Profile
+import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class ProfileDetailViewModel : ViewModel() {
-    private val _items = MutableStateFlow<List<ProfileDetailModel>>(emptyList())
-    val items: StateFlow<List<ProfileDetailModel>> get() = _items
+class ProfileDetailViewModel @AssistedInject constructor(
+    @Assisted private val userId: String,
+    private val getUserDetailInfoUseCase: GetUserDetailInfoUseCase
+) : ViewModel() {
+    private val _items = MutableStateFlow<ModelState<List<ProfileDetailModel>>>(ModelState.Empty())
+    val items get() = _items.asStateFlow()
 
-    private val _showAllItems = MutableStateFlow(false)
-    val showAllItems: StateFlow<Boolean> get() = _showAllItems
+    private var showAllItems = false
 
-    private val _qnaItems = MutableStateFlow<List<ProfileDetailModel.Qna>>(emptyList())
-    val qnaItems: StateFlow<List<ProfileDetailModel.Qna>> get() = _qnaItems
+    private var qnaItems = emptyList<ProfileDetailModel.Qna>()
 
-    companion object {
-        const val ITEM_COUNT_THRESHOLD = 2
+    private var _currentPosition = 0
+    val currentPosition: Int get() = _currentPosition
+
+    private val _mediaItems = MutableStateFlow<List<ProfileDetailModel.MediaItem>>(emptyList())
+    val mediaItems: StateFlow<List<ProfileDetailModel.MediaItem>> get() = _mediaItems
+
+    private val _isLike = MutableStateFlow(false)
+    val isLike: StateFlow<Boolean> get() = _isLike
+    private var profileDetailJob: Job? = null
+
+    init {
+        fetchProfileDetail()
     }
 
-    fun setItems(newItems: List<ProfileDetailModel>) {
-        _items.value = newItems
+    fun fetchProfileDetail() {
+        if (profileDetailJob?.isCompleted == false) return
+
+        profileDetailJob = viewModelScope.launch {
+            _items.value = ModelState.Loading()
+            val result = getUserDetailInfoUseCase(userId)
+            result.onSuccess { profile ->
+                _items.value = ModelState.Success(mapProfileToItems(profile))
+            }.onFailure {
+                _items.value = ModelState.Error(throwable = it)
+            }
+            Log.d("getUserDetailInfoUseCase", "@@@@@ : ${getUserDetailInfoUseCase(userId)}")
+        }
+    }
+
+    private fun mapProfileToItems(profile: Profile): List<ProfileDetailModel> {
+        val qnaList = if (profile.qna.isEmpty()) {
+            listOf(
+                ProfileDetailModel.Qna(
+                    id = "empty_qna",
+                    question = "",
+                    answer = ""
+                )
+            )
+        } else {
+            profile.qna.map { qnaItem ->
+                ProfileDetailModel.Qna(
+                    id = qnaItem.question.name,
+                    question = qnaItem.question.name,
+                    answer = qnaItem.answer
+                )
+            }
+        }
+        return listOf(
+            ProfileDetailModel.ProfileImages(
+                id = profile.id,
+                mediaItems = profile.medias.map {
+                    ProfileDetailModel.MediaItem(
+                        url = it.url,
+                        isVideo = true
+                    )
+                },
+                likeCount = 100
+            ),
+            ProfileDetailModel.ProfileInfo(
+                id = profile.id,
+                name = profile.nickName,
+                age = profile.age,
+                school = profile.school.name
+            ),
+            ProfileDetailModel.BadgeAndTeen(
+                id = profile.id,
+                badgeCount = profile.badgeCount,
+                teenAward = profile.teenDescription ?: ""
+            ),
+            ProfileDetailModel.Introduction(
+                id = profile.id,
+                personalityType = "Unknown",
+                introductionText = profile.description ?: "등록된 소개글이 없습니다."
+            ),
+            ProfileDetailModel.QnaListTitle(id = "qna_list_title"),
+        ) + qnaList
+    }
+
+    fun setMediaItems(mediaItems: List<ProfileDetailModel.MediaItem>) {
+        _mediaItems.value = mediaItems
+    }
+
+    fun setCurrentPosition(position: Int) {
+        _currentPosition = position
     }
 
     fun toggleItems() {
-        _showAllItems.value = !_showAllItems.value
+        showAllItems = !showAllItems
         updateItems()
     }
 
+
     private fun updateItems() {
-        val currentItems = _items.value.toMutableList()
+        if (_items.value.isSuccess().not()) return
+
+        val currentItems = (_items.value.data ?: emptyList()).toMutableList()
         val qnaIndex = currentItems.indexOfFirst { it is ProfileDetailModel.QnaToggle }
         val qnaTitleIndex = currentItems.indexOfFirst { it is ProfileDetailModel.QnaListTitle }
 
         if (qnaIndex != -1) {
-            val qnaList = _qnaItems.value
-            val showAll = _showAllItems.value
+            val qnaList = qnaItems
+            val showAll = showAllItems
             val qnaItemsToShow = if (showAll) qnaList else qnaList.take(ITEM_COUNT_THRESHOLD)
 
             currentItems.removeAll { it is ProfileDetailModel.Qna }
@@ -47,7 +141,6 @@ class ProfileDetailViewModel : ViewModel() {
             } else {
                 currentItems.addAll(qnaItemsToShow)
             }
-
 
             // 기존의 QnaToggle 항목이 있으면 제거합니다.
             val existingToggleIndex =
@@ -64,34 +157,67 @@ class ProfileDetailViewModel : ViewModel() {
                         insertIndex,
                         ProfileDetailModel.QnaToggle(
                             id = "toggle",
-                            isExpanded = _showAllItems.value
+                            isExpanded = showAllItems
                         )
                     )
                 } else {
                     currentItems.add(
                         ProfileDetailModel.QnaToggle(
                             id = "toggle",
-                            isExpanded = _showAllItems.value
+                            isExpanded = showAllItems
                         )
                     )
                 }
             }
-
-            _items.value = currentItems
-        }
-    }
-
-    fun updateQnaToggle(updatedToggle: ProfileDetailModel.QnaToggle) {
-        val currentItems = _items.value.toMutableList()
-        val index = currentItems.indexOfFirst { it.id == updatedToggle.id }
-        if (index != -1) {
-            currentItems[index] = updatedToggle
-            _items.value = currentItems
+            _items.value = ModelState.Success(currentItems)
         }
     }
 
     fun updateQnaItems(qnaItems: List<ProfileDetailModel.Qna>) {
-        _qnaItems.value = qnaItems
+        this.qnaItems = qnaItems
         updateItems()
+    }
+
+    fun toggleLike() {
+        if (_items.value.isSuccess().not()) return
+
+        val currentItems = (_items.value.data ?: emptyList()).toMutableList()
+        val profileImages =
+            currentItems.filterIsInstance<ProfileDetailModel.ProfileImages>().firstOrNull()
+
+        profileImages?.let { item ->
+            val isCurrentLiked = item.isLiked
+            val updateProfileImages = item.copy(
+                likeCount = if (isCurrentLiked) profileImages.likeCount - 1 else profileImages.likeCount + 1,
+                isLiked = !isCurrentLiked
+            )
+            val index = currentItems.indexOf(item)
+            if (index != -1) {
+                currentItems[index] = updateProfileImages
+                _items.value = ModelState.Success(currentItems)
+
+                _isLike.value = updateProfileImages.isLiked
+            }
+        }
+    }
+
+    @AssistedFactory
+    interface ProfileDetailAssistedFactory {
+        fun create(userId: String): ProfileDetailViewModel
+    }
+
+    class Factory(
+        private val assistedFactory: ProfileDetailAssistedFactory,
+        private val getUserDetailInfoUseCase: GetUserDetailInfoUseCase,
+        private val userId: String
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return assistedFactory.create(userId = userId) as T
+        }
+    }
+
+    companion object {
+        const val ITEM_COUNT_THRESHOLD = 2
     }
 }

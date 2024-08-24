@@ -2,6 +2,9 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
 import android.util.Log
 import android.view.View
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -116,10 +119,29 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
     class Qna(val binding: ItemQnaBinding) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
             val qna = profileDetailModel as? ProfileDetailModel.Qna
-            qna.let {
-                binding.question.text = it?.question
-                binding.answer.text = it?.answer
+            binding.root.post {
+                if (qna?.question.isNullOrEmpty()) {
+                    binding.question.isVisible = false
+                    binding.answer.isVisible = false
+                    binding.emptyTextView.isVisible = true
+                    binding.root.background = null
+                    binding.root.setBackgroundColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.background_color
+                        )
+                    )
+                    binding.root.setPadding(0, 0, 0, 0)
+                } else {
+                    // qna가 null이 아닌 경우 처리
+                    binding.question.text = qna?.question
+                    binding.answer.text = qna?.answer
+                }
             }
+//            qna?.let {
+//                binding.question.text = it.question
+//                binding.answer.text = it.answer
+//            }
         }
     }
 

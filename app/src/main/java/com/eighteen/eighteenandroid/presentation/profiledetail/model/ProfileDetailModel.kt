@@ -25,7 +25,7 @@ sealed class ProfileDetailModel {
 
     data class BadgeAndTeen(
         override val id: String,
-        val badgeCount: Int,
+        val badgeCount: Int?,
         val teenAward: String
     ) : ProfileDetailModel()
 
@@ -37,8 +37,8 @@ sealed class ProfileDetailModel {
 
     data class Qna(
         override val id: String,
-        val question: String,
-        val answer: String
+        val question: String?,
+        val answer: String?
     ) : ProfileDetailModel()
 
     data class QnaListTitle(

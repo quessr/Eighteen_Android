@@ -1,8 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -130,7 +130,12 @@ class ProfileDetailAdapter(
 
                 else -> {
                     // 나머지 Qna 항목
-                    holder.binding.root.setBackgroundColor(Color.parseColor("#999999")) // 배경색 설정
+                    holder.binding.root.setBackgroundColor(
+                        ContextCompat.getColor(
+                            holder.binding.root.context,
+                            R.color.grey_03
+                        )
+                    ) // 배경색 설정
                 }
             }
         } else if (holder is ProfileDetailViewHolder.QnaToggle) {

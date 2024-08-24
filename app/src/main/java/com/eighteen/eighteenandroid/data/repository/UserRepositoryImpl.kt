@@ -57,30 +57,60 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         }
 
     override suspend fun fetchUserDetailInfo(id: String): Result<Profile> = runCatching {
-        userService.postProfileDetailInfo(id).mapper { profileDetailResponse ->
-            ProfileDetailMapper.asProfileDetailModel(profileDetailResponse = profileDetailResponse)
+//                userService.postProfileDetailInfo(id).mapper { profileDetailResponse ->
+//            ProfileDetailMapper.asProfileDetailModel(profileDetailResponse = profileDetailResponse)
+//        }
+
+        // 비디오인지 여부를 결정하는 함수
+        fun determineIfMedia(link: String): Boolean {
+            val videoExtensions = listOf("mp4", "avi", "mkv", "mov")
+            return videoExtensions.any { link.endsWith(it, ignoreCase = true) }
         }
-//        val image1 =
-//            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-//        val image2 =
-//            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
-//        val image3 =
-//            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-//        return Result.success(
-//            Profile(
-//                nickName = "nickname",
-//                school = School("school name", "address"),
-//                age = 17,
-//                badgeCount = 21,
-//                teenDescription = "teen description",
-//                medias = listOf(Media.Image(image1), Media.Image(image2), Media.Image(image3)),
-//                id = "id",
-//                description = "description",
-//                mbti = null,
-//                qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
-//                snsLinks = listOf(SnsLink("https://www.google.co.kr", "test"))
-//            )
-//        )
+
+        // 각 링크를 MediaItem으로 변환
+        val mediaList = listOf(
+            "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
+            "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        ).map { link ->
+            if (determineIfMedia(link)) {
+                Media.Video(link)
+            } else {
+                Media.Image(link)
+            }
+        }
+
+
+        val qnaList = List(10) { index ->
+            Qna(
+                question = QnaType.values().getOrNull(index) ?: QnaType.QNA1,
+                answer = "${index + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            )
+        }
+
+        return Result.success(
+            Profile(
+                nickName = "김 에스더",
+                school = School("서울 중학교", "서울시"),
+                age = 16,
+                badgeCount = 10,
+                teenDescription = "5월 2주차 우승",
+                medias = mediaList,
+                id = "2",
+                description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                mbti = Mbti(
+                    energy = Mbti.MbtiType.Energy.Extroversion,
+                    information = Mbti.MbtiType.Information.Intuition,
+                    decision = Mbti.MbtiType.Decision.Feeling,
+                    lifestyle = Mbti.MbtiType.Lifestyle.Judging
+                ),
+                qna = qnaList,
+                snsLinks = listOf(SnsLink("https://www.google.co.kr", "Google"))
+            )
+        )
     }
 
     override suspend fun postCheckIdValidation(id: String): Result<Unit?> {

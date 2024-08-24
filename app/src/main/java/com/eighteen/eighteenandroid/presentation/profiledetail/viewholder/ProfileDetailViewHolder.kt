@@ -2,7 +2,6 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 
 import android.util.Log
 import android.view.View
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -138,16 +137,11 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                     binding.answer.text = qna?.answer
                 }
             }
-//            qna?.let {
-//                binding.question.text = it.question
-//                binding.answer.text = it.answer
-//            }
         }
     }
 
     class QnaToggle(
         val binding: ItemSeeMoreBinding,
-//        private val toggleItems: (ProfileDetailModel.QnaToggle) -> Unit
         private val onQnaToggleCallback: () -> Unit
     ) : ProfileDetailViewHolder(binding) {
         override fun onBind(profileDetailModel: ProfileDetailModel) {
@@ -155,11 +149,9 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
             toggle?.let {
                 binding.tvSeeMore.text = if (toggle.isExpanded) "접기" else "펼쳐서 보기"
                 binding.tvSeeMore.setOnClickListener(View.OnClickListener {
-//                    toggleItems(toggle)
                     onQnaToggleCallback()
                 })
                 binding.ivSeeMore.setOnClickListener(View.OnClickListener {
-//                    toggleItems(toggle)
                     onQnaToggleCallback()
                 })
             }

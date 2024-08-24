@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.eighteen.eighteenandroid.data.mapper.ProfileDetailMapper
 import com.eighteen.eighteenandroid.domain.model.Profile
 import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
 
 class ProfileDetailViewModel @AssistedInject constructor(
     @Assisted private val userId: String,
@@ -60,7 +58,23 @@ class ProfileDetailViewModel @AssistedInject constructor(
     }
 
     private fun mapProfileToItems(profile: Profile): List<ProfileDetailModel> {
-        // TODO isVideo
+        val qnaList = if (profile.qna.isEmpty()) {
+            listOf(
+                ProfileDetailModel.Qna(
+                    id = "empty_qna",
+                    question = "",
+                    answer = ""
+                )
+            )
+        } else {
+            profile.qna.map { qnaItem ->
+                ProfileDetailModel.Qna(
+                    id = qnaItem.question.name,
+                    question = qnaItem.question.name,
+                    answer = qnaItem.answer
+                )
+            }
+        }
         return listOf(
             ProfileDetailModel.ProfileImages(
                 id = profile.id,
@@ -80,22 +94,17 @@ class ProfileDetailViewModel @AssistedInject constructor(
             ),
             ProfileDetailModel.BadgeAndTeen(
                 id = profile.id,
-                badgeCount = profile.badgeCount ?: 0,
+                badgeCount = profile.badgeCount,
                 teenAward = profile.teenDescription ?: ""
             ),
             ProfileDetailModel.Introduction(
                 id = profile.id,
                 personalityType = "Unknown",
-                introductionText = profile.description ?: ""
+                introductionText = profile.description ?: "등록된 소개글이 없습니다."
             ),
             ProfileDetailModel.QnaListTitle(id = "qna_list_title"),
-            ProfileDetailModel.QnaToggle(id = "qna_toggle", isExpanded = true)
-        )
+        ) + qnaList
     }
-
-//    fun setItems(newItems: List<ProfileDetailModel>) {
-//        _items.value = newItems
-//    }
 
     fun setMediaItems(mediaItems: List<ProfileDetailModel.MediaItem>) {
         _mediaItems.value = mediaItems
@@ -163,15 +172,6 @@ class ProfileDetailViewModel @AssistedInject constructor(
             _items.value = ModelState.Success(currentItems)
         }
     }
-
-//    fun updateQnaToggle(updatedToggle: ProfileDetailModel.QnaToggle) {
-//        val currentItems = _items.value.toMutableList()
-//        val index = currentItems.indexOfFirst { it.id == updatedToggle.id }
-//        if (index != -1) {
-//            currentItems[index] = updatedToggle
-//            _items.value = currentItems
-//        }
-//    }
 
     fun updateQnaItems(qnaItems: List<ProfileDetailModel.Qna>) {
         this.qnaItems = qnaItems

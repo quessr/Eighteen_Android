@@ -59,8 +59,9 @@ class ProfileDetailFragment() :
         setupAdapter()
         setupRecyclerViewScrollListener()
         initViewModel()
-        setupInitialData()
         observeMediaItems()
+        initMediaDetailFlow()
+        initMediaDetailFlow()
     }
 
     override fun initView() {
@@ -225,73 +226,6 @@ class ProfileDetailFragment() :
         val drawableRes =
             if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
         binding.ivSound.setImageResource(drawableRes)
-    }
-
-    private fun setupInitialData() {
-        val qnaList = List(10) { index ->
-            ProfileDetailModel.Qna(
-                id = index.toString(),
-                question = "${index + 1}. Lorem ipsum dolor sit amet?",
-                answer = "${index + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            )
-        }
-
-        // 비디오인지 여부를 결정하는 함수
-        fun determineIfMedia(link: String): Boolean {
-            val videoExtensions = listOf("mp4", "avi", "mkv", "mov")
-            return videoExtensions.any { link.endsWith(it, ignoreCase = true) }
-        }
-
-        val mediaLinks = listOf(
-            "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-//            "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg",
-//            "https://cdn.hankooki.com/news/photo/202309/107376_146623_1695826504.jpg",
-            "https://cdn.dailycc.net/news/photo/202312/766253_670987_1515.png",
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            "https://cdn.newsculture.press/news/photo/202306/525899_650590_620.jpg",
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-        )
-
-        mediaItems = mediaLinks.map { link ->
-            val isVideo = determineIfMedia(link)
-
-            ProfileDetailModel.MediaItem(
-                url = link,
-                isVideo = isVideo
-            )
-        }
-
-        val initialData = listOf(
-            ProfileDetailModel.ProfileImages(
-                id = "2",
-                mediaItems = mediaItems,
-                likeCount = 100
-            ),
-            ProfileDetailModel.ProfileInfo(
-                id = "1",
-                name = "김 에스더",
-                age = 16,
-                school = "서울 중학교",
-            ),
-            ProfileDetailModel.BadgeAndTeen(
-                id = "2",
-                badgeCount = 10,
-                teenAward = "5월 2주차 우승",
-            ),
-            ProfileDetailModel.Introduction(
-                id = "4",
-                personalityType = "INTP",
-                introductionText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            ),
-
-            ProfileDetailModel.QnaListTitle(id = "5"),
-            ProfileDetailModel.QnaToggle(id = "6", isExpanded = true)
-        )
-//        profileDetailViewModel.setItems(initialData)
-        profileDetailViewModel.setMediaItems(mediaItems)
-        profileDetailViewModel.updateQnaItems(qnaList)
-        initMediaDetailFlow()
     }
 
     private fun initNavigation() {

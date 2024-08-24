@@ -1,6 +1,17 @@
 package com.eighteen.eighteenandroid.presentation.home
 
+import android.content.Context
+import android.util.DisplayMetrics
+import android.view.View
+import android.view.animation.AlphaAnimation
+import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
@@ -10,13 +21,19 @@ import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
 import com.eighteen.eighteenandroid.presentation.common.setTagStyle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
+import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogLeft
+import com.eighteen.eighteenandroid.presentation.common.throttleClick
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
+import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapterListener
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
 import com.eighteen.eighteenandroid.presentation.home.adapter.Tournament
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * @file MainFragment.kt
@@ -34,50 +51,123 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private var aboutTeenList = listOf<AboutTeen>()
     private var tournamentList = listOf<Tournament>()
 
+    private lateinit var mainAdapterListener: MainAdapterListener
+
+    val fadeIn = AlphaAnimation(0f, 1f).apply { duration = 200 }
+    val fadeOut = AlphaAnimation(1f, 0f).apply { duration = 200 }
+    var isTop = true
+
+    private var autoScrollJob: Job? = null
+    private var isAutoScrolling = false
+
     override fun initView() {
         initChipGroup()
         initMain()
     }
 
-    private fun initMainAdapter() {
-        mainAdapter = MainAdapter(
-            context = requireContext(),
-            viewModel,
-            savePosition = { pos ->
-                viewModel.savedPosition = pos
-            },
-            onTournamentClicks = { tournament: Tournament ->
-                // 토너먼트 클릭
-                when (tournament) {
-                    Tournament.Exercise -> {
-                        // 운동
-                    }
+    private fun getCenterItemPosition(recyclerView: RecyclerView): Int {
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
 
-                    Tournament.Study -> {
+        // RecyclerView의 중앙 Y 위치 계산
+        val centerY = recyclerView.height / 2
 
-                    }
-                }
-            },
-            onUserClicks = { user: User ->
-                // 유저 클릭
-                // TODO. 유저 상세로 이동
-            },
-            onAboutTeenClicks = { title ->
-                // About Teen 클릭
-                // TODO. About Teen 상세로 이동
-            },
-            onTournamentMoreClicks = {
-                // 토너먼트 더보기
-                // TODO. 토너먼트 더보기로 이동
-            },
-            showUserReportSelectDialog = { user: User ->
-                showReportDialog(user)
+        // 현재 화면에 보이는 첫 번째 아이템과 마지막 아이템의 포지션
+        val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+        val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+
+        var closestPosition = -1
+        var closestDistance = Int.MAX_VALUE
+
+        // 현재 화면에 보이는 아이템들 중 중앙에 가장 가까운 아이템 찾기
+        for (i in firstVisiblePosition..lastVisiblePosition) {
+            val itemView = layoutManager.findViewByPosition(i)
+
+            // 아이템 뷰의 중앙 Y 위치 계산
+            val itemCenterY = (itemView!!.top + itemView.bottom) / 2
+
+            // 아이템 뷰의 중앙 위치와 RecyclerView의 중앙 위치 간의 거리 계산
+            val distance = kotlin.math.abs(itemCenterY - centerY)
+
+            // 가장 가까운 아이템을 찾음
+            if (distance < closestDistance) {
+                closestDistance = distance
+                closestPosition = i
             }
-        )
+        }
+
+        return closestPosition
+    }
+
+    private fun initMainAdapter() {
+        initMainAdapterListener()
+
+        mainAdapter = MainAdapter(context = requireContext(), listener = mainAdapterListener).apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY // 현재 스크롤 위치 저장
+        }
 
         bind {
             with(rvMain) {
                 adapter = mainAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+
+                        // 스크롤이 위로 되면 (dy < 0) 버튼 숨기기, 아래로 스크롤 시( dy > 0 ) 버튼 보여주기
+                        if (dy > 0 && btnScrollTop.visibility == View.GONE) {
+                            btnScrollTop.startAnimation(fadeIn)
+                            btnScrollTop.visibility = View.VISIBLE
+                        }
+                    }
+
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+
+                        if (!canScrollVertically(-1)) {
+                            isTop = true
+                        } else {
+                            isTop = false
+                        }
+
+                        val layoutManager = (layoutManager as? LinearLayoutManager)
+
+//                        Log.i("MainScrollStateChanged", "findLastVisible = ${layoutManager?.findLastVisibleItemPosition().toString()}")
+//                        Log.i("MainScrollStateChanged", "findFirstVisible = ${layoutManager?.findFirstVisibleItemPosition().toString()}")
+//                        Log.i("MainScrollStateChanged", "findLastCompletely = ${layoutManager?.findLastCompletelyVisibleItemPosition()}")
+//                        Log.i("MainScrollStateChanged", "findFirstCompletely = ${layoutManager?.findFirstCompletelyVisibleItemPosition()}")
+
+                        val firstVisiblePosition = layoutManager?.findFirstVisibleItemPosition()
+                        if(firstVisiblePosition != null) {
+                            if(firstVisiblePosition > 1) {
+                                mainAdapterListener.stopAutoScroll()
+                            }
+                        }
+
+                        when(newState) {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
+                                viewModel.pageScrollPosition = getCenterItemPosition(recyclerView)
+
+                                if(isTop && btnScrollTop.isVisible) {
+                                    btnScrollTop.startAnimation(fadeOut)
+                                    btnScrollTop.visibility = View.GONE
+                                } else {
+                                    if(!btnScrollTop.isVisible) {
+                                        btnScrollTop.visibility = View.VISIBLE
+                                        btnScrollTop.startAnimation(fadeIn)
+                                    }
+                                }
+                            }
+
+                            else -> {}
+                        }
+                    }
+                })
+            }
+
+            // Top 버튼
+            btnScrollTop.throttleClick(viewLifecycleOwner.lifecycleScope) {
+                appbarLayout.setExpanded(true, true)
+                rvMain.smoothScrollToPosition(0)
             }
         }
 
@@ -97,6 +187,167 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         // 라이브데이터 값 바꾸고
 
         // 뷰 갱신
+    }
+
+    private fun initMainAdapterListener() {
+        mainAdapterListener = object : MainAdapterListener {
+            /**
+             * 유저 클릭, 상세로 이동
+             */
+            override fun onUserClicks(user: User) {
+                stopAutoScroll()
+                findNavController().navigate(R.id.action_fragmentMain_to_fragmentProfileDetail)   // 유저 상세로 이동
+            }
+
+            /**
+             * 유저 좋아요 클릭
+             */
+            override fun onUserLikeClicks(user: User) {
+                stopAutoScroll()
+                // TODO. User Like API 호출
+            }
+
+            /**
+             * 유저 채팅 버튼 클릭
+             */
+            override fun onUserChatClicks(user: User) {
+                stopAutoScroll()
+//                findNavController().navigate(R.id.action_fragmentMain_to_fragmentChat)
+            }
+
+            /**
+             * 유저 더보기 클릭 -> 신고, 차단 다이얼로그 보여지기
+             */
+            override fun onUserMoreClicks(itemView: View, user: User) {
+                stopAutoScroll()
+                // TODO. 차단이나 신고에 의한 UserID 필요
+                showReportSelectDialogLeft(
+                    itemView,
+                    onReportClicked = {
+                        showDialogFragment(ReportDialogFragment.newInstance(user))
+                    },
+                    onBlockClicked = {}
+                )
+            }
+
+            /**
+             * About Teen 테마 선택
+             */
+            override fun onAboutTeenClicks(title: String) {
+                val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_bar)
+
+                when(title) {
+                    "Teen" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_teen
+                    "채팅" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_chat
+                    "토너먼트" -> {}
+                    "나만의 Teen" -> bottomNavigationView.selectedItemId = R.id.fragmentMyProfile
+                }
+            }
+
+            /**
+             * 토너먼트 클릭
+             */
+            override fun onTournamentClicks(tournament: Tournament) {
+                when(tournament) {
+                    is Tournament.Exercise -> {}
+                    is Tournament.Study -> {}
+                }
+            }
+
+            /**
+             * 토너먼트 더보기 클릭
+             */
+            override fun onTournamentMoreClicks() {
+//                findNavController().navigate(R.id.action_fragmentMain_to_fragmentTournament)
+            }
+
+            /**
+             * 이전에 보던 인기 Teen 유저로 이동
+             */
+            override fun scrollToPreviousUser() {
+                val popularUserListViewHolder = getMainChildViewHolder<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
+                val rvPopularUserList = popularUserListViewHolder?.binding?.rvMainTeenPopularList
+
+                val layoutManager = rvPopularUserList?.layoutManager as? LinearLayoutManager
+                layoutManager?.scrollToPositionWithOffset(viewModel.popularUserPosition, 0)
+
+                val targetView = layoutManager?.findViewByPosition(viewModel.popularUserPosition)
+                targetView?.let {
+                    val offset = rvPopularUserList.width / 2 - it.width / 2
+                    layoutManager.scrollToPositionWithOffset(viewModel.popularUserPosition, offset)
+                }
+
+                stopAutoScroll()
+                startAutoScroll()
+            }
+
+            /**
+             * 인기 Teen 현재 보고있는 유저 위치 저장
+             */
+            override fun saveUserPosition(position: Int) {
+                viewModel.popularUserPosition = position
+            }
+
+            override fun saveScrollPosition(position: Int) {
+                viewModel.pageScrollPosition = position
+            }
+
+            override fun startAutoScroll() {
+                isAutoScrolling = true
+                autoScrollJob = viewLifecycleOwner.lifecycleScope.launch {
+                    val smoothScroller = linearSmoothScroller(requireContext())
+
+                    while (isAutoScrolling) {
+                        delay(4500)
+
+                        val popularUserListViewHolder = getMainChildViewHolder<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
+
+                        val rvPopularUserList = popularUserListViewHolder?.binding?.rvMainTeenPopularList
+                        val itemCount = rvPopularUserList?.adapter?.itemCount ?: 0
+
+                        if (itemCount > 0) {
+                            viewModel.popularUserPosition = (viewModel.popularUserPosition + 1) % itemCount
+                            smoothScroller.targetPosition = viewModel.popularUserPosition
+                            rvPopularUserList?.layoutManager?.startSmoothScroll(smoothScroller)
+                        }
+                    }
+                }
+            }
+
+            override fun stopAutoScroll() {
+                isAutoScrolling = false
+                autoScrollJob?.cancel()
+            }
+        }
+    }
+
+    private fun linearSmoothScroller(context: Context) = object : LinearSmoothScroller(context) {
+        override fun getVerticalSnapPreference(): Int {
+            return SNAP_TO_START
+        }
+
+        override fun getHorizontalSnapPreference(): Int {
+            return SNAP_TO_START
+        }
+
+        // 스크롤 속도: 80f
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+            return 80f / displayMetrics.densityDpi
+        }
+    }
+
+    /**
+     * Get main RV child view holder
+     * @param T: ViewHolder 타입
+     * @return
+     */
+    private inline fun<reified T: RecyclerView.ViewHolder> getMainChildViewHolder(): T? {
+        return binding.rvMain.run {
+            children.map {
+                val adapterPosition = getChildAdapterPosition(it)
+                findViewHolderForAdapterPosition(adapterPosition)
+            }.filterIsInstance<T>().firstOrNull()
+        }
     }
 
     private fun initMain() {
@@ -119,6 +370,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun updateMain() {
         mainAdapter.updateView(
             listOf(
+                MainItem.HeaderView(resources.getString(R.string.main_today_teen)),
                 MainItem.UserListView(
                     userList
                 ), // User List
@@ -256,15 +508,27 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         }
     }
 
-    private fun showReportDialog(user: User) {
-        showReportSelectDialog(
-            context = requireContext(),
-            onReportClicked = {
-                // 신고 다이얼로그 보여주기
-                showDialogFragment(ReportDialogFragment.newInstance(user))
-            },
-            onBlockClicked = {}
-        )
-    }
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            delay(300)
+            bind {
+                // 마지막 스크롤 상태로 돌아오기
+                if (viewModel.pageScrollPosition != -1) {
 
+                    rvMain.scrollToPosition(viewModel.pageScrollPosition)
+
+                    // LayoutManager에서 해당 위치의 아이템을 중앙에 위치시키도록 오프셋 조정
+                    rvMain.post {
+                        val layoutManager = rvMain.layoutManager as LinearLayoutManager
+                        val viewAtPosition = layoutManager.findViewByPosition(viewModel.pageScrollPosition)
+                        if (viewAtPosition != null) {
+                            val offset = (rvMain.height - viewAtPosition.height) / 2
+                            layoutManager.scrollToPositionWithOffset(viewModel.pageScrollPosition, offset)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

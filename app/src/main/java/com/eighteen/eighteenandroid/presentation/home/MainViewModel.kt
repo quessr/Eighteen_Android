@@ -5,15 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide.init
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +18,8 @@ class MainViewModel @Inject constructor(
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-    var savedPosition = 0
+    var popularUserPosition = 0
+    var pageScrollPosition = 0
 
     private val _userData = MutableLiveData<List<User>>()
     val userData: LiveData<List<User>> = _userData

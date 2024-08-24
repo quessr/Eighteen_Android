@@ -19,7 +19,7 @@
         android:title="@string/menu_teen" />
 
     <item
-        android:id="@+id/btn_bottom_chat"
+        android:id="@+id/fragmentChat"
         android:enabled="true"
         android:icon="@drawable/menu_chat_selected"
         android:title="@string/menu_chat" />

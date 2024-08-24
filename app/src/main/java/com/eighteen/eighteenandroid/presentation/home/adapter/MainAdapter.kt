@@ -1,9 +1,10 @@
 package com.eighteen.eighteenandroid.presentation.home.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -18,18 +19,47 @@ import com.eighteen.eighteenandroid.databinding.ItemMainPopularTeenListviewBindi
 import com.eighteen.eighteenandroid.databinding.ItemMainTournamentListviewBinding
 import com.eighteen.eighteenandroid.databinding.ItemTeenBinding
 import com.eighteen.eighteenandroid.domain.model.User
-import com.eighteen.eighteenandroid.presentation.home.MainViewModel
+import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.MainItemDiffCallBack
 
+interface MainAdapterListener {
+    /** 유저 클릭 -> 유저 상세로 이동 */
+    fun onUserClicks(user: User)
+
+    /** 유저 좋아요 클릭 */
+    fun onUserLikeClicks(user: User)
+
+    /** 유저 채팅 클릭 */
+    fun onUserChatClicks(user: User)
+
+    /** 유저 더보기 클릭 */
+    fun onUserMoreClicks(itemView: View, user: User)
+
+    /** About Teen 클릭 */
+    fun onAboutTeenClicks(title: String)
+
+    /** 토너먼트 클릭 */
+    fun onTournamentClicks(tournament: Tournament)
+
+    /** 토너먼트 더보기 클릭 */
+    fun onTournamentMoreClicks()
+
+    /** 이전에 보여진 유저 스크롤 */
+    fun scrollToPreviousUser()
+
+    /** 이전에 보여진 유저 포지션 저장*/
+    fun saveUserPosition(position: Int)
+
+    /** 현재 메인화면 스크롤 포지션 저장*/
+    fun saveScrollPosition(position: Int)
+
+    fun startAutoScroll()
+
+    fun stopAutoScroll()
+}
 class MainAdapter(
     private val context: Context,
-    private val mainViewModel: MainViewModel,
-    private val savePosition: (Int) -> Unit,
-    private val onTournamentMoreClicks: () -> Unit,
-    private val onAboutTeenClicks: (String) -> Unit,
-    private val onUserClicks: (User) -> Unit,
-    private val onTournamentClicks: (Tournament) -> Unit,
-    private val showUserReportSelectDialog: (User) -> Unit,
+    private val listener: MainAdapterListener
 ) : ListAdapter<MainItem, MainAdapter.CommonViewHolder>(MainItemDiffCallBack()) {
     companion object {
         const val HEADER = 1
@@ -52,11 +82,7 @@ class MainAdapter(
 
             HEADER_WITH_MORE -> {
                 val itemBinding = ItemMainHeaderMoreBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.HeaderWithMoreViewHolder(
-                    context,
-                    itemBinding,
-                    onTournamentMoreClicks
-                )
+                CommonViewHolder.TournamentHeaderViewHolder(context, itemBinding, listener)
             }
 
             DIVIDER -> {
@@ -66,24 +92,24 @@ class MainAdapter(
 
             POPULAR_USER_LIST -> {
                 val itemBinding = ItemMainPopularTeenListviewBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.PopularUserListViewHolder(context, mainViewModel, itemBinding, showUserReportSelectDialog, savePosition)
+                CommonViewHolder.PopularUserListViewHolder(context, itemBinding, listener)
             }
 
             USER_VIEW -> {
                 val itemBinding = ItemTeenBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.UserViewHolder(context, itemBinding, showUserReportSelectDialog)
+                CommonViewHolder.UserViewHolder(context, itemBinding, listener)
             }
 
             ABOUT_TEEN_LIST -> {
                 val itemBinding =
                     ItemMainAboutTeenListviewBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.AboutTeenListViewHolder(itemBinding)
+                CommonViewHolder.AboutTeenListViewHolder(itemBinding, listener)
             }
 
             TOURNAMENT_LIST -> {
                 val itemBinding =
                     ItemMainTournamentListviewBinding.inflate(layoutInflater, parent, false)
-                CommonViewHolder.TournamentListViewHolder(itemBinding)
+                CommonViewHolder.TournamentListViewHolder(itemBinding, listener)
             }
 
             else -> throw IllegalArgumentException("Invalid ViewType")
@@ -96,7 +122,7 @@ class MainAdapter(
                 (getItem(position) as? MainItem.HeaderView)?.let { holder.bind(it) }
             }
 
-            is CommonViewHolder.HeaderWithMoreViewHolder -> {
+            is CommonViewHolder.TournamentHeaderViewHolder -> {
                 (getItem(position) as? MainItem.HeaderWithMoreView)?.let { holder.bind(it) }
             }
 
@@ -105,7 +131,7 @@ class MainAdapter(
             }
 
             is CommonViewHolder.UserViewHolder -> {
-                (getItem(position) as? MainItem.UserView)?.let { holder.bind(it) }
+                (getItem(position) as? MainItem.UserView)?.let { holder.bind(it, itemCount, position) }
             }
 
             is CommonViewHolder.AboutTeenListViewHolder -> {
@@ -140,12 +166,10 @@ class MainAdapter(
         binding: ViewBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        abstract fun bind(item: MainItem)
-
         class HeaderViewHolder(
             private val binding: ItemMainHeaderBinding
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val headerView = item as? MainItem.HeaderView ?: return
                 with(binding) {
                     tvHeader.text = headerView.text
@@ -153,20 +177,20 @@ class MainAdapter(
             }
         }
 
-        class HeaderWithMoreViewHolder(
+        class TournamentHeaderViewHolder(
             private val context: Context,
             private val binding: ItemMainHeaderMoreBinding,
-            private val onTournamentMoreClicks: () -> Unit,
+            private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val headerMoreView = item as? MainItem.HeaderWithMoreView ?: return
                 with(binding) {
                     tvHeader.text = headerMoreView.text
 
+                    // 토너먼트 더 보기
                     tvMore.setOnClickListener {
-                        // 토너먼트 더 보기
                         if (context.getString(R.string.main_tournament_in_progress) == headerMoreView.text) {
-                            onTournamentMoreClicks()
+                            listener.onTournamentMoreClicks()
                         }
                     }
                 }
@@ -175,41 +199,53 @@ class MainAdapter(
 
         class PopularUserListViewHolder(
             private val context: Context,
-            private val mainViewModel: MainViewModel,
-            private val binding: ItemMainPopularTeenListviewBinding,
-            private val showUserReportSelectDialog: (User) -> Unit,
-            private val savePosition: (Int) -> Unit
+            val binding: ItemMainPopularTeenListviewBinding,
+            private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
             private val snapHelper = PagerSnapHelper()
 
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val userListView = item as? MainItem.UserListView
 
                 with(binding) {
                     // SnapHelper 설정
                     snapHelper.attachToRecyclerView(rvMainTeenPopularList)
 
-                    val teenAdapter = TeenAdapter(context, showUserReportSelectDialog)
-                    rvMainTeenPopularList.adapter = teenAdapter
+                    val popularUserAdapter = PopularUserAdapter(context, listener)
+                    with(rvMainTeenPopularList) {
+                        adapter = popularUserAdapter
 
-                    rvMainTeenPopularList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                            super.onScrollStateChanged(recyclerView, newState)
-                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                val layoutManager = recyclerView.layoutManager
-                                val centerView = snapHelper.findSnapView(layoutManager)
-                                val pos = centerView?.let { layoutManager?.getPosition(it) }
-                                pos?.let {
-                                    // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
-                                    savePosition(pos)
+                        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                                super.onScrollStateChanged(recyclerView, newState)
+                                when(newState) {
+                                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                                        // 사용자가 스크롤 중
+                                        listener.stopAutoScroll()
+                                    }
+
+                                    RecyclerView.SCROLL_STATE_IDLE -> {
+                                        // 스크롤이 멈춘 후 자동 스크롤 재개
+                                        val layoutManager = recyclerView.layoutManager
+                                        val centerView = snapHelper.findSnapView(layoutManager)
+                                        val pos = centerView?.let { layoutManager?.getPosition(it) }
+                                        pos?.let {
+                                            // 페이지가 변경될 때마다 이 위치(pos)를 사용하여 원하는 작업을 수행
+                                            listener.saveUserPosition(it)
+                                            listener.stopAutoScroll()
+                                            listener.startAutoScroll()
+                                        }
+                                    }
                                 }
                             }
+                        })
+                    }
+
+                    popularUserAdapter.submitList(userListView?.userList) {
+                        rvMainTeenPopularList.doOnLayout {
+                            listener.scrollToPreviousUser()
                         }
-                    })
-
-                    rvMainTeenPopularList.scrollToPosition(mainViewModel.savedPosition)
-
-                    teenAdapter.submitList(userListView?.userList)
+                    }
                 }
             }
         }
@@ -217,30 +253,33 @@ class MainAdapter(
         class UserViewHolder(
             private val context: Context,
             private val binding: ItemTeenBinding,
-            private val showUserReportSelectDialog: (User) -> Unit,
+            private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            @SuppressLint("SetTextI18n")
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem, itemCount: Int, position: Int) {
+                if(itemCount -1 == position) {
+                    itemView.setPadding(0, 0, 0, context.dp2Px(60))
+                }
                 val userView = item as? MainItem.UserView
                 with(binding) {
                     userView?.let {
                         val user = it.user
+                        val userName = "${user.userName}, ${user.userAge}"
                         tvSchool.text = user.userSchoolName
-                        tvName.text = "${user.userName}, ${user.userAge}"
+                        tvName.text = userName
                         Glide.with(context).load(user.userImage).into(imgTodayTeen) // 프로필 이미지
 
-                        // TODO. Button Listener
-                        root.setOnClickListener {
-
+                        imgTodayTeen.setOnClickListener {
+                            listener.onUserClicks(user)
+                            listener.saveScrollPosition(position)   // 현재 메인화면 스크롤 position 저장
                         }
                         btnChat.setOnClickListener {
-
+                            listener.onUserChatClicks(user)
                         }
                         btnLike.setOnClickListener {
-
+                            listener.onUserLikeClicks(user)
                         }
                         btnSetting.setOnClickListener {
-                            showUserReportSelectDialog(user)
+                            listener.onUserMoreClicks(btnSetting, user)
                         }
                     }
                 }
@@ -248,13 +287,14 @@ class MainAdapter(
         }
 
         class AboutTeenListViewHolder(
-            private val binding: ItemMainAboutTeenListviewBinding
+            private val binding: ItemMainAboutTeenListviewBinding,
+            private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 with(binding) {
                     val aboutTeenListView = item as? MainItem.AboutTeenListView
 
-                    val adapter = AboutTeenAdapter()
+                    val adapter = AboutTeenAdapter(listener)
                     adapter.submitList(aboutTeenListView?.aboutTeenList)
                     rvItemMainAboutTeenList.adapter = adapter
                 }
@@ -262,12 +302,13 @@ class MainAdapter(
         }
 
         class TournamentListViewHolder(
-            private val binding: ItemMainTournamentListviewBinding
+            private val binding: ItemMainTournamentListviewBinding,
+            private val listener: MainAdapterListener
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 val tournamentListView = item as? MainItem.TournamentListView
                 with(binding) {
-                    val tournamentAdapter = TournamentAdapter()
+                    val tournamentAdapter = TournamentAdapter(listener)
                     rvItemTournamentList.adapter = tournamentAdapter
 
                     tournamentListView?.tournamentList?.let {
@@ -280,7 +321,7 @@ class MainAdapter(
         class DividerViewHolder(
             private val binding: ItemDividerBinding
         ) : CommonViewHolder(binding) {
-            override fun bind(item: MainItem) {
+            fun bind(item: MainItem) {
                 // ...
             }
         }

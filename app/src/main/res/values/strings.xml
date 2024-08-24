@@ -83,8 +83,10 @@
     <string name="sign_up_select_tag_title">TEEN에서 자랑할 나만의\n카테고리를 골라주세요!</string>
     <string name="sign_up_select_tag_hint">하나의 카테고리를 선택할 수 있어요!</string>
 
-    <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
+    <string name="sign_up_add_media_title">%s 카테고리에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
+    <string name="sign_up_add_media_guide">사진 가이드를 참고해주세요</string>
+
     <string name="sign_up_completed_title">등록이 완료되었어요!\n이제 A-TEEN을 시작해보세요 :)</string>
 
     <string name="edit_media_crop_image_complete">등록 완료</string>

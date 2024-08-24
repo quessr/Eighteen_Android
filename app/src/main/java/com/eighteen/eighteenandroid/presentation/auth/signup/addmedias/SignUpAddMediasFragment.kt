@@ -1,5 +1,9 @@
 package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias
 
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
+import androidx.core.text.buildSpannedString
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.safeLet
@@ -13,6 +17,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
 import com.eighteen.eighteenandroid.presentation.common.mediapicker.MediaPicker
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 
 class SignUpAddMediasFragment :
     BaseSignUpContentFragment<FragmentSignUpAddMediasBinding>(FragmentSignUpAddMediasBinding::inflate) {
@@ -50,15 +55,34 @@ class SignUpAddMediasFragment :
         override fun onClickAddMedia(position: Int) {
             mediaPicker.openMediaPicker()
         }
-
-        override fun onClickMedia() {
-            //TODO 미디어 클릭 시
-        }
     }
 
     override fun initView() {
         initRecyclerView()
+        binding.tvBtnGuide.setOnClickListener {
+            showDialogFragment(SignUpAddMediasGuideDialogFragment())
+        }
+        initTitle()
         initStateFlow()
+    }
+
+    private fun initTitle() {
+        val context = context ?: return
+        val tagString = signUpViewModelContentInterface.tag?.strValue ?: ""
+        val titleText = buildSpannedString {
+            val text = getString(
+                R.string.sign_up_add_media_title,
+                tagString
+            )
+            append(text)
+            setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context, R.color.grey_01)),
+                0,
+                tagString.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+        binding.tvTitle.text = titleText
     }
 
     private fun initRecyclerView() {

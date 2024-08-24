@@ -35,8 +35,9 @@ class SignUpMediaViewHolder(
             when (model) {
                 is SignUpMediaItemModel.RefEmpty -> clickListener.onClickAddMedia(position)
                 is SignUpMediaItemModel.Empty -> clickListener.onClickAddMedia(position)
-                is SignUpMediaItemModel.Image -> clickListener.onClickMedia()
-                is SignUpMediaItemModel.Video -> clickListener.onClickMedia()
+                else -> {
+                    //do nothing
+                }
             }
         }
     }

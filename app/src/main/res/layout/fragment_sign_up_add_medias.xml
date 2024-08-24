@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="13dp"
-        android:text="@string/sign_up_add_media_title"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +31,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMedias"
         android:layout_width="0dp"
-        android:layout_height="288dp"
+        android:layout_height="230dp"
         android:layout_marginTop="31dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -40,4 +39,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvHint"
         tools:listitem="@layout/item_sign_up_media" />
+
+    <TextView
+        android:id="@+id/tvBtnGuide"
+        style="@style/pretendard_regular_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
+        android:gravity="center_vertical"
+        android:text="@string/sign_up_add_media_guide"
+        android:textColor="@color/grey_02"
+        app:drawableEndCompat="@drawable/ic_more"
+        app:drawableTint="@color/grey_02"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvMedias" />
 </androidx.constraintlayout.widget.ConstraintLayout>

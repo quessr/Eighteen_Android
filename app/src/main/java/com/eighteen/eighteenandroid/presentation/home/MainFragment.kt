@@ -238,7 +238,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
                 when(title) {
                     "Teen" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_teen
-                    "채팅" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_chat
+                    "채팅" -> bottomNavigationView.selectedItemId = R.id.fragmentChat
                     "토너먼트" -> {}
                     "나만의 Teen" -> bottomNavigationView.selectedItemId = R.id.fragmentMyProfile
                 }

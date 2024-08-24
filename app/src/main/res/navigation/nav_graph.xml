@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_fragmentEditImage_to_fragmentEditImageResult"
             app:destination="@id/fragmentEditImageResult" />
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentSignUpCompleted"
+            app:destination="@id/fragmentSignUpCompleted" />
     </fragment>
     <fragment
         android:id="@+id/fragmentEditImageResult"
@@ -52,6 +55,11 @@
         android:name="com.eighteen.eighteenandroid.presentation.FullWebViewFragment"
         android:label="fragment_full_web_view"
         tools:layout="@layout/fragment_full_web_view" />
+    <fragment
+        android:id="@+id/fragmentSignUpCompleted"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.signup.completed.SignUpCompletedFragment"
+        android:label="fragment_sign_up_compelted"
+        tools:layout="@layout/fragment_sign_up_completed" />
     <fragment
         android:id="@+id/fragmentMain"
         android:name="com.eighteen.eighteenandroid.presentation.home.MainFragment"

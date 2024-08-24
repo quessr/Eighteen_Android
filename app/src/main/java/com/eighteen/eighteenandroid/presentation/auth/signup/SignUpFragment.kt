@@ -166,7 +166,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             when (it) {
                 is ModelState.Success -> {
                     //TODO 로그인 처리?
-                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.action_fragmentSignUp_to_fragmentSignUpCompleted)
                 }
                 else -> {
                     //do nothing

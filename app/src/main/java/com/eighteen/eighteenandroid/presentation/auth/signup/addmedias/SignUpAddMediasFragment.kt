@@ -2,9 +2,9 @@ package com.eighteen.eighteenandroid.presentation.auth.signup.addmedias
 
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
-import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpAddMediasBinding
@@ -14,6 +14,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMed
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
 import com.eighteen.eighteenandroid.presentation.common.mediapicker.MediaPicker
@@ -28,7 +29,7 @@ class SignUpAddMediasFragment :
     }
 
     override val onMoveNextPageAction: () -> Unit = {
-        findNavController().navigate(R.id.action_fragmentSignUpAddMedias_to_fragmentSignUpCompleted)
+        signUpViewModelContentInterface.requestSignUp()
     }
     override val progress: Int = 100
     override val signUpNextButtonModel = SignUpNextButtonModel(
@@ -104,6 +105,22 @@ class SignUpAddMediasFragment :
             if (it.peekContent() == SignUpPage.ADD_MEDIAS) {
                 it.getContentIfNotHandled()?.run {
                     signUpViewModelContentInterface.clearMediaResultStateFlow()
+                }
+            }
+        }
+        collectInLifecycle(signUpViewModelContentInterface.signUpResultStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    Log.d("SignUpCompletedFragment", "loading")
+                    //TODO 로딩 처리
+                }
+                is ModelState.Error -> {
+                    Log.d("SignUpCompletedFragment", "error $it")
+                    //TODO 에러처리
+                }
+                else -> {
+                    Log.d("SignUpCompletedFragment", "Empty or Success")
+                    //TODO 로딩, 에러 뷰 invisible
                 }
             }
         }

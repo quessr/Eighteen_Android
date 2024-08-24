@@ -2,7 +2,6 @@ package com.eighteen.eighteenandroid.presentation.auth.signup.model
 
 enum class SignUpPage {
     ADD_MEDIAS,
-    COMPLETED,
     ENTER_AUTH_CODE,
     ENTER_BIRTH,
     ENTER_ID,

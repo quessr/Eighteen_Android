@@ -20,7 +20,7 @@ import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
-import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialog
+import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogBottom
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
@@ -70,12 +70,12 @@ class ProfileDetailFragment() :
         bind {
             ivMore.setOnClickListener {
                 context?.let {
-                    showReportSelectDialog(
-                        context = it,
+                    showReportSelectDialogBottom(
+                        ivMore,
                         onReportClicked = {
                             // 신고 다이얼로그 보여주기
                             // TODO. 유저 정보 필요
-                            // showDialogFragment(ReportDialogFragment.newInstance(user))
+//                            showDialogFragment(ReportDialogFragment.newInstance(user))
                         },
                         onBlockClicked = {}
                     )

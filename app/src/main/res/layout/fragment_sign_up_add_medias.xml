@@ -31,7 +31,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMedias"
         android:layout_width="0dp"
-        android:layout_height="230dp"
+        android:layout_height="@dimen/sign_up_add_media_height"
         android:layout_marginTop="31dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

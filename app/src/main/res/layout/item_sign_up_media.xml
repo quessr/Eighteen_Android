@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="247:288"
+            app:layout_constraintDimensionRatio="197:230"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

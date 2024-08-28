@@ -17,7 +17,7 @@ class SignUpMediasAdapter(private val clickListener: SignUpAddMediasClickListene
     }
 
     override fun onBindViewHolder(holder: SignUpMediaViewHolder, position: Int) {
-        holder.onBind(getItem(position), position)
+        holder.onBind(model = getItem(position), position = position)
     }
 
     companion object {

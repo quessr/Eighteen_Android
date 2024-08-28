@@ -4,7 +4,7 @@ import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
-import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedias
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -22,7 +22,7 @@ interface SignUpViewModelContentInterface {
     var birth: Calendar?
     var school: School?
     var tag: Tag?
-    val mediasStateFlow: StateFlow<List<SignUpMedia>>
+    val mediasStateFlow: StateFlow<SignUpMedias>
     val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>>
     val pageClearEvent: StateFlow<Event<SignUpPage>>
     fun setNextButtonModel(signUpNextButtonModel: SignUpNextButtonModel)
@@ -31,4 +31,6 @@ interface SignUpViewModelContentInterface {
     fun actionOpenWebViewFragment(url: String)
     fun requestSignUp()
     fun setPageClearEvent(page: SignUpPage)
+    fun removeRefMedia()
+    fun removeMedia(position: Int)
 }

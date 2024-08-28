@@ -157,7 +157,12 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
     private fun initEditMediaObserver() = with(editMediaViewModel) {
         editResultEventLiveData.observe(viewLifecycleOwner, EventObserver {
-            signUpViewModel.addMediaResult(it)
+            val isRef = signUpViewModel.editMediaActionEventLiveData.value?.peekContent()?.isRef
+                ?: false
+            signUpViewModel.addMediaResult(
+                mediaResult = it,
+                isRef = isRef
+            )
         })
     }
 

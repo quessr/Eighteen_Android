@@ -34,10 +34,13 @@ open class MediaPicker {
     companion object {
         private val pickVisualMediaRequest =
             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+        private val SUPPORT_MIME_TYPES =
+            arrayOf("image/jpeg", "image/png", "video/mkv", "video/mov", "video/webm", "video/mp4")
         private val resultLauncher = object : ActivityResultContracts.PickVisualMedia() {
             override fun createIntent(context: Context, input: PickVisualMediaRequest): Intent {
                 return super.createIntent(context, input).apply {
                     addFlags(FLAG_ACTIVITY_SINGLE_TOP)
+                    putExtra(Intent.EXTRA_MIME_TYPES, SUPPORT_MIME_TYPES)
                 }
             }
         }

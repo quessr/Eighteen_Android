@@ -111,4 +111,10 @@
             android:id="@+id/action_fragmentProfileDetail_to_fragmentMain"
             app:destination="@id/fragmentMain" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragmentRanking"
+        android:name="com.eighteen.eighteenandroid.presentation.ranking.RankingFragment"
+        android:label="fragment_ranking"
+        tools:layout="@layout/fragment_ranking" />
 </navigation>

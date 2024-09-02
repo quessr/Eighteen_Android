@@ -31,8 +31,9 @@ class SignUpEnterIdViewModel @Inject constructor(private val checkIdDuplicationU
 
     fun setInputText(input: String) {
         val status = checkStatus(input)
-        _signUpEnterIdModel.value =
-            signUpEnterIdModel.value.copy(inputString = input, status = status)
+        _signUpEnterIdModel.update {
+            it.copy(inputString = input, status = status)
+        }
     }
 
     fun checkIdValidation() {

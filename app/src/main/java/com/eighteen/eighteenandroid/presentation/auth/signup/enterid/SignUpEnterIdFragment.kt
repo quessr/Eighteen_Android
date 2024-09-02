@@ -73,10 +73,14 @@ class SignUpEnterIdFragment :
                     //TODO 로딩
                 }
                 is ModelState.Success -> {
-                    it.data?.getContentIfNotHandled()?.let {
-                        signUpViewModelContentInterface.id =
-                            signUpEnterIdViewModel.signUpEnterIdModel.value.inputString
-                        findNavController().navigate(R.id.action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname)
+                    it.data?.getContentIfNotHandled()?.let { isDuplicated ->
+                        if (isDuplicated) {
+                            signUpEnterIdViewModel.setStatusDuplicated()
+                        } else {
+                            signUpViewModelContentInterface.id =
+                                signUpEnterIdViewModel.signUpEnterIdModel.value.inputString
+                            findNavController().navigate(R.id.action_fragmentSignUpEnterId_to_fragmentSignUpEnterNickname)
+                        }
                     }
                 }
                 is ModelState.Error -> {

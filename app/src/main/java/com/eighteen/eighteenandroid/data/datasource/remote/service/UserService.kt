@@ -21,4 +21,7 @@ interface UserService {
 
     @POST("/v1/api/user/find/{uniqueId}")
     suspend fun postProfileDetailInfo(@Path("uniqueId") uniqueId: String): Response<ApiResult<ProfileDetailResponse>>
+
+    @POST("/v1/api/user/duplication-check")
+    suspend fun postDuplicationCheck(@Query("uniqueId") uniqueId: String): Response<ApiResult<Boolean>>
 }

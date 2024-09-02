@@ -2,7 +2,7 @@ package com.eighteen.eighteenandroid.domain.di
 
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import com.eighteen.eighteenandroid.domain.usecase.AddSnsLinkUseCase
-import com.eighteen.eighteenandroid.domain.usecase.CheckIdValidationUseCase
+import com.eighteen.eighteenandroid.domain.usecase.CheckIdDuplicationUseCase
 import com.eighteen.eighteenandroid.domain.usecase.EditIntroduceUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
@@ -30,8 +30,8 @@ object UserUseCaseModule {
 
     @Provides
     @Singleton
-    fun provideCheckIdValidationUseCase(repository: UserRepository) =
-        CheckIdValidationUseCase(repository = repository)
+    fun provideCheckIdDuplicationUseCase(repository: UserRepository) =
+        CheckIdDuplicationUseCase(repository = repository)
 
     @Provides
     @Singleton

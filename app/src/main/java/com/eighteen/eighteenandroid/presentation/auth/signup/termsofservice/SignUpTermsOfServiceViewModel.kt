@@ -33,4 +33,8 @@ class SignUpTermsOfServiceViewModel : ViewModel() {
         _termsOfServiceModelStateFlow.value =
             termsOfServiceModelStateFlow.value.copy(isCheckedNotification = termsOfServiceModelStateFlow.value.isCheckedNotification.not())
     }
+
+    fun clear(){
+        _termsOfServiceModelStateFlow.value = SignUpTermsOfServiceModel()
+    }
 }

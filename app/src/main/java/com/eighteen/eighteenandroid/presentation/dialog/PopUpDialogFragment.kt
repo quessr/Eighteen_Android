@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResult
 import com.eighteen.eighteenandroid.databinding.FragmentPopUpDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 
-class PopUpDialog :
+class PopUpDialogFragment :
     BaseDialogFragment<FragmentPopUpDialogBinding>(FragmentPopUpDialogBinding::inflate) {
     override fun initView() {
         arguments?.let {
@@ -27,6 +30,14 @@ class PopUpDialog :
                 if (buttonColorRes != -1) {
                     context?.let {
                         tvBtnConfirm.setBackgroundColor(ContextCompat.getColor(it, buttonColorRes))
+                    }
+                }
+                tvBtnConfirm.setOnClickListener {
+                    arguments?.getString(ARGUMENT_REQUEST_KEY_KEY)?.let {
+                        val result =
+                            bundleOf(RESULT_CONFIRM_KEY to true)
+                        setFragmentResult(requestKey = it, result = result)
+                        dismissNow()
                     }
                 }
             }
@@ -48,22 +59,37 @@ class PopUpDialog :
     }
 
     companion object {
+        private const val ARGUMENT_REQUEST_KEY_KEY = "ARGUMENT_REQUEST_KEY_KEY"
         private const val ARGUMENT_TITLE_KEY = "ARGUMENT_TITLE_KEY"
         private const val ARGUMENT_CONTENT_KEY = "ARGUMENT_CONTENT_KEY"
         private const val ARGUMENT_BUTTON_COLOR_RES_KEY = "ARGUMENT_BUTTON_COLOR_RES_KEY"
         private const val ARGUMENT_BUTTON_TEXT = "ARGUMENT_BUTTON_TEXT"
+
+        private const val RESULT_CONFIRM_KEY = "RESULT_CONFIRM_KEY"
         fun newInstance(
+            requestKey: String? = null,
             title: String? = null,
             content: String? = null,
             @ColorRes buttonColorRes: Int = -1,
             buttonText: String? = null
-        ) = PopUpDialog().apply {
+        ) = PopUpDialogFragment().apply {
             arguments = Bundle().apply {
+                putString(ARGUMENT_REQUEST_KEY_KEY, requestKey)
                 putString(ARGUMENT_TITLE_KEY, title)
                 putString(ARGUMENT_CONTENT_KEY, content)
                 putInt(ARGUMENT_BUTTON_COLOR_RES_KEY, buttonColorRes)
                 putString(ARGUMENT_BUTTON_TEXT, buttonText)
             }
         }
+    }
+
+    abstract class PopUpDialogFragmentResultListener : FragmentResultListener {
+        final override fun onFragmentResult(requestKey: String, result: Bundle) {
+            result.getBoolean(RESULT_CONFIRM_KEY, false).takeIf { it }?.let {
+                onConfirm()
+            }
+        }
+
+        open fun onConfirm() {}
     }
 }

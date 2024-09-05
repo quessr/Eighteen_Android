@@ -17,6 +17,5 @@ data class SignUpNextButtonModel(
     enum class ButtonText(@StringRes val strRes: Int) {
         NEXT(R.string.sign_up_next),
         PASS(R.string.sign_up_pass),
-        START(R.string.sign_up_start)
     }
 }

@@ -19,25 +19,36 @@ class SignUpMediaViewHolder(
     }
 
     private fun bindImage(model: SignUpMediaItemModel) {
+        binding.vRefContainer.isVisible = model.isRef
         when (model) {
-            is SignUpMediaItemModel.RefEmpty -> binding.ivMedia.setImageResource(R.drawable.bg_add_media_ref_empty)
-            is SignUpMediaItemModel.Empty -> binding.ivMedia.setImageResource(R.drawable.bg_add_media_empty)
+            is SignUpMediaItemModel.Empty -> {
+                val drawableRes = if (model.isRef) R.drawable.ic_add_media_ref else
+                    R.drawable.bg_add_media_empty
+                binding.ivMedia.setImageResource(drawableRes)
+            }
             is SignUpMediaItemModel.Image -> ImageLoader.get()
                 .loadBitmapCenterCrop(binding.ivMedia, model.imageBitmap)
             is SignUpMediaItemModel.Video -> ImageLoader.get()
                 .loadUrlCenterCrop(binding.ivMedia, url = model.uriString)
         }
+        binding.ivBtnDelete.isVisible = model !is SignUpMediaItemModel.Empty
         binding.ivVideoIcon.isVisible = model is SignUpMediaItemModel.Video
     }
 
     private fun bindClickListener(model: SignUpMediaItemModel, position: Int) {
         binding.ivMedia.setOnClickListener {
-            when (model) {
-                is SignUpMediaItemModel.RefEmpty -> clickListener.onClickAddMedia(position)
-                is SignUpMediaItemModel.Empty -> clickListener.onClickAddMedia(position)
-                is SignUpMediaItemModel.Image -> clickListener.onClickMedia()
-                is SignUpMediaItemModel.Video -> clickListener.onClickMedia()
+            if (model is SignUpMediaItemModel.Empty) {
+                if (model.isRef) clickListener.onClickAddRefMedia()
+                else clickListener.onClickAddMedia()
+            } else {
+                //do nothing
             }
+        }
+        binding.ivBtnDelete.setOnClickListener {
+            //대표이미지를 제외하고 위치(index)를 넣어주어야 함
+            if (model.isRef) clickListener.onClickRemoveRef()
+            else clickListener.onClickRemove(position = position - 1)
+
         }
     }
 }

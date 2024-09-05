@@ -2,7 +2,7 @@ package com.eighteen.eighteenandroid.presentation.auth.signup.enterid
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eighteen.eighteenandroid.domain.usecase.CheckIdValidationUseCase
+import com.eighteen.eighteenandroid.domain.usecase.CheckIdDuplicationUseCase
 import com.eighteen.eighteenandroid.presentation.auth.signup.enterid.model.SignUpEnterIdModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.enterid.model.SignUpEnterIdStatus
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -12,40 +12,40 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpEnterIdViewModel @Inject constructor(private val checkIdValidationUseCase: CheckIdValidationUseCase) :
+class SignUpEnterIdViewModel @Inject constructor(private val checkIdDuplicationUseCase: CheckIdDuplicationUseCase) :
     ViewModel() {
     private val _signUpEnterIdModel = MutableStateFlow(SignUpEnterIdModel())
     val signUpEnterIdModel: StateFlow<SignUpEnterIdModel> = _signUpEnterIdModel.asStateFlow()
 
     private val _checkIdValidationEventStateFlow =
-        MutableStateFlow<ModelState<Event<Unit>>>(ModelState.Empty())
-    val checkIdValidationEventStateFlow: StateFlow<ModelState<Event<Unit>>> =
+        MutableStateFlow<ModelState<Event<Boolean>>>(ModelState.Empty())
+    val checkIdValidationEventStateFlow: StateFlow<ModelState<Event<Boolean>>> =
         _checkIdValidationEventStateFlow.asStateFlow()
 
     private var checkIdValidationJob: Job? = null
 
     fun setInputText(input: String) {
         val status = checkStatus(input)
-        _signUpEnterIdModel.value =
-            signUpEnterIdModel.value.copy(inputString = input, status = status)
+        _signUpEnterIdModel.update {
+            it.copy(inputString = input, status = status)
+        }
     }
 
     fun checkIdValidation() {
         if (checkIdValidationJob?.isCompleted == false) return
         checkIdValidationJob = viewModelScope.launch {
             _checkIdValidationEventStateFlow.value = ModelState.Loading()
-            checkIdValidationUseCase.invoke(id = signUpEnterIdModel.value.inputString).onSuccess {
-                _checkIdValidationEventStateFlow.value = ModelState.Success(Event(Unit))
-            }.onFailure {
-                //TODO 중복응답 코드 받을 경우 id 모델 수정
-//                _signUpEnterIdModel.value =
-//                    signUpEnterIdModel.value.copy(status = SignUpEnterIdStatus.Error.Duplicated)
-                _checkIdValidationEventStateFlow.value = ModelState.Error(throwable = it)
-            }
+            checkIdDuplicationUseCase.invoke(uniqueId = signUpEnterIdModel.value.inputString)
+                .onSuccess {
+                    _checkIdValidationEventStateFlow.value = ModelState.Success(Event(it))
+                }.onFailure {
+                    _checkIdValidationEventStateFlow.value = ModelState.Error(throwable = it)
+                }
         }
     }
 
@@ -59,6 +59,13 @@ class SignUpEnterIdViewModel @Inject constructor(private val checkIdValidationUs
             else -> SignUpEnterIdStatus.Error.Length
         }
     }
+
+    fun setStatusDuplicated() {
+        _signUpEnterIdModel.update {
+            it.copy(status = SignUpEnterIdStatus.Error.Duplicated)
+        }
+    }
+
 
     companion object {
         private const val REGEX_VALID_INPUT = """[a-z0-9]*"""

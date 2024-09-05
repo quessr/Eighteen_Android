@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.animation.AlphaAnimation
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +18,7 @@ import com.eighteen.eighteenandroid.domain.model.AboutTeen
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
+import com.eighteen.eighteenandroid.presentation.common.findViewHolderOrNull
 import com.eighteen.eighteenandroid.presentation.common.setTagStyle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogLeft
@@ -101,9 +101,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun initMainAdapter() {
         initMainAdapterListener()
 
-        mainAdapter = MainAdapter(context = requireContext(), listener = mainAdapterListener).apply {
-            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY // 현재 스크롤 위치 저장
-        }
+        mainAdapter =
+            MainAdapter(context = requireContext(), listener = mainAdapterListener).apply {
+                stateRestorationPolicy =
+                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY // 현재 스크롤 위치 저장
+            }
 
         bind {
             with(rvMain) {
@@ -137,21 +139,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 //                        Log.i("MainScrollStateChanged", "findFirstCompletely = ${layoutManager?.findFirstCompletelyVisibleItemPosition()}")
 
                         val firstVisiblePosition = layoutManager?.findFirstVisibleItemPosition()
-                        if(firstVisiblePosition != null) {
-                            if(firstVisiblePosition > 1) {
+                        if (firstVisiblePosition != null) {
+                            if (firstVisiblePosition > 1) {
                                 mainAdapterListener.stopAutoScroll()
                             }
                         }
 
-                        when(newState) {
+                        when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE -> {
                                 viewModel.pageScrollPosition = getCenterItemPosition(recyclerView)
 
-                                if(isTop && btnScrollTop.isVisible) {
+                                if (isTop && btnScrollTop.isVisible) {
                                     btnScrollTop.startAnimation(fadeOut)
                                     btnScrollTop.visibility = View.GONE
                                 } else {
-                                    if(!btnScrollTop.isVisible) {
+                                    if (!btnScrollTop.isVisible) {
                                         btnScrollTop.visibility = View.VISIBLE
                                         btnScrollTop.startAnimation(fadeIn)
                                     }
@@ -234,9 +236,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * About Teen 테마 선택
              */
             override fun onAboutTeenClicks(title: String) {
-                val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_bar)
+                val bottomNavigationView =
+                    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_bar)
 
-                when(title) {
+                when (title) {
                     "Teen" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_teen
                     "채팅" -> bottomNavigationView.selectedItemId = R.id.fragmentChat
                     "토너먼트" -> {}
@@ -248,7 +251,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 토너먼트 클릭
              */
             override fun onTournamentClicks(tournament: Tournament) {
-                when(tournament) {
+                when (tournament) {
                     is Tournament.Exercise -> {}
                     is Tournament.Study -> {}
                 }
@@ -265,7 +268,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
              * 이전에 보던 인기 Teen 유저로 이동
              */
             override fun scrollToPreviousUser() {
-                val popularUserListViewHolder = getMainChildViewHolder<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
+                val popularUserListViewHolder =
+                    binding.rvMain.findViewHolderOrNull<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
                 val rvPopularUserList = popularUserListViewHolder?.binding?.rvMainTeenPopularList
 
                 val layoutManager = rvPopularUserList?.layoutManager as? LinearLayoutManager
@@ -300,13 +304,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                     while (isAutoScrolling) {
                         delay(4500)
 
-                        val popularUserListViewHolder = getMainChildViewHolder<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
+                        val popularUserListViewHolder =
+                            binding.rvMain.findViewHolderOrNull<MainAdapter.CommonViewHolder.PopularUserListViewHolder>()
 
-                        val rvPopularUserList = popularUserListViewHolder?.binding?.rvMainTeenPopularList
+                        val rvPopularUserList =
+                            popularUserListViewHolder?.binding?.rvMainTeenPopularList
                         val itemCount = rvPopularUserList?.adapter?.itemCount ?: 0
 
                         if (itemCount > 0) {
-                            viewModel.popularUserPosition = (viewModel.popularUserPosition + 1) % itemCount
+                            viewModel.popularUserPosition =
+                                (viewModel.popularUserPosition + 1) % itemCount
                             smoothScroller.targetPosition = viewModel.popularUserPosition
                             rvPopularUserList?.layoutManager?.startSmoothScroll(smoothScroller)
                         }
@@ -333,20 +340,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         // 스크롤 속도: 80f
         override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
             return 80f / displayMetrics.densityDpi
-        }
-    }
-
-    /**
-     * Get main RV child view holder
-     * @param T: ViewHolder 타입
-     * @return
-     */
-    private inline fun<reified T: RecyclerView.ViewHolder> getMainChildViewHolder(): T? {
-        return binding.rvMain.run {
-            children.map {
-                val adapterPosition = getChildAdapterPosition(it)
-                findViewHolderForAdapterPosition(adapterPosition)
-            }.filterIsInstance<T>().firstOrNull()
         }
     }
 
@@ -381,8 +374,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                     listOf(
                         AboutTeen("Teen", "친구들의 프로필을 투표해보세요!"),
                         AboutTeen("토너먼트", "투표 결과를 한 눈에 볼 수 있어요!"),
-                        AboutTeen("채팅","채팅을 통해 친구들과 소통해보세요!"),
-                        AboutTeen("나만의 Teen","나만의 프로필을 등록해보세요!")
+                        AboutTeen("채팅", "채팅을 통해 친구들과 소통해보세요!"),
+                        AboutTeen("나만의 Teen", "나만의 프로필을 등록해보세요!")
                     )
                 ), // About Teen List
                 MainItem.DividerView,
@@ -442,8 +435,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                     listOf(
                         AboutTeen("Teen", "친구들의 프로필을 투표해보세요!"),
                         AboutTeen("토너먼트", "투표 결과를 한 눈에 볼 수 있어요!"),
-                        AboutTeen("채팅","채팅을 통해 친구들과 소통해보세요!"),
-                        AboutTeen("나만의 Teen","나만의 프로필을 등록해보세요!")
+                        AboutTeen("채팅", "채팅을 통해 친구들과 소통해보세요!"),
+                        AboutTeen("나만의 Teen", "나만의 프로필을 등록해보세요!")
                     )
                 ), // About Teen List
                 MainItem.DividerView,
@@ -521,10 +514,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                     // LayoutManager에서 해당 위치의 아이템을 중앙에 위치시키도록 오프셋 조정
                     rvMain.post {
                         val layoutManager = rvMain.layoutManager as LinearLayoutManager
-                        val viewAtPosition = layoutManager.findViewByPosition(viewModel.pageScrollPosition)
+                        val viewAtPosition =
+                            layoutManager.findViewByPosition(viewModel.pageScrollPosition)
                         if (viewAtPosition != null) {
                             val offset = (rvMain.height - viewAtPosition.height) / 2
-                            layoutManager.scrollToPositionWithOffset(viewModel.pageScrollPosition, offset)
+                            layoutManager.scrollToPositionWithOffset(
+                                viewModel.pageScrollPosition,
+                                offset
+                            )
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna
 
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,9 +13,10 @@ import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.findViewHolderOrNull
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.SelectQnaDialogFragment
-import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.model.EditTenOfQnaModel
+import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.viewholder.EditTenOfQnaSaveBtnViewHolder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,14 +52,12 @@ class EditTenOfQnaFragment :
                             }
                     openSelectQnaDialog(options = options)
                 },
+                onClickSave = editTenOfQnaViewModel::requestEditQnas
             )
             rvQnas.addItemDecoration(EditTenOfQnaItemDecoration())
             rvQnas.itemAnimator = null
             ivBtnBack.setOnClickListener {
                 findNavController().popBackStack()
-            }
-            tvBtnSave.setOnClickListener {
-                editTenOfQnaViewModel.requestEditQnas()
             }
         }
         initStateFlow()
@@ -77,9 +77,19 @@ class EditTenOfQnaFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editTenOfQnaViewModel.editTenOfQnaModelStateFlow.collect {
-                    (binding.rvQnas.adapter as? EditTenOfQnaAdapter)?.submitList(it)
-                    binding.tvBtnSave.isEnabled =
-                        it.filterIsInstance<EditTenOfQnaModel.Input>().size >= MINIMUM_QNA_COUNT
+                    with(binding.rvQnas) {
+                        (adapter as? EditTenOfQnaAdapter)?.submitList(it) {
+                            binding.root.doOnLayout {
+                                findViewHolderOrNull<EditTenOfQnaSaveBtnViewHolder>()?.run {
+                                    val paddingTop = maxOf(
+                                        0,
+                                        binding.rvQnas.height - itemView.run { y.toInt() + height })
+                                    itemView.setPadding(0, paddingTop, 0, 0)
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -120,6 +130,5 @@ class EditTenOfQnaFragment :
 
     companion object {
         private const val REQUEST_KEY_SELECT_DIALOG = "request_key_select_dialog"
-        private const val MINIMUM_QNA_COUNT = 3
     }
 }

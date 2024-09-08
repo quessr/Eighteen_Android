@@ -68,6 +68,7 @@ class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val in
             add(EditTenOfQnaModel.Title)
             addAll(inputs.mapIndexed { idx, input -> input.copy(position = idx + 1) })
             if (inputs.size < MAXIMUM_QNA_COUNT) add(EditTenOfQnaModel.Add)
+            add(EditTenOfQnaModel.SaveBtn(isEnabled = inputs.size >= MINIMUM_QNA_COUNT))
         }
 
     fun requestEditQnas() {
@@ -97,6 +98,7 @@ class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val in
 
 
     companion object {
+        private const val MINIMUM_QNA_COUNT = 3
         private const val MAXIMUM_QNA_COUNT = 10
     }
 }

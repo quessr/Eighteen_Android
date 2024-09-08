@@ -23,4 +23,12 @@ sealed interface EditTenOfQnaModel {
 
         override fun areContentsTheSame(other: EditTenOfQnaModel): Boolean = this == other
     }
+
+    data class SaveBtn(val isEnabled: Boolean) : EditTenOfQnaModel {
+        override fun areItemsTheSame(other: EditTenOfQnaModel): Boolean =
+            other is SaveBtn && this.isEnabled == other.isEnabled
+
+        override fun areContentsTheSame(other: EditTenOfQnaModel): Boolean =
+            other is SaveBtn && this.isEnabled == other.isEnabled
+    }
 }

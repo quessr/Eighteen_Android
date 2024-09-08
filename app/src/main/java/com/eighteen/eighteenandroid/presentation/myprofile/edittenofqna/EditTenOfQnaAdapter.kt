@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eighteen.eighteenandroid.databinding.ItemEditTenOfQnaAddBinding
+import com.eighteen.eighteenandroid.databinding.ItemEditTenOfQnaBtnSaveBinding
 import com.eighteen.eighteenandroid.databinding.ItemEditTenOfQnaInputBinding
 import com.eighteen.eighteenandroid.databinding.ItemEditTenOfQnaTitleBinding
 import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.model.EditTenOfQnaModel
 import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.viewholder.EditTenOfQnaAddViewHolder
 import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.viewholder.EditTenOfQnaInputViewHolder
+import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.viewholder.EditTenOfQnaSaveBtnViewHolder
 import com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.viewholder.EditTenOfQnaTitleViewHolder
 
 class EditTenOfQnaAdapter(
@@ -19,6 +21,7 @@ class EditTenOfQnaAdapter(
     private val setInput: (QnaType, String) -> Unit,
     private val onClickRemove: (QnaType) -> Unit,
     private val onClickAdd: () -> Unit,
+    private val onClickSave: () -> Unit
 ) : ListAdapter<EditTenOfQnaModel, ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -36,9 +39,13 @@ class EditTenOfQnaAdapter(
                     onClickRemove = onClickRemove
                 )
             }
-            else -> {
+            ITEM_TYPE_ADD -> {
                 val binding = ItemEditTenOfQnaAddBinding.inflate(layoutInflater, parent, false)
                 EditTenOfQnaAddViewHolder(binding = binding, onClickAdd = onClickAdd)
+            }
+            else -> {
+                val binding = ItemEditTenOfQnaBtnSaveBinding.inflate(layoutInflater, parent, false)
+                EditTenOfQnaSaveBtnViewHolder(binding = binding, onClick = onClickSave)
             }
         }
     }
@@ -46,6 +53,7 @@ class EditTenOfQnaAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (val model = getItem(position)) {
             is EditTenOfQnaModel.Input -> (holder as? EditTenOfQnaInputViewHolder)?.onBind(model = model)
+            is EditTenOfQnaModel.SaveBtn -> (holder as? EditTenOfQnaSaveBtnViewHolder)?.onBind(model = model)
             else -> {
                 //do nothing
             }
@@ -57,6 +65,7 @@ class EditTenOfQnaAdapter(
             is EditTenOfQnaModel.Title -> ITEM_TYPE_TITLE
             is EditTenOfQnaModel.Input -> ITEM_TYPE_INPUT
             is EditTenOfQnaModel.Add -> ITEM_TYPE_ADD
+            is EditTenOfQnaModel.SaveBtn -> ITEM_TYPE_SAVE_BTN
         }
     }
 
@@ -64,6 +73,7 @@ class EditTenOfQnaAdapter(
         private const val ITEM_TYPE_TITLE = 1
         private const val ITEM_TYPE_INPUT = 2
         private const val ITEM_TYPE_ADD = 3
+        private const val ITEM_TYPE_SAVE_BTN = 4
         private val diffUtil = object : DiffUtil.ItemCallback<EditTenOfQnaModel>() {
             override fun areItemsTheSame(
                 oldItem: EditTenOfQnaModel,

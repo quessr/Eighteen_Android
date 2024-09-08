@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna
 
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -91,7 +92,7 @@ class EditTenOfQnaFragment :
             //TODO qna 질문 적용
             tvQuestion.text = model.question.name
             tvAnswer.text = model.answer
-            vDivider.isVisible = isDividerVisible
+            vDivider.visibility = if (isDividerVisible) View.VISIBLE else View.INVISIBLE
         }.root
 
     private fun initFragmentResult() {

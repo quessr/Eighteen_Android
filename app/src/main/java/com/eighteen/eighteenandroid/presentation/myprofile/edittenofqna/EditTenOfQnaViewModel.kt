@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.eighteen.eighteenandroid.domain.model.Qna
+import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import dagger.assisted.Assisted
@@ -11,6 +12,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val initQnas: List<Qna>) :
     ViewModel() {
@@ -28,6 +30,14 @@ class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val in
     @AssistedFactory
     interface EditTenOfQnaAssistedFactory {
         fun create(initQnas: List<Qna>): EditTenOfQnaViewModel
+    }
+
+    fun removeQna(qnaType: QnaType) {
+        _editTenOfQnaModelsStateFlow.update {
+            it.toMutableList().apply {
+                removeIf { it.question == qnaType }
+            }
+        }
     }
 
     class Factory(

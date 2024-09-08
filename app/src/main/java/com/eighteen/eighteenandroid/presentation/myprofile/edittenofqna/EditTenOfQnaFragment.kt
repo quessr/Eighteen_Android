@@ -56,14 +56,18 @@ class EditTenOfQnaFragment :
 
     private fun initStateFlow() {
         collectInLifecycle(editTenOfQnaViewModel.editTenOfQnaModelsStateFlow) {
-            binding.llQnas.run {
-                removeAllViews()
-                isVisible = it.isNotEmpty()
-                it.forEachIndexed { index, qna ->
-                    val qnaView =
-                        createQnaView(model = qna, isDividerVisible = index < it.lastIndex)
-                    addView(qnaView)
+            bind {
+                llQnas.run {
+                    removeAllViews()
+                    isVisible = it.isNotEmpty()
+                    it.forEachIndexed { index, qna ->
+                        val qnaView =
+                            createQnaView(model = qna, isDividerVisible = index < it.lastIndex)
+                        addView(qnaView)
+                    }
                 }
+                tvBtnAddQna.isVisible = it.size < MAXIMUM_QNA_SIZE
+                tvBtnSave.isEnabled = it.size >= MINIMUM_QNA_SIZE
             }
         }
         collectInLifecycle(editTenOfQnaViewModel.requestEditQnaResultStateFlow) {
@@ -93,6 +97,9 @@ class EditTenOfQnaFragment :
             tvQuestion.text = model.question.name
             tvAnswer.text = model.answer
             vDivider.visibility = if (isDividerVisible) View.VISIBLE else View.INVISIBLE
+            ivBtnRemove.setOnClickListener {
+                editTenOfQnaViewModel.removeQna(qnaType = model.question)
+            }
         }.root
 
     private fun initFragmentResult() {
@@ -107,5 +114,7 @@ class EditTenOfQnaFragment :
 
     companion object {
         private const val REQUEST_KEY_SELECT_DIALOG = "request_key_select_dialog"
+        private const val MINIMUM_QNA_SIZE = 3
+        private const val MAXIMUM_QNA_SIZE = 10
     }
 }

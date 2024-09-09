@@ -1,9 +1,9 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna
 
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditTenOfQnaBinding
@@ -15,6 +15,7 @@ import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.SelectQnaDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -28,18 +29,23 @@ class EditTenOfQnaFragment :
     @Inject
     lateinit var editTenOfQnaAssistedFactory: EditTenOfQnaViewModel.EditTenOfQnaAssistedFactory
 
-    private val editTenOfQnaViewModel by viewModels<EditTenOfQnaViewModel>(factoryProducer = {
-        EditTenOfQnaViewModel.Factory(
-            assistedFactory = editTenOfQnaAssistedFactory,
-            initQnas = loginViewModel.myProfileStateFlow.value.data?.qna ?: emptyList()
-        )
-    })
+    private val editTenOfQnaViewModel by viewModelsByBackStackEntry<EditTenOfQnaViewModel>(
+        factoryProducer = {
+            EditTenOfQnaViewModel.Factory(
+                assistedFactory = editTenOfQnaAssistedFactory,
+                initQnas = loginViewModel.myProfileStateFlow.value.data?.qna ?: emptyList()
+            )
+        })
 
     override fun initView() {
         bind {
             ivBtnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
+            tvBtnAddQna.setOnClickListener {
+                openSelectQnaDialog(options = QnaType.values().toList())
+            }
+            tvBtnSave.setOnClickListener { }
         }
         initStateFlow()
         initFragmentResult()
@@ -107,7 +113,12 @@ class EditTenOfQnaFragment :
             viewLifecycleOwner,
             object : SelectQnaDialogFragment.SelectQnaResultListener() {
                 override fun onSelectResult(qnaType: QnaType) {
-//                    editTenOfQnaViewModel.addQna(qnaType = qnaType)
+                    val bundle =
+                        bundleOf(
+                            EditTenOfQnaAnswerFragment.ARGUMENT_QNA_TYPE_KEY to qnaType,
+                            EditTenOfQnaAnswerFragment.ARGUMENT_DESTINATION_ID_KEY to R.id.fragmentEditTenOfQna
+                        )
+                    findNavController().navigate(R.id.fragmentEditTenOfQnaAnswer, bundle)
                 }
             })
     }

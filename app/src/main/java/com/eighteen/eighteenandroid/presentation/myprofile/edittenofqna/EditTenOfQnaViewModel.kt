@@ -40,6 +40,14 @@ class EditTenOfQnaViewModel @AssistedInject constructor(@Assisted private val in
         }
     }
 
+    fun addQna(qnaType: QnaType, answer: String) {
+        _editTenOfQnaModelsStateFlow.update {
+            it.toMutableList().apply {
+                add(Qna(question = qnaType, answer = answer))
+            }
+        }
+    }
+
     class Factory(
         private val assistedFactory: EditTenOfQnaAssistedFactory,
         private val initQnas: List<Qna>

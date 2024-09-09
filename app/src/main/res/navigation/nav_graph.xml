@@ -112,6 +112,11 @@
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.EditTenOfQnaFragment"
         android:label="fragment_edit_ten_of_qna"
         tools:layout="@layout/fragment_edit_ten_of_qna" />
+    <fragment
+        android:id="@+id/fragmentEditTenOfQnaAnswer"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.EditTenOfQnaAnswerFragment"
+        android:label="fragment_edit_ten_of_qna_answer"
+        tools:layout="@layout/fragment_edit_ten_of_qna_answer" />
 
     <fragment
         android:id="@+id/fragmentProfileDetailFragment"

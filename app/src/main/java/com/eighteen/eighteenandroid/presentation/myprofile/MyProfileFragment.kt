@@ -62,6 +62,10 @@ class MyProfileFragment :
         Log.d("MyProfileFragment", "onClickEditMedia")
     }
 
+    override fun onClickEditNickName() {
+        //TODO 닉네임 편집화면 이동
+    }
+
     override fun onClickEditSchool() {
         //TODO 학교 편집 화면 이동
         Log.d("MyProfileFragment", "onClickEditSchool")

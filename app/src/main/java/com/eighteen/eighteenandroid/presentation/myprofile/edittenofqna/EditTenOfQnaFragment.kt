@@ -17,6 +17,7 @@ import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEntry
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.SelectQnaDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.selectqna.model.SelectQnaDialogModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,7 +44,7 @@ class EditTenOfQnaFragment :
                 findNavController().popBackStack()
             }
             tvBtnAddQna.setOnClickListener {
-                openSelectQnaDialog(options = QnaType.values().toList())
+                openSelectQnaDialog()
             }
             tvBtnSave.setOnClickListener { }
         }
@@ -51,11 +52,19 @@ class EditTenOfQnaFragment :
         initFragmentResult()
     }
 
-    private fun openSelectQnaDialog(options: List<QnaType>) {
+    private fun openSelectQnaDialog() {
+        val disableQnaSet =
+            editTenOfQnaViewModel.editTenOfQnaModelsStateFlow.value.map { it.question }.toSet()
+        val dialogModels = QnaType.values().map { qnaType ->
+            SelectQnaDialogModel(
+                qnaType = qnaType,
+                isEnabled = disableQnaSet.contains(qnaType).not()
+            )
+        }
         val selectQnaDialog = SelectQnaDialogFragment.newInstance(
             requestKey = REQUEST_KEY_SELECT_DIALOG,
             title = getString(R.string.my_profile_edit_ten_of_qna_select_title),
-            qnas = options
+            models = dialogModels
         )
         showDialogFragment(dialogFragment = selectQnaDialog)
     }

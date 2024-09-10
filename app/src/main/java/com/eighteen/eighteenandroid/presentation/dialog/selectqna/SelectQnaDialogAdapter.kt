@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.databinding.ItemSelectQnaDialogQnaBinding
 import com.eighteen.eighteenandroid.domain.model.QnaType
+import com.eighteen.eighteenandroid.presentation.dialog.selectqna.model.SelectQnaDialogModel
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.viewholder.SelectQnaDialogQnaViewHolder
 
 class SelectQnaDialogAdapter(private val onClickItem: (QnaType) -> Unit) :
-    ListAdapter<QnaType, RecyclerView.ViewHolder>(diffUtil) {
+    ListAdapter<SelectQnaDialogModel, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemSelectQnaDialogQnaBinding.inflate(
@@ -23,18 +24,22 @@ class SelectQnaDialogAdapter(private val onClickItem: (QnaType) -> Unit) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? SelectQnaDialogQnaViewHolder)?.onBind(
-            qnaType = getItem(position),
+            model = getItem(position),
             idx = position
         )
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<QnaType>() {
-            override fun areItemsTheSame(oldItem: QnaType, newItem: QnaType): Boolean =
-                oldItem == newItem
+        private val diffUtil = object : DiffUtil.ItemCallback<SelectQnaDialogModel>() {
+            override fun areItemsTheSame(
+                oldItem: SelectQnaDialogModel,
+                newItem: SelectQnaDialogModel
+            ): Boolean = oldItem == newItem
 
-            override fun areContentsTheSame(oldItem: QnaType, newItem: QnaType): Boolean =
-                oldItem == newItem
+            override fun areContentsTheSame(
+                oldItem: SelectQnaDialogModel,
+                newItem: SelectQnaDialogModel
+            ): Boolean = oldItem == newItem
         }
     }
 }

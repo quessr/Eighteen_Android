@@ -13,6 +13,7 @@ import com.eighteen.eighteenandroid.domain.model.Qna
 import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SignUpInfo
+import com.eighteen.eighteenandroid.domain.model.SnsInfo
 import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
@@ -152,7 +153,13 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                 description = "description",
                 mbti = null,
                 qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
-                snsLinks = listOf(SnsLink("https://www.google.co.kr", "test"))
+                snsLinks = listOf(SnsLink("https://www.google.co.kr", "test")),
+                snsInfo = listOf(
+                    SnsInfo(SnsInfo.SnsType.INSTAGRAM, "instagram12"),
+                    SnsInfo(SnsInfo.SnsType.X, "x123123"),
+                    SnsInfo(SnsInfo.SnsType.TIKTOK, "tiktok123"),
+                    SnsInfo(SnsInfo.SnsType.YOUTUBE, "youtube17947")
+                )
             )
         )
     }

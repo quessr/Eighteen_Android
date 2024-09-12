@@ -6,6 +6,7 @@ import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.domain.model.Profile
 import com.eighteen.eighteenandroid.domain.model.Qna
+import com.eighteen.eighteenandroid.domain.model.SnsInfo
 import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -87,6 +89,14 @@ class LoginViewModel @Inject constructor(private val myProfileUseCase: MyProfile
         if (_myProfileStateFlow.value !is ModelState.Success) return
         _myProfileStateFlow.value = myProfileStateFlow.value.run {
             val updatedProfile = data?.copy(qna = qnas)
+            ModelState.Success(updatedProfile)
+        }
+    }
+
+    fun editSnsInfoList(snsInfoList: List<SnsInfo>) {
+        if (_myProfileStateFlow.value !is ModelState.Success) return
+        _myProfileStateFlow.update {
+            val updatedProfile = it.data?.copy(snsInfoList = snsInfoList)
             ModelState.Success(updatedProfile)
         }
     }

@@ -24,7 +24,7 @@ sealed interface MyProfileItem {
     }
 
 
-    data class Link(val snsInfo: List<SnsInfo>) : MyProfileItem {
+    data class Link(val snsInfoList: List<SnsInfo>) : MyProfileItem {
         override fun areItemsTheSame(other: MyProfileItem) =
             other is Link && this == other
 

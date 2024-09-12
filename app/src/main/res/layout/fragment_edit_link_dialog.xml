@@ -4,153 +4,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp">
+    android:paddingHorizontal="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_rounded_dialog"
+        android:paddingStart="20dp"
+        android:paddingEnd="27dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clMainContainer"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivBtnBack"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_previous"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/pretendard_bold_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:text="@string/my_profile_my_link"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/ivBtnCheck"
+            app:layout_constraintStart_toEndOf="@id/ivBtnBack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivBtnCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_check"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etInstagram"
+            style="@style/EditLinkTextField"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="instagram123871293872138912798312  1289371298" />
+
+        <ImageView
+            android:id="@+id/ivInstagram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_instagram"
+            app:layout_constraintBottom_toBottomOf="@id/etInstagram"
+            app:layout_constraintStart_toStartOf="@id/etInstagram"
+            app:layout_constraintTop_toTopOf="@id/etInstagram" />
+
+
+        <EditText
+            android:id="@+id/etX"
+            style="@style/EditLinkTextField"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etInstagram"
+            tools:text="xxxxxxxxxx" />
+
+        <ImageView
+            android:id="@+id/ivX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_x"
+            app:layout_constraintBottom_toBottomOf="@id/etX"
+            app:layout_constraintStart_toStartOf="@id/etX"
+            app:layout_constraintTop_toTopOf="@id/etX" />
+
+        <EditText
+            android:id="@+id/etTiktok"
+            style="@style/EditLinkTextField"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etX"
+            tools:text="tiktok123871293872138912798312  1289371298" />
+
+        <ImageView
+            android:id="@+id/ivTiktok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_tiktok"
+            app:layout_constraintBottom_toBottomOf="@id/etTiktok"
+            app:layout_constraintStart_toStartOf="@id/etTiktok"
+            app:layout_constraintTop_toTopOf="@id/etTiktok" />
+
+        <EditText
+            android:id="@+id/etYoutube"
+            style="@style/EditLinkTextField"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="33dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone">
+            app:layout_constraintTop_toBottomOf="@id/etTiktok"
+            tools:text="youtube123871293872138912798312  1289371298" />
 
-            <TextView
-                android:id="@+id/tvTitle"
-                style="@style/pretendard_bold_16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toStartOf="@id/ivBtnClose"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="제목" />
-
-            <ImageView
-                android:id="@+id/ivBtnClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/ic_close"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- TODO string resource 적용 -->
-            <TextView
-                android:id="@+id/tvBtnAddLink"
-                style="@style/pretendard_regular_14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/add_external_link"
-                android:textColor="@color/grey_02"
-                app:drawableStartCompat="@drawable/ic_add_external_link"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvLinks"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="33dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_max="200dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvBtnAddLink"
-                tools:listitem="@layout/item_link" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clAddLinkContainer"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivYoutube"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingEnd="27dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/ivAddBtnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/ic_previous"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvAddTitle"
-                style="@style/pretendard_bold_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
-                android:text="@string/my_profile_my_link"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toStartOf="@id/ivAddBtnCheck"
-                app:layout_constraintStart_toEndOf="@id/ivAddBtnBack"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivAddBtnCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/ic_check"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/etAddLinkUrl"
-                style="@style/TextField"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:hint="@string/my_profile_add_link_url_hint"
-                android:inputType="textUri"
-                android:textColorHint="@color/grey_01"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAddTitle" />
-
-            <EditText
-                android:id="@+id/etAddLinkName"
-                style="@style/TextField"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="33dp"
-                android:hint="@string/my_profile_add_link_name_hint"
-                android:inputType="text"
-                android:textColorHint="@color/grey_01"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/etAddLinkUrl"
-                app:layout_constraintStart_toStartOf="@id/etAddLinkUrl"
-                app:layout_constraintTop_toBottomOf="@id/etAddLinkUrl" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_youtube"
+            app:layout_constraintBottom_toBottomOf="@id/etYoutube"
+            app:layout_constraintStart_toStartOf="@id/etYoutube"
+            app:layout_constraintTop_toTopOf="@id/etYoutube" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

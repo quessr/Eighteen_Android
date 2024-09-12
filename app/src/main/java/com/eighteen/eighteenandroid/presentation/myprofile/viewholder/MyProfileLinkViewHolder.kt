@@ -22,16 +22,18 @@ class MyProfileLinkViewHolder(
     override fun onBind(model: MyProfileItem.Link) {
         with(binding) {
             llLinks.removeAllViews()
-            tvEmptyLinks.isVisible = model.snsInfo.isEmpty()
-            llLinks.isVisible = model.snsInfo.isNotEmpty()
-
-            model.snsInfo.forEachIndexed { idx, snsInfo ->
+            tvEmptyLinks.isVisible = model.snsInfoList.isEmpty()
+            llLinks.isVisible = model.snsInfoList.isNotEmpty()
+            ivBtnEditLink.setOnClickListener {
+                clickListener.onClickEditLink()
+            }
+            model.snsInfoList.forEachIndexed { idx, snsInfo ->
                 val view = createLinkTextView(
                     iconDrawableRes = snsInfo.type.iconDrawableRes,
                     text = snsInfo.id
                 )
                 llLinks.addView(view)
-                if (idx < model.snsInfo.lastIndex) {
+                if (idx < model.snsInfoList.lastIndex) {
                     val dividerView = createDividerView()
                     llLinks.addView(dividerView)
                 }

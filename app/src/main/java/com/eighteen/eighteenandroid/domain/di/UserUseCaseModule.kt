@@ -1,12 +1,11 @@
 package com.eighteen.eighteenandroid.domain.di
 
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
-import com.eighteen.eighteenandroid.domain.usecase.AddSnsLinkUseCase
 import com.eighteen.eighteenandroid.domain.usecase.CheckIdDuplicationUseCase
 import com.eighteen.eighteenandroid.domain.usecase.EditIntroduceUseCase
+import com.eighteen.eighteenandroid.domain.usecase.EditSnsLinkUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
-import com.eighteen.eighteenandroid.domain.usecase.RemoveSnsLinkUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
 import dagger.Module
@@ -44,13 +43,8 @@ object UserUseCaseModule {
 
     @Provides
     @Singleton
-    fun provideAddSnsLinkUseCase(repository: UserRepository) =
-        AddSnsLinkUseCase(repository = repository)
-
-    @Provides
-    @Singleton
-    fun provideRemoveSnsLinkUseCase(repository: UserRepository) =
-        RemoveSnsLinkUseCase(repository = repository)
+    fun provideEditSnsLinkUseCase(repository: UserRepository) =
+        EditSnsLinkUseCase(repository = repository)
 
     @Provides
     @Singleton

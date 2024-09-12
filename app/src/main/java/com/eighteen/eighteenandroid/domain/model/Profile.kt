@@ -10,7 +10,7 @@ data class Profile(
     val medias: List<Media>,
     val id: String,
     val snsLinks: List<SnsLink> = emptyList(),
-    val snsInfo: List<SnsInfo> = emptyList(),
+    val snsInfoList: List<SnsInfo> = emptyList(),
     val mbti: Mbti?,
     val description: String?,
     val qna: List<Qna>

@@ -154,7 +154,7 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                 mbti = null,
                 qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
                 snsLinks = listOf(SnsLink("https://www.google.co.kr", "test")),
-                snsInfo = listOf(
+                snsInfoList = listOf(
                     SnsInfo(SnsInfo.SnsType.INSTAGRAM, "instagram12"),
                     SnsInfo(SnsInfo.SnsType.X, "x123123"),
                     SnsInfo(SnsInfo.SnsType.TIKTOK, "tiktok123"),
@@ -164,13 +164,8 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         )
     }
 
-    //TODO api 호출 구현 필요
-    override suspend fun addSnsLink(snsLink: SnsLink): Result<SnsLink> {
-        return Result.success(snsLink)
-    }
-
-    //TODO api 호출 구현 필요
-    override suspend fun removeSnsLink(idx: Int): Result<Unit> {
+    //TODO 링크편집 api 확인 필요
+    override suspend fun editSnsLink(snsInfo: List<SnsInfo>): Result<Unit> {
         return Result.success(Unit)
     }
 

@@ -33,7 +33,7 @@ class MyProfileViewModel : ViewModel() {
                 badgeCount = badgeCount,
                 teenDescription = teenDescription
             )
-            val linkItem = MyProfileItem.Link(snsInfo = snsInfo)
+            val linkItem = MyProfileItem.Link(snsInfoList = snsInfoList)
             val introduceItem =
                 MyProfileItem.Introduce(mbti = mbti?.mbtiString, description = description)
             val qnaItem = MyProfileItem.TenOfQna(qnas = qna)

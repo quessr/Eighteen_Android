@@ -103,6 +103,11 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragmentEditNickname"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editnickname.EditNicknameFragment"
+        android:label="fragment_edit_nickname"
+        tools:layout="@layout/fragment_edit_nickname" />
+    <fragment
         android:id="@+id/fragmentEditIntroduce"
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.EditIntroduceFragment"
         android:label="fragment_edit_introduce"

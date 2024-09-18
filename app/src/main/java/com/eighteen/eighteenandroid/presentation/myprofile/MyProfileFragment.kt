@@ -63,7 +63,7 @@ class MyProfileFragment :
     }
 
     override fun onClickEditNickName() {
-        //TODO 닉네임 편집화면 이동
+        findNavController().navigate(R.id.fragmentEditNickname)
     }
 
     override fun onClickEditSchool() {

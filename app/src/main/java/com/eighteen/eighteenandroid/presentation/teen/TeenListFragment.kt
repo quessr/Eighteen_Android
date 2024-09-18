@@ -29,7 +29,7 @@ class TeenListFragment: BaseFragment<FragmentTeenListBinding>(FragmentTeenListBi
             // adapter 연결
             val adapter = TeenListAdapter(object: TeenListAdapterListener {
                 override fun onUserClicks(user: User) {
-                    findNavController().navigate(R.id.action_fragmentMain_to_fragmentProfileDetail)   // 유저 상세로 이동
+                    findNavController().navigate(R.id.action_fragmentTeenList_to_fragmentProfileDetail)   // 유저 상세로 이동
                 }
 
                 override fun onUserLikeClicks(user: User) {

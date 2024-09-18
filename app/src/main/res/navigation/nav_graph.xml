@@ -136,5 +136,9 @@
         android:id="@+id/teenListFragment"
         tools:layout="@layout/fragment_teen_list"
         android:name="com.eighteen.eighteenandroid.presentation.teen.TeenListFragment"
-        android:label="TeenListFragment" />
+        android:label="TeenListFragment" >
+        <action
+            android:id="@+id/action_fragmentTeenList_to_fragmentProfileDetail"
+            app:destination="@id/fragmentProfileDetailFragment" />
+    </fragment>
 </navigation>

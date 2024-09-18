@@ -128,5 +128,13 @@
         android:name="com.eighteen.eighteenandroid.presentation.teen.TeenMainFragment"
         android:label="fragment_teen_main"
         tools:layout="@layout/fragment_teen_main" >
+        <action
+            android:id="@+id/action_fragmentTeenMain_to_fragmentTeenList"
+            app:destination="@id/teenListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/teenListFragment"
+        tools:layout="@layout/fragment_teen_list"
+        android:name="com.eighteen.eighteenandroid.presentation.teen.TeenListFragment"
+        android:label="TeenListFragment" />
 </navigation>

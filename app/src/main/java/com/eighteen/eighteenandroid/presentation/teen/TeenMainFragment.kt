@@ -2,10 +2,12 @@ package com.eighteen.eighteenandroid.presentation.teen
 
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.databinding.FragmentTeenMainBinding
 import com.eighteen.eighteenandroid.domain.model.TeenType
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
+import com.eighteen.eighteenandroid.presentation.teen.adapter.TeenTypePagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TeenMainFragment : BaseFragment<FragmentTeenMainBinding>(FragmentTeenMainBinding::inflate) {
@@ -17,7 +19,7 @@ class TeenMainFragment : BaseFragment<FragmentTeenMainBinding>(FragmentTeenMainB
     override fun initView() {
         bind {
             val items: List<TeenType> = getTeenTypeItems()
-            val pagerAdapter = TeenTypePagerAdapter(requireContext(), items)
+            val pagerAdapter = TeenTypePagerAdapter(requireContext(), items, findNavController())
             vpTeen.adapter = pagerAdapter
 
             TabLayoutMediator(tabLayout, vpTeen) { _, _ -> }.attach()

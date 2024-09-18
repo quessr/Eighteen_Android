@@ -1,8 +1,10 @@
-package com.eighteen.eighteenandroid.presentation.teen
+package com.eighteen.eighteenandroid.presentation.teen.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +13,8 @@ import com.eighteen.eighteenandroid.databinding.ItemTeenTypeBinding
 import com.eighteen.eighteenandroid.domain.model.TeenType
 
 class TeenTypeAdapter(
-    private val context: Context
+    private val context: Context,
+    private val navController: NavController
 ): ListAdapter<TeenType, TeenTypeAdapter.TeenTypeViewHolder>(diffUtil) {
 
     companion object {
@@ -25,7 +28,10 @@ class TeenTypeAdapter(
         }
     }
 
-    class TeenTypeViewHolder(val context: Context, val binding: ItemTeenTypeBinding): RecyclerView.ViewHolder(binding.root) {
+    class TeenTypeViewHolder(
+        private val context: Context,
+        private val binding: ItemTeenTypeBinding,
+        private val navController: NavController): RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: TeenType) {
             with(binding) {
                 when(item) {
@@ -69,6 +75,16 @@ class TeenTypeAdapter(
                         ivTeenType.setImageResource(R.drawable.ic_teen_weekly)
                     }
                 }
+
+                ivTeenType.setOnClickListener {
+                    val title = tvTeenTypeTitle.text
+                    navController.navigate(
+                        R.id.action_fragmentTeenMain_to_fragmentTeenList,
+                        bundleOf(
+                            "title" to  title
+                        )
+                    )
+                }
             }
 
         }
@@ -78,7 +94,7 @@ class TeenTypeAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemTeenTypeBinding.inflate(inflater, parent, false)
 
-        return TeenTypeViewHolder(context, binding)
+        return TeenTypeViewHolder(context, binding, navController)
     }
 
     override fun onBindViewHolder(holder: TeenTypeViewHolder, position: Int) {

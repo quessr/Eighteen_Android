@@ -18,6 +18,8 @@ import com.eighteen.eighteenandroid.databinding.ItemMainHeaderMoreBinding
 import com.eighteen.eighteenandroid.databinding.ItemMainPopularTeenListviewBinding
 import com.eighteen.eighteenandroid.databinding.ItemMainTournamentListviewBinding
 import com.eighteen.eighteenandroid.databinding.ItemTeenBinding
+import com.eighteen.eighteenandroid.domain.model.MainItem
+import com.eighteen.eighteenandroid.domain.model.Tournament
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.MainItemDiffCallBack

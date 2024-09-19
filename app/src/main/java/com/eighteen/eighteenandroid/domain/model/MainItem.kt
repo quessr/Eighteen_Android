@@ -1,7 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.home.adapter
-
-import com.eighteen.eighteenandroid.domain.model.AboutTeen
-import com.eighteen.eighteenandroid.domain.model.User
+package com.eighteen.eighteenandroid.domain.model
 
 sealed class MainItem{
     // 헤더
@@ -36,9 +33,4 @@ sealed class MainItem{
     data class UserView(
         val user: User
     ): MainItem()
-}
-
-sealed class Tournament {
-    object Exercise: Tournament()
-    object Study: Tournament()
 }

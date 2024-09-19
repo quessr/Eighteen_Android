@@ -16,6 +16,8 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.domain.model.AboutTeen
+import com.eighteen.eighteenandroid.domain.model.MainItem
+import com.eighteen.eighteenandroid.domain.model.Tournament
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
@@ -26,8 +28,6 @@ import com.eighteen.eighteenandroid.presentation.common.throttleClick
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapterListener
-import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
-import com.eighteen.eighteenandroid.presentation.home.adapter.Tournament
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint

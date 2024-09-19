@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eighteen.eighteenandroid.domain.model.MainItem
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
-import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

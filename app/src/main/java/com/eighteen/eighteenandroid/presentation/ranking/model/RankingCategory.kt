@@ -1,5 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.ranking.model
 
+import com.eighteen.eighteenandroid.presentation.ranking.cardList.model.CardListItem
+
 interface RankingCategory {
     val id: String
 
@@ -9,7 +11,7 @@ interface RankingCategory {
     data class Category(
         override val id: String,
         val categoryTitle: String,
-        val categoryItems: List<RankingItem>
+        val cardListItems: List<CardListItem>
     ) : RankingCategory {
         override fun areItemsTheSame(other: RankingCategory): Boolean =
             other is Category && this.id == other.id

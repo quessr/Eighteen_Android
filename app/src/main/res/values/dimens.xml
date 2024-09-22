@@ -10,4 +10,8 @@
 
     <!-- chat -->
     <dimen name="chat_exit_width">74dp</dimen>
+
+    <!-- SignUp-->
+    <dimen name="sign_up_add_media_width">197dp</dimen>
+    <dimen name="sign_up_add_media_height">230dp</dimen>
 </resources>

@@ -3,7 +3,7 @@ package com.eighteen.eighteenandroid.data.repository
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SchoolRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SignUpRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
-import com.eighteen.eighteenandroid.data.mapper.ProfileDetailMapper
+import com.eighteen.eighteenandroid.data.mapper.ApiException
 import com.eighteen.eighteenandroid.data.mapper.mapper
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.Mbti
@@ -113,11 +113,6 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         )
     }
 
-    override suspend fun postCheckIdValidation(id: String): Result<Unit?> {
-        //TODO id 체크 api 추가
-        return Result.success(Unit)
-    }
-
     override suspend fun postSignUp(signUpInfo: SignUpInfo): Result<LoginResultInfo> = runCatching {
         val signUpRequest = signUpInfo.run {
             SignUpRequest(
@@ -178,5 +173,13 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         selectedMbti: Mbti?
     ): Result<Unit> {
         return Result.success(Unit)
+    }
+
+    override suspend fun checkIdDuplication(
+        uniqueId: String
+    ): Result<Boolean> = runCatching {
+        userService.postDuplicationCheck(uniqueId = uniqueId).mapper {
+            it.data ?: throw ApiException.Unknown
+        }
     }
 }

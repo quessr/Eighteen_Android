@@ -5,7 +5,9 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterBirthBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.WebViewUrl
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.DatePickerDialogFragment
 import java.util.Calendar
@@ -14,7 +16,7 @@ class SignUpEnterBirthFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterBirthBinding>(FragmentSignUpEnterBirthBinding::inflate) {
 
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.nickName = ""
+        signUpViewModelContentInterface.setPageClearEvent(SignUpPage.ENTER_NICK_NAME)
         super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {
@@ -44,6 +46,7 @@ class SignUpEnterBirthFragment :
             }
         }
         initFragmentResultListener()
+        initStateFlow()
     }
 
     private fun initFragmentResultListener() {
@@ -68,6 +71,17 @@ class SignUpEnterBirthFragment :
                 isEnabled = calendar != null
             )
         )
+    }
+
+    private fun initStateFlow() {
+        collectInLifecycle(flow = signUpViewModelContentInterface.pageClearEvent) {
+            if (it.peekContent() == SignUpPage.ENTER_BIRTH) {
+                it.getContentIfNotHandled()?.run {
+                    setCalendar(null)
+                    signUpViewModelContentInterface.birth = null
+                }
+            }
+        }
     }
 
     companion object {

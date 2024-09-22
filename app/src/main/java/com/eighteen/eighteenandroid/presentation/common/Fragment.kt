@@ -2,21 +2,24 @@ package com.eighteen.eighteenandroid.presentation.common
 
 import android.content.Context
 import android.os.Parcelable
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.annotation.IdRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.databinding.DialogReportSelectBinding
 import com.eighteen.eighteenandroid.presentation.MainActivity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 fun Fragment.showDialogFragment(dialogFragment: DialogFragment, tag: String? = null) {
     dialogFragment.show(childFragmentManager, tag)
@@ -48,7 +51,7 @@ fun showReportSelectDialogLeft(itemView: View, onReportClicked: () -> Unit, onBl
     reportSelectDialogView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     val popupWidth = reportSelectDialogView.measuredWidth
 
-    val xOffset = -popupWidth - itemView.width - (itemView.context.dp2Px(18))
+    val xOffset = -popupWidth - itemView.width - (itemView.context.dp2Px(36))
     val yOffset = - (itemView.height * 2)
 
     // 팝업 창 표시
@@ -140,5 +143,18 @@ fun Fragment.showKeyboard(view: View) {
         val inputManager =
             (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
         inputManager?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+}
+
+fun <T> Fragment.collectInLifecycle(
+    flow: Flow<T>,
+    lifecycle: LifecycleOwner = viewLifecycleOwner,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    action: (T) -> Unit
+) = lifecycle.lifecycleScope.launch {
+    repeatOnLifecycle(state = state) {
+        flow.collect {
+            action.invoke(it)
+        }
     }
 }

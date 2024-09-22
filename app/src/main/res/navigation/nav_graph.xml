@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_fragmentSignUp_to_fragmentFullWebView"
             app:destination="@id/fragmentFullWebView" />
+        <action
+            android:id="@+id/action_fragmentSignUp_to_fragmentSignUpCompleted"
+            app:destination="@id/fragmentSignUpCompleted" />
     </fragment>
     <fragment
         android:id="@+id/fragmentEditImage"
@@ -53,6 +56,11 @@
         android:label="fragment_full_web_view"
         tools:layout="@layout/fragment_full_web_view" />
     <fragment
+        android:id="@+id/fragmentSignUpCompleted"
+        android:name="com.eighteen.eighteenandroid.presentation.auth.SignUpCompletedFragment"
+        android:label="fragment_sign_up_completed"
+        tools:layout="@layout/fragment_sign_up_completed" />
+    <fragment
         android:id="@+id/fragmentMain"
         android:name="com.eighteen.eighteenandroid.presentation.home.MainFragment"
         android:label="fragment_main"
@@ -60,6 +68,9 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentProfileDetail"
             app:destination="@id/fragmentProfileDetailFragment" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentLogin"
+            app:destination="@id/fragmentLogin" />
     </fragment>
 
     <fragment
@@ -117,4 +128,23 @@
         android:name="com.eighteen.eighteenandroid.presentation.ranking.RankingFragment"
         android:label="fragment_ranking"
         tools:layout="@layout/fragment_ranking" />
+
+    <fragment
+        android:id="@+id/teenMainFragment"
+        android:name="com.eighteen.eighteenandroid.presentation.teen.TeenMainFragment"
+        android:label="fragment_teen_main"
+        tools:layout="@layout/fragment_teen_main">
+        <action
+            android:id="@+id/action_fragmentTeenMain_to_fragmentTeenList"
+            app:destination="@id/teenListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teenListFragment"
+        android:name="com.eighteen.eighteenandroid.presentation.teen.TeenListFragment"
+        android:label="TeenListFragment"
+        tools:layout="@layout/fragment_teen_list">
+        <action
+            android:id="@+id/action_fragmentTeenList_to_fragmentProfileDetail"
+            app:destination="@id/fragmentProfileDetailFragment" />
+    </fragment>
 </navigation>

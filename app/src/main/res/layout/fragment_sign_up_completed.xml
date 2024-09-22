@@ -9,7 +9,7 @@
         style="@style/pretendard_bold_20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="110dp"
         android:gravity="center"
         android:text="@string/sign_up_completed_title"
         android:textColor="@color/black"
@@ -26,4 +26,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <TextView
+        android:id="@+id/tvBtnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/bg_btn_selector"
+        android:gravity="center"
+        android:paddingVertical="13dp"
+        android:text="@string/sign_up_start"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

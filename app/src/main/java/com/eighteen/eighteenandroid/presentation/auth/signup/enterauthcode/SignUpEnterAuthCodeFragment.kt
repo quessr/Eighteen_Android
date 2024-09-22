@@ -10,20 +10,21 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpEnterAuthCodeBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.clearFocus
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showKeyboard
+import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.TwoButtonPopUpDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
  * 인증 코드 입력 페이지
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 class SignUpEnterAuthCodeFragment :
     BaseSignUpContentFragment<FragmentSignUpEnterAuthCodeBinding>(FragmentSignUpEnterAuthCodeBinding::inflate) {
     override val onMovePrevPageAction: () -> Unit = {
-        signUpViewModelContentInterface.phoneNumber = ""
+        signUpViewModelContentInterface.setPageClearEvent(page = SignUpPage.ENTER_PHONE_NUMBER)
         super.onMovePrevPageAction.invoke()
     }
     override val onMoveNextPageAction: () -> Unit = {
@@ -68,6 +69,7 @@ class SignUpEnterAuthCodeFragment :
         }
         initStateFlow()
         collectRemainTimeFlow()
+        initFragmentResultListener()
     }
 
     override fun onResume() {
@@ -165,64 +167,115 @@ class SignUpEnterAuthCodeFragment :
         }
 
     private fun initStateFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterAuthCodeViewModel.sendMessageResultStateFlow.collect {
-                    when (it) {
-                        is ModelState.Loading -> {
-                            //TODO 로딩 처리
-                            Log.d("SignUpEnterAuthCodeFragment", "send loading")
-                        }
-                        is ModelState.Success -> {
-                            //do nothing
-                        }
-                        is ModelState.Error -> {
-                            //TODO 에러처리
-                            Log.d("SignUpEnterAuthCodeFragment", "send error ${it.throwable}")
+        collectInLifecycle(signUpEnterAuthCodeViewModel.sendMessageResultStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩 처리
+                    Log.d("SignUpEnterAuthCodeFragment", "send loading")
+                }
+                is ModelState.Success -> {
+                    //do nothing
+                }
+                is ModelState.Error -> {
+                    //TODO 에러처리
+                    Log.d("SignUpEnterAuthCodeFragment", "send error ${it.throwable}")
 
-                        }
-                        is ModelState.Empty -> {
-                            //do nothing
-                        }
-                    }
+                }
+                is ModelState.Empty -> {
+                    //do nothing
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpEnterAuthCodeViewModel.confirmMessageResultStateFlow.collect {
-                    when (it) {
-                        is ModelState.Loading -> {
-                            //TODO 로딩 처리
-                            Log.d("SignUpEnterAuthCodeFragment", "confirm loading")
-                        }
-                        is ModelState.Success -> {
-                            //TODO 확인팝업 적용(팝업 디자인 수정 후 작업 예정)
-                            findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
-                        }
-                        is ModelState.Error -> {
-                            //TODO 에러처리
-                            Log.d("SignUpEnterAuthCodeFragment", "confirm error ${it.throwable}")
-                        }
-                        is ModelState.Empty -> {
-                            //do nothing
-                        }
-                    }
+
+        collectInLifecycle(signUpEnterAuthCodeViewModel.confirmMessageResultStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩 처리
+                    Log.d("SignUpEnterAuthCodeFragment", "confirm loading")
+                }
+                is ModelState.Success -> {
+                    //TODO 인증 완료 분기처리
+                    //case 1. 이미 있는 회원일 경우(로그인)
+                    //showLoginDialogFragment()
+
+                    //case 2. 처음 가입한 경우(회원가입)
+                    showSignUpDialogFragment()
+                }
+                is ModelState.Error -> {
+                    //TODO 에러처리
+                    Log.d("SignUpEnterAuthCodeFragment", "confirm error ${it.throwable}")
+                }
+                is ModelState.Empty -> {
+                    //do nothing
                 }
             }
         }
     }
 
+    private fun showSignUpDialogFragment() {
+        val title = getString(R.string.sign_up_enter_auth_code_sign_up_dialog_title)
+        val content = getString(R.string.sign_up_enter_auth_code_sign_up_dialog_content)
+        val buttonText = getString(R.string.ok_like)
+        val dialogFragment =
+            PopUpDialogFragment.newInstance(
+                requestKey = REQUEST_KEY_SIGN_UP_DIALOG,
+                title = title,
+                content = content,
+                buttonText = buttonText
+            )
+        showDialogFragment(dialogFragment = dialogFragment)
+    }
+
+    private fun showLoginDialogFragment() {
+        val title = getString(R.string.sign_up_enter_auth_code_login_dialog_title)
+        val content = getString(R.string.sign_up_enter_auth_code_login_dialog_content)
+        val confirmButtonText = getString(R.string.ok_like)
+        val rejectButtonText = getString(R.string.no)
+
+        val dialogFragment = TwoButtonPopUpDialogFragment.newInstance(
+            requestKey = REQUEST_KEY_LOGIN_DIALOG,
+            title = title,
+            content = content,
+            confirmButtonText = confirmButtonText,
+            rejectButtonText = rejectButtonText
+        )
+        showDialogFragment(dialogFragment = dialogFragment)
+    }
+
     private fun collectRemainTimeFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            signUpEnterAuthCodeViewModel.remainTimeFlow.collect {
-                binding.tvRemainTime.text = it
-            }
+        collectInLifecycle(signUpEnterAuthCodeViewModel.remainTimeFlow) {
+            binding.tvRemainTime.text = it
         }
+    }
+
+    private fun initFragmentResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            REQUEST_KEY_SIGN_UP_DIALOG,
+            viewLifecycleOwner,
+            object : PopUpDialogFragment.PopUpDialogFragmentResultListener() {
+                override fun onConfirm() {
+                    findNavController().navigate(R.id.action_fragmentSignUpEnterAuthCode_to_fragmentSignUpTermsOfService)
+                }
+            })
+
+        childFragmentManager.setFragmentResultListener(
+            REQUEST_KEY_LOGIN_DIALOG,
+            viewLifecycleOwner,
+            object : TwoButtonPopUpDialogFragment.TowButtonPopUpDialogFragmentResultListener() {
+                override fun onConfirm() {
+                    //TODO 로그인 상태로 변경
+                    findNavController().popBackStack()
+                }
+            })
     }
 
     override fun onDestroyView() {
         signUpEnterAuthCodeViewModel.clear()
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val REQUEST_KEY_SIGN_UP_DIALOG = "REQUEST_KEY_SIGN_UP_DIALOG"
+        private const val REQUEST_KEY_LOGIN_DIALOG = "REQUEST_KEY_LOGIN_DIALOG"
     }
 }

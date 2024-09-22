@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
 import com.eighteen.eighteenandroid.domain.model.School
@@ -12,7 +13,9 @@ import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedias
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
@@ -21,6 +24,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -51,14 +55,21 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     override val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>> =
         _signUpResultStateFlow.asStateFlow()
 
-    override var phoneNumber: String = "01077777777"
+    private val _pageClearEventStateFlow =
+        MutableStateFlow(Event(SignUpPage.NOTHING))
+
+    override val pageClearEvent: StateFlow<Event<SignUpPage>> =
+        _pageClearEventStateFlow.asStateFlow()
+
+    override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
     override var birth: Calendar? = null
     override var school: School? = null
+    override var tag: Tag? = null
 
-    private val _mediasStateFlow = MutableStateFlow<List<SignUpMedia>>(emptyList())
-    override val mediasStateFlow: StateFlow<List<SignUpMedia>> = _mediasStateFlow.asStateFlow()
+    private val _mediasStateFlow = MutableStateFlow(SignUpMedias())
+    override val mediasStateFlow: StateFlow<SignUpMedias> = _mediasStateFlow.asStateFlow()
 
     private var signUpJob: Job? = null
     fun actionToPrevPage() {
@@ -88,18 +99,19 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         _progressLiveData.value = progress
     }
 
-    fun addMediaResult(mediaResult: EditMediaResult) {
+    fun addMediaResult(mediaResult: EditMediaResult, isRef: Boolean) {
         val signUpMedia = when (mediaResult) {
             is EditMediaResult.Image -> SignUpMedia.Image(imageBitmap = mediaResult.imageBitmap)
             is EditMediaResult.Video -> SignUpMedia.Video(uriString = mediaResult.uriString)
         }
-        _mediasStateFlow.value = _mediasStateFlow.value.toMutableList().apply {
-            add(signUpMedia)
+        _mediasStateFlow.update {
+            if (isRef) it.copy(ref = signUpMedia)
+            else it.copy(medias = it.medias + signUpMedia)
         }
     }
 
     override fun clearMediaResultStateFlow() {
-        _mediasStateFlow.value = emptyList()
+        _mediasStateFlow.value = SignUpMedias()
     }
 
     override fun requestSignUp() {
@@ -123,9 +135,28 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         }
     }
 
+    override fun setPageClearEvent(page: SignUpPage) {
+        _pageClearEventStateFlow.value = Event(page)
+    }
+
+    override fun removeRefMedia() {
+        _mediasStateFlow.update {
+            it.copy(ref = null)
+        }
+    }
+
+    override fun removeMedia(position: Int) {
+        _mediasStateFlow.update {
+            it.copy(medias = it.medias.toMutableList().apply {
+                removeAt(position)
+            })
+        }
+    }
+
     override fun onCleared() {
-        _mediasStateFlow.value.forEach {
-            if (it is SignUpMedia.Image) it.imageBitmap.recycle()
+        _mediasStateFlow.value.run {
+            (medias + ref).filterIsInstance<SignUpMedia.Image>()
+                .forEach { it.imageBitmap.recycle() }
         }
         super.onCleared()
     }

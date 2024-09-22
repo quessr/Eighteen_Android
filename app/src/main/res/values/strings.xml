@@ -31,6 +31,7 @@
     <string name="no">아니요</string>
     <string name="yes">네</string>
     <string name="send">보내기</string>
+    <string name="ok_like">좋아요!</string>
 
     <!-- 로그인/회원가입 -->
     <string name="sign_up_login_title">가입하기</string>
@@ -49,6 +50,10 @@
     <string name="sign_up_enter_auth_code_title">6자리 코드 입력</string>
     <string name="sign_up_enter_auth_code_resend_tip">코드를 받지 못하셨나요? 다시 전송해보세요!</string>
     <string name="sign_up_enter_auth_code_resend">다시 전송하기</string>
+    <string name="sign_up_enter_auth_code_sign_up_dialog_title">인증이 완료되었어요!</string>
+    <string name="sign_up_enter_auth_code_sign_up_dialog_content">A-TEEN에 정보를 입력하여\n가입을 마저 완료해보세요.</string>
+    <string name="sign_up_enter_auth_code_login_dialog_title">이미 가입된 사용자에요!</string>
+    <string name="sign_up_enter_auth_code_login_dialog_content">바로 로그인 할까요?</string>
 
     <string name="sign_up_terms_of_service_title">사용 약관</string>
     <string name="sign_up_terms_of_service_agree_all">모두 동의</string>
@@ -75,8 +80,13 @@
 
     <string name="sign_up_enter_school_title">다니고 있는\n학교를 알려주세요</string>
 
-    <string name="sign_up_add_media_title">TEEN에서 자랑할\n사진이나 동영상을 추가해보세요</string>
+    <string name="sign_up_select_tag_title">TEEN에서 자랑할 나만의\n카테고리를 골라주세요!</string>
+    <string name="sign_up_select_tag_hint">하나의 카테고리를 선택할 수 있어요!</string>
+
+    <string name="sign_up_add_media_title">%s 카테고리에서 자랑할\n사진이나 동영상을 추가해보세요</string>
     <string name="sign_up_add_media_hint">*최대 10개를 등록할 수 있어요</string>
+    <string name="sign_up_add_media_guide">사진 가이드를 참고해주세요</string>
+
     <string name="sign_up_completed_title">등록이 완료되었어요!\n이제 A-TEEN을 시작해보세요 :)</string>
 
     <string name="edit_media_crop_image_complete">등록 완료</string>
@@ -160,4 +170,19 @@
     <string name="chat_empty_message">아직 도착한\n메시지가 없어요!</string>
     <string name="chat_exit_dialog_title">채팅방에서 나가시겠습니까?</string>
     <string name="chat_room_input_hint">메시지를 보내보세요</string>
+
+    <string name="fragment_teen_title">TEEN</string>
+    <string name="teen_description">친구들의 프로필을\n구경해보세요!</string>
+    <string name="teen_ranking_title">오늘의 TEEN</string>
+
+    <!-- Teen -->
+    <string name="text_teen_most_vote">투표 수가 많은\nTEEN</string>
+    <string name="text_teen_awards">우승한\nTEEN</string>
+    <string name="text_teen_monthly">월간 참여\nTEEN</string>
+    <string name="text_teen_weekly">주간 인기\nTEEN</string>
+    <string name="text_teen_most_badge">배지가 많은\nTEEN</string>
+    <string name="text_teen_my_choice">내가 투표했던\nTEEN</string>
+    <string name="text_teen_recent_join">최근 가입한\nTEEN</string>
+    <string name="text_teen_same_school">같은 학교인\nTEEN</string>
+
 </resources>

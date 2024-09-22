@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="247dp"
-        android:height="288dp">
+        android:width="@dimen/sign_up_add_media_width"
+        android:height="@dimen/sign_up_add_media_height">
         <shape android:shape="rectangle">
             <solid android:color="@color/grey_03" />
         </shape>

@@ -13,7 +13,7 @@
         android:title="@string/menu_ranking" />
 
     <item
-        android:id="@+id/btn_bottom_teen"
+        android:id="@+id/teenMainFragment"
         android:enabled="true"
         android:icon="@drawable/menu_teen_selected"
         android:title="@string/menu_teen" />

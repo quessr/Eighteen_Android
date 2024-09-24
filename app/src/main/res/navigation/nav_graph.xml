@@ -103,6 +103,10 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragmentEditMedia"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editmedia.EditMediaFragment"
+        android:label="fragment_edit_media" />
+    <fragment
         android:id="@+id/fragmentEditNickname"
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.editnickname.EditNicknameFragment"
         android:label="fragment_edit_nickname"

@@ -58,8 +58,7 @@ class MyProfileFragment :
     }
 
     override fun onClickEditMedia() {
-        //TODO 미디어 편집화면 이동
-        Log.d("MyProfileFragment", "onClickEditMedia")
+        findNavController().navigate(R.id.fragmentEditMedia)
     }
 
     override fun onClickEditNickName() {

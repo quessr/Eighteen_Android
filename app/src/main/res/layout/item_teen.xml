@@ -10,8 +10,8 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         app:cardCornerRadius="20dp"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,9 +30,9 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintHeight_percent="0.7"
                 android:src="@drawable/bg_gradient_bottom"
-                app:layout_constraintBottom_toBottomOf="@+id/img_today_teen" />
+                app:layout_constraintBottom_toBottomOf="@+id/img_today_teen"
+                app:layout_constraintHeight_percent="0.7" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -61,34 +61,36 @@
 
             <ImageButton
                 android:id="@+id/btn_chat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00ff0000"
-                android:src="@drawable/ic_profile_chat_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/bg_oval_main_color"
+                android:src="@drawable/ic_empty_chat"
                 app:layout_constraintBottom_toTopOf="@id/btn_like"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageButton
                 android:id="@+id/btn_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00ff0000"
-                android:src="@drawable/ic_profile_like_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_oval_main_color"
+                android:src="@drawable/ic_empty_heart"
                 app:layout_constraintBottom_toTopOf="@id/btn_setting"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageButton
                 android:id="@+id/btn_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="26dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
                 android:background="#00ff0000"
-                android:padding="12dp"
+                android:paddingTop="6dp"
+                android:layout_marginBottom="26dp"
                 android:src="@drawable/ic_profile_setting_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/btn_like"
                 app:layout_constraintEnd_toEndOf="@id/btn_like"
-                app:layout_constraintStart_toStartOf="@id/btn_like" />
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

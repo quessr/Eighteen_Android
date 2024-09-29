@@ -58,7 +58,7 @@ class MyProfileFragment :
     }
 
     override fun onClickEditMedia() {
-        findNavController().navigate(R.id.fragmentEditMedia)
+        findNavController().navigate(R.id.fragmentMyEditMedia)
     }
 
     override fun onClickEditNickName() {

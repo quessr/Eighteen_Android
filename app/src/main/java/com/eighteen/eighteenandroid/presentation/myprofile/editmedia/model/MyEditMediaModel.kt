@@ -2,7 +2,7 @@ package com.eighteen.eighteenandroid.presentation.myprofile.editmedia.model
 
 import android.graphics.Bitmap
 
-data class EditMediaModel(
+data class MyEditMediaModel(
     val repMedia: Media? = null,
     val medias: List<Media> = emptyList()
 ) {

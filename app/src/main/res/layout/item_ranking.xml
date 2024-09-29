@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="58dp">
 
     <TextView
         android:id="@+id/tv_category_title"
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="뷰티" />

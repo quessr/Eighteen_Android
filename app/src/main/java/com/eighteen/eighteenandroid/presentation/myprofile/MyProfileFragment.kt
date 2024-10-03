@@ -66,8 +66,7 @@ class MyProfileFragment :
     }
 
     override fun onClickEditSchool() {
-        //TODO 학교 편집 화면 이동
-        Log.d("MyProfileFragment", "onClickEditSchool")
+        findNavController().navigate(R.id.fragmentEditSchool)
     }
 
     override fun onClickBadge() {

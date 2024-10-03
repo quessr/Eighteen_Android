@@ -1,4 +1,4 @@
-package com.eighteen.eighteenandroid.presentation.auth.signup.enterschool
+package com.eighteen.eighteenandroid.presentation.common.searchschool
 
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -7,7 +7,7 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class SignUpEnterSchoolSearchResultItemDecoration(
+class SchoolSearchResultItemDecoration(
     @ColorInt private val dividerColor: Int,
     @Px private val dividerHeightPx: Int,
 ) : ItemDecoration() {

@@ -1,33 +1,33 @@
-package com.eighteen.eighteenandroid.presentation.auth.signup.enterschool
+package com.eighteen.eighteenandroid.presentation.common.searchschool
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.eighteen.eighteenandroid.databinding.ItemSignUpSchoolSearchResultBinding
+import com.eighteen.eighteenandroid.databinding.ItemSchoolSearchResultBinding
 import com.eighteen.eighteenandroid.domain.model.School
-import com.eighteen.eighteenandroid.presentation.auth.signup.enterschool.viewholder.SignUpEnterSchoolSearchResultViewHolder
+import com.eighteen.eighteenandroid.presentation.common.searchschool.viewholder.SchoolSearchResultViewHolder
 
-class SignUpEnterSchoolSearchResultAdapter(private val onClickSchool: (School) -> Unit) :
-    ListAdapter<School, SignUpEnterSchoolSearchResultViewHolder>(diffUtil) {
+class SchoolSearchResultAdapter(private val onClickSchool: (School) -> Unit) :
+    ListAdapter<School, SchoolSearchResultViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SignUpEnterSchoolSearchResultViewHolder {
+    ): SchoolSearchResultViewHolder {
         val binding =
-            ItemSignUpSchoolSearchResultBinding.inflate(
+            ItemSchoolSearchResultBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-        return SignUpEnterSchoolSearchResultViewHolder(
+        return SchoolSearchResultViewHolder(
             binding = binding,
             onClickSchool = onClickSchool
         )
     }
 
-    override fun onBindViewHolder(holder: SignUpEnterSchoolSearchResultViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SchoolSearchResultViewHolder, position: Int) {
         holder.onBind(getItem(position))
     }
 

@@ -19,87 +19,47 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
         binding.rvRanking.run {
             this.adapter = adapter
         }
+        
+        val categoryTitles = listOf("운동", "뷰티", "공부", "예술", "게임")
 
-        val categories = listOf(
+        val categories = (0..9).map { index ->
+            val titleIndex = index % categoryTitles.size
             RankingCategory.Category(
-                id = "1",
-                categoryTitle = "뷰티",
+                id = index.toString(),
+                categoryTitle = categoryTitles[titleIndex],
                 cardListItems = listOf(
                     CardListItem.VoteCard(
-                        id = "vote_1",
-                        category = "Beauty",
-                        illustrationUrl = "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg"
+                        id = "vote_$index",
+                        category = "카테고리 $index",
+                        illustrationUrl = "https://png.pngtree.com/thumb_back/fw800/back_our/20190625/ourmid/pngtree-beautiful-nice-sky-blue-background-image_260273.jpg"
                     ),
                     CardListItem.WinnerCard(
-                        id = "winner_1",
-                        category = "Beauty",
+                        id = "winner_${index}_1",
+                        category = "카테고리 $index",
                         imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "1회차 우승자",
                         tournamentNumb = 1
                     ),
                     CardListItem.WinnerCard(
-                        id = "winner_2",
-                        category = "Beauty",
+                        id = "winner_${index}_2",
+                        category = "카테고리 $index",
                         imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "2회차 우승자",
                         tournamentNumb = 2
                     ),
                     CardListItem.WinnerCard(
-                        id = "winner_2",
-                        category = "Beauty",
+                        id = "winner_${index}_3",
+                        category = "카테고리 $index",
                         imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "3회차 우승자",
-                        tournamentNumb = 2
+                        tournamentNumb = 3
                     ),
                     CardListItem.WinnerCard(
-                        id = "winner_2",
-                        category = "Beauty",
+                        id = "winner_${index}_4",
+                        category = "카테고리 $index",
                         imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "4회차 우승자",
-                        tournamentNumb = 2
-                    )
-                )
-            ),
-            RankingCategory.Category(
-                id = "1",
-                categoryTitle = "운동",
-                cardListItems = listOf(
-                    CardListItem.VoteCard(
-                        id = "vote_1",
-                        category = "Beauty",
-                        illustrationUrl = "https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg"
-                    ),
-                    CardListItem.WinnerCard(
-                        id = "winner_1",
-                        category = "Beauty",
-                        imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "1회차 우승자",
-                        tournamentNumb = 1
-                    ),
-                    CardListItem.WinnerCard(
-                        id = "winner_2",
-                        category = "Beauty",
-                        imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "2회차 우승자",
-                        tournamentNumb = 2
-                    ),
-                    CardListItem.WinnerCard(
-                        id = "winner_2",
-                        category = "Beauty",
-                        imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "3회차 우승자",
-                        tournamentNumb = 2
-                    ),
-                    CardListItem.WinnerCard(
-                        id = "winner_2",
-                        category = "Beauty",
-                        imageUrl = "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg",
-                        title = "4회차 우승자",
-                        tournamentNumb = 2
+                        tournamentNumb = 4
                     )
                 )
             )
-        )
+        }
 
         // 데이터를 어댑터에 설정
         adapter.submitList(categories)

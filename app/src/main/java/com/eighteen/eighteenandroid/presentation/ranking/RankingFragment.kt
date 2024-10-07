@@ -1,13 +1,19 @@
 package com.eighteen.eighteenandroid.presentation.ranking
 
+import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.databinding.FragmentRankingBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.common.createChip
+import com.eighteen.eighteenandroid.presentation.common.setTagStyle
 import com.eighteen.eighteenandroid.presentation.ranking.cardList.model.CardListItem
 import com.eighteen.eighteenandroid.presentation.ranking.model.RankingCategory
+import com.google.android.material.chip.Chip
 
 class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBinding::inflate) {
+    private var selectedChip: Chip? = null
     override fun initView() {
         val adapter = RankingAdapter()
+        initChipGroup()
 
 
         binding.rvRanking.run {
@@ -97,5 +103,23 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
 
         // 데이터를 어댑터에 설정
         adapter.submitList(categories)
+    }
+
+    private fun initChipGroup() {
+        for (tag in Tag.values()) {
+            val chip = createChip(requireContext(), tag.strValue)
+            if (tag == Tag.ALL) { // 화면 최초 진입 시 전체 태그가 클릭된 상태여야함
+                chip.setTagStyle(isBlackBackground = true)
+                selectedChip = chip
+            }
+            chip.setOnClickListener { _ ->
+                selectedChip?.setTagStyle(isBlackBackground = false)
+                chip.setTagStyle(isBlackBackground = true)
+                selectedChip = chip
+            }
+            bind {
+                chipGroup.addView(chip)
+            }
+        }
     }
 }

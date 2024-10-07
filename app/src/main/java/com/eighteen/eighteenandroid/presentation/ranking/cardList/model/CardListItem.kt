@@ -22,7 +22,6 @@ sealed interface CardListItem {
         override val id: String,
         override val category: String,
         val imageUrl: String,
-        val title: String,
         val tournamentNumb: Int
     ) : CardListItem {
         override fun areItemsTheSame(other: CardListItem) =

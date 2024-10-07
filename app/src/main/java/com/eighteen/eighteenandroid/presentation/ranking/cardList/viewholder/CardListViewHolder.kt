@@ -31,6 +31,8 @@ sealed class CardListViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(
             Glide.with(binding.ivWinner.context)
                 .load(winnerModel?.imageUrl)
                 .into(binding.ivWinner)
+
+            binding.tvVote.text = "${winnerModel?.tournamentNumb}회차 우승자"
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemTournamentBinding
+import com.eighteen.eighteenandroid.domain.model.Tournament
 import com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback.TournamentDiffCallBack
 
 class TournamentAdapter(

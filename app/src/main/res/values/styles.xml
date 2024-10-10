@@ -34,4 +34,11 @@
     <style name="DatePickerStyle" parent="pretendard_regular_16">
         <item name="android:colorControlNormal">@color/main_color</item>
     </style>
+
+    <style name="Theme.EighteenAndroid.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/Theme.EighteenAndroid</item>
+    </style>
 </resources>

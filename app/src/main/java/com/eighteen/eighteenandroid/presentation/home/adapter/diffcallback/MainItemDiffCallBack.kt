@@ -1,7 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.home.adapter.diffcallback
 
 import androidx.recyclerview.widget.DiffUtil
-import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
+import com.eighteen.eighteenandroid.domain.model.MainItem
 
 class MainItemDiffCallBack: DiffUtil.ItemCallback<MainItem>() {
     override fun areItemsTheSame(oldItem: MainItem, newItem: MainItem): Boolean {

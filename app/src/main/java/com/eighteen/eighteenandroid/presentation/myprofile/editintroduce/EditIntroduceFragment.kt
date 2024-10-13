@@ -13,9 +13,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditIntroduceBinding
+import com.eighteen.eighteenandroid.domain.model.createMbtiOrNull
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.recyclerview.GridMarginItemDecoration
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
@@ -79,7 +81,7 @@ class EditIntroduceFragment :
                     binding.clEditMbtiContainer.isVisible = it == EditIntroducePage.MBTI
                     //gone으로 할 경우 editText의 크기가 0dp가 되는 현상 발생, 원인 모르겠음
                     binding.clEditDescriptionContainer.visibility =
-                        if (it == EditIntroducePage.DESCIRPTION) View.VISIBLE else View.INVISIBLE
+                        if (it == EditIntroducePage.INTRODUCTION) View.VISIBLE else View.INVISIBLE
                     updateNextButton()
                 }
             }
@@ -92,30 +94,21 @@ class EditIntroduceFragment :
                 }
             }
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                editIntroduceViewModel.editIntroduceResultStateFlow.collect {
-                    when (it) {
-                        is ModelState.Loading -> {
-                            //TODO 로딩처리
-                        }
-                        is ModelState.Success -> {
-                            it.data?.getContentIfNotHandled()?.let {
-                                loginViewModel.editIntroduce(
-                                    mbti = it.mbti,
-                                    description = it.description
-                                )
-                            }
-                            findNavController().popBackStack()
-                        }
-                        is ModelState.Error -> {
-                            //TODO 에러처리
-                        }
-                        is ModelState.Empty -> {
-                            //do nothing
-                        }
+        collectInLifecycle(loginViewModel.editProfileEventStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩
+                }
+                is ModelState.Success -> {
+                    it.data?.getContentIfNotHandled()?.let {
+                        findNavController().popBackStack()
                     }
+                }
+                is ModelState.Error -> {
+                    //TODO 에러
+                }
+                is ModelState.Empty -> {
+                    //do nothing
                 }
             }
         }
@@ -132,10 +125,10 @@ class EditIntroduceFragment :
                 editIntroduceViewModel.moveNextPage()
                 binding.etEditDescription.setText("")
             }
-            EditIntroducePage.DESCIRPTION -> {
-                editIntroduceViewModel.requestEditIntroduce(
-                    binding.etEditDescription.text.toString()
-                )
+            EditIntroducePage.INTRODUCTION -> {
+                val introduction = binding.etEditDescription.text.toString()
+                val mbti = createMbtiOrNull(editIntroduceViewModel.selectedMbtiType)
+                loginViewModel.requestEditIntroductionMbti(introduction = introduction, mbti = mbti)
             }
         }
     }
@@ -143,7 +136,7 @@ class EditIntroduceFragment :
     private fun onClickBack() {
         when (editIntroduceViewModel.pageStateFlow.value) {
             EditIntroducePage.MBTI -> findNavController().popBackStack()
-            EditIntroducePage.DESCIRPTION -> editIntroduceViewModel.movePrevPage()
+            EditIntroducePage.INTRODUCTION -> editIntroduceViewModel.movePrevPage()
         }
     }
 
@@ -154,7 +147,7 @@ class EditIntroduceFragment :
                 if (editIntroduceViewModel.selectedMbtiType.size == 4) R.string.completed
                 else R.string.pass
             }
-            EditIntroducePage.DESCIRPTION -> R.string.completed
+            EditIntroducePage.INTRODUCTION -> R.string.completed
         }
         binding.tvBtnNext.text = getString(buttonTextRes)
     }

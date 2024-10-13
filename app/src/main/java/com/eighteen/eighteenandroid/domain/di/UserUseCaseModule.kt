@@ -1,11 +1,10 @@
 package com.eighteen.eighteenandroid.domain.di
 
+import com.eighteen.eighteenandroid.domain.repository.MyPageRepository
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import com.eighteen.eighteenandroid.domain.usecase.CheckIdDuplicationUseCase
-import com.eighteen.eighteenandroid.domain.usecase.EditIntroduceUseCase
-import com.eighteen.eighteenandroid.domain.usecase.EditSnsLinkUseCase
+import com.eighteen.eighteenandroid.domain.usecase.GetMyProfileUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
-import com.eighteen.eighteenandroid.domain.usecase.MyProfileUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
 import dagger.Module
@@ -38,16 +37,6 @@ object UserUseCaseModule {
 
     @Provides
     @Singleton
-    fun provideMyProfileUseCase(repository: UserRepository) =
-        MyProfileUseCase(repository = repository)
-
-    @Provides
-    @Singleton
-    fun provideEditSnsLinkUseCase(repository: UserRepository) =
-        EditSnsLinkUseCase(repository = repository)
-
-    @Provides
-    @Singleton
-    fun provideEditIntroduceUseCase(repository: UserRepository) =
-        EditIntroduceUseCase(repository = repository)
+    fun provideMyProfileUseCase(repository: MyPageRepository) =
+        GetMyProfileUseCase(repository = repository)
 }

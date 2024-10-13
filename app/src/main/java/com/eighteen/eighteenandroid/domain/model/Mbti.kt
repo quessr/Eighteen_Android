@@ -59,6 +59,15 @@ data class Mbti(
             }
         }
     }
+
+    companion object {
+        val mbtiTypes = listOf(
+            MbtiType.Energy.Extroversion, MbtiType.Energy.Introversion,
+            MbtiType.Information.Sensing, MbtiType.Information.Intuition,
+            MbtiType.Decision.Thinking, MbtiType.Decision.Feeling,
+            MbtiType.Lifestyle.Judging, MbtiType.Lifestyle.Perceiving
+        )
+    }
 }
 
 fun createMbtiOrNull(mbtiTypeList: List<Mbti.MbtiType>): Mbti? {
@@ -81,5 +90,15 @@ fun createMbtiOrNull(mbtiTypeList: List<Mbti.MbtiType>): Mbti? {
             )
         }
     }
+}
+
+fun createMbtiOrNull(mbtiString: String): Mbti? {
+    if (mbtiString.length != 4) return null
+    val mbtiTypeList = mbtiString.mapNotNull { Mbti.mbtiTypes.find { type -> type.alp == it } }
+    if (mbtiTypeList[0] !is Mbti.MbtiType.Energy) return null
+    if (mbtiTypeList[1] !is Mbti.MbtiType.Information) return null
+    if (mbtiTypeList[2] !is Mbti.MbtiType.Decision) return null
+    if (mbtiTypeList[3] !is Mbti.MbtiType.Lifestyle) return null
+    return createMbtiOrNull(mbtiTypeList)
 }
 

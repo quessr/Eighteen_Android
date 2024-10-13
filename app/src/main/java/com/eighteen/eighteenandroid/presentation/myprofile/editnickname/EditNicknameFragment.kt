@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditNicknameBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.LoginViewModel
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.model.nickname.NicknameStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +27,7 @@ class EditNicknameFragment :
                 editNicknameViewModel.setNickName(nickname = it?.toString() ?: "")
             }
             tvBtnNext.setOnClickListener {
-                //TODO 닉네임 편집 요청
+                loginViewModel.requestEditNickName(nickName = editNicknameViewModel.nicknameStatusStateFLow.value.inputString)
             }
             ivBtnBack.setOnClickListener {
                 findNavController().popBackStack()
@@ -54,6 +55,24 @@ class EditNicknameFragment :
                 tvCount.text = countText
                 tvBtnNext.isEnabled =
                     it.inputString.isNotEmpty() && it.status !is NicknameStatus.Error
+            }
+        }
+        collectInLifecycle(loginViewModel.editProfileEventStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩
+                }
+                is ModelState.Success -> {
+                    it.data?.getContentIfNotHandled()?.let {
+                        findNavController().popBackStack()
+                    }
+                }
+                is ModelState.Error -> {
+                    //TODO 에러
+                }
+                is ModelState.Empty -> {
+                    //do nothing
+                }
             }
         }
     }

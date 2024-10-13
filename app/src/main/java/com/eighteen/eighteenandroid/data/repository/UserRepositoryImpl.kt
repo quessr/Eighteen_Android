@@ -13,7 +13,6 @@ import com.eighteen.eighteenandroid.domain.model.Qna
 import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SignUpInfo
-import com.eighteen.eighteenandroid.domain.model.SnsInfo
 import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
@@ -109,7 +108,9 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                     lifestyle = Mbti.MbtiType.Lifestyle.Judging
                 ),
                 qna = qnaList,
-                snsLinks = listOf(SnsLink("https://www.google.co.kr", "Google"))
+                snsLinks = listOf(SnsLink("https://www.google.co.kr", "Google")),
+                birth = null,
+                introduction = null
             )
         )
     }
@@ -131,50 +132,6 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         userService.postSignUp(signUpRequest = signUpRequest).mapper {
             LoginResultInfo("", "", uniqueId = it.data?.uniqueId ?: "")
         }
-    }
-
-    //TODO 서버 api 적용
-    override suspend fun getMyProfile(accessToken: String): Result<Profile> {
-        val image1 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-        val image2 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
-        val image3 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-        return Result.success(
-            Profile(
-                nickName = "nickname",
-                school = School("school name", "address"),
-                age = 17,
-                badgeCount = 21,
-                teenDescription = "teen description",
-                medias = listOf(Media.Image(image1), Media.Image(image2), Media.Image(image3)),
-                id = "id",
-                description = "description",
-                mbti = null,
-                qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
-                snsLinks = listOf(SnsLink("https://www.google.co.kr", "test")),
-                snsInfoList = listOf(
-                    SnsInfo(SnsInfo.SnsType.INSTAGRAM, "instagram12"),
-                    SnsInfo(SnsInfo.SnsType.X, "x123123"),
-                    SnsInfo(SnsInfo.SnsType.TIKTOK, "tiktok123"),
-                    SnsInfo(SnsInfo.SnsType.YOUTUBE, "youtube17947")
-                )
-            )
-        )
-    }
-
-    //TODO 링크편집 api 확인 필요
-    override suspend fun editSnsLink(snsInfo: List<SnsInfo>): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    //TODO api 호출 구현 필요
-    override suspend fun editIntroduce(
-        description: String?,
-        selectedMbti: Mbti?
-    ): Result<Unit> {
-        return Result.success(Unit)
     }
 
     override suspend fun checkIdDuplication(

@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.myprofile.editschool
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -10,6 +11,7 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentEditSchoolBinding
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class EditSchoolFragment :
     BaseFragment<FragmentEditSchoolBinding>(FragmentEditSchoolBinding::inflate) {
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     private val editSchoolViewModel by viewModels<EditSchoolViewModel>()
 
@@ -35,7 +38,7 @@ class EditSchoolFragment :
                 findNavController().popBackStack()
             }
             tvBtnComplete.setOnClickListener {
-                //TODO 수정 완료
+                loginViewModel.requestEditSchool(school = editSchoolViewModel.selectedSchool)
             }
         }
         initStateFlow()
@@ -95,6 +98,24 @@ class EditSchoolFragment :
                 }
                 is ModelState.Error -> {
                     //TODO Error 처리
+                }
+                is ModelState.Empty -> {
+                    //do nothing
+                }
+            }
+        }
+        collectInLifecycle(loginViewModel.editProfileEventStateFlow) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩
+                }
+                is ModelState.Success -> {
+                    it.data?.getContentIfNotHandled()?.let {
+                        findNavController().popBackStack()
+                    }
+                }
+                is ModelState.Error -> {
+                    //TODO 에러
                 }
                 is ModelState.Empty -> {
                     //do nothing

@@ -19,7 +19,6 @@ import com.eighteen.eighteenandroid.presentation.common.viewModelsByBackStackEnt
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.SelectQnaDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.selectqna.model.SelectQnaDialogModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditTenOfQnaFragment :
@@ -27,13 +26,9 @@ class EditTenOfQnaFragment :
 
     private val loginViewModel by activityViewModels<LoginViewModel>()
 
-    @Inject
-    lateinit var editTenOfQnaAssistedFactory: EditTenOfQnaViewModel.EditTenOfQnaAssistedFactory
-
     private val editTenOfQnaViewModel by viewModelsByBackStackEntry<EditTenOfQnaViewModel>(
         factoryProducer = {
             EditTenOfQnaViewModel.Factory(
-                assistedFactory = editTenOfQnaAssistedFactory,
                 initQnas = loginViewModel.myProfileStateFlow.value.data?.qna ?: emptyList()
             )
         })
@@ -46,7 +41,9 @@ class EditTenOfQnaFragment :
             tvBtnAddQna.setOnClickListener {
                 openSelectQnaDialog()
             }
-            tvBtnSave.setOnClickListener { }
+            tvBtnSave.setOnClickListener {
+                loginViewModel.requestEditQuestions(questions = editTenOfQnaViewModel.editTenOfQnaModelsStateFlow.value)
+            }
         }
         initStateFlow()
         initFragmentResult()
@@ -85,21 +82,20 @@ class EditTenOfQnaFragment :
                 tvBtnSave.isEnabled = it.size >= MINIMUM_QNA_SIZE
             }
         }
-        collectInLifecycle(editTenOfQnaViewModel.requestEditQnaResultStateFlow) {
+        collectInLifecycle(loginViewModel.editProfileEventStateFlow) {
             when (it) {
                 is ModelState.Loading -> {
-                    //TODO 로딩처리
+                    //TODO 로딩
                 }
                 is ModelState.Success -> {
-                    it.data?.getContentIfNotHandled()?.let { qnas ->
-                        loginViewModel.editQnas(qnas)
+                    it.data?.getContentIfNotHandled()?.let {
                         findNavController().popBackStack()
                     }
                 }
                 is ModelState.Error -> {
-                    //TODO 에러처리
+                    //TODO 에러
                 }
-                else -> {
+                is ModelState.Empty -> {
                     //do nothing
                 }
             }

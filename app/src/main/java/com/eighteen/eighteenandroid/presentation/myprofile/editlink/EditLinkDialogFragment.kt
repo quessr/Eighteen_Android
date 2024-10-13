@@ -15,8 +15,8 @@ import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 import com.eighteen.eighteenandroid.presentation.LoginViewModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
+import com.eighteen.eighteenandroid.presentation.myprofile.editlink.model.EditLinkModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditLinkDialogFragment :
@@ -24,8 +24,6 @@ class EditLinkDialogFragment :
 
     private val loginViewModel by activityViewModels<LoginViewModel>()
 
-    @Inject
-    lateinit var editLinkViewModelAssistedFactory: EditLinkViewModel.EditLinkViewModelAssistedFactory
     private val editLinkViewModel by viewModels<EditLinkViewModel>(factoryProducer = {
         val snsLinksList = loginViewModel.myProfileStateFlow.value.data?.snsInfoList ?: emptyList()
         EditLinkViewModel.Factory(
@@ -33,7 +31,6 @@ class EditLinkDialogFragment :
             x = snsLinksList.find { it.type == SnsInfo.SnsType.X }?.id.orEmpty(),
             tiktok = snsLinksList.find { it.type == SnsInfo.SnsType.TIKTOK }?.id.orEmpty(),
             youtube = snsLinksList.find { it.type == SnsInfo.SnsType.YOUTUBE }?.id.orEmpty(),
-            assistedFactory = editLinkViewModelAssistedFactory
         )
     })
 
@@ -66,13 +63,27 @@ class EditLinkDialogFragment :
                 }
             }
             ivBtnCheck.setOnClickListener {
-                editLinkViewModel.requestEditLinks()
+                loginViewModel.requestEditSnsInfo(snsInfo = editLinkViewModel.editLinkModelStateFlow.value.toSnsInfoList())
             }
             ivBtnBack.setOnClickListener {
                 dismissNow()
             }
         }
         initStateFlow()
+    }
+
+
+    private fun EditLinkModel.toSnsInfoList(): List<SnsInfo> {
+        val instagramSnsInfo = SnsInfo(type = SnsInfo.SnsType.INSTAGRAM, id = this.instagram)
+        val xSnsInfo = SnsInfo(type = SnsInfo.SnsType.X, id = this.x)
+        val tiktokSnsInfo = SnsInfo(type = SnsInfo.SnsType.TIKTOK, id = this.tiktok)
+        val youtubeSnsInfo = SnsInfo(type = SnsInfo.SnsType.YOUTUBE, id = this.youtube)
+        return listOf(
+            instagramSnsInfo,
+            xSnsInfo,
+            tiktokSnsInfo,
+            youtubeSnsInfo
+        ).filter { it.id.isNotEmpty() }
     }
 
     private fun initStateFlow() {
@@ -88,14 +99,13 @@ class EditLinkDialogFragment :
             DrawableCompat.setTint(targetDrawable, colorTint)
             binding.ivBtnCheck.setImageDrawable(targetDrawable)
         }
-        collectInLifecycle(editLinkViewModel.editLinkResultStateFlow) {
+        collectInLifecycle(loginViewModel.editProfileEventStateFlow) {
             when (it) {
                 is ModelState.Loading -> {
                     //TODO 로딩처리
                 }
                 is ModelState.Success -> {
-                    it.data?.getContentIfNotHandled()?.let { snsInfoList ->
-                        loginViewModel.editSnsInfoList(snsInfoList)
+                    it.data?.getContentIfNotHandled()?.let {
                         dismissNow()
                     }
                 }

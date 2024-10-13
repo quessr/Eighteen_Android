@@ -15,6 +15,8 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.databinding.FragmentMainBinding
 import com.eighteen.eighteenandroid.domain.model.AboutTeen
+import com.eighteen.eighteenandroid.domain.model.MainItem
+import com.eighteen.eighteenandroid.domain.model.Tournament
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.createChip
@@ -26,8 +28,6 @@ import com.eighteen.eighteenandroid.presentation.common.throttleClick
 import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapter
 import com.eighteen.eighteenandroid.presentation.home.adapter.MainAdapterListener
-import com.eighteen.eighteenandroid.presentation.home.adapter.MainItem
-import com.eighteen.eighteenandroid.presentation.home.adapter.Tournament
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -239,8 +239,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 val bottomNavigationView =
                     requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_bar)
 
-                when (title) {
-                    "Teen" -> bottomNavigationView.selectedItemId = R.id.btn_bottom_teen
+                when(title) {
+                    "Teen" -> bottomNavigationView.selectedItemId = R.id.teenMainFragment
                     "채팅" -> bottomNavigationView.selectedItemId = R.id.fragmentChat
                     "토너먼트" -> {}
                     "나만의 Teen" -> bottomNavigationView.selectedItemId = R.id.fragmentMyProfile
@@ -505,27 +505,23 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         super.onResume()
         lifecycleScope.launch {
             delay(300)
-            bind {
-                // 마지막 스크롤 상태로 돌아오기
-                if (viewModel.pageScrollPosition != -1) {
-
-                    rvMain.scrollToPosition(viewModel.pageScrollPosition)
-
-                    // LayoutManager에서 해당 위치의 아이템을 중앙에 위치시키도록 오프셋 조정
-                    rvMain.post {
-                        val layoutManager = rvMain.layoutManager as LinearLayoutManager
-                        val viewAtPosition =
-                            layoutManager.findViewByPosition(viewModel.pageScrollPosition)
-                        if (viewAtPosition != null) {
-                            val offset = (rvMain.height - viewAtPosition.height) / 2
-                            layoutManager.scrollToPositionWithOffset(
-                                viewModel.pageScrollPosition,
-                                offset
-                            )
-                        }
-                    }
-                }
-            }
+//            bind {
+//                // 마지막 스크롤 상태로 돌아오기
+//                if (viewModel.pageScrollPosition != -1) {
+//
+//                    rvMain.scrollToPosition(viewModel.pageScrollPosition)
+//
+//                    // LayoutManager에서 해당 위치의 아이템을 중앙에 위치시키도록 오프셋 조정
+//                    rvMain.post {
+//                        val layoutManager = rvMain.layoutManager as LinearLayoutManager
+//                        val viewAtPosition = layoutManager.findViewByPosition(viewModel.pageScrollPosition)
+//                        if (viewAtPosition != null) {
+//                            val offset = (rvMain.height - viewAtPosition.height) / 2
+//                            layoutManager.scrollToPositionWithOffset(viewModel.pageScrollPosition, offset)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

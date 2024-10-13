@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -56,8 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         // 네비게이션 목적지 변경 시 바텀 네비게이션의 가시성 조정
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val visibleNavigationIds =
-                listOf(R.id.fragmentMain, R.id.fragmentMyProfile, R.id.fragmentChat)
+            val visibleNavigationIds = listOf(R.id.fragmentMain, R.id.fragmentMyProfile, R.id.fragmentChat, R.id.teenMainFragment)
             binding.bottomNavigationBar.isVisible = visibleNavigationIds.contains(destination.id)
         }
     }

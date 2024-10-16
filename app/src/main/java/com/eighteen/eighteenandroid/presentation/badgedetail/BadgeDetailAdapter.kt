@@ -8,12 +8,13 @@ import com.eighteen.eighteenandroid.databinding.ItemBadgeDetailBadgeBinding
 import com.eighteen.eighteenandroid.presentation.badgedetail.model.BadgeDetailModel
 import com.eighteen.eighteenandroid.presentation.badgedetail.viewholder.BadgeViewHolder
 
-class BadgeDetailAdapter : ListAdapter<BadgeDetailModel, BadgeViewHolder>(diffUtil) {
+class BadgeDetailAdapter(private val onClickBadge: (BadgeDetailModel) -> Unit) :
+    ListAdapter<BadgeDetailModel, BadgeViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BadgeViewHolder {
         val binding =
             ItemBadgeDetailBadgeBinding.inflate(LayoutInflater.from(parent.context), null, false)
-        return BadgeViewHolder(binding = binding)
+        return BadgeViewHolder(binding = binding, onClick = onClickBadge)
     }
 
     override fun onBindViewHolder(holder: BadgeViewHolder, position: Int) {

@@ -12,11 +12,20 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
  * @param spanCount : GridLayoutManager의 spanCount
  * @param horizontalBetweenMarginPx : 가로 사이 마진 값(Px)
  * @param verticalBetweenMarginPx : 세로 사이 마진 값(Px)
+ * @param topMarginPx : 리스트 상단 마진 값(Px)
+ * @param startMarginPx : 리스트 왼쪽 마진 값(Px)
+ * @param bottomMarginPx : 리스트 하단 마진 값(Px)
+ * @param endMarginPx : 리스트 오른쪽 마진 값(Px)
+
  */
 class GridMarginItemDecoration(
     private val spanCount: Int,
     @Px private val horizontalBetweenMarginPx: Int,
-    @Px private val verticalBetweenMarginPx: Int
+    @Px private val verticalBetweenMarginPx: Int,
+    @Px private val topMarginPx: Int = 0,
+    @Px private val startMarginPx: Int = 0,
+    @Px private val bottomMarginPx: Int = 0,
+    @Px private val endMarginPx: Int = 0
 ) : ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
@@ -30,20 +39,26 @@ class GridMarginItemDecoration(
         val adapterPosition = parent.getChildAdapterPosition(view)
         val row = adapterPosition / spanCount
         val column = adapterPosition % spanCount
-        val sumOfHorizontalMargins =
-            horizontalBetweenMarginPx.toFloat() * (spanCount - 1) / spanCount
-        val leftOffset = column * (horizontalBetweenMarginPx - sumOfHorizontalMargins)
-        val rightOffset = sumOfHorizontalMargins - leftOffset
 
-        val sumOfVerticalMargins = verticalBetweenMarginPx.toFloat() * (rowCount - 1) / rowCount
-        val topOffset = row * (verticalBetweenMarginPx - sumOfVerticalMargins)
-        val bottomOffset = sumOfVerticalMargins - topOffset
+        val sumOfHorizontalMargins =
+            (horizontalBetweenMarginPx * (spanCount - 1) + startMarginPx + endMarginPx) / spanCount
+        val leftOffset =
+            if (column == 0) startMarginPx else column * (horizontalBetweenMarginPx - sumOfHorizontalMargins) + startMarginPx
+        val rightOffset =
+            if (column == spanCount - 1) endMarginPx else sumOfHorizontalMargins - leftOffset
+
+        val sumOfVerticalMargins =
+            (verticalBetweenMarginPx * (rowCount - 1) + topMarginPx + bottomMarginPx) / rowCount
+        val topOffset =
+            if (row == 0) topMarginPx else row * (verticalBetweenMarginPx - sumOfVerticalMargins) + topMarginPx
+        val bottomOffset =
+            if (row == rowCount - 1) bottomMarginPx else sumOfVerticalMargins - topOffset
 
         outRect.run {
-            left = leftOffset.toInt()
-            right = rightOffset.toInt()
-            top = topOffset.toInt()
-            bottom = bottomOffset.toInt()
+            left = leftOffset
+            right = rightOffset
+            top = topOffset
+            bottom = bottomOffset
         }
     }
 }

@@ -185,4 +185,6 @@
     <string name="text_teen_recent_join">최근 가입한\nTEEN</string>
     <string name="text_teen_same_school">같은 학교인\nTEEN</string>
 
+    <!-- Badge Detail -->
+    <string name="badge_detail_title">내 배지</string>
 </resources>

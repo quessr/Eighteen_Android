@@ -127,18 +127,23 @@
         android:id="@+id/teenMainFragment"
         android:name="com.eighteen.eighteenandroid.presentation.teen.TeenMainFragment"
         android:label="fragment_teen_main"
-        tools:layout="@layout/fragment_teen_main" >
+        tools:layout="@layout/fragment_teen_main">
         <action
             android:id="@+id/action_fragmentTeenMain_to_fragmentTeenList"
             app:destination="@id/teenListFragment" />
     </fragment>
     <fragment
         android:id="@+id/teenListFragment"
-        tools:layout="@layout/fragment_teen_list"
         android:name="com.eighteen.eighteenandroid.presentation.teen.TeenListFragment"
-        android:label="TeenListFragment" >
+        android:label="TeenListFragment"
+        tools:layout="@layout/fragment_teen_list">
         <action
             android:id="@+id/action_fragmentTeenList_to_fragmentProfileDetail"
             app:destination="@id/fragmentProfileDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentBadgeDetail"
+        android:name="com.eighteen.eighteenandroid.presentation.badgedetail.BadgeDetailFragment"
+        android:label="fragment_badge_detail"
+        tools:layout="@layout/fragment_badge_detail" />
 </navigation>

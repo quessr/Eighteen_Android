@@ -70,8 +70,7 @@ class MyProfileFragment :
     }
 
     override fun onClickBadge() {
-        //TODO 뱃지 화면 이동
-        Log.d("MyProfileFragment", "onClickBadge")
+        findNavController().navigate(R.id.fragmentBadgeDetail)
     }
 
     override fun onClickTeen() {

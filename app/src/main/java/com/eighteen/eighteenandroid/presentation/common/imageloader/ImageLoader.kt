@@ -12,6 +12,7 @@ interface ImageLoader {
     fun loadUrlCenterCrop(imageView: ImageView, url: String?, placeHolderRes: Int? = null)
     fun loadUrlCenterCrop(imageView: ImageView, url: Uri?, placeHolderRes: Int? = null)
     fun loadBitmapCenterCrop(imageView: ImageView, bitmap: Bitmap?, placeHolderRes: Int? = null)
+    fun loadUrlCircleCrop(imageView: ImageView, url: String?, placeHolderRes: Int? = null)
 
     companion object {
         private val imageLoaderImpl = GlideImageLoader()
@@ -77,6 +78,10 @@ interface ImageLoader {
             placeHolderRes: Int?
         ) {
             loadBitmapBase(imageView, bitmap, placeHolderRes).centerCrop().into(imageView)
+        }
+
+        override fun loadUrlCircleCrop(imageView: ImageView, url: String?, placeHolderRes: Int?) {
+            loadUrlBase(imageView, url, placeHolderRes).circleCrop().into(imageView)
         }
     }
 }

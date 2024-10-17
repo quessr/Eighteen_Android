@@ -103,6 +103,15 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragmentMyEditMedia"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editmedia.MyEditMediaFragment"
+        android:label="fragment_my_edit_media" />
+    <fragment
+        android:id="@+id/fragmentEditNickname"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editnickname.EditNicknameFragment"
+        android:label="fragment_edit_nickname"
+        tools:layout="@layout/fragment_edit_nickname" />
+    <fragment
         android:id="@+id/fragmentEditIntroduce"
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.EditIntroduceFragment"
         android:label="fragment_edit_introduce"
@@ -112,6 +121,16 @@
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.EditTenOfQnaFragment"
         android:label="fragment_edit_ten_of_qna"
         tools:layout="@layout/fragment_edit_ten_of_qna" />
+    <fragment
+        android:id="@+id/fragmentEditTenOfQnaAnswer"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.edittenofqna.EditTenOfQnaAnswerFragment"
+        android:label="fragment_edit_ten_of_qna_answer"
+        tools:layout="@layout/fragment_edit_ten_of_qna_answer" />
+    <fragment
+        android:id="@+id/fragmentEditSchool"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.editschool.EditSchoolFragment"
+        android:label="fragment_edit_school"
+        tools:layout="@layout/fragment_edit_school" />
 
     <fragment
         android:id="@+id/fragmentProfileDetailFragment"

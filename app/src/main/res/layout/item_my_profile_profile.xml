@@ -58,6 +58,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNickName" />
 
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="1dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="13dp"
+        android:background="@color/grey_03"
+        app:layout_constraintBottom_toBottomOf="@id/tvBtnEditImage"
+        app:layout_constraintStart_toEndOf="@id/tvBtnEditImage"
+        app:layout_constraintTop_toTopOf="@id/tvBtnEditImage" />
+
+    <TextView
+        android:id="@+id/tvBtnEditNickName"
+        style="@style/pretendard_regular_13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:text="@string/my_profile_edit_nickname"
+        android:textColor="@color/grey_01"
+        app:layout_constraintBottom_toBottomOf="@id/tvBtnEditImage"
+        app:layout_constraintStart_toEndOf="@id/vDivider"
+        app:layout_constraintTop_toTopOf="@id/tvBtnEditImage" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cvImageContainer"
         android:layout_width="63dp"

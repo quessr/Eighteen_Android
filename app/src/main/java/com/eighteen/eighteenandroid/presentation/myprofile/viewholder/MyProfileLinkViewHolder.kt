@@ -1,10 +1,13 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.viewholder
 
 import android.text.TextUtils
-import android.view.Gravity
+import android.view.Gravity.CENTER_VERTICAL
+import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.ItemMyProfileLinkBinding
@@ -15,41 +18,45 @@ import com.eighteen.eighteenandroid.presentation.myprofile.model.MyProfileItem
 class MyProfileLinkViewHolder(
     private val clickListener: MyProfileClickListener,
     private val binding: ItemMyProfileLinkBinding
-) : BaseMyProfileViewHolder<MyProfileItem.Link, ItemMyProfileLinkBinding>(
-    binding = binding
-) {
+) : BaseMyProfileViewHolder<MyProfileItem.Link, ItemMyProfileLinkBinding>(binding = binding) {
     override fun onBind(model: MyProfileItem.Link) {
         with(binding) {
-            tvEmptyLinks.isVisible = model.links.isEmpty()
-            llLinks.isVisible = model.links.isNotEmpty()
             llLinks.removeAllViews()
-            model.links.forEach {
-                val linkTextView = createLinkTextView(it.linkUrl)
-                llLinks.addView(linkTextView)
-            }
+            tvEmptyLinks.isVisible = model.snsInfoList.isEmpty()
+            llLinks.isVisible = model.snsInfoList.isNotEmpty()
             ivBtnEditLink.setOnClickListener {
                 clickListener.onClickEditLink()
+            }
+            model.snsInfoList.forEachIndexed { idx, snsInfo ->
+                val view = createLinkTextView(
+                    iconDrawableRes = snsInfo.type.iconDrawableRes,
+                    text = snsInfo.id
+                )
+                llLinks.addView(view)
+                if (idx < model.snsInfoList.lastIndex) {
+                    val dividerView = createDividerView()
+                    llLinks.addView(dividerView)
+                }
             }
         }
     }
 
-    private fun createLinkTextView(link: String) = TextView(context).apply {
-        text = link
-        setTextAppearance(R.style.pretendard_regular_13)
-        setTextColor(ContextCompat.getColor(context, R.color.black))
-        val linkDrawable = ContextCompat.getDrawable(context, R.drawable.ic_link)
-        linkDrawable?.let {
-            DrawableCompat.setTint(it, ContextCompat.getColor(context, R.color.grey_01))
+    private fun createLinkTextView(@DrawableRes iconDrawableRes: Int, text: String) =
+        TextView(context).apply {
+            setText(text)
+            setTextAppearance(R.style.pretendard_regular_13)
+            setTextColor(ContextCompat.getColor(context, R.color.black))
+            setCompoundDrawablesWithIntrinsicBounds(iconDrawableRes, 0, 0, 0)
+            compoundDrawablePadding = context.dp2Px(8)
+            ellipsize = TextUtils.TruncateAt.END
+            gravity = CENTER_VERTICAL
+            maxLines = 1
         }
-        setCompoundDrawablesWithIntrinsicBounds(
-            linkDrawable,
-            null,
-            null,
-            null
-        )
-        compoundDrawablePadding = context.dp2Px(4)
-        gravity = Gravity.CENTER_VERTICAL
-        ellipsize = TextUtils.TruncateAt.END
-        maxLines = 1
+
+    private fun createDividerView() = View(context).apply {
+        layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, context.dp2Px(1)).apply {
+            setMargins(0, context.dp2Px(17), 0, context.dp2Px(11))
+        }
+        setBackgroundResource(R.color.grey_04)
     }
 }

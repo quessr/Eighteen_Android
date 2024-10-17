@@ -1,25 +1,13 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.editintroduce
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.Mbti
-import com.eighteen.eighteenandroid.domain.model.createMbtiOrNull
-import com.eighteen.eighteenandroid.domain.usecase.EditIntroduceUseCase
-import com.eighteen.eighteenandroid.presentation.common.ModelState
-import com.eighteen.eighteenandroid.presentation.common.livedata.Event
-import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroduceModel
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditMbtiModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class EditIntroduceViewModel @Inject constructor(private val editIntroduceUseCase: EditIntroduceUseCase) :
-    ViewModel() {
+class EditIntroduceViewModel : ViewModel() {
     private val _pageStateFlow = MutableStateFlow(EditIntroducePage.MBTI)
     val pageStateFlow = _pageStateFlow.asStateFlow()
 
@@ -40,19 +28,13 @@ class EditIntroduceViewModel @Inject constructor(private val editIntroduceUseCas
     val selectedMbtiType
         get() = mbtiModelsStateFlow.value.filter { it.isSelected }.map { it.mbtiType }
 
-    private val _editIntroduceResultStateFlow =
-        MutableStateFlow<ModelState<Event<EditIntroduceModel>>>(ModelState.Empty())
-    val editIntroduceResultStateFlow = _editIntroduceResultStateFlow.asStateFlow()
-
-    private var requestEditIntroduceJob: Job? = null
-
     fun moveNextPage() {
         if (pageStateFlow.value == EditIntroducePage.MBTI) _pageStateFlow.value =
-            EditIntroducePage.DESCIRPTION
+            EditIntroducePage.INTRODUCTION
     }
 
     fun movePrevPage() {
-        if (pageStateFlow.value == EditIntroducePage.DESCIRPTION) _pageStateFlow.value =
+        if (pageStateFlow.value == EditIntroducePage.INTRODUCTION) _pageStateFlow.value =
             EditIntroducePage.MBTI
     }
 
@@ -67,29 +49,6 @@ class EditIntroduceViewModel @Inject constructor(private val editIntroduceUseCas
                     pairMbtiType -> it.copy(isSelected = false)
                     else -> it
                 }
-            }
-        }
-    }
-
-    fun requestEditIntroduce(description: String) {
-        if (requestEditIntroduceJob?.isCompleted == false) return
-        requestEditIntroduceJob = viewModelScope.launch {
-            _editIntroduceResultStateFlow.value = ModelState.Loading()
-            val mbti = createMbtiOrNull(selectedMbtiType)
-            editIntroduceUseCase.invoke(
-                description = description,
-                mbti = mbti
-            ).onSuccess {
-                _editIntroduceResultStateFlow.value = ModelState.Success(
-                    Event(
-                        EditIntroduceModel(
-                            mbti = mbti,
-                            description = description
-                        )
-                    )
-                )
-            }.onFailure {
-                _editIntroduceResultStateFlow.value = ModelState.Error(throwable = it)
             }
         }
     }

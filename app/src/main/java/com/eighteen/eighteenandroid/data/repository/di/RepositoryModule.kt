@@ -1,11 +1,13 @@
 package com.eighteen.eighteenandroid.data.repository.di
 
 import com.eighteen.eighteenandroid.data.repository.MessageRepositoryImpl
+import com.eighteen.eighteenandroid.data.repository.MyPageRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.SchoolRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.UserRepositoryImpl
 import com.eighteen.eighteenandroid.data.repository.mock.MockChatRepositoryImpl
 import com.eighteen.eighteenandroid.domain.repository.ChatRepository
 import com.eighteen.eighteenandroid.domain.repository.MessageRepository
+import com.eighteen.eighteenandroid.domain.repository.MyPageRepository
 import com.eighteen.eighteenandroid.domain.repository.SchoolRepository
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import dagger.Binds
@@ -33,4 +35,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindChatRepository(chatRepositoryImpl: MockChatRepositoryImpl): ChatRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMyPageRepository(myPageRepositoryImpl: MyPageRepositoryImpl): MyPageRepository
 }

@@ -35,6 +35,18 @@
         <item name="android:colorControlNormal">@color/main_color</item>
     </style>
 
+    <style name="EditLinkTextField" parent="pretendard_regular_16">
+        <item name="android:paddingStart">46dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColorHint">@color/grey_01</item>
+        <item name="android:background">@drawable/bg_text_field</item>
+        <item name="android:textCursorDrawable">@drawable/ic_text_field_cursor_grey_01</item>
+        <item name="android:saveEnabled">false</item>
+    </style>
+
     <style name="Theme.EighteenAndroid.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>

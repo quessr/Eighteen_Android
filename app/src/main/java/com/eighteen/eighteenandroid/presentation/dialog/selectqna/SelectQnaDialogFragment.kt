@@ -10,6 +10,8 @@ import androidx.fragment.app.setFragmentResult
 import com.eighteen.eighteenandroid.databinding.FragmentSelectQnaDialogBinding
 import com.eighteen.eighteenandroid.domain.model.QnaType
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
+import com.eighteen.eighteenandroid.presentation.common.getParcelableListOrNull
+import com.eighteen.eighteenandroid.presentation.dialog.selectqna.model.SelectQnaDialogModel
 
 class SelectQnaDialogFragment :
     BaseDialogFragment<FragmentSelectQnaDialogBinding>(FragmentSelectQnaDialogBinding::inflate) {
@@ -22,15 +24,19 @@ class SelectQnaDialogFragment :
         arguments?.getString(ARGUMENT_TITLE_KEY, "") ?: ""
     }
 
-    private val qnas by lazy {
-        arguments?.getStringArray(ARGUMENT_QNAS_KEY)?.map { QnaType.valueOf(it) } ?: emptyList()
+    private val models by lazy {
+        arguments?.getParcelableListOrNull(ARGUMENT_MODELS_KEY, SelectQnaDialogModel::class.java)
+            ?: emptyList()
     }
 
     override fun initView() {
         bind {
+            ivBtnClose.setOnClickListener {
+                dismissNow()
+            }
             tvTitle.text = title
             rvQnas.adapter = SelectQnaDialogAdapter(onClickItem = ::onClickItem).apply {
-                submitList(qnas)
+                submitList(models)
             }
             rvQnas.addItemDecoration(SelectQnaDialogItemDecoration())
         }
@@ -61,18 +67,21 @@ class SelectQnaDialogFragment :
     companion object {
         private const val ARGUMENT_REQUEST_KEY = "argument_request_key"
         private const val ARGUMENT_TITLE_KEY = "argument_title_key"
-        private const val ARGUMENT_QNAS_KEY = "argumenet_qnas_key"
+        private const val ARGUMENT_MODELS_KEY = "argumenet_models_key"
 
         private const val RESULT_QNA_TYPE_KEY = "result_qna_type_key"
 
-        fun newInstance(requestKey: String, title: String = "", qnas: List<QnaType>) =
-            SelectQnaDialogFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARGUMENT_REQUEST_KEY, requestKey)
-                    putString(ARGUMENT_TITLE_KEY, title)
-                    putStringArray(ARGUMENT_QNAS_KEY, qnas.map { it.name }.toTypedArray())
-                }
+        fun newInstance(
+            requestKey: String,
+            title: String = "",
+            models: List<SelectQnaDialogModel>
+        ) = SelectQnaDialogFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARGUMENT_REQUEST_KEY, requestKey)
+                putString(ARGUMENT_TITLE_KEY, title)
+                putParcelableArrayList(ARGUMENT_MODELS_KEY, ArrayList(models))
             }
+        }
     }
 
 

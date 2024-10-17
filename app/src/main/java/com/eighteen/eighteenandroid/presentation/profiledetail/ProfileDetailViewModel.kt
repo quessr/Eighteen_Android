@@ -90,7 +90,7 @@ class ProfileDetailViewModel @AssistedInject constructor(
                 id = profile.id,
                 name = profile.nickName,
                 age = profile.age,
-                school = profile.school.name
+                school = profile.school?.name ?: ""
             ),
             ProfileDetailModel.BadgeAndTeen(
                 id = profile.id,

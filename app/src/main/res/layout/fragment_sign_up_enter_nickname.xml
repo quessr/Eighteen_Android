@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/etInput"
         app:layout_constraintTop_toBottomOf="@id/etInput"
-        tools:text="@string/sign_up_enter_nickname_error_length" />
+        tools:text="@string/nickname_error_length" />
 
     <TextView
         android:id="@+id/tvTip"

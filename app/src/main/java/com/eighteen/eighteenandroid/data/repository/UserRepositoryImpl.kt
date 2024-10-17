@@ -108,7 +108,9 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
                     lifestyle = Mbti.MbtiType.Lifestyle.Judging
                 ),
                 qna = qnaList,
-                snsLinks = listOf(SnsLink("https://www.google.co.kr", "Google"))
+                snsLinks = listOf(SnsLink("https://www.google.co.kr", "Google")),
+                birth = null,
+                introduction = null
             )
         )
     }
@@ -130,49 +132,6 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         userService.postSignUp(signUpRequest = signUpRequest).mapper {
             LoginResultInfo("", "", uniqueId = it.data?.uniqueId ?: "")
         }
-    }
-
-    //TODO 서버 api 적용
-    override suspend fun getMyProfile(accessToken: String): Result<Profile> {
-        val image1 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-        val image2 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
-        val image3 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-        return Result.success(
-            Profile(
-                nickName = "nickname",
-                school = School("school name", "address"),
-                age = 17,
-                badgeCount = 21,
-                teenDescription = "teen description",
-                medias = listOf(Media.Image(image1), Media.Image(image2), Media.Image(image3)),
-                id = "id",
-                description = "description",
-                mbti = null,
-                qna = List(10) { Qna(QnaType.values()[it], "answer$it") },
-                snsLinks = listOf(SnsLink("https://www.google.co.kr", "test"))
-            )
-        )
-    }
-
-    //TODO api 호출 구현 필요
-    override suspend fun addSnsLink(snsLink: SnsLink): Result<SnsLink> {
-        return Result.success(snsLink)
-    }
-
-    //TODO api 호출 구현 필요
-    override suspend fun removeSnsLink(idx: Int): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    //TODO api 호출 구현 필요
-    override suspend fun editIntroduce(
-        description: String?,
-        selectedMbti: Mbti?
-    ): Result<Unit> {
-        return Result.success(Unit)
     }
 
     override suspend fun checkIdDuplication(

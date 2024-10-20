@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/tvCategoryTitle"
+        style="@style/pretendard_bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="뷰티부문"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="뷰티부문" />
+
+    <TextView
+        android:id="@+id/tvRound"
+        style="@style/pretendard_regular_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="16강 대결"
+        android:textColor="@color/grey_02"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCategoryTitle"
+        tools:text="16강 대결" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvParticipant1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="23dp"
+        android:background="@color/white_grey"
+        app:cardCornerRadius="23dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRound">
+
+        <ImageView
+            android:id="@+id/ivParticipant1"
+            android:layout_width="235dp"
+            android:layout_height="273dp"
+            android:background="@color/grey_01" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvParticipant2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="23dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvParticipant1">
+
+        <ImageView
+            android:id="@+id/ivParticipant2"
+            android:layout_width="235dp"
+            android:layout_height="273dp"
+            android:background="@color/main_color" />
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

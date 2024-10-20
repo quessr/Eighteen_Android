@@ -188,6 +188,8 @@
     <!-- Ranking-->
     <string name="ranking_banner_title">Ranking</string>
     <string name="ranking_banner_description">투표해보세요</string>
-
-
+    <string name="ranking_voting_dialog_title">뷰티 투표에 참여하시겠어요?</string>
+    <string name="ranking_voting_dialog_description">투표 설명에 대한 간단한 text</string>
+    <string name="ranking_voting_dialog_non_participation">다음에 할게요</string>
+    <string name="ranking_voting_dialog_participation">네, 참여할래요!</string>
 </resources>

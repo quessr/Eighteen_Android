@@ -12,6 +12,7 @@ import com.eighteen.eighteenandroid.common.toTimeString
 import com.eighteen.eighteenandroid.domain.model.ChatMessage
 import com.eighteen.eighteenandroid.domain.usecase.GetChatMessagesUseCase
 import com.eighteen.eighteenandroid.presentation.chat.chatroom.model.ChatRoomMessageModel
+import com.eighteen.eighteenandroid.presentation.chat.chatroom.model.ChatRoomMessagesModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -30,12 +31,11 @@ class ChatRoomViewModel @AssistedInject constructor(
 ) : ViewModel() {
 
     private val _chatRoomMessagesStateFlow =
-        MutableStateFlow<ModelState<List<ChatRoomMessageModel>>>(ModelState.Empty())
+        MutableStateFlow<ModelState<ChatRoomMessagesModel>>(ModelState.Empty())
 
     val chatRoomMessagesStateFlow = _chatRoomMessagesStateFlow.asStateFlow()
 
     private var getChatMessagesJob: Job? = null
-    var isInitialized = false
 
     init {
         requestChatMessages()
@@ -43,17 +43,24 @@ class ChatRoomViewModel @AssistedInject constructor(
 
     //TODO 채팅 내역 위로 스크롤 할 경우 요청에 커서 필요할 것 같음
     fun requestChatMessages() {
-        if (getChatMessagesJob?.isCompleted == false) return
+        if (getChatMessagesJob?.isCompleted == false || chatRoomMessagesStateFlow.value.data?.hasNextPage == false) return
         getChatMessagesJob = viewModelScope.launch {
-            val prevData = chatRoomMessagesStateFlow.value.data ?: emptyList()
+            val prevData = chatRoomMessagesStateFlow.value.data ?: ChatRoomMessagesModel()
             _chatRoomMessagesStateFlow.value = ModelState.Loading(prevData)
 
             getChatMessagesUseCase.invoke(
                 chatRoomId = chatRoomId,
-                requestTime = Date().toTimeString()
+                requestTime = prevData.date.toTimeString()
             ).onSuccess {
+                val messages = createMessageModels(prevItem = prevData.messages, newData = it)
                 _chatRoomMessagesStateFlow.value =
-                    ModelState.Success(createMessageModels(prevItem = prevData, newData = it))
+                    ModelState.Success(
+                        ChatRoomMessagesModel(
+                            date = it.lastOrNull()?.createdAt ?: Date(),
+                            messages = messages,
+                            hasNextPage = it.lastOrNull()?.createdAt != null
+                        )
+                    )
             }.onFailure {
                 ModelState.Error(data = prevData, throwable = it)
             }
@@ -108,6 +115,7 @@ class ChatRoomViewModel @AssistedInject constructor(
                     lastDateCalendar = nextCalendar
                 }
             }
+            //TODO 아이템 어디 붙는 지
             val prevFirstDateCalendar =
                 prevItem.filterIsInstance<ChatRoomMessageModel.Message>()
                     .firstOrNull { it.createdAt != null }?.createdAt?.toCalendar() ?: return@apply
@@ -115,10 +123,10 @@ class ChatRoomViewModel @AssistedInject constructor(
                 lastDateCalendar,
                 prevFirstDateCalendar
             )?.let { timeItem ->
-                add(timeItem)
+                add(0, timeItem)
             }
         }
-        return items
+        return prevItem + items
     }
 
     fun requestSendMessage(message: String) {

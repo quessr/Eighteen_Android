@@ -5,6 +5,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.eighteen.eighteenandroid.databinding.FragmentChatRoomBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -38,8 +41,20 @@ class ChatRoomFragment : BaseFragment<FragmentChatRoomBinding>(FragmentChatRoomB
                 chatRoomViewModel.requestSendMessage(message = etInput.text.toString())
                 etInput.setText("")
             }
-            rvChat.adapter = ChatMessagesAdapter()
-            rvChat.addItemDecoration(ChatMessageItemDecoration())
+            with(rvChat) {
+                layoutManager = LinearLayoutManager(context).apply {
+                    reverseLayout = true
+                }
+                adapter = ChatMessagesAdapter()
+                addItemDecoration(ChatMessageItemDecoration())
+                addOnScrollListener(object : OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        if (recyclerView.canScrollVertically(-1).not()) {
+                            chatRoomViewModel.requestChatMessages()
+                        }
+                    }
+                })
+            }
         }
         initStateFlow()
     }
@@ -48,20 +63,13 @@ class ChatRoomFragment : BaseFragment<FragmentChatRoomBinding>(FragmentChatRoomB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 chatRoomViewModel.chatRoomMessagesStateFlow.collect {
+                    val adapter = (binding.rvChat.adapter as? ChatMessagesAdapter) ?: return@collect
                     when (it) {
                         is ModelState.Loading -> {
-                            //TODO 로딩처리
+                            //TODO 로딩
                         }
                         is ModelState.Success -> {
-                            (binding.rvChat.adapter as? ChatMessagesAdapter)?.submitList(it.data) {
-                                if (chatRoomViewModel.isInitialized.not()) {
-                                    it.data?.let { models ->
-                                        binding.rvChat.scrollToPosition(models.lastIndex)
-                                        chatRoomViewModel.isInitialized = true
-                                    }
-                                }
-                            }
-
+                            adapter.submitList(it.data?.messages)
                         }
                         is ModelState.Error -> {
                             //TODO 에러처리

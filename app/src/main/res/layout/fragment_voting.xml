@@ -47,8 +47,18 @@
             android:layout_width="235dp"
             android:layout_height="273dp"
             android:background="@color/grey_01" />
-    </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/tvParticipant1Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp"
+            android:textSize="16sp"
+            android:layout_gravity="bottom"
+            tools:text="participant1" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvParticipant2"
@@ -65,6 +75,18 @@
             android:layout_width="235dp"
             android:layout_height="273dp"
             android:background="@color/main_color" />
+
+        <TextView
+            android:id="@+id/tvParticipant2Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp"
+            android:textSize="16sp"
+            android:layout_gravity="bottom"
+            tools:text="participant2" />
     </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import com.eighteen.eighteenandroid.data.datasource.remote.service.ChatService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MessageService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MyPageService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.SchoolService
+import com.eighteen.eighteenandroid.data.datasource.remote.service.TournamentService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -39,4 +40,9 @@ object ServiceModule {
     @Provides
     fun provideMyPageService(retrofit: Retrofit): MyPageService =
         retrofit.create(MyPageService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideTournamentService(retrofit: Retrofit): TournamentService =
+        retrofit.create(TournamentService::class.java)
 }

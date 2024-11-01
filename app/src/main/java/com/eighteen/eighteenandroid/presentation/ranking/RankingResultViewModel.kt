@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.UserRankInfo
-import com.eighteen.eighteenandroid.domain.usecase.GetUserRankingUseCase
+import com.eighteen.eighteenandroid.domain.usecase.GetTournamentRankingUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RankingResultViewModel @AssistedInject constructor(
-    private val getUserRankingUseCase: GetUserRankingUseCase,
+    private val getTournamentRankingUseCase: GetTournamentRankingUseCase,
     @Assisted private val tournamentNo: Int
 ) : ViewModel() {
 
@@ -34,7 +34,7 @@ class RankingResultViewModel @AssistedInject constructor(
         getRankingListJob = viewModelScope.launch {
             _rankingListStateFlow.value = ModelState.Loading()
 
-            getUserRankingUseCase.invoke(tournamentNo)
+            getTournamentRankingUseCase.invoke(tournamentNo)
                 .onSuccess {
                     _rankingListStateFlow.value = ModelState.Success(it)
                 }

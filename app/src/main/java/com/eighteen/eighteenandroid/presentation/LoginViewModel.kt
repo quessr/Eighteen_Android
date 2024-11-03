@@ -1,15 +1,19 @@
 package com.eighteen.eighteenandroid.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.AuthToken
 import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.domain.model.Profile
 import com.eighteen.eighteenandroid.domain.model.Qna
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SnsInfo
 import com.eighteen.eighteenandroid.domain.usecase.EditMyProfileUseCase
+import com.eighteen.eighteenandroid.domain.usecase.GetAuthTokenFlowUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetMyProfileUseCase
+import com.eighteen.eighteenandroid.domain.usecase.LoginUseCase
+import com.eighteen.eighteenandroid.domain.usecase.SaveAuthTokenUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +28,10 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val getMyProfileUseCase: GetMyProfileUseCase,
-    private val editMyProfileUseCase: EditMyProfileUseCase
+    private val editMyProfileUseCase: EditMyProfileUseCase,
+    private val saveAuthTokenUseCase: SaveAuthTokenUseCase,
+    private val getAuthTokenFlowUseCase: GetAuthTokenFlowUseCase,
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
     private val _myProfileStateFlow = MutableStateFlow<ModelState<Profile>>(ModelState.Empty())
     val myProfileStateFlow = _myProfileStateFlow.asStateFlow()
@@ -33,15 +40,22 @@ class LoginViewModel @Inject constructor(
         MutableStateFlow<ModelState<Event<Unit>>>(ModelState.Empty())
     val editProfileEventStateFlow = _editProfileEventStateFlow.asStateFlow()
 
-    //TODO token 모델 설계
-    private var loginResultInfo: LoginResultInfo? = null
-
     private var loginJob: Job? = null
     private var editMyProfileJob: Job? = null
 
+    var authToken: AuthToken? = null
+        private set
+
     init {
-        //TODO test 임시 호출 코드 제거
-        requestLogin()
+        requestToken()
+    }
+
+    private fun requestToken() {
+        viewModelScope.launch {
+            getAuthTokenFlowUseCase.invoke().collect {
+                authToken = it
+            }
+        }
     }
 
     fun requestLogin() {
@@ -49,18 +63,24 @@ class LoginViewModel @Inject constructor(
         loginJob = viewModelScope.launch {
             //TODO accessToken 발급
             //TODO 로그인 api 호출
-            val loginResultInfo =
-                async { LoginResultInfo("accessToken", "refreshToken", "uniqueId") }.await()
+            val authToken =
+                async {
+                    loginUseCase.invoke("01000000001")
+                }.await()
 
-            val myProfileResult =
-                async { getMyProfileUseCase.invoke(loginResultInfo.accessToken) }.await()
-
-            myProfileResult.onSuccess {
-                this@LoginViewModel.loginResultInfo = loginResultInfo
-                _myProfileStateFlow.value = ModelState.Success(it)
-            }.onFailure {
-                _myProfileStateFlow.value = ModelState.Error(throwable = it)
-            }
+            Log.d("TESTLOG", "authToken : $authToken")
+//
+//            if(authToken.)
+//
+//            val myProfileResult =
+//                async { getMyProfileUseCase.invoke(authToken.accessToken) }.await()
+//
+//            myProfileResult.onSuccess {
+//                this@LoginViewModel.loginResultInfo = loginResultInfo
+//                _myProfileStateFlow.value = ModelState.Success(it)
+//            }.onFailure {
+//                _myProfileStateFlow.value = ModelState.Error(throwable = it)
+//            }
         }
     }
 

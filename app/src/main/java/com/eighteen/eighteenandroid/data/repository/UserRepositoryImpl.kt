@@ -1,11 +1,16 @@
 package com.eighteen.eighteenandroid.data.repository
 
+import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SchoolRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SignUpRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
 import com.eighteen.eighteenandroid.data.mapper.ApiException
 import com.eighteen.eighteenandroid.data.mapper.mapper
-import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.AuthToken
 import com.eighteen.eighteenandroid.domain.model.Mbti
 import com.eighteen.eighteenandroid.domain.model.Media
 import com.eighteen.eighteenandroid.domain.model.Profile
@@ -16,10 +21,14 @@ import com.eighteen.eighteenandroid.domain.model.SignUpInfo
 import com.eighteen.eighteenandroid.domain.model.SnsLink
 import com.eighteen.eighteenandroid.domain.model.User
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val userService: UserService) :
-    UserRepository {
+class UserRepositoryImpl @Inject constructor(
+    private val userService: UserService,
+    private val preferenceDatastore: DataStore<Preferences>
+) : UserRepository {
     override suspend fun fetchUserData(): Result<List<User>> =
         runCatching {
 //            userService.getUserInfo().mapper {
@@ -115,7 +124,7 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         )
     }
 
-    override suspend fun postSignUp(signUpInfo: SignUpInfo): Result<LoginResultInfo> = runCatching {
+    override suspend fun postSignUp(signUpInfo: SignUpInfo): Result<AuthToken> = runCatching {
         val signUpRequest = signUpInfo.run {
             SignUpRequest(
                 phoneNumber = phoneNumber,
@@ -130,7 +139,7 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         }
         //TODO 응답 값 수정(문의 중)
         userService.postSignUp(signUpRequest = signUpRequest).mapper {
-            LoginResultInfo("", "", uniqueId = it.data?.uniqueId ?: "")
+            AuthToken("", "")
         }
     }
 
@@ -140,5 +149,31 @@ class UserRepositoryImpl @Inject constructor(private val userService: UserServic
         userService.postDuplicationCheck(uniqueId = uniqueId).mapper {
             it.data ?: throw ApiException.Unknown
         }
+    }
+
+    override suspend fun getTokenFlow(): Flow<AuthToken> =
+        preferenceDatastore.data.map {
+            val accessToken = it[accessTokenPreferenceKey]
+            val refreshToken = it[refreshTokenPreferenceKey]
+            AuthToken(accessToken = accessToken, refreshToken = refreshToken)
+        }
+
+    override suspend fun saveToken(authToken: AuthToken) {
+        //TODO default key 추가
+        preferenceDatastore.edit {
+            it[accessTokenPreferenceKey] = authToken.accessToken ?: ""
+            it[refreshTokenPreferenceKey] = authToken.refreshToken ?: ""
+        }
+    }
+
+    override suspend fun login(phoneNumber: String): Result<AuthToken> = runCatching {
+        val result = userService.postLogin(phoneNumber = phoneNumber)
+        Log.d("TESTLOG","${result.headers()}}")
+        AuthToken(accessToken = "", refreshToken =  "")
+    }
+
+    companion object {
+        private val accessTokenPreferenceKey = stringPreferencesKey("access_token_preference_key")
+        private val refreshTokenPreferenceKey = stringPreferencesKey("refresh_token_preference_key")
     }
 }

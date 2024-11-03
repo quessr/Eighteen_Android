@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.common.safeLet
-import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.AuthToken
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SignUpInfo
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
@@ -51,8 +51,8 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     val openWebViewLiveData: LiveData<Event<String>> = _openWebViewEventLiveData
 
     private val _signUpResultStateFlow =
-        MutableStateFlow<ModelState<LoginResultInfo>>(ModelState.Empty())
-    override val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>> =
+        MutableStateFlow<ModelState<AuthToken>>(ModelState.Empty())
+    override val signUpResultStateFlow: StateFlow<ModelState<AuthToken>> =
         _signUpResultStateFlow.asStateFlow()
 
     private val _pageClearEventStateFlow =

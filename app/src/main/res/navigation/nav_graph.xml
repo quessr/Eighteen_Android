@@ -171,4 +171,9 @@
         android:name="com.eighteen.eighteenandroid.presentation.badgedetail.BadgeDetailFragment"
         android:label="fragment_badge_detail"
         tools:layout="@layout/fragment_badge_detail" />
+
+    <fragment
+        android:id="@+id/fragmentRankingResult"
+        android:name="com.eighteen.eighteenandroid.presentation.ranking.RankingResultFragment"
+        android:label="RankingResultFragment" />
 </navigation>

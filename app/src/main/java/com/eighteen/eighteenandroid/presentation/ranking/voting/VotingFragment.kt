@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.view.isInvisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentVotingBinding
@@ -18,78 +20,102 @@ import com.eighteen.eighteenandroid.presentation.ranking.RankingFragment
 import com.eighteen.eighteenandroid.presentation.ranking.RankingVotingDialogFragment
 import com.eighteen.eighteenandroid.presentation.ranking.cardList.viewholder.CardListViewHolder
 import com.eighteen.eighteenandroid.presentation.ranking.voting.model.TournamentEntity
+import kotlinx.coroutines.launch
 
 class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding::inflate) {
-    private lateinit var participants: List<TournamentEntity.Participant>
-    private var matches: List<TournamentEntity.Match> = listOf()
-    private var currentRound = 16
-    private var currentMatchIndex = 0
+//    private lateinit var participants: List<TournamentEntity.Participant>
+//    private var matches: List<TournamentEntity.Match> = listOf()
+//    private var currentRound = 16
+//    private var currentMatchIndex = 0
+
+    private val viewModel: VotingViewModel by viewModels()
     override fun initView() {
-        initFragmentResultListener()
-        setupParticipants()
-        setupMatches()
-        showCurrentMatch()
+        initObservers()
+        viewModel.setupParticipants()
     }
 
-    private fun initFragmentResultListener() {
-        parentFragmentManager.setFragmentResultListener(
-            RankingFragment.REQUEST_KEY_VOTING_ROOM_ENTER, viewLifecycleOwner
-        ) { _, result ->
-            val confirmedId = result.getString(RankingVotingDialogFragment.RESULT_CONFIRM_KEY)
-            val categoryTitle =
-                result.getString(RankingVotingDialogFragment.ARGUMENT_CATEGORY_TITLE)
+    private fun initObservers() {
+        lifecycleScope.launch {
+            viewModel.currentMatch.collect { match ->
+                match?.let { showCurrentMatch(it) }
+            }
+        }
 
-            Log.d("VotingFragment", "categoryTitle: $categoryTitle")
-
-            if (confirmedId != null && categoryTitle != null) {
-                binding.tvCategoryTitle.text = categoryTitle
+        lifecycleScope.launch {
+            viewModel.isRoundComplete.collect { (isComplete, winner) ->
+                if (isComplete) navigateToCompletion(winner)
             }
         }
     }
 
-    private fun setupParticipants() {
-        participants = listOf(
-            TournamentEntity.Participant("1", "참가자1"),
-            TournamentEntity.Participant("2", "참가자2"),
-            TournamentEntity.Participant("3", "참가자3"),
-            TournamentEntity.Participant("4", "참가자4"),
-            TournamentEntity.Participant("5", "참가자5"),
-            TournamentEntity.Participant("6", "참가자6"),
-            TournamentEntity.Participant("7", "참가자7"),
-            TournamentEntity.Participant("8", "참가자8"),
-            TournamentEntity.Participant("9", "참가자9"),
-            TournamentEntity.Participant("10", "참가자10"),
-            TournamentEntity.Participant("11", "참가자11"),
-            TournamentEntity.Participant("12", "참가자12"),
-            TournamentEntity.Participant("13", "참가자13"),
-            TournamentEntity.Participant("14", "참가자14"),
-            TournamentEntity.Participant("15", "참가자15"),
-            TournamentEntity.Participant("16", "참가자16")
-        )
-    }
+//    private fun initFragmentResultListener() {
+//        parentFragmentManager.setFragmentResultListener(
+//            RankingFragment.REQUEST_KEY_VOTING_ROOM_ENTER, viewLifecycleOwner
+//        ) { _, result ->
+//            val confirmedId = result.getString(RankingVotingDialogFragment.RESULT_CONFIRM_KEY)
+//            val categoryTitle =
+//                result.getString(RankingVotingDialogFragment.ARGUMENT_CATEGORY_TITLE)
+//
+//            Log.d("VotingFragment", "categoryTitle: $categoryTitle")
+//
+//            if (confirmedId != null && categoryTitle != null) {
+//                binding.tvCategoryTitle.text = categoryTitle
+//            }
+//        }
+//    }
 
-    private fun setupMatches() {
-        matches = participants.chunked(2).map { pair ->
-            TournamentEntity.Match(pair[0], pair[1])
-        }
-    }
+//    private fun setupParticipants() {
+//        participants = listOf(
+//            TournamentEntity.Participant("1", "참가자1"),
+//            TournamentEntity.Participant("2", "참가자2"),
+//            TournamentEntity.Participant("3", "참가자3"),
+//            TournamentEntity.Participant("4", "참가자4"),
+//            TournamentEntity.Participant("5", "참가자5"),
+//            TournamentEntity.Participant("6", "참가자6"),
+//            TournamentEntity.Participant("7", "참가자7"),
+//            TournamentEntity.Participant("8", "참가자8"),
+//            TournamentEntity.Participant("9", "참가자9"),
+//            TournamentEntity.Participant("10", "참가자10"),
+//            TournamentEntity.Participant("11", "참가자11"),
+//            TournamentEntity.Participant("12", "참가자12"),
+//            TournamentEntity.Participant("13", "참가자13"),
+//            TournamentEntity.Participant("14", "참가자14"),
+//            TournamentEntity.Participant("15", "참가자15"),
+//            TournamentEntity.Participant("16", "참가자16")
+//        )
+//    }
 
-    private fun showCurrentMatch() {
-        val currentMatch = matches[currentMatchIndex]
-        binding.cvParticipant1.tag = currentMatch.participant1
-        binding.cvParticipant2.tag = currentMatch.participant2
+//    private fun setupMatches() {
+//        matches = participants.chunked(2).map { pair ->
+//            TournamentEntity.Match(pair[0], pair[1])
+//        }
+//    }
+
+    private fun showCurrentMatch(match: TournamentEntity.Match) {
+//        val currentMatch = matches[currentMatchIndex]
+        binding.cvParticipant1.tag = match.participant1
+        binding.cvParticipant2.tag = match.participant2
 
         bind {
-            tvParticipant1Name.text = currentMatch.participant1.nickName
-            tvParticipant2Name.text = currentMatch.participant2.nickName
+            tvParticipant1Name.text = match.participant1.nickName
+            tvParticipant2Name.text = match.participant2.nickName
         }
 
         setupCardViewAnimations()
     }
 
+    private fun navigateToCompletion(winner: TournamentEntity.Participant?) {
+        winner?.let {
+            val bundle = Bundle().apply {
+                putString("winnerName", it.nickName)
+                putString("winnerId", it.id)
+            }
+            findNavController().navigate(R.id.fragmentVotingComplete, bundle)
+        }
+    }
+
     private fun setupCardViewAnimations() {
         binding.cvParticipant1.setOnClickListener {
-            val winner = binding.cvParticipant1.tag as TournamentEntity.Participant
             animateCardViewToCenterThenDisappear(
                 selectedCardView = binding.cvParticipant1,
                 nonSelectedCardView = binding.cvParticipant2,
@@ -99,7 +125,6 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
         }
 
         binding.cvParticipant2.setOnClickListener {
-            val winner = binding.cvParticipant2.tag as TournamentEntity.Participant
             animateCardViewToCenterThenDisappear(
                 selectedCardView = binding.cvParticipant2,
                 nonSelectedCardView = binding.cvParticipant1,
@@ -109,42 +134,42 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
         }
     }
 
-    private fun selectWinner(winner: TournamentEntity.Participant) {
-        matches[currentMatchIndex].winner = winner
+//    private fun selectWinner(winner: TournamentEntity.Participant) {
+//        matches[currentMatchIndex].winner = winner
+//
+//        if (currentMatchIndex < matches.size - 1) {
+//            currentMatchIndex++
+//            showCurrentMatch()
+//        } else {
+//            setupNextRound()
+//        }
+//    }
 
-        if (currentMatchIndex < matches.size - 1) {
-            currentMatchIndex++
-            showCurrentMatch()
-        } else {
-            setupNextRound()
-        }
-    }
-
-    private fun setupNextRound() {
-        currentRound /= 2
-        currentMatchIndex = 0
-
-        val winners = matches.mapNotNull { it.winner }
-
-        // 최종 승자가 결정된 경우 (winners 리스트에 한 명만 남은 경우)
-        if (winners.size == 1) {
-            val winner = winners.first()
-            val bundle = Bundle().apply {
-                putString("winnerName", winner.nickName)
-                putString("winnerId", winner.id)
-            }
-            Log.d("VotingFragment", "winnerName: ${winner?.nickName}, winnerId: ${winner?.id}")
-            findNavController().navigate(R.id.fragmentVotingComplete, bundle)
-        } else {
-            // 다음 라운드의 매치를 구성
-            matches = winners.chunked(2).map { pair -> TournamentEntity.Match(pair[0], pair[1]) }
-
-            // 다음 라운드가 있으면 첫 번째 매치를 보여줌
-            if (matches.isNotEmpty()) {
-                showCurrentMatch()
-            }
-        }
-    }
+//    private fun setupNextRound() {
+//        currentRound /= 2
+//        currentMatchIndex = 0
+//
+//        val winners = matches.mapNotNull { it.winner }
+//
+//        // 최종 승자가 결정된 경우 (winners 리스트에 한 명만 남은 경우)
+//        if (winners.size == 1) {
+//            val winner = winners.first()
+//            val bundle = Bundle().apply {
+//                putString("winnerName", winner.nickName)
+//                putString("winnerId", winner.id)
+//            }
+//            Log.d("VotingFragment", "winnerName: ${winner?.nickName}, winnerId: ${winner?.id}")
+//            findNavController().navigate(R.id.fragmentVotingComplete, bundle)
+//        } else {
+//            // 다음 라운드의 매치를 구성
+//            matches = winners.chunked(2).map { pair -> TournamentEntity.Match(pair[0], pair[1]) }
+//
+//            // 다음 라운드가 있으면 첫 번째 매치를 보여줌
+//            if (matches.isNotEmpty()) {
+//                showCurrentMatch()
+//            }
+//        }
+//    }
 
     private fun animateCardViewToCenterThenDisappear(
         selectedCardView: CardView, nonSelectedCardView: CardView, isTopCard: Boolean
@@ -224,7 +249,13 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
                     // 애니메이션이 끝난 후 카드 초기화 및 다음 참가자 표시
                     resetCardView(selectedCardView)
                     resetCardView(nonSelectedCardView)
-                    selectWinner(selectedCardView.tag as TournamentEntity.Participant)
+
+                    val participant = selectedCardView.tag as? TournamentEntity.Participant
+                    if (participant != null) {
+                        viewModel.selectWinner(participant)
+                    } else {
+                        Log.e("VotingFragment", "Participant tag is null on selectedCardView")
+                    }
                 }
 
                 override fun onAnimationCancel(animation: Animator) {

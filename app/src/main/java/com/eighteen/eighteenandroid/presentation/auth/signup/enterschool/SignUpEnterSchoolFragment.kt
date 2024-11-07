@@ -15,6 +15,8 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
+import com.eighteen.eighteenandroid.presentation.common.searchschool.SchoolSearchResultAdapter
+import com.eighteen.eighteenandroid.presentation.common.searchschool.SchoolSearchResultItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -75,11 +77,11 @@ class SignUpEnterSchoolFragment :
     }
 
     private fun initRecyclerView() = with(binding.rvSearchResult) {
-        adapter = SignUpEnterSchoolSearchResultAdapter(onClickSchool = ::onClickSchool)
+        adapter = SchoolSearchResultAdapter(onClickSchool = ::onClickSchool)
         val dividerColorInt = ContextCompat.getColor(context, R.color.divider)
         val dividerHeightPx = context.dp2Px(DIVIDER_HEIGHT_DP)
         addItemDecoration(
-            SignUpEnterSchoolSearchResultItemDecoration(
+            SchoolSearchResultItemDecoration(
                 dividerColor = dividerColorInt,
                 dividerHeightPx = dividerHeightPx
             )
@@ -110,7 +112,7 @@ class SignUpEnterSchoolFragment :
                 is ModelState.Success -> {
                     //TODO empty case 처리
                     bind {
-                        (rvSearchResult.adapter as? SignUpEnterSchoolSearchResultAdapter)?.submitList(
+                        (rvSearchResult.adapter as? SchoolSearchResultAdapter)?.submitList(
                             it.data?.schools
                         )
                     }

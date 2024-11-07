@@ -26,6 +26,9 @@ class MyProfileProfileViewHolder(
             tvBtnEditImage.setOnClickListener {
                 clickListener.onClickEditMedia()
             }
+            tvBtnEditNickName.setOnClickListener {
+                clickListener.onClickEditNickName()
+            }
             ivBtnEditSchool.setOnClickListener {
                 clickListener.onClickEditSchool()
             }

@@ -21,6 +21,8 @@ object ProfileDetailMapper {
             snsLinks = emptyList(),
             mbti = null,
             description = null,
-            qna = emptyList()
+            qna = emptyList(),
+            birth = null,
+            introduction = null
         )
 }

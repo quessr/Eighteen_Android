@@ -161,4 +161,7 @@ dependencies {
     // Flow Binding
     val flowbinding_version = "1.2.0"
     implementation("io.github.reactivecircus.flowbinding:flowbinding-android:${flowbinding_version}")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

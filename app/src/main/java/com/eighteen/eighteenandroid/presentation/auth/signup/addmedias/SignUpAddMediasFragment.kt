@@ -11,7 +11,6 @@ import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpAddMediasBinding
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.model.SignUpMediaItemModel
-import com.eighteen.eighteenandroid.presentation.auth.signup.addmedias.model.SignUpMediaPickerWrapper
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedia
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpMedias
@@ -20,6 +19,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
+import com.eighteen.eighteenandroid.presentation.common.mediapicker.MediaPickerWrapper
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 
 class SignUpAddMediasFragment :
@@ -60,7 +60,7 @@ class SignUpAddMediasFragment :
         }
     }
 
-    private val mediaPickerWrapper = SignUpMediaPickerWrapper(this)
+    private val mediaPickerWrapper = MediaPickerWrapper(this)
 
     private val clickListener = object : SignUpAddMediasClickListener {
         override fun onClickAddMedia() {

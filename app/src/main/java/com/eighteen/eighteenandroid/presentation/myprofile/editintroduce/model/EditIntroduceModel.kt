@@ -4,5 +4,5 @@ import com.eighteen.eighteenandroid.domain.model.Mbti
 
 data class EditIntroduceModel(
     val mbti: Mbti?,
-    val description: String?
+    val introduction: String?
 )

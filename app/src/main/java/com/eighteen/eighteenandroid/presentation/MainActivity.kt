@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
@@ -68,6 +69,21 @@ class MainActivity : AppCompatActivity() {
             )
             binding.bottomNavigationBar.isVisible = visibleNavigationIds.contains(destination.id)
         }
+        initRequiredLoginMenus()
+    }
+
+    private fun initRequiredLoginMenus() {
+        val requiredLoginMenuIds = listOf(R.id.fragmentMyProfile)
+        binding.bottomNavigationBar.menu.children.filter { requiredLoginMenuIds.contains(it.itemId) }
+            .forEach {
+                it.setOnMenuItemClickListener {
+                    var isSuccess = false
+                    requestWithRequiredLogin {
+                        isSuccess = true
+                    }
+                    isSuccess.not()
+                }
+            }
     }
 
     private fun initStateFlow() {
@@ -104,22 +120,28 @@ class MainActivity : AppCompatActivity() {
             this,
             object : TwoButtonPopUpDialogFragment.TowButtonPopUpDialogFragmentResultListener() {
                 override fun onConfirm() {
-                    //TODO 로그인 화면 이동
+                    findNavController(R.id.fragment_container_view).navigate(R.id.fragmentLogin)
                 }
             })
     }
 
-    fun requestWithLogin(request: () -> Unit) {
+    fun requestWithRequiredLogin(request: () -> Unit) {
         if (loginViewModel.authToken?.accessToken == null) {
             showLoginDialog()
             return
         }
-
+        request()
     }
 
     private fun showLoginDialog() {
         val dialogFragment =
-            TwoButtonPopUpDialogFragment.newInstance(requestKey = LOGIN_DIALOG_REQUEST_KEY)
+            TwoButtonPopUpDialogFragment.newInstance(
+                requestKey = LOGIN_DIALOG_REQUEST_KEY,
+                title = getString(R.string.required_login_title),
+                content = getString(R.string.required_login_content),
+                rejectButtonText = getString(R.string.no),
+                confirmButtonText = getString(R.string.yes)
+            )
         dialogFragment.show(supportFragmentManager, null)
     }
 

@@ -20,6 +20,7 @@ import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMed
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
+import com.eighteen.eighteenandroid.presentation.common.getParcelableOrNull
 import com.eighteen.eighteenandroid.presentation.common.hideKeyboardAndRemoveCurrentFocus
 import com.eighteen.eighteenandroid.presentation.common.livedata.EventObserver
 import com.eighteen.eighteenandroid.presentation.common.requestPermissions
@@ -48,8 +49,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             if (backStackEntryCount <= 0) findNavController().popBackStack()
             else signUpViewModel.actionToPrevPage()
         }
-
     }
+
+    val loginType
+        get() = arguments?.getParcelableOrNull(
+            ARGUMENT_LOGIN_TYPE_KEY,
+            LoginType::class.java
+        )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -178,5 +184,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 }
             }
         }
+    }
+
+    companion object {
+        const val ARGUMENT_LOGIN_TYPE_KEY = "argument_login_type_key"
     }
 }

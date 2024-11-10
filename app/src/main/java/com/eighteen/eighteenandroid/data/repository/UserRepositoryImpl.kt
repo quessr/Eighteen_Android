@@ -159,7 +159,6 @@ class UserRepositoryImpl @Inject constructor(
         }
 
     override suspend fun saveToken(authToken: AuthToken) {
-        //TODO default key 추가
         preferenceDatastore.edit {
             it[accessTokenPreferenceKey] = authToken.accessToken ?: ""
             it[refreshTokenPreferenceKey] = authToken.refreshToken ?: ""

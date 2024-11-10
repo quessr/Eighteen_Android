@@ -9,6 +9,7 @@ import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.domain.model.AuthToken
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SignUpInfo
+import com.eighteen.eighteenandroid.domain.usecase.SaveAuthTokenUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
@@ -31,7 +32,10 @@ import javax.inject.Inject
 
 //TODO 로그인, 회원가입 관련 api 연동, 입력받은 정보 저장 뒤로가기 시 데이터 지워진 상태로 나옴
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase) : ViewModel(),
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase,
+    private val saveAuthTokenUseCase: SaveAuthTokenUseCase
+) : ViewModel(),
     SignUpViewModelContentInterface {
     private val _actionEventLiveData = MutableLiveData<Event<SignUpAction>>()
     val actionEventLiveData: LiveData<Event<SignUpAction>> = _actionEventLiveData
@@ -150,6 +154,12 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
             it.copy(medias = it.medias.toMutableList().apply {
                 removeAt(position)
             })
+        }
+    }
+
+    override fun saveToken(authToken: AuthToken) {
+        viewModelScope.launch{
+            saveAuthTokenUseCase.invoke(authToken)
         }
     }
 

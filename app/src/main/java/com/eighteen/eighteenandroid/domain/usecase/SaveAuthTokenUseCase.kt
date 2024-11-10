@@ -6,6 +6,10 @@ import javax.inject.Inject
 
 class SaveAuthTokenUseCase @Inject constructor(private val repository: UserRepository) {
     suspend operator fun invoke(accessToken: String? = null, refreshToken: String? = null) {
-        repository.saveToken(authToken = AuthToken(accessToken, refreshToken))
+        invoke(AuthToken(accessToken, refreshToken))
+    }
+
+    suspend operator fun invoke(authToken: AuthToken) {
+        repository.saveToken(authToken = authToken)
     }
 }

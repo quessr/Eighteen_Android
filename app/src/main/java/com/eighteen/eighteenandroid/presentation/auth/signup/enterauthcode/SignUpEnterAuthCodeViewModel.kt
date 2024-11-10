@@ -3,7 +3,10 @@ package com.eighteen.eighteenandroid.presentation.auth.signup.enterauthcode
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.usecase.ConfirmMessageUseCase
+import com.eighteen.eighteenandroid.domain.usecase.LoginUseCase
+import com.eighteen.eighteenandroid.domain.usecase.SaveAuthTokenUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SendMessageUseCase
+import com.eighteen.eighteenandroid.presentation.auth.signup.enterauthcode.model.ConfirmResultModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -19,7 +22,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpEnterAuthCodeViewModel @Inject constructor(
     private val sendMessageUseCase: SendMessageUseCase,
-    private val confirmMessageUseCase: ConfirmMessageUseCase
+    private val confirmMessageUseCase: ConfirmMessageUseCase,
+    private val loginUseCase: LoginUseCase,
+    private val saveAuthTokenUseCase: SaveAuthTokenUseCase
 ) : ViewModel() {
     private val _sendMessageResultStateFlow =
         MutableStateFlow<ModelState<Long>>(ModelState.Success(Calendar.getInstance().timeInMillis))
@@ -29,8 +34,8 @@ class SignUpEnterAuthCodeViewModel @Inject constructor(
     private var requestSendMessageJob: Job? = null
 
     private val _confirmMessageResultStateFlow =
-        MutableStateFlow<ModelState<Unit>>(ModelState.Empty())
-    val confirmMessageResultStateFlow: StateFlow<ModelState<Unit>> =
+        MutableStateFlow<ModelState<ConfirmResultModel>>(ModelState.Empty())
+    val confirmMessageResultStateFlow: StateFlow<ModelState<ConfirmResultModel>> =
         _confirmMessageResultStateFlow.asStateFlow()
 
     private var requestConfirmMessageJob: Job? = null
@@ -73,7 +78,13 @@ class SignUpEnterAuthCodeViewModel @Inject constructor(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             ).onSuccess {
-                _confirmMessageResultStateFlow.value = ModelState.Success()
+                loginUseCase.invoke(phoneNumber = phoneNumber).onSuccess {
+                    _confirmMessageResultStateFlow.value =
+                        ModelState.Success(ConfirmResultModel.LoginSuccess(it))
+                }.onFailure {
+                    _confirmMessageResultStateFlow.value =
+                        ModelState.Success(ConfirmResultModel.LoginFailed)
+                }
             }.onFailure {
                 _confirmMessageResultStateFlow.value = ModelState.Error(throwable = it)
             }

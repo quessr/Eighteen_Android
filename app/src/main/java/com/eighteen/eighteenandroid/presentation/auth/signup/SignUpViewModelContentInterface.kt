@@ -33,4 +33,5 @@ interface SignUpViewModelContentInterface {
     fun setPageClearEvent(page: SignUpPage)
     fun removeRefMedia()
     fun removeMedia(position: Int)
+    fun saveToken(authToken: AuthToken)
 }

@@ -65,6 +65,9 @@ class SignUpViewModel @Inject constructor(
     override val pageClearEvent: StateFlow<Event<SignUpPage>> =
         _pageClearEventStateFlow.asStateFlow()
 
+    private val _loginCompleteEventLiveData = MutableLiveData<Event<Unit>>()
+    val loginCompleteEventLiveData: LiveData<Event<Unit>> = _loginCompleteEventLiveData
+
     override var phoneNumber: String = ""
     override var id: String = ""
     override var nickName: String = ""
@@ -157,9 +160,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    override fun saveToken(authToken: AuthToken) {
-        viewModelScope.launch{
+    override fun completeLogin(authToken: AuthToken) {
+        viewModelScope.launch {
             saveAuthTokenUseCase.invoke(authToken)
+            _loginCompleteEventLiveData.value = Event(Unit)
         }
     }
 

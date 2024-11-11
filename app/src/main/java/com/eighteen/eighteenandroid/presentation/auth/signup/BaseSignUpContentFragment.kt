@@ -36,7 +36,7 @@ abstract class BaseSignUpContentFragment<VB : ViewBinding>(bindingFactory: (Layo
     protected abstract val onMoveNextPageAction: () -> Unit
     protected abstract val progress: Int?
     protected abstract val signUpNextButtonModel: SignUpNextButtonModel
-    val loginType get() = (parentFragment as? SignUpFragment)?.loginType
+    val loginType get() = ((parentFragment?.parentFragment) as? SignUpFragment)?.loginType
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

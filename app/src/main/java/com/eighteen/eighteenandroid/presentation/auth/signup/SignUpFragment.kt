@@ -86,6 +86,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         initEditMediaObserver()
         initActionEventObserver()
         initSignUpResultStateFlow()
+        initLoginCompleteLiveEvent()
     }
 
     private fun initSignUpObserver() = with(signUpViewModel) {
@@ -184,6 +185,12 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 }
             }
         }
+    }
+
+    private fun initLoginCompleteLiveEvent() {
+        signUpViewModel.loginCompleteEventLiveData.observe(viewLifecycleOwner, EventObserver {
+            findNavController().popBackStack(R.id.fragmentLogin, true)
+        })
     }
 
     companion object {

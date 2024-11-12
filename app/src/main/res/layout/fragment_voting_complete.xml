@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <TextView
+        android:id="@+id/tvCategoryCompleteTitle"
+        style="@style/pretendard_bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="뷰티" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_vote_complete_banner"
         android:layout_width="263dp"

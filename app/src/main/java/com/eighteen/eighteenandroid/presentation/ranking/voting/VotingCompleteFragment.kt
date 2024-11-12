@@ -7,10 +7,12 @@ class VotingCompleteFragment :
     BaseFragment<FragmentVotingCompleteBinding>(FragmentVotingCompleteBinding::inflate) {
     override fun initView() {
         val winnerName = arguments?.getString("winnerName")
+        val category = arguments?.getString("category")
         val winnerId = arguments?.getString("winnerId")
 
         bind {
             tvName.text = winnerName
+            tvCategoryCompleteTitle.text = category
         }
     }
 }

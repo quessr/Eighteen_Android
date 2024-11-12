@@ -24,6 +24,14 @@ import kotlinx.coroutines.launch
 
 class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding::inflate) {
     private val viewModel: VotingViewModel by viewModels()
+    private var category: String? = ""
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        category = arguments?.getString("selectedCategory")
+        binding.tvCategoryTitle.text = category
+    }
+
     override fun initView() {
         initObservers()
         viewModel.setupParticipants()
@@ -60,6 +68,7 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
             val bundle = Bundle().apply {
                 putString("winnerName", it.nickName)
                 putString("winnerId", it.id)
+                putString("category", category)
             }
             findNavController().navigate(R.id.fragmentVotingComplete, bundle)
         }

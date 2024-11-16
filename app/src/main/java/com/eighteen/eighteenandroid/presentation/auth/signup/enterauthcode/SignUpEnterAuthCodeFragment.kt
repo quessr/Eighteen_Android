@@ -203,7 +203,7 @@ class SignUpEnterAuthCodeFragment :
                     } else if (loginType == LoginType.LOGIN) {
                         val data = it.data
                         if (data is ConfirmResultModel.LoginSuccess) {
-                            signUpViewModelContentInterface.completeLogin(authToken = data.authToken)
+                            signUpViewModelContentInterface.requestLogin(authToken = data.authToken)
                         } else {
                             //TODO 로그인 실패
                         }
@@ -272,7 +272,7 @@ class SignUpEnterAuthCodeFragment :
             object : TwoButtonPopUpDialogFragment.TowButtonPopUpDialogFragmentResultListener() {
                 override fun onConfirm() {
                     (signUpEnterAuthCodeViewModel.confirmMessageResultStateFlow.value.data as? ConfirmResultModel.LoginSuccess)?.let {
-                        signUpViewModelContentInterface.completeLogin(it.authToken)
+                        signUpViewModelContentInterface.requestLogin(it.authToken)
                     }
                 }
             })

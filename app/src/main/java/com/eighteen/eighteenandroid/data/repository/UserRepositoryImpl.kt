@@ -1,10 +1,12 @@
 package com.eighteen.eighteenandroid.data.repository
 
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import com.eighteen.eighteenandroid.data.ACCESS_TOKEN_PREFERENCE_KEY
+import com.eighteen.eighteenandroid.data.HEADER_AUTHORIZATION
+import com.eighteen.eighteenandroid.data.HEADER_REFRESH
+import com.eighteen.eighteenandroid.data.REFRESH_TOKEN_PREFERENCE_KEY
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SchoolRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.request.SignUpRequest
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
@@ -151,28 +153,24 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTokenFlow(): Flow<AuthToken> =
+    override fun getTokenFlow(): Flow<AuthToken> =
         preferenceDatastore.data.map {
-            val accessToken = it[accessTokenPreferenceKey]
-            val refreshToken = it[refreshTokenPreferenceKey]
+            val accessToken = it[ACCESS_TOKEN_PREFERENCE_KEY]
+            val refreshToken = it[REFRESH_TOKEN_PREFERENCE_KEY]
             AuthToken(accessToken = accessToken, refreshToken = refreshToken)
         }
 
     override suspend fun saveToken(authToken: AuthToken) {
         preferenceDatastore.edit {
-            it[accessTokenPreferenceKey] = authToken.accessToken ?: ""
-            it[refreshTokenPreferenceKey] = authToken.refreshToken ?: ""
+            it[ACCESS_TOKEN_PREFERENCE_KEY] = authToken.accessToken ?: ""
+            it[REFRESH_TOKEN_PREFERENCE_KEY] = authToken.refreshToken ?: ""
         }
     }
 
     override suspend fun login(phoneNumber: String): Result<AuthToken> = runCatching {
         val result = userService.postLogin(phoneNumber = phoneNumber)
-        Log.d("TESTLOG","${result.headers()}}")
-        AuthToken(accessToken = "", refreshToken =  "")
-    }
-
-    companion object {
-        private val accessTokenPreferenceKey = stringPreferencesKey("access_token_preference_key")
-        private val refreshTokenPreferenceKey = stringPreferencesKey("refresh_token_preference_key")
+        result.headers().run {
+            AuthToken(accessToken = get(HEADER_AUTHORIZATION), refreshToken = get(HEADER_REFRESH))
+        }
     }
 }

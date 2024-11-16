@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentSignUpBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.FullWebViewFragment
+import com.eighteen.eighteenandroid.presentation.MyViewModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -37,8 +39,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate),
     SignUpContentContainer {
     private val signUpViewModel by viewModels<SignUpViewModel>()
-
     private val editMediaViewModel by viewModelsByBackStackEntry<EditMediaViewModel>()
+    private val myViewModel by activityViewModels<MyViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -188,9 +190,25 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     }
 
     private fun initLoginCompleteLiveEvent() {
-        signUpViewModel.loginCompleteEventLiveData.observe(viewLifecycleOwner, EventObserver {
-            findNavController().popBackStack(R.id.fragmentLogin, true)
+        signUpViewModel.requestLoginEventLiveData.observe(viewLifecycleOwner, EventObserver {
+            myViewModel.completeLogin(authToken = it)
         })
+        collectInLifecycle(myViewModel.myProfileStateFlow){
+            when(it){
+                is ModelState.Loading->{
+
+                }
+                is ModelState.Success->{
+                    findNavController().popBackStack(R.id.fragmentLogin, true)
+                }
+                is ModelState.Error->{
+
+                }
+                else ->{
+                    //do nothing
+                }
+            }
+        }
     }
 
     companion object {

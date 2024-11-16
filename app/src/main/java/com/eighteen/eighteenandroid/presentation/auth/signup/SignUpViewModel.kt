@@ -9,7 +9,6 @@ import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.domain.model.AuthToken
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SignUpInfo
-import com.eighteen.eighteenandroid.domain.usecase.SaveAuthTokenUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpAction
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpEditMediaAction
@@ -34,7 +33,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
-    private val saveAuthTokenUseCase: SaveAuthTokenUseCase
 ) : ViewModel(),
     SignUpViewModelContentInterface {
     private val _actionEventLiveData = MutableLiveData<Event<SignUpAction>>()
@@ -65,8 +63,8 @@ class SignUpViewModel @Inject constructor(
     override val pageClearEvent: StateFlow<Event<SignUpPage>> =
         _pageClearEventStateFlow.asStateFlow()
 
-    private val _loginCompleteEventLiveData = MutableLiveData<Event<Unit>>()
-    val loginCompleteEventLiveData: LiveData<Event<Unit>> = _loginCompleteEventLiveData
+    private val _requestLoginEventLiveData = MutableLiveData<Event<AuthToken>>()
+    val requestLoginEventLiveData: LiveData<Event<AuthToken>> = _requestLoginEventLiveData
 
     override var phoneNumber: String = ""
     override var id: String = ""
@@ -160,10 +158,9 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    override fun completeLogin(authToken: AuthToken) {
+    override fun requestLogin(authToken: AuthToken) {
         viewModelScope.launch {
-            saveAuthTokenUseCase.invoke(authToken)
-            _loginCompleteEventLiveData.value = Event(Unit)
+            _requestLoginEventLiveData.value = Event(authToken)
         }
     }
 

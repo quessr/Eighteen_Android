@@ -1,6 +1,9 @@
 package com.eighteen.eighteenandroid.data.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.eighteen.eighteenandroid.BuildConfig
+import com.eighteen.eighteenandroid.data.retrofit.AuthHeaderInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -18,21 +21,28 @@ import javax.inject.Singleton
 object ApiModule {
     private const val BASE_URL: String = BuildConfig.BASE_URL
 
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level =
-            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
-    }
-    private val okHttpClient = OkHttpClient.Builder().addInterceptor { chain ->
-        val request = chain.request().newBuilder()
-        chain.proceed(request.build())
-    }.addNetworkInterceptor(loggingInterceptor).build()
+    @Singleton
+    @Provides
+    fun provideRetrofit(authHeaderInterceptor: AuthHeaderInterceptor): Retrofit {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level =
+                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        }
+        val okHttpClient = OkHttpClient.Builder().addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+            chain.proceed(request.build())
+        }.addNetworkInterceptor(loggingInterceptor).addInterceptor(authHeaderInterceptor).build()
 
-    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        return Retrofit.Builder().baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi)).client(
+                okHttpClient
+            ).build()
+    }
+
 
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit = Retrofit.Builder().baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create(moshi)).client(
-            okHttpClient
-        ).build()
+    fun provideAuthHeaderInterceptor(preferenceDatastore: DataStore<Preferences>) =
+        AuthHeaderInterceptor(preferenceDatastore)
 }

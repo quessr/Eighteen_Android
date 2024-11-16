@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.usecase.ConfirmMessageUseCase
 import com.eighteen.eighteenandroid.domain.usecase.LoginUseCase
-import com.eighteen.eighteenandroid.domain.usecase.SaveAuthTokenUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SendMessageUseCase
 import com.eighteen.eighteenandroid.presentation.auth.signup.enterauthcode.model.ConfirmResultModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
@@ -24,7 +23,6 @@ class SignUpEnterAuthCodeViewModel @Inject constructor(
     private val sendMessageUseCase: SendMessageUseCase,
     private val confirmMessageUseCase: ConfirmMessageUseCase,
     private val loginUseCase: LoginUseCase,
-    private val saveAuthTokenUseCase: SaveAuthTokenUseCase
 ) : ViewModel() {
     private val _sendMessageResultStateFlow =
         MutableStateFlow<ModelState<Long>>(ModelState.Success(Calendar.getInstance().timeInMillis))

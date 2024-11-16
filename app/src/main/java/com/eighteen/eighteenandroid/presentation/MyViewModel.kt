@@ -1,6 +1,5 @@
 package com.eighteen.eighteenandroid.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.AuthToken
@@ -12,26 +11,25 @@ import com.eighteen.eighteenandroid.domain.model.SnsInfo
 import com.eighteen.eighteenandroid.domain.usecase.EditMyProfileUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetAuthTokenFlowUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetMyProfileUseCase
-import com.eighteen.eighteenandroid.domain.usecase.LoginUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SaveAuthTokenUseCase
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.livedata.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class MyViewModel @Inject constructor(
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val editMyProfileUseCase: EditMyProfileUseCase,
     private val saveAuthTokenUseCase: SaveAuthTokenUseCase,
-    private val getAuthTokenFlowUseCase: GetAuthTokenFlowUseCase,
-    private val loginUseCase: LoginUseCase
+    getAuthTokenFlowUseCase: GetAuthTokenFlowUseCase
 ) : ViewModel() {
     private val _myProfileStateFlow = MutableStateFlow<ModelState<Profile>>(ModelState.Empty())
     val myProfileStateFlow = _myProfileStateFlow.asStateFlow()
@@ -40,47 +38,24 @@ class LoginViewModel @Inject constructor(
         MutableStateFlow<ModelState<Event<Unit>>>(ModelState.Empty())
     val editProfileEventStateFlow = _editProfileEventStateFlow.asStateFlow()
 
-    private var loginJob: Job? = null
+    private var myProfileJob: Job? = null
     private var editMyProfileJob: Job? = null
 
-    var authToken: AuthToken? = null
-        private set
+    val authTokenStateFlow = getAuthTokenFlowUseCase.invoke().stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly, null
+    )
 
-    init {
-        requestToken()
-    }
-
-    private fun requestToken() {
-        viewModelScope.launch {
-            getAuthTokenFlowUseCase.invoke().collect {
-                authToken = it
+    fun completeLogin(authToken: AuthToken) {
+        if (myProfileJob?.isCompleted == false) return
+        myProfileJob = viewModelScope.launch {
+            _myProfileStateFlow.value = ModelState.Loading()
+            saveAuthTokenUseCase.invoke(authToken)
+            getMyProfileUseCase.invoke().onSuccess {
+                _myProfileStateFlow.value = ModelState.Success(it)
+            }.onFailure {
+                _myProfileStateFlow.value = ModelState.Error(throwable = it)
             }
-        }
-    }
-
-    fun requestLogin() {
-        if (loginJob?.isCompleted == false) return
-        loginJob = viewModelScope.launch {
-            //TODO accessToken 발급
-            //TODO 로그인 api 호출
-            val authToken =
-                async {
-                    loginUseCase.invoke("01000000001")
-                }.await()
-
-            Log.d("TESTLOG", "authToken : $authToken")
-//
-//            if(authToken.)
-//
-//            val myProfileResult =
-//                async { getMyProfileUseCase.invoke(authToken.accessToken) }.await()
-//
-//            myProfileResult.onSuccess {
-//                this@LoginViewModel.loginResultInfo = loginResultInfo
-//                _myProfileStateFlow.value = ModelState.Success(it)
-//            }.onFailure {
-//                _myProfileStateFlow.value = ModelState.Error(throwable = it)
-//            }
         }
     }
 
@@ -104,7 +79,6 @@ class LoginViewModel @Inject constructor(
         requestEditProfile(questions = questions)
     }
 
-    //TODO 토큰 획득
     private fun requestEditProfile(
         nickName: String? = null,
         school: School? = null,

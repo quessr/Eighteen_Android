@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     val permissionManager = PermissionManager(this)
 
-    private val loginViewModel by viewModels<LoginViewModel>()
+    private val myViewModel by viewModels<MyViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     private fun initStateFlow() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                loginViewModel.myProfileStateFlow.collect {
+                myViewModel.myProfileStateFlow.collect {
                     //TODO placeholder 추가
                     if (it.isSuccess()) {
                         Glide.with(this@MainActivity).asBitmap()
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun requestWithRequiredLogin(request: () -> Unit) {
-        if (loginViewModel.authToken?.accessToken == null) {
+        if (myViewModel.authTokenStateFlow.value?.accessToken == null) {
             showLoginDialog()
             return
         }

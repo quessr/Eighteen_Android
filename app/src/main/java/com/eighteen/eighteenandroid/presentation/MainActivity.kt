@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun requestWithRequiredLogin(request: () -> Unit) {
-        if (myViewModel.authTokenStateFlow.value?.accessToken == null) {
+        if (myViewModel.authTokenStateFlow.value == null) {
             showLoginDialog()
             return
         }

@@ -3,7 +3,9 @@ package com.eighteen.eighteenandroid.data.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.eighteen.eighteenandroid.BuildConfig
+import com.eighteen.eighteenandroid.data.datasource.remote.service.TokenReissueService
 import com.eighteen.eighteenandroid.data.retrofit.AuthHeaderInterceptor
+import com.eighteen.eighteenandroid.data.retrofit.AuthTokenAuthenticator
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -14,26 +16,56 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
     private const val BASE_URL: String = BuildConfig.BASE_URL
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+    }
+    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class QualifierRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class QualifierTokenReissueRetrofit
 
     @Singleton
     @Provides
-    fun provideRetrofit(authHeaderInterceptor: AuthHeaderInterceptor): Retrofit {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level =
-                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
-        }
+    @QualifierRetrofit
+    fun provideRetrofit(
+        authHeaderInterceptor: AuthHeaderInterceptor,
+        authenticator: AuthTokenAuthenticator
+    ): Retrofit {
+        val okHttpClient = OkHttpClient.Builder().addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+            chain.proceed(request.build())
+        }.addNetworkInterceptor(loggingInterceptor).addInterceptor(authHeaderInterceptor)
+            .authenticator(authenticator).build()
+
+        return Retrofit.Builder().baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi)).client(
+                okHttpClient
+            ).build()
+    }
+
+    @Singleton
+    @Provides
+    @QualifierTokenReissueRetrofit
+    fun provideTokenReissueRetrofit(
+        authHeaderInterceptor: AuthHeaderInterceptor
+    ): Retrofit {
         val okHttpClient = OkHttpClient.Builder().addInterceptor { chain ->
             val request = chain.request().newBuilder()
             chain.proceed(request.build())
         }.addNetworkInterceptor(loggingInterceptor).addInterceptor(authHeaderInterceptor).build()
-
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         return Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi)).client(
                 okHttpClient
@@ -45,4 +77,14 @@ object ApiModule {
     @Provides
     fun provideAuthHeaderInterceptor(preferenceDatastore: DataStore<Preferences>) =
         AuthHeaderInterceptor(preferenceDatastore)
+
+    @Singleton
+    @Provides
+    fun provideAuthTokenAuthenticator(
+        preferenceDatastore: DataStore<Preferences>,
+        tokenReissueService: TokenReissueService
+    ) = AuthTokenAuthenticator(
+        preferenceDatastore = preferenceDatastore,
+        tokenReissueService = tokenReissueService
+    )
 }

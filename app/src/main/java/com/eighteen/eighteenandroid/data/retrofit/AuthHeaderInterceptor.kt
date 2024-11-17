@@ -2,8 +2,10 @@ package com.eighteen.eighteenandroid.data.retrofit
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.data.ACCESS_TOKEN_PREFERENCE_KEY
 import com.eighteen.eighteenandroid.data.HEADER_AUTHORIZATION
+import com.eighteen.eighteenandroid.data.HEADER_REFRESH
 import com.eighteen.eighteenandroid.data.REFRESH_TOKEN_PREFERENCE_KEY
 import com.eighteen.eighteenandroid.domain.model.AuthToken
 import kotlinx.coroutines.flow.first
@@ -26,8 +28,9 @@ class AuthHeaderInterceptor @Inject constructor(
         }
         val request = chain.request().newBuilder().apply {
             authToken.let {
-                it.accessToken?.let { accessToken ->
+                safeLet(it.accessToken, it.refreshToken) { accessToken, refreshToken ->
                     addHeader(HEADER_AUTHORIZATION, accessToken)
+                    addHeader(HEADER_REFRESH, refreshToken)
                 }
             }
         }.build()

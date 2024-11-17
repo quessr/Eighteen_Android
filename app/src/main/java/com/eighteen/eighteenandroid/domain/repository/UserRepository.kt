@@ -11,7 +11,7 @@ interface UserRepository {
     suspend fun fetchUserDetailInfo(id: String): Result<Profile>
     suspend fun postSignUp(signUpInfo: SignUpInfo): Result<AuthToken>
     suspend fun checkIdDuplication(uniqueId: String): Result<Boolean>
-    fun getTokenFlow(): Flow<AuthToken>
+    fun getTokenFlow(): Flow<AuthToken?>
     suspend fun saveToken(authToken: AuthToken)
     suspend fun login(phoneNumber: String): Result<AuthToken>
 }

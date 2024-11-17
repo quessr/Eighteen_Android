@@ -46,6 +46,14 @@ class MyViewModel @Inject constructor(
         SharingStarted.Eagerly, null
     )
 
+    init {
+        viewModelScope.launch {
+            getMyProfileUseCase.invoke().onSuccess {
+                _myProfileStateFlow.value = ModelState.Success(it)
+            }
+        }
+    }
+
     fun completeLogin(authToken: AuthToken) {
         if (myProfileJob?.isCompleted == false) return
         myProfileJob = viewModelScope.launch {

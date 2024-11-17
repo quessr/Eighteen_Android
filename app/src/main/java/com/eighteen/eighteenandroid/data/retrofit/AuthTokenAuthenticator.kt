@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.data.retrofit
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.data.ACCESS_TOKEN_PREFERENCE_KEY
 import com.eighteen.eighteenandroid.data.HEADER_AUTHORIZATION
 import com.eighteen.eighteenandroid.data.HEADER_REFRESH
@@ -31,10 +32,12 @@ class AuthTokenAuthenticator @Inject constructor(
             preferenceDatastore.data.map {
                 val accessToken = it[ACCESS_TOKEN_PREFERENCE_KEY]
                 val refreshToken = it[REFRESH_TOKEN_PREFERENCE_KEY]
-                AuthToken(accessToken = accessToken, refreshToken = refreshToken)
+                safeLet(accessToken, refreshToken) { access, refresh ->
+                    AuthToken(accessToken = access, refreshToken = refresh)
+                }
             }.first()
         }
-        if (authToken.accessToken == null || authToken.refreshToken == null) {
+        if (authToken == null) {
             response.close()
             return null
         }

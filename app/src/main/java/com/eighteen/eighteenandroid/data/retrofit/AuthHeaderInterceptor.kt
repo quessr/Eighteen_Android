@@ -23,15 +23,15 @@ class AuthHeaderInterceptor @Inject constructor(
             preferenceDatastore.data.map {
                 val accessToken = it[ACCESS_TOKEN_PREFERENCE_KEY]
                 val refreshToken = it[REFRESH_TOKEN_PREFERENCE_KEY]
-                AuthToken(accessToken = accessToken, refreshToken = refreshToken)
+                safeLet(accessToken, refreshToken) { access, refresh ->
+                    AuthToken(accessToken = access, refreshToken = refresh)
+                }
             }.first()
         }
         val request = chain.request().newBuilder().apply {
-            authToken.let {
-                safeLet(it.accessToken, it.refreshToken) { accessToken, refreshToken ->
-                    addHeader(HEADER_AUTHORIZATION, accessToken)
-                    addHeader(HEADER_REFRESH, refreshToken)
-                }
+            authToken?.let {
+                addHeader(HEADER_AUTHORIZATION, it.accessToken)
+                addHeader(HEADER_REFRESH, it.refreshToken)
             }
         }.build()
         return chain.proceed(request)

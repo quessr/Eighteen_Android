@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.data.ACCESS_TOKEN_PREFERENCE_KEY
 import com.eighteen.eighteenandroid.data.HEADER_AUTHORIZATION
 import com.eighteen.eighteenandroid.data.HEADER_REFRESH
@@ -153,24 +154,28 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getTokenFlow(): Flow<AuthToken> =
+    override fun getTokenFlow(): Flow<AuthToken?> =
         preferenceDatastore.data.map {
             val accessToken = it[ACCESS_TOKEN_PREFERENCE_KEY]
             val refreshToken = it[REFRESH_TOKEN_PREFERENCE_KEY]
-            AuthToken(accessToken = accessToken, refreshToken = refreshToken)
+            safeLet(accessToken, refreshToken) { access, refresh ->
+                AuthToken(accessToken = access, refreshToken = refresh)
+            }
         }
 
     override suspend fun saveToken(authToken: AuthToken) {
         preferenceDatastore.edit {
-            it[ACCESS_TOKEN_PREFERENCE_KEY] = authToken.accessToken ?: ""
-            it[REFRESH_TOKEN_PREFERENCE_KEY] = authToken.refreshToken ?: ""
+            it[ACCESS_TOKEN_PREFERENCE_KEY] = authToken.accessToken
+            it[REFRESH_TOKEN_PREFERENCE_KEY] = authToken.refreshToken
         }
     }
 
     override suspend fun login(phoneNumber: String): Result<AuthToken> = runCatching {
         val result = userService.postLogin(phoneNumber = phoneNumber)
         result.headers().run {
-            AuthToken(accessToken = get(HEADER_AUTHORIZATION), refreshToken = get(HEADER_REFRESH))
+            safeLet(get(HEADER_AUTHORIZATION), get(HEADER_REFRESH)) { accessToken, refreshToken ->
+                AuthToken(accessToken = accessToken, refreshToken = refreshToken)
+            } ?: throw Exception("token must not be null")
         }
     }
 }

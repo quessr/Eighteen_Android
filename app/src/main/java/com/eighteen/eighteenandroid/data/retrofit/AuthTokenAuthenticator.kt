@@ -42,8 +42,17 @@ class AuthTokenAuthenticator @Inject constructor(
             return null
         }
         val newToken = runBlocking { tokenReissueService.postTokenReissue() }
-        val nAccessToken = newToken.headers()[HEADER_AUTHORIZATION] ?: return null
-        val nRefreshToken = newToken.headers()[HEADER_REFRESH] ?: return null
+        val nAccessToken = newToken.headers()[HEADER_AUTHORIZATION]
+        val nRefreshToken = newToken.headers()[HEADER_REFRESH]
+        if (newToken.isSuccessful.not() || nAccessToken == null || nRefreshToken == null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                preferenceDatastore.edit {
+                    it.remove(ACCESS_TOKEN_PREFERENCE_KEY)
+                    it.remove(REFRESH_TOKEN_PREFERENCE_KEY)
+                }
+            }
+            return null
+        }
         CoroutineScope(Dispatchers.IO).launch {
             preferenceDatastore.edit {
                 it[ACCESS_TOKEN_PREFERENCE_KEY] = nAccessToken

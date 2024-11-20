@@ -31,7 +31,7 @@ interface SignUpViewModelContentInterface {
     fun actionOpenWebViewFragment(url: String)
     fun requestSignUp()
     fun setPageClearEvent(page: SignUpPage)
-    fun removeRefMedia()
     fun removeMedia(position: Int)
+    fun setMainMedia(position: Int)
     fun requestLogin(authToken: AuthToken)
 }

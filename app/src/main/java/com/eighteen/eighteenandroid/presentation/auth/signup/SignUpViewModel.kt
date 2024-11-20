@@ -104,14 +104,13 @@ class SignUpViewModel @Inject constructor(
         _progressLiveData.value = progress
     }
 
-    fun addMediaResult(mediaResult: EditMediaResult, isRef: Boolean) {
+    fun addMediaResult(mediaResult: EditMediaResult) {
         val signUpMedia = when (mediaResult) {
             is EditMediaResult.Image -> SignUpMedia.Image(imageBitmap = mediaResult.imageBitmap)
             is EditMediaResult.Video -> SignUpMedia.Video(uriString = mediaResult.uriString)
         }
         _mediasStateFlow.update {
-            if (isRef) it.copy(ref = signUpMedia)
-            else it.copy(medias = it.medias + signUpMedia)
+            it.copy(medias = it.medias + signUpMedia)
         }
     }
 
@@ -144,17 +143,21 @@ class SignUpViewModel @Inject constructor(
         _pageClearEventStateFlow.value = Event(page)
     }
 
-    override fun removeRefMedia() {
+    override fun removeMedia(position: Int) {
         _mediasStateFlow.update {
-            it.copy(ref = null)
+            val updatedMedias = it.medias.toMutableList().apply {
+                removeAt(position)
+            }
+            it.copy(
+                mainMedia = it.mainMedia.takeIf { target -> updatedMedias.any { target == it } },
+                medias = updatedMedias
+            )
         }
     }
 
-    override fun removeMedia(position: Int) {
+    override fun setMainMedia(position: Int) {
         _mediasStateFlow.update {
-            it.copy(medias = it.medias.toMutableList().apply {
-                removeAt(position)
-            })
+            it.copy(mainMedia = it.medias.getOrNull(position))
         }
     }
 
@@ -166,7 +169,7 @@ class SignUpViewModel @Inject constructor(
 
     override fun onCleared() {
         _mediasStateFlow.value.run {
-            (medias + ref).filterIsInstance<SignUpMedia.Image>()
+            (medias).filterIsInstance<SignUpMedia.Image>()
                 .forEach { it.imageBitmap.recycle() }
         }
         super.onCleared()

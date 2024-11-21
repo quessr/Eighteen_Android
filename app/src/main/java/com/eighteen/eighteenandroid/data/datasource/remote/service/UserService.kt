@@ -24,4 +24,7 @@ interface UserService {
 
     @POST("/v1/api/user/duplication-check")
     suspend fun postDuplicationCheck(@Query("uniqueId") uniqueId: String): Response<ApiResult<Boolean>>
+
+    @POST("/v1/api/user/sign-in")
+    suspend fun postLogin(@Query("phoneNumber") phoneNumber: String): Response<ApiResult<String>>
 }

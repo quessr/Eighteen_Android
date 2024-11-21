@@ -17,7 +17,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentMyEditMediaBinding
 import com.eighteen.eighteenandroid.databinding.ItemEditMediaBinding
 import com.eighteen.eighteenandroid.domain.model.Media
 import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.eighteen.eighteenandroid.presentation.LoginViewModel
+import com.eighteen.eighteenandroid.presentation.MyViewModel
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.getMimeTypeFromUri
@@ -34,10 +34,10 @@ import com.eighteen.eighteenandroid.presentation.myprofile.editmedia.model.MyEdi
 
 class MyEditMediaFragment :
     BaseFragment<FragmentMyEditMediaBinding>(FragmentMyEditMediaBinding::inflate) {
-    private val loginViewModel by activityViewModels<LoginViewModel>()
+    private val myViewModel by activityViewModels<MyViewModel>()
     private val myEditMediaViewModel by viewModels<MyEditMediaViewModel>(factoryProducer = {
         //TODO profile 모델 대표이미지 구분 문의 후 적용(현재 임시로 변환)
-        val medias = loginViewModel.myProfileStateFlow.value.data?.medias ?: emptyList()
+        val medias = myViewModel.myProfileStateFlow.value.data?.medias ?: emptyList()
         val mediaModels = medias.map {
             when (it) {
                 is Media.Image -> MyEditMediaModel.Media.Image(imageUrl = it.url)

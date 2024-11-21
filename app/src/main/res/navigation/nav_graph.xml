@@ -147,6 +147,16 @@
         android:name="com.eighteen.eighteenandroid.presentation.ranking.RankingFragment"
         android:label="fragment_ranking"
         tools:layout="@layout/fragment_ranking" />
+    <fragment
+        android:id="@+id/fragmentVoting"
+        android:name="com.eighteen.eighteenandroid.presentation.ranking.voting.VotingFragment"
+        android:label="fragment_voting"
+        tools:layout="@layout/fragment_voting" />
+    <fragment
+        android:id="@+id/fragmentVotingComplete"
+        android:name="com.eighteen.eighteenandroid.presentation.ranking.voting.VotingCompleteFragment"
+        android:label="fragment_voting_complete"
+        tools:layout="@layout/fragment_voting_complete" />
 
     <fragment
         android:id="@+id/teenMainFragment"

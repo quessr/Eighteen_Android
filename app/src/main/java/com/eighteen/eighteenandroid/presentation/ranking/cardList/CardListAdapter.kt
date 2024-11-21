@@ -10,7 +10,8 @@ import com.eighteen.eighteenandroid.databinding.ItemRankingWinnerBinding
 import com.eighteen.eighteenandroid.presentation.ranking.cardList.model.CardListItem
 import com.eighteen.eighteenandroid.presentation.ranking.cardList.viewholder.CardListViewHolder
 
-class CardListAdapter() : ListAdapter<CardListItem, CardListViewHolder>(diffUtil) {
+class CardListAdapter(private val onVoteCardClick: (CardListItem.VoteCard) -> Unit) :
+    ListAdapter<CardListItem, CardListViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardListViewHolder {
         val context = parent.context
         val inflate = LayoutInflater.from(context)
@@ -20,7 +21,12 @@ class CardListAdapter() : ListAdapter<CardListItem, CardListViewHolder>(diffUtil
         return when (viewType) {
             ITEM_TYPE_VOTE -> {
                 val binding = inflaterBinding(ItemRankingVoteBinding::inflate)
-                CardListViewHolder.Vote(binding)
+                CardListViewHolder.Vote(binding).apply {
+                    binding.root.setOnClickListener {
+                        val voteCard = getItem(adapterPosition) as? CardListItem.VoteCard
+                        voteCard?.let { onVoteCardClick(it) }
+                    }
+                }
             }
 
             ITEM_TYPE_WINNER -> {

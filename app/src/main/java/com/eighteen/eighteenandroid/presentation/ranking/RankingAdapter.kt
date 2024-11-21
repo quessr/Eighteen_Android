@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 import com.eighteen.eighteenandroid.databinding.ItemRankingBinding
+import com.eighteen.eighteenandroid.presentation.ranking.cardList.model.CardListItem
 import com.eighteen.eighteenandroid.presentation.ranking.model.RankingCategory
 import com.eighteen.eighteenandroid.presentation.ranking.viewholder.RankingViewHolder
 
-class RankingAdapter() : ListAdapter<RankingCategory, RankingViewHolder>(diffUtil) {
+class RankingAdapter( private val onVoteCardClick: (CardListItem.VoteCard) -> Unit) : ListAdapter<RankingCategory, RankingViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RankingViewHolder {
         val context = parent.context
@@ -18,7 +19,7 @@ class RankingAdapter() : ListAdapter<RankingCategory, RankingViewHolder>(diffUti
             bindingInflate.invoke(inflater, parent, false)
 
         val binding = inflateBinding(ItemRankingBinding::inflate)
-        return RankingViewHolder(binding)
+        return RankingViewHolder(binding, onVoteCardClick)
     }
 
 

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.cardview.widget.CardView
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
@@ -59,7 +60,7 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
             tvParticipant1Name.text = match.participant1.nickName
             tvParticipant2Name.text = match.participant2.nickName
         }
-
+        setupNextMatchAnimation()
         setupCardViewAnimations()
     }
 
@@ -93,6 +94,52 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
             binding.cvParticipant1.isInvisible = true
         }
     }
+
+    private fun setupNextMatchAnimation() {
+        // ViewTreeObserver를 사용하여 parent.width가 준비된 후에 접근합니다.
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                // parent의 width를 사용하여 애니메이션 위치를 설정합니다.
+                val parentWidth = binding.root.width.toFloat()
+
+                // 초기 위치 설정: 위쪽 카드는 왼쪽 밖으로, 아래쪽 카드는 오른쪽 밖으로 이동
+                binding.cvParticipant1.apply {
+                    translationX = -parentWidth  // 왼쪽 화면 밖으로 이동
+                    rotation = -90f  // 초기 회전 설정
+                }
+                binding.cvParticipant2.apply {
+                    translationX = parentWidth  // 오른쪽 화면 밖으로 이동
+                    rotation = 90f  // 초기 회전 설정
+                }
+
+                // 진입 애니메이션 설정
+                val participant1EnterAnimation = AnimatorSet().apply {
+                    playTogether(
+                        ObjectAnimator.ofFloat(binding.cvParticipant1, View.ROTATION, -90f, 0f),
+                        ObjectAnimator.ofFloat(binding.cvParticipant1, View.TRANSLATION_X, 0f)
+                    )
+                    duration = 500  // 애니메이션 지속 시간
+                }
+
+                val participant2EnterAnimation = AnimatorSet().apply {
+                    playTogether(
+                        ObjectAnimator.ofFloat(binding.cvParticipant2, View.ROTATION, 90f, 0f),
+                        ObjectAnimator.ofFloat(binding.cvParticipant2, View.TRANSLATION_X, 0f)
+                    )
+                    duration = 500  // 애니메이션 지속 시간
+                }
+
+                // 진입 애니메이션 실행
+                participant1EnterAnimation.start()
+                participant2EnterAnimation.start()
+
+                // 레이아웃 리스너 제거
+                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
 
     private fun animateCardViewToCenterThenDisappear(
         selectedCardView: CardView, nonSelectedCardView: CardView, isTopCard: Boolean

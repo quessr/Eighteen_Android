@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val visibleNavigationIds = listOf(
                 R.id.fragmentMain,
+                R.id.fragmentRanking,
                 R.id.fragmentMyProfile,
                 R.id.fragmentChat,
                 R.id.teenMainFragment

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.common.safeLet
-import com.eighteen.eighteenandroid.domain.model.LoginResultInfo
+import com.eighteen.eighteenandroid.domain.model.AuthToken
 import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.domain.model.SignUpInfo
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
@@ -31,7 +31,9 @@ import javax.inject.Inject
 
 //TODO 로그인, 회원가입 관련 api 연동, 입력받은 정보 저장 뒤로가기 시 데이터 지워진 상태로 나옴
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase) : ViewModel(),
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase,
+) : ViewModel(),
     SignUpViewModelContentInterface {
     private val _actionEventLiveData = MutableLiveData<Event<SignUpAction>>()
     val actionEventLiveData: LiveData<Event<SignUpAction>> = _actionEventLiveData
@@ -51,8 +53,8 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     val openWebViewLiveData: LiveData<Event<String>> = _openWebViewEventLiveData
 
     private val _signUpResultStateFlow =
-        MutableStateFlow<ModelState<LoginResultInfo>>(ModelState.Empty())
-    override val signUpResultStateFlow: StateFlow<ModelState<LoginResultInfo>> =
+        MutableStateFlow<ModelState<AuthToken>>(ModelState.Empty())
+    override val signUpResultStateFlow: StateFlow<ModelState<AuthToken>> =
         _signUpResultStateFlow.asStateFlow()
 
     private val _pageClearEventStateFlow =
@@ -60,6 +62,9 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
 
     override val pageClearEvent: StateFlow<Event<SignUpPage>> =
         _pageClearEventStateFlow.asStateFlow()
+
+    private val _requestLoginEventLiveData = MutableLiveData<Event<AuthToken>>()
+    val requestLoginEventLiveData: LiveData<Event<AuthToken>> = _requestLoginEventLiveData
 
     override var phoneNumber: String = ""
     override var id: String = ""
@@ -150,6 +155,12 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
             it.copy(medias = it.medias.toMutableList().apply {
                 removeAt(position)
             })
+        }
+    }
+
+    override fun requestLogin(authToken: AuthToken) {
+        viewModelScope.launch {
+            _requestLoginEventLiveData.value = Event(authToken)
         }
     }
 

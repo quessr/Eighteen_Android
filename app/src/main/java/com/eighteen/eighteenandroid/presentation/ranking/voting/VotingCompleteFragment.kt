@@ -1,5 +1,7 @@
 package com.eighteen.eighteenandroid.presentation.ranking.voting
 
+import androidx.navigation.fragment.findNavController
+import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentVotingCompleteBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 
@@ -13,6 +15,9 @@ class VotingCompleteFragment :
         bind {
             tvName.text = winnerName
             tvCategoryCompleteTitle.text = category
+            tvBtnComplete.setOnClickListener{
+                findNavController().navigate(R.id.fragmentMain)
+            }
         }
     }
 }

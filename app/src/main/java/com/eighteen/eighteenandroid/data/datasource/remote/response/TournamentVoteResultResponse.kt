@@ -7,6 +7,6 @@ data class TournamentVoteResultResponse(
     val rankerId: String,
     val rankerNickName: String,
     val rank: Int,
-    val voteCount: Int,
+    val score: Int,
     val profileImageUrl: String
 )

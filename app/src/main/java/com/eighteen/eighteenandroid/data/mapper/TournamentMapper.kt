@@ -5,7 +5,7 @@ import com.eighteen.eighteenandroid.domain.model.UserRankInfo
 
 object TournamentMapper {
     fun asUserRankInfoList(response: List<TournamentVoteResultResponse>): List<UserRankInfo> {
-        val sumOfVoteCount = response.sumOf { it.voteCount }
+        val sumOfVoteCount = response.sumOf { it.score }
 
         return response.map {
             UserRankInfo(
@@ -13,7 +13,7 @@ object TournamentMapper {
                 rankerNickName = it.rankerNickName,
                 rank = it.rank,
                 profileImageUrl = it.profileImageUrl,
-                voteRate = (it.voteCount / sumOfVoteCount.toDouble()) * 100
+                voteRate = (it.score / sumOfVoteCount.toDouble()) * 100
             )
         }
     }

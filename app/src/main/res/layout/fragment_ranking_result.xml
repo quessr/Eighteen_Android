@@ -34,12 +34,12 @@
                 style="@style/pretendard_bold_20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="이번 주 대결"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@id/ivBtnBack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivBtnBack"
-                tools:text="이번 주 대결" />
+                app:layout_constraintTop_toTopOf="@id/ivBtnBack" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -57,10 +57,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginBottom="32dp"
             android:includeFontPadding="false"
+            android:text="TEEN 순위"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutBannerHeader"
-            tools:text="스포츠 부문 TEEN 순위" />
+            app:layout_constraintTop_toBottomOf="@id/layoutBannerHeader" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -69,10 +69,13 @@
         android:id="@+id/layout_1st"
         android:layout_width="110dp"
         android:layout_height="160dp"
+
         android:layout_marginBottom="-50dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/topBanner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/ivCrown"
@@ -174,9 +177,12 @@
         android:id="@+id/layout_2nd"
         android:layout_width="110dp"
         android:layout_height="143dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/layout_1st"
+
         app:layout_constraintEnd_toStartOf="@+id/layout_1st"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_user_2nd"
@@ -265,9 +271,12 @@
         android:id="@+id/layout_3rd"
         android:layout_width="110dp"
         android:layout_height="143dp"
+        android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="@id/layout_1st"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/layout_1st">
+        app:layout_constraintStart_toEndOf="@+id/layout_1st"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_user_3rd"
@@ -356,10 +365,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRankingResult"
         android:layout_width="match_parent"
-        tools:listitem="@layout/item_ranking_result"
         android:layout_height="0dp"
         android:layout_marginTop="22dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/layout_1st" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_1st"
+        tools:listitem="@layout/item_ranking_result"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

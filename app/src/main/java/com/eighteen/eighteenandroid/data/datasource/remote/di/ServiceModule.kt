@@ -4,8 +4,8 @@ import com.eighteen.eighteenandroid.data.datasource.remote.service.ChatService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MessageService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MyPageService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.SchoolService
-import com.eighteen.eighteenandroid.data.datasource.remote.service.TournamentService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.TokenReissueService
+import com.eighteen.eighteenandroid.data.datasource.remote.service.TournamentService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.UserService
 import com.eighteen.eighteenandroid.data.di.ApiModule
 import dagger.Module
@@ -50,6 +50,6 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideTournamentService(retrofit: Retrofit): TournamentService =
+    fun provideTournamentService(@ApiModule.QualifierRetrofit retrofit: Retrofit): TournamentService =
         retrofit.create(TournamentService::class.java)
 }

@@ -1,0 +1,19 @@
+package com.eighteen.eighteenandroid.data.datasource.remote.service
+
+import com.eighteen.eighteenandroid.data.datasource.remote.request.TournamentRequest
+import com.eighteen.eighteenandroid.data.datasource.remote.response.ApiResult
+import com.eighteen.eighteenandroid.data.datasource.remote.response.TournamentCategoryResponse
+import com.eighteen.eighteenandroid.domain.model.TournamentCategory
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+
+interface TournamentService {
+    @GET("/v1/api/tournament/search")
+    suspend fun getTournamentParticipants(): Response<ApiResult<List<TournamentCategoryResponse>>>
+
+    @GET("/v1/api/tournament/final/vote")
+    suspend fun submitTournamentResults(
+        @Body tournamentRequest: TournamentRequest
+    ): Response<ApiResult<String>>
+}

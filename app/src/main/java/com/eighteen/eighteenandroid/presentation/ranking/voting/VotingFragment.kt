@@ -12,7 +12,9 @@ import android.view.ViewTreeObserver
 import androidx.cardview.widget.CardView
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentVotingBinding
@@ -21,11 +23,25 @@ import com.eighteen.eighteenandroid.presentation.ranking.RankingFragment
 import com.eighteen.eighteenandroid.presentation.ranking.RankingVotingDialogFragment
 import com.eighteen.eighteenandroid.presentation.ranking.cardList.viewholder.CardListViewHolder
 import com.eighteen.eighteenandroid.presentation.ranking.voting.model.TournamentEntity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding::inflate) {
-    private val viewModel: VotingViewModel by viewModels()
+//    private val viewModel: VotingViewModel by viewModels()
     private var category: String? = ""
+
+    @Inject
+    lateinit var assistedFactory: VotingViewModel.VotingAssistedFactory
+    private val votingViewModel by viewModels<VotingViewModel>(
+        factoryProducer = {
+            VotingViewModel.Factory(
+                assistedFactory = assistedFactory,
+                thisWeekTournamentNo = 24
+            )
+        }
+    )
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -35,19 +51,25 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
 
     override fun initView() {
         initObservers()
-        viewModel.setupParticipants()
+        votingViewModel.setupParticipants()
     }
 
     private fun initObservers() {
-        lifecycleScope.launch {
-            viewModel.currentMatch.collect { match ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            votingViewModel.currentMatch.collect { match ->
                 match?.let { showCurrentMatch(it) }
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.isRoundComplete.collect { (isComplete, winner) ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            votingViewModel.isRoundComplete.collect { (isComplete, winner) ->
                 if (isComplete) navigateToCompletion(winner)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
             }
         }
     }
@@ -222,7 +244,7 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
 
                     val participant = selectedCardView.tag as? TournamentEntity.Participant
                     if (participant != null) {
-                        viewModel.selectWinner(participant)
+                        votingViewModel.selectWinner(participant)
                     } else {
                         Log.e("VotingFragment", "Participant tag is null on selectedCardView")
                     }

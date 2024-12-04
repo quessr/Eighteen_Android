@@ -4,7 +4,9 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentVotingCompleteBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class VotingCompleteFragment :
     BaseFragment<FragmentVotingCompleteBinding>(FragmentVotingCompleteBinding::inflate) {
     override fun initView() {

@@ -1,11 +1,20 @@
 package com.eighteen.eighteenandroid.presentation.ranking.voting
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.presentation.ranking.voting.model.TournamentEntity
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class VotingViewModel : ViewModel() {
+class VotingViewModel @AssistedInject constructor(
+    @Assisted private val thisWeekTournamentNo: Int
+) : ViewModel() {
     private val _currentMatch = MutableStateFlow<TournamentEntity.Match?>(null)
     val currentMatch = _currentMatch.asStateFlow()
 
@@ -14,10 +23,15 @@ class VotingViewModel : ViewModel() {
 
     val isRoundComplete = _isRoundComplete.asStateFlow()
 
+//    private val _topParticipants = MutableStateFlow<List<TournamentEntity.Participant>>(emptyList())
+//    val topParticipant = _topParticipants.asStateFlow()
+
+//    private var votingJob: Job? = null
     private var participants: List<TournamentEntity.Participant> = listOf()
     private var matches: List<TournamentEntity.Match> = listOf()
     private var currentRound = 16
     private var currentMatchIndex = 0
+
 
     init {
         setupParticipants()
@@ -45,6 +59,13 @@ class VotingViewModel : ViewModel() {
             TournamentEntity.Participant("16", "참가자16")
         )
     }
+
+//    private fun postTopParticipantsList() {
+//        if (votingJob?.isCompleted == false) return
+//
+//        votingJob = viewModelScope.launch {
+//        }
+//    }
 
     private fun setupMatches() {
         matches = participants.chunked(2).map { pair ->
@@ -80,6 +101,22 @@ class VotingViewModel : ViewModel() {
             // 다음 라운드의 매치를 구성
             matches = winners.chunked(2).map { pair -> TournamentEntity.Match(pair[0], pair[1]) }
             showCurrentMatch()
+        }
+    }
+
+    @AssistedFactory
+    interface VotingAssistedFactory {
+        fun create(thisWeekTournamentNo: Int): VotingViewModel
+    }
+
+    class Factory(
+        private val assistedFactory: VotingAssistedFactory,
+        private val thisWeekTournamentNo: Int
+    ) :
+        ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return assistedFactory.create(thisWeekTournamentNo = thisWeekTournamentNo) as T
         }
     }
 }

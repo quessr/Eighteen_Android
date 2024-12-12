@@ -47,9 +47,9 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
                 id = voteCard.id.toString(),
                 categoryTitle = categoryTitle ?: "기본 카테고리"
             )
-            showDialogFragment(votingDialog)
+            requestWithRequiredLogin { showDialogFragment(votingDialog) }
         }
-        initChipGroup()
+//        initChipGroup()
 
 
         binding.rvRanking.run {
@@ -153,27 +153,27 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
         }
     }
 
-    private fun initChipGroup() {
-        for (tag in Tag.values()) {
-            if (tag == Tag.ALL) {
-                continue
-            }
-
-            val chip = createChip(requireContext(), tag.strValue)
-            if (tag == Tag.BEAUTY) { // 화면 최초 진입 시 전체 태그가 클릭된 상태여야함
-                chip.setTagStyle(isBlackBackground = true)
-                selectedChip = chip
-            }
-            chip.setOnClickListener { _ ->
-                selectedChip?.setTagStyle(isBlackBackground = false)
-                chip.setTagStyle(isBlackBackground = true)
-                selectedChip = chip
-            }
-            bind {
-                chipGroup.addView(chip)
-            }
-        }
-    }
+//    private fun initChipGroup() {
+//        for (tag in Tag.values()) {
+//            if (tag == Tag.ALL) {
+//                continue
+//            }
+//
+//            val chip = createChip(requireContext(), tag.strValue)
+//            if (tag == Tag.BEAUTY) { // 화면 최초 진입 시 전체 태그가 클릭된 상태여야함
+//                chip.setTagStyle(isBlackBackground = true)
+//                selectedChip = chip
+//            }
+//            chip.setOnClickListener { _ ->
+//                selectedChip?.setTagStyle(isBlackBackground = false)
+//                chip.setTagStyle(isBlackBackground = true)
+//                selectedChip = chip
+//            }
+//            bind {
+//                chipGroup.addView(chip)
+//            }
+//        }
+//    }
 
     private fun initFragmentResultListener() {
         childFragmentManager.setFragmentResultListener(

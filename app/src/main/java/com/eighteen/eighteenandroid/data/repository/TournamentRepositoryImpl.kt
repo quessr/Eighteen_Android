@@ -21,7 +21,6 @@ class TournamentRepositoryImpl @Inject constructor(private val tournamentService
     }
 
     override suspend fun postTournament(
-        accessToken: String,
         tournamentNo: Int,
         participantIdsOrderByRank: List<String>
     ) = runCatching {

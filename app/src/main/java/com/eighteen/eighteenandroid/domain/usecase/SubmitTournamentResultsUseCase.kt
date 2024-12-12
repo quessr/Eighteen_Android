@@ -5,10 +5,9 @@ import javax.inject.Inject
 
 class SubmitTournamentResultsUseCase @Inject constructor(private val repository: TournamentRepository) {
     suspend operator fun invoke(
-        accessToken: String, tournamentNo: Int,
+        tournamentNo: Int,
         participantIdsOrderByRank: List<String>
     ) = repository.postTournament(
-        accessToken = accessToken,
         tournamentNo = tournamentNo,
         participantIdsOrderByRank = participantIdsOrderByRank
     )

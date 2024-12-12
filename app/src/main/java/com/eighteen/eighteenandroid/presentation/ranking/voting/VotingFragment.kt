@@ -19,9 +19,6 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentVotingBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
-import com.eighteen.eighteenandroid.presentation.ranking.RankingFragment
-import com.eighteen.eighteenandroid.presentation.ranking.RankingVotingDialogFragment
-import com.eighteen.eighteenandroid.presentation.ranking.cardList.viewholder.CardListViewHolder
 import com.eighteen.eighteenandroid.presentation.ranking.voting.model.TournamentEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

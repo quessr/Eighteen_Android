@@ -2,7 +2,6 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -21,6 +20,7 @@ import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
+import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogBottom
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
@@ -53,13 +53,13 @@ class ProfileDetailFragment() :
         }
     )
 
-    private lateinit var mediaItems: List<ProfileDetailModel.MediaItem>
+    private var playerManager: PlayerManager? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
         setupRecyclerViewScrollListener()
         initViewModel()
-        observeMediaItems()
+        initPlayerManager()
     }
 
     override fun initView() {
@@ -78,23 +78,13 @@ class ProfileDetailFragment() :
                         onBlockClicked = {}
                     )
                 }
-                clLike.setOnClickListener {
-                    profileDetailViewModel.toggleLike()
-                }
-                ivSound.setOnClickListener {
-//                    mediaDetailViewModel.toggleVolume()
-                }
             }
-        }
-    }
-
-    private fun observeMediaItems() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                profileDetailViewModel.mediaItems.collectLatest { mediaItems ->
-                    val hasVideo = mediaItems.any { it.isVideo }
-                    Log.d("ProfileDetailFragment", "hasVideo : $hasVideo")
-                    binding.ivSound.isVisible = hasVideo
+            clLike.setOnClickListener {
+                profileDetailViewModel.toggleLike()
+            }
+            ivSound.setOnClickListener {
+                playerManager?.let {
+                    setVolume(it.isVolumeOn.not())
                 }
             }
         }
@@ -105,7 +95,9 @@ class ProfileDetailFragment() :
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    val mediaItems = profileDetailViewModel.mediaItems.value
+                    val mediaItems =
+                        profileDetailViewModel.items.value.data?.filterIsInstance<ProfileDetailModel.ProfileImages>()
+                            ?.firstOrNull()?.mediaItems ?: return
                     if (mediaItems.isNotEmpty() && position < mediaItems.size) {
                         val mediaItem = mediaItems[position]
                         binding.ivSound.isVisible = mediaItem.isVideo
@@ -118,7 +110,6 @@ class ProfileDetailFragment() :
             profileDetailRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             profileDetailRecyclerview.adapter =
                 ProfileDetailAdapter(
-                    viewLifecycleOwner,
                     onPageChangeCallbackForVisibilitySoundIcon,
                     onPageChangeCallbackForImagePosition = { currentPosition ->
                         profileDetailViewModel.setCurrentPosition(currentPosition)
@@ -139,7 +130,11 @@ class ProfileDetailFragment() :
                                 )
                             }
                         )
-                    }
+                    },
+                    playerManager = playerManager ?: PlayerManager(
+                        viewLifecycleOwner,
+                        requireContext()
+                    )
                 )
             profileDetailRecyclerview.itemAnimator = null
         }
@@ -160,7 +155,6 @@ class ProfileDetailFragment() :
                                     details.data
                                 )
                             }
-
                         }
 
                         is ModelState.Error -> {
@@ -192,6 +186,13 @@ class ProfileDetailFragment() :
             val drawableRes =
                 if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
             binding.ivSound.setImageResource(drawableRes)
+            playerManager?.setVolume(isVolumeOn = isVolumeOn)
+        }
+    }
+
+    private fun initPlayerManager() {
+        playerManager = context?.let {
+            PlayerManager(viewLifecycleOwner, it)
         }
     }
 
@@ -237,9 +238,10 @@ class ProfileDetailFragment() :
     }
 
     private fun setVolume(isVolumeOn: Boolean) {
-        val drawableRes =
-            if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
-        binding.ivSound.setImageResource(drawableRes)
+        val context = context ?: return
+        viewLifecycleOwner.lifecycleScope.launch {
+            AppConfig.setSoundOption(context, isVolumeOn)
+        }
     }
 
     private fun initNavigation() {
@@ -248,6 +250,11 @@ class ProfileDetailFragment() :
                 findNavController().popBackStack()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        playerManager = null
+        super.onDestroyView()
     }
 
     /**

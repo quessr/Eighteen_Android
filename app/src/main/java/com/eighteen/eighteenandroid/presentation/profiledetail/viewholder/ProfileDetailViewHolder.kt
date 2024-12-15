@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2
@@ -17,7 +16,9 @@ import com.eighteen.eighteenandroid.databinding.ItemProfileDetailIntroductionBin
 import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
-import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
+import com.eighteen.eighteenandroid.presentation.common.getRecyclerViewOrNull
+import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
+import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerMediaItem
 import com.eighteen.eighteenandroid.presentation.profiledetail.ViewPagerAdapter
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -38,21 +39,14 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    //TODO 사운드 적용 - viewPagerPlayerManager Fragment단으로 이동
     class Images(
         val binding: ItemProfileDetailImagesWithLikeBinding,
-        private val lifecycleOwner: LifecycleOwner,
         private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
         private val onPageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
         private val onLikeClickCallback: () -> Unit,
         private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit,
+        private val playerManager: PlayerManager
     ) : ProfileDetailViewHolder(binding) {
-        private val viewPagerPlayerManager: ViewPagerPlayerManager = ViewPagerPlayerManager(
-            viewPager2 = binding.viewPager,
-            lifecycleOwner = lifecycleOwner,
-            context = binding.root.context
-        )
-
         init {
             binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -60,6 +54,11 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                     Log.d("ProfileDetailViewHolder", "onPageSelected")
                     // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트 (스크롤시 ViewPager의 위치 유지)
                     onPageChangeCallbackForImagePosition(position)
+                    val mediaItem = (binding.viewPager.getRecyclerViewOrNull()
+                        ?.findViewHolderForAdapterPosition(position) as? ViewPagerMediaItem)
+                    mediaItem?.let {
+                        playerManager.play(it.getMediaInfo())
+                    }
                 }
             })
 
@@ -74,7 +73,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 val adapter = ViewPagerAdapter(
                     it.mediaItems,
                     onClickItem = { position ->
-                        viewPagerPlayerManager.pause()
+                        playerManager.pause()
                         onClickMedia(position, it.mediaItems)
                     })
                 binding.viewPager.adapter = adapter

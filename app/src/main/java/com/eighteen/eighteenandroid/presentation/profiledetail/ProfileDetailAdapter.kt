@@ -3,7 +3,6 @@ package com.eighteen.eighteenandroid.presentation.profiledetail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
@@ -17,17 +16,18 @@ import com.eighteen.eighteenandroid.databinding.ItemQnaBinding
 import com.eighteen.eighteenandroid.databinding.ItemQnaTitleBinding
 import com.eighteen.eighteenandroid.databinding.ItemSeeMoreBinding
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
+import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 
 class ProfileDetailAdapter(
-    private val lifecycleOwner: LifecycleOwner,
     private val pageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
     private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
     private val onLikeChangeCallback: () -> Unit,
     private val onQnaToggleCallback: () -> Unit,
     private val getCurrentPosition: () -> Int,
-    private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit
+    private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit,
+    private val playerManager: PlayerManager
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
@@ -48,9 +48,9 @@ class ProfileDetailAdapter(
                     binding,
                     onPageChangeCallbackForImagePosition = onPageChangeCallbackForImagePosition,
                     onLikeClickCallback = onLikeChangeCallback,
-                    lifecycleOwner = lifecycleOwner,
                     onPageCallbackForVisibilitySoundIcon = pageCallbackForVisibilitySoundIcon,
-                    onClickMedia = onClickMedia
+                    onClickMedia = onClickMedia,
+                    playerManager = playerManager
                 )
             }
 

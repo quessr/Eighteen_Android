@@ -1,8 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.profiledetail
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -74,15 +72,14 @@ class ViewPagerAdapter(
         private val mediaView: MediaView = itemView.findViewById(R.id.media_view)
         private var mediaItem: ProfileDetailModel.MediaItem? = null
 
-        @SuppressLint("ClickableViewAccessibility")
         fun bind(mediaItem: ProfileDetailModel.MediaItem, onClick: () -> Unit) {
             this.mediaItem = mediaItem
             mediaView.setThumbnailUrl(mediaItem.url)
-            itemView.findViewById<View>(R.id.vTouchArea).setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
+            itemView.findViewById<View>(R.id.vTouchArea).apply {
+                setOnClickListener {
                     onClick()
                 }
-                true
+                bringToFront()
             }
         }
 

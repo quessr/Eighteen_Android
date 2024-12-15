@@ -28,6 +28,8 @@ open class PlayerManager(
     val duration get() = player.duration
     val isPlaying get() = player.isPlaying
 
+    val isVolumeOn get() = player.volume > 0f
+
     init {
         initLifecycle()
     }

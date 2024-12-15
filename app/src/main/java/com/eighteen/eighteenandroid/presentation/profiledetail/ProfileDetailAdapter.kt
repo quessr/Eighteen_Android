@@ -26,7 +26,8 @@ class ProfileDetailAdapter(
     private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
     private val onLikeChangeCallback: () -> Unit,
     private val onQnaToggleCallback: () -> Unit,
-    private val getCurrentPosition: () -> Int
+    private val getCurrentPosition: () -> Int,
+    private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {
@@ -48,7 +49,8 @@ class ProfileDetailAdapter(
                     onPageChangeCallbackForImagePosition = onPageChangeCallbackForImagePosition,
                     onLikeClickCallback = onLikeChangeCallback,
                     lifecycleOwner = lifecycleOwner,
-                    onPageCallbackForVisibilitySoundIcon = pageCallbackForVisibilitySoundIcon
+                    onPageCallbackForVisibilitySoundIcon = pageCallbackForVisibilitySoundIcon,
+                    onClickMedia = onClickMedia
                 )
             }
 

@@ -38,12 +38,14 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         }
     }
 
+    //TODO 사운드 적용 - viewPagerPlayerManager Fragment단으로 이동
     class Images(
         val binding: ItemProfileDetailImagesWithLikeBinding,
         private val lifecycleOwner: LifecycleOwner,
         private val onPageChangeCallbackForImagePosition: (Int) -> Unit,
         private val onPageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
-        private val onLikeClickCallback: () -> Unit
+        private val onLikeClickCallback: () -> Unit,
+        private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit,
     ) : ProfileDetailViewHolder(binding) {
         private val viewPagerPlayerManager: ViewPagerPlayerManager = ViewPagerPlayerManager(
             viewPager2 = binding.viewPager,
@@ -69,7 +71,12 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
             val profileImages = profileDetailModel as? ProfileDetailModel.ProfileImages
 
             profileImages?.let {
-                val adapter = ViewPagerAdapter(it.mediaItems)
+                val adapter = ViewPagerAdapter(
+                    it.mediaItems,
+                    onClickItem = { position ->
+                        viewPagerPlayerManager.pause()
+                        onClickMedia(position, it.mediaItems)
+                    })
                 binding.viewPager.adapter = adapter
                 TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
 

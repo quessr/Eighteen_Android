@@ -15,19 +15,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.eighteen.eighteenandroid.R
+import com.eighteen.eighteenandroid.common.AppConfig
 import com.eighteen.eighteenandroid.databinding.FragmentProfileDetailBinding
 import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogBottom
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
-import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailViewModel
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.viewholder.ProfileDetailViewHolder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,8 +40,6 @@ class ProfileDetailFragment() :
 
     @Inject
     lateinit var getUserDetailInfoUseCase: GetUserDetailInfoUseCase
-
-    private val mediaDetailViewModel by viewModels<MediaDetailViewModel>()
 
     @Inject
     lateinit var assistedFactory: ProfileDetailViewModel.ProfileDetailAssistedFactory
@@ -53,15 +54,12 @@ class ProfileDetailFragment() :
     )
 
     private lateinit var mediaItems: List<ProfileDetailModel.MediaItem>
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
         setupRecyclerViewScrollListener()
         initViewModel()
         observeMediaItems()
-        initMediaDetailFlow()
-        initMediaDetailFlow()
     }
 
     override fun initView() {
@@ -84,7 +82,7 @@ class ProfileDetailFragment() :
                     profileDetailViewModel.toggleLike()
                 }
                 ivSound.setOnClickListener {
-                    mediaDetailViewModel.toggleVolume()
+//                    mediaDetailViewModel.toggleVolume()
                 }
             }
         }
@@ -126,7 +124,22 @@ class ProfileDetailFragment() :
                         profileDetailViewModel.setCurrentPosition(currentPosition)
                     }, onLikeChangeCallback = { profileDetailViewModel.toggleLike() },
                     onQnaToggleCallback = { profileDetailViewModel.toggleItems() },
-                    getCurrentPosition = { profileDetailViewModel.currentPosition }
+                    getCurrentPosition = { profileDetailViewModel.currentPosition },
+                    onClickMedia = { position, medias ->
+                        openMediaDetailDialogFragment(
+                            position = position,
+                            mediaModels = medias.map {
+                                if (it.isVideo) MediaDetailMediaModel.Video(
+                                    id = it.url ?: "",
+                                    mediaUrl = it.url
+                                )
+                                else MediaDetailMediaModel.Image(
+                                    id = it.url ?: "",
+                                    mediaUrl = it.url
+                                )
+                            }
+                        )
+                    }
                 )
             profileDetailRecyclerview.itemAnimator = null
         }
@@ -172,12 +185,13 @@ class ProfileDetailFragment() :
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mediaDetailViewModel.mediaDetailStateFlow.collect {
-                    setVolume(isVolumeOn = it.isVolumeOn)
-                }
-            }
+        collectInLifecycle(
+            AppConfig.getSoundOptionFlow(requireContext())
+                .stateIn(viewLifecycleOwner.lifecycleScope, SharingStarted.WhileSubscribed(), false)
+        ) { isVolumeOn ->
+            val drawableRes =
+                if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
+            binding.ivSound.setImageResource(drawableRes)
         }
     }
 
@@ -236,36 +250,18 @@ class ProfileDetailFragment() :
         }
     }
 
-    //TODO pageChangeCallback position 업데이트 추가
-//TODO 샘플코드 제거 미디어 모델 flow형태로 변환 후 전달
-    private fun initMediaDetailFlow() = viewLifecycleOwner.lifecycleScope.launch {
-        val video1 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        val video2 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-        val video3 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-        val image1 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-        val image2 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
-        val image3 =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-        val testMedias = listOf(
-            MediaDetailMediaModel.Video("1", video1),
-            MediaDetailMediaModel.Video("2", video2),
-            MediaDetailMediaModel.Image("3", image1),
-            MediaDetailMediaModel.Video("4", video3),
-            MediaDetailMediaModel.Image("5", image2),
-            MediaDetailMediaModel.Image("6", image3),
-        )
-        mediaDetailViewModel.setMedias(medias = testMedias)
-    }
-
     /**
      * 프로필 상세에서 사진/영상 클릭 시 미디어 상세화면으로 이동
      */
-    private fun openMediaDetailDialogFragment() {
-        showDialogFragment(MediaDetailDialogFragment())
+    private fun openMediaDetailDialogFragment(
+        position: Int,
+        mediaModels: List<MediaDetailMediaModel>
+    ) {
+        showDialogFragment(
+            MediaDetailDialogFragment.newInstance(
+                startPosition = position,
+                mediaModels = mediaModels
+            )
+        )
     }
 }

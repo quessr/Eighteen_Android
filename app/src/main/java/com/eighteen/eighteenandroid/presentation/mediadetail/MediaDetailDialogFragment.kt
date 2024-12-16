@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -35,6 +36,8 @@ class MediaDetailDialogFragment :
 
     private val mediaPageChangeCallback = object : OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
+            binding.ivBtnSound.isVisible =
+                mediaModels.getOrNull(position) is MediaDetailMediaModel.Video
             mediaDetailViewModel.selectedIndex = position
         }
     }
@@ -61,6 +64,8 @@ class MediaDetailDialogFragment :
 
     override fun initView() {
         initPlayerManager()
+        binding.ivBtnSound.isVisible =
+            mediaModels.getOrNull(startPosition) is MediaDetailMediaModel.Video
         bind {
             ivBtnClose.setOnClickListener {
                 dismiss()

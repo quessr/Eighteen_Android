@@ -4,6 +4,7 @@ import com.eighteen.eighteenandroid.data.datasource.remote.request.TournamentReq
 import com.eighteen.eighteenandroid.data.datasource.remote.service.TournamentService
 import com.eighteen.eighteenandroid.data.mapper.TournamentMapper
 import com.eighteen.eighteenandroid.data.mapper.mapper
+import com.eighteen.eighteenandroid.domain.model.Participant
 import com.eighteen.eighteenandroid.domain.model.TournamentCategory
 import com.eighteen.eighteenandroid.domain.repository.TournamentRepository
 import javax.inject.Inject
@@ -15,6 +16,16 @@ class TournamentRepositoryImpl @Inject constructor(private val tournamentService
             response.data?.map { tournamentResponse ->
                 TournamentMapper.asTournamentCategoryModel(
                     tournamentCategoryResponse = tournamentResponse
+                )
+            } ?: emptyList()
+        }
+    }
+
+    override suspend fun getThisWeekParticipants(category: String): Result<List<Participant>> = runCatching {
+        tournamentService.getThisWeekParticipants(category = category).mapper { response ->
+            response.data?.map { thisWeekParticipantsResponse ->
+                TournamentMapper.asTournamentThisWeekParticipantsModel(
+                    tournamentThisWeekParticipantsResponse = thisWeekParticipantsResponse
                 )
             } ?: emptyList()
         }

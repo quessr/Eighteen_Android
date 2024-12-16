@@ -19,6 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentVotingBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.common.ModelState
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.ranking.voting.model.TournamentEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,8 +28,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding::inflate) {
-//    private val viewModel: VotingViewModel by viewModels()
-    private var category: String? = ""
+    //    private val viewModel: VotingViewModel by viewModels()
+    private var category: String = ""
 
     @Inject
     lateinit var assistedFactory: VotingViewModel.VotingAssistedFactory
@@ -35,14 +37,16 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
         factoryProducer = {
             VotingViewModel.Factory(
                 assistedFactory = assistedFactory,
-                thisWeekTournamentNo = 24
+                thisWeekTournamentNo = 24,
+                category = category
             )
         }
     )
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        category = arguments?.getString("selectedCategory")
+        category = arguments?.getString("selectedCategory").toString()
         binding.tvCategoryTitle.text = category
     }
 
@@ -52,6 +56,29 @@ class VotingFragment : BaseFragment<FragmentVotingBinding>(FragmentVotingBinding
     }
 
     private fun initObservers() {
+        collectInLifecycle(votingViewModel.thisWeekParticipants) {
+            when (it) {
+                is ModelState.Loading -> {
+                    //TODO 로딩 처리
+                }
+
+                is ModelState.Success -> {
+                    Log.d("VotingFragment", it.data.toString())
+                }
+
+                is ModelState.Error -> {
+                    Log.e(
+                        "VotingFragment",
+                        "Error get this week participants",
+                        it.throwable
+                    )
+                }
+
+                is ModelState.Error -> {}
+
+                else -> {}
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             votingViewModel.currentMatch.collect { match ->
                 match?.let { showCurrentMatch(it) }

@@ -1,8 +1,11 @@
 package com.eighteen.eighteenandroid.presentation.ranking.voting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.eighteen.eighteenandroid.domain.usecase.GetThisWeekParticipantsUseCase
+import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.ranking.voting.model.TournamentEntity
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -13,20 +16,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class VotingViewModel @AssistedInject constructor(
-    @Assisted private val thisWeekTournamentNo: Int
+    @Assisted private val thisWeekTournamentNo: Int,
+    @Assisted private val category: String,
+    private val getThisWeekParticipantsUseCase: GetThisWeekParticipantsUseCase
 ) : ViewModel() {
     private val _currentMatch = MutableStateFlow<TournamentEntity.Match?>(null)
     val currentMatch = _currentMatch.asStateFlow()
 
     private val _isRoundComplete =
         MutableStateFlow<Pair<Boolean, TournamentEntity.Participant?>>(false to null)
-
     val isRoundComplete = _isRoundComplete.asStateFlow()
 
-//    private val _topParticipants = MutableStateFlow<List<TournamentEntity.Participant>>(emptyList())
-//    val topParticipant = _topParticipants.asStateFlow()
+    private val _thisWeekParticipants =
+        MutableStateFlow<ModelState<List<TournamentEntity.Participant>>>(ModelState.Empty())
+    val thisWeekParticipants = _thisWeekParticipants.asStateFlow()
 
-//    private var votingJob: Job? = null
+    private var votingJob: Job? = null
+
     private var participants: List<TournamentEntity.Participant> = listOf()
     private var matches: List<TournamentEntity.Match> = listOf()
     private var currentRound = 16
@@ -37,26 +43,54 @@ class VotingViewModel @AssistedInject constructor(
         setupParticipants()
         setupMatches()
         showCurrentMatch()
+        fetchThisWeekParticipants(category = category)
+    }
+
+    private fun fetchThisWeekParticipants(category: String) {
+        if (votingJob?.isCompleted == false) return
+
+        votingJob = viewModelScope.launch {
+            _thisWeekParticipants.value = ModelState.Loading()
+            getThisWeekParticipantsUseCase.invoke(category = category)
+                .onSuccess { thisWeekParticipantsData ->
+                    val thisWeekParticipantsModel = thisWeekParticipantsData.map {
+                        TournamentEntity.Participant(
+                            id = it.id,
+                            nickName = it.name,
+                            school = it.school,
+                            age = it.age,
+                            imageUrl = it.imgUrl
+                        )
+                    }
+                    Log.d(
+                        "VotingViewModel",
+                        "thisWeekParticipantsModel: $thisWeekParticipantsModel"
+                    )
+                    _thisWeekParticipants.value = ModelState.Success(thisWeekParticipantsModel)
+                }.onFailure {
+                    _thisWeekParticipants.value = ModelState.Error(throwable = it)
+                }
+        }
     }
 
     fun setupParticipants() {
         participants = listOf(
-            TournamentEntity.Participant("1", "참가자1"),
-            TournamentEntity.Participant("2", "참가자2"),
-            TournamentEntity.Participant("3", "참가자3"),
-            TournamentEntity.Participant("4", "참가자4"),
-            TournamentEntity.Participant("5", "참가자5"),
-            TournamentEntity.Participant("6", "참가자6"),
-            TournamentEntity.Participant("7", "참가자7"),
-            TournamentEntity.Participant("8", "참가자8"),
-            TournamentEntity.Participant("9", "참가자9"),
-            TournamentEntity.Participant("10", "참가자10"),
-            TournamentEntity.Participant("11", "참가자11"),
-            TournamentEntity.Participant("12", "참가자12"),
-            TournamentEntity.Participant("13", "참가자13"),
-            TournamentEntity.Participant("14", "참가자14"),
-            TournamentEntity.Participant("15", "참가자15"),
-            TournamentEntity.Participant("16", "참가자16")
+//            TournamentEntity.Participant("1", "참가자1"),
+//            TournamentEntity.Participant("2", "참가자2"),
+//            TournamentEntity.Participant("3", "참가자3"),
+//            TournamentEntity.Participant("4", "참가자4"),
+//            TournamentEntity.Participant("5", "참가자5"),
+//            TournamentEntity.Participant("6", "참가자6"),
+//            TournamentEntity.Participant("7", "참가자7"),
+//            TournamentEntity.Participant("8", "참가자8"),
+//            TournamentEntity.Participant("9", "참가자9"),
+//            TournamentEntity.Participant("10", "참가자10"),
+//            TournamentEntity.Participant("11", "참가자11"),
+//            TournamentEntity.Participant("12", "참가자12"),
+//            TournamentEntity.Participant("13", "참가자13"),
+//            TournamentEntity.Participant("14", "참가자14"),
+//            TournamentEntity.Participant("15", "참가자15"),
+//            TournamentEntity.Participant("16", "참가자16")
         )
     }
 
@@ -106,17 +140,21 @@ class VotingViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface VotingAssistedFactory {
-        fun create(thisWeekTournamentNo: Int): VotingViewModel
+        fun create(thisWeekTournamentNo: Int, category: String): VotingViewModel
     }
 
     class Factory(
         private val assistedFactory: VotingAssistedFactory,
-        private val thisWeekTournamentNo: Int
+        private val thisWeekTournamentNo: Int,
+        private val category: String
     ) :
         ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return assistedFactory.create(thisWeekTournamentNo = thisWeekTournamentNo) as T
+            return assistedFactory.create(
+                thisWeekTournamentNo = thisWeekTournamentNo,
+                category = category
+            ) as T
         }
     }
 }

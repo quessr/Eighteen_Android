@@ -45,7 +45,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
         private val onPageCallbackForVisibilitySoundIcon: ViewPager2.OnPageChangeCallback,
         private val onLikeClickCallback: () -> Unit,
         private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit,
-        private val playerManager: PlayerManager
+        private val playerManager: PlayerManager?
     ) : ProfileDetailViewHolder(binding) {
         init {
             binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
@@ -57,7 +57,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                     val mediaItem = (binding.viewPager.getRecyclerViewOrNull()
                         ?.findViewHolderForAdapterPosition(position) as? ViewPagerMediaItem)
                     mediaItem?.let {
-                        playerManager.play(it.getMediaInfo())
+                        playerManager?.play(it.getMediaInfo())
                     }
                 }
             })
@@ -73,7 +73,7 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 val adapter = ViewPagerAdapter(
                     it.mediaItems,
                     onClickItem = { position ->
-                        playerManager.pause()
+                        playerManager?.pause()
                         onClickMedia(position, it.mediaItems)
                     })
                 binding.viewPager.adapter = adapter

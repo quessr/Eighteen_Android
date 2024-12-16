@@ -56,10 +56,11 @@ class ProfileDetailFragment() :
     private var playerManager: PlayerManager? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initPlayerManager()
         setupAdapter()
         setupRecyclerViewScrollListener()
         initViewModel()
-        initPlayerManager()
+        initFragmentResultListener()
     }
 
     override fun initView() {
@@ -131,10 +132,7 @@ class ProfileDetailFragment() :
                             }
                         )
                     },
-                    playerManager = playerManager ?: PlayerManager(
-                        viewLifecycleOwner,
-                        requireContext()
-                    )
+                    playerManager = playerManager
                 )
             profileDetailRecyclerview.itemAnimator = null
         }
@@ -252,6 +250,17 @@ class ProfileDetailFragment() :
         }
     }
 
+    private fun initFragmentResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            MEDIA_DETAIL_REQUEST_KEY,
+            viewLifecycleOwner,
+            object : MediaDetailDialogFragment.MediaDetailDialogResultListener() {
+                override fun onDismiss() {
+                    playerManager?.resume()
+                }
+            })
+    }
+
     override fun onDestroyView() {
         playerManager = null
         super.onDestroyView()
@@ -266,9 +275,14 @@ class ProfileDetailFragment() :
     ) {
         showDialogFragment(
             MediaDetailDialogFragment.newInstance(
+                requestKey = MEDIA_DETAIL_REQUEST_KEY,
                 startPosition = position,
                 mediaModels = mediaModels
             )
         )
+    }
+
+    companion object {
+        private const val MEDIA_DETAIL_REQUEST_KEY = "media_detail_request_key"
     }
 }

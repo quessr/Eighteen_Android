@@ -1,10 +1,14 @@
 package com.eighteen.eighteenandroid.presentation.mediadetail
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
+import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -137,18 +141,40 @@ class MediaDetailDialogFragment :
         super.onDestroyView()
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        arguments?.getString(
+            ARGUMENT_REQUEST_KEY_KEY
+        )?.let {
+            setFragmentResult(it, bundleOf(RESULT_DISMISS_KEY to true))
+        }
+        super.onDismiss(dialog)
+    }
+
     companion object {
+        private const val ARGUMENT_REQUEST_KEY_KEY = "argument_request_key_key"
         private const val ARGUMENT_START_POSITION_KEY = "argument_start_position_key"
         private const val ARGUMENT_MEDIA_MODELS_KEY = "argument_media_models_key"
+        private const val RESULT_DISMISS_KEY = "result_dismiss_key"
         fun newInstance(
+            requestKey: String? = null,
             startPosition: Int = 0,
-            mediaModels: List<MediaDetailMediaModel>
-        ) =
-            MediaDetailDialogFragment().apply {
-                arguments = bundleOf(
-                    ARGUMENT_START_POSITION_KEY to startPosition,
-                    ARGUMENT_MEDIA_MODELS_KEY to mediaModels
-                )
+            mediaModels: List<MediaDetailMediaModel>,
+        ) = MediaDetailDialogFragment().apply {
+            arguments = bundleOf(
+                ARGUMENT_REQUEST_KEY_KEY to requestKey,
+                ARGUMENT_START_POSITION_KEY to startPosition,
+                ARGUMENT_MEDIA_MODELS_KEY to mediaModels
+            )
+        }
+    }
+
+    abstract class MediaDetailDialogResultListener : FragmentResultListener {
+        override fun onFragmentResult(requestKey: String, result: Bundle) {
+            result.getBoolean(RESULT_DISMISS_KEY).takeIf { it }?.run {
+                onDismiss()
             }
+        }
+
+        open fun onDismiss() {}
     }
 }

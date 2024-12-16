@@ -72,6 +72,10 @@ open class PlayerManager(
         mediaInfo.mediaView.setPlayer(player)
     }
 
+    fun resume() {
+        player.play()
+    }
+
     open fun pause() {
         player.pause()
     }

@@ -27,7 +27,7 @@ class ProfileDetailAdapter(
     private val onQnaToggleCallback: () -> Unit,
     private val getCurrentPosition: () -> Int,
     private val onClickMedia: (Int, List<ProfileDetailModel.MediaItem>) -> Unit,
-    private val playerManager: PlayerManager
+    private val playerManager: PlayerManager?
 ) : ListAdapter<ProfileDetailModel, ProfileDetailViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileDetailViewHolder {

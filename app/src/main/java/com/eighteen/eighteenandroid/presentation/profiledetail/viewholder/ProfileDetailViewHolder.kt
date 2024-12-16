@@ -3,6 +3,7 @@ package com.eighteen.eighteenandroid.presentation.profiledetail.viewholder
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -26,6 +27,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     open fun onBind(profileDetailModel: ProfileDetailModel) {}
+
+    open fun onDetached() {}
+    open fun onAttached() {}
 
     class Info(private val binding: ItemProfileDetailInfoBinding) :
         ProfileDetailViewHolder(binding) {
@@ -54,16 +58,20 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                     Log.d("ProfileDetailViewHolder", "onPageSelected")
                     // 페이지 변경 시 콜백을 통해 currentPosition 값을 업데이트 (스크롤시 ViewPager의 위치 유지)
                     onPageChangeCallbackForImagePosition(position)
-                    val mediaItem = (binding.viewPager.getRecyclerViewOrNull()
-                        ?.findViewHolderForAdapterPosition(position) as? ViewPagerMediaItem)
-                    mediaItem?.let {
-                        playerManager?.play(it.getMediaInfo())
-                    }
+                    playCurrent(position)
                 }
             })
 
             binding.viewPager.registerOnPageChangeCallback(onPageCallbackForVisibilitySoundIcon)
             binding.viewPager.offscreenPageLimit = 5
+        }
+
+        private fun playCurrent(position: Int) {
+            val mediaItem = (binding.viewPager.getRecyclerViewOrNull()
+                ?.findViewHolderForAdapterPosition(position) as? ViewPagerMediaItem)
+            mediaItem?.let {
+                playerManager?.play(it.getMediaInfo())
+            }
         }
 
         override fun onBind(profileDetailModel: ProfileDetailModel) {
@@ -87,7 +95,18 @@ sealed class ProfileDetailViewHolder(binding: ViewBinding) : RecyclerView.ViewHo
                 binding.ivLike.setOnClickListener {
                     onLikeClickCallback()
                 }
+                binding.viewPager.doOnLayout {
+                    playCurrent(binding.viewPager.currentItem)
+                }
             }
+        }
+
+        override fun onDetached() {
+            playerManager?.pause()
+        }
+
+        override fun onAttached() {
+            playerManager?.resume()
         }
     }
 

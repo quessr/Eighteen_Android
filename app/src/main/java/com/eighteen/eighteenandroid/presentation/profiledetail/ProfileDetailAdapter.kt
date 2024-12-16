@@ -100,6 +100,16 @@ class ProfileDetailAdapter(
         }
     }
 
+    override fun onViewDetachedFromWindow(holder: ProfileDetailViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        holder.onDetached()
+    }
+
+    override fun onViewAttachedToWindow(holder: ProfileDetailViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.onAttached()
+    }
+
     override fun onBindViewHolder(holder: ProfileDetailViewHolder, position: Int) {
         holder.onBind(getItem(position))
 

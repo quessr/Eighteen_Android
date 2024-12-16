@@ -54,7 +54,8 @@ open class PlayerManager(
     @OptIn(UnstableApi::class)
     open fun play(mediaInfo: MediaInfo) {
         player.repeatMode = mediaInfo.repeatMode
-        if (mediaInfo.id == targetMediaInfo?.id && mediaInfo.resizeMode == targetMediaInfo?.resizeMode) {
+        if (mediaInfo == targetMediaInfo) {
+            player.prepare()
             player.play()
             return
         }

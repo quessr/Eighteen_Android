@@ -207,4 +207,8 @@
 
     <!-- Badge Detail -->
     <string name="badge_detail_title">내 배지</string>
+
+    <!-- Edit Media -->
+    <string name="edit_media_cancel_title">동영상 편집 취소</string>
+    <string name="edit_media_failure_title">동영상 편집 오류</string>
 </resources>

@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.net.Uri
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.OptIn
@@ -31,13 +30,17 @@ import com.eighteen.eighteenandroid.presentation.common.getFileExtension
 import com.eighteen.eighteenandroid.presentation.common.getVideoThumbnailFromUri
 import com.eighteen.eighteenandroid.presentation.common.media3.MediaInfo
 import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.PopUpDialogFragment
 import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalTime
 
 
@@ -62,6 +65,7 @@ class EditVideoFragment :
                     setVolume(isVolumeOn = it.isVolumeOn.not())
                 }
             }
+            vBackground.setOnClickListener { }
         }
         initStateFlow()
     }
@@ -316,7 +320,6 @@ class EditVideoFragment :
 
     @OptIn(UnstableApi::class)
     private fun trimVideoAndFinishIfSuccess() {
-        //TODO result media url cancel ,failure callback
         val context = context ?: return
         val uri = Uri.parse(editMediaViewModel.mediaUriStringStateFlow.value)
         val path = contentUriToPath(context, uri) ?: return
@@ -324,22 +327,38 @@ class EditVideoFragment :
         val extension = getFileExtension(context = context, uri = uri)
         val resultUrl =
             "${context.getExternalFilesDir("Video")?.path}/${LocalTime.now()}.$extension"
-
+        binding.clLoading.isVisible = true
         FfmpegUtils.trimVideo(
             mediaUriString = path,
             resultMediaUriString = resultUrl,
             startTimeSec = getTrimStartTime(),
             endTimeSec = getTrimEndTime(),
             onSuccess = {
-                Log.d("EditVideoFragment", "success")
-                val editResult = EditMediaResult.Video(uriString = resultUrl)
-                editMediaViewModel.setEditResultEvent(result = editResult)
-                findNavController().popBackStack()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    withContext(Dispatchers.Main) {
+                        val editResult = EditMediaResult.Video(uriString = resultUrl)
+                        editMediaViewModel.setEditResultEvent(result = editResult)
+                        findNavController().popBackStack()
+                    }
+                }
             },
-            onCancel = { Log.d("EditVideoFragment", "cancel") },
-            onFailure = { Log.d("EditVideoFragment", "failure") }
+            onCancel = {
+                binding.lavLoading.isVisible = false
+                val dialogFragment = PopUpDialogFragment.newInstance(
+                    title = getString(R.string.edit_media_cancel_title),
+                    buttonText = getString(R.string.confirm)
+                )
+                showDialogFragment(dialogFragment)
+            },
+            onFailure = {
+                binding.lavLoading.isVisible = false
+                val dialogFragment = PopUpDialogFragment.newInstance(
+                    title = getString(R.string.edit_media_failure_title),
+                    buttonText = getString(R.string.confirm)
+                )
+                showDialogFragment(dialogFragment)
+            }
         )
-
     }
 
     override fun onDestroyView() {

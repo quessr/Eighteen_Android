@@ -12,6 +12,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.OptIn
 import androidx.core.graphics.scale
 import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
 import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
 import androidx.core.view.updateLayoutParams
@@ -21,7 +22,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
+import com.eighteen.eighteenandroid.common.AppConfig
 import com.eighteen.eighteenandroid.databinding.FragmentEditVideoBinding
+import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.contentUriToPath
 import com.eighteen.eighteenandroid.presentation.common.ffmpeg.FfmpegUtils
 import com.eighteen.eighteenandroid.presentation.common.getFileExtension
@@ -32,6 +35,8 @@ import com.eighteen.eighteenandroid.presentation.editmedia.BaseEditMediaFragment
 import com.eighteen.eighteenandroid.presentation.editmedia.model.EditMediaResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
@@ -51,17 +56,40 @@ class EditVideoFragment :
             inHeader.ivBtnCheck.setOnClickListener {
                 trimVideoAndFinishIfSuccess()
             }
+            inHeader.ivBtnSound.isVisible = true
+            inHeader.ivBtnSound.setOnClickListener {
+                playerManager?.let {
+                    setVolume(isVolumeOn = it.isVolumeOn.not())
+                }
+            }
         }
         initStateFlow()
     }
 
+    private fun setVolume(isVolumeOn: Boolean) {
+        val context = context ?: return
+        viewLifecycleOwner.lifecycleScope.launch {
+            AppConfig.setSoundOption(context, isVolumeOn)
+        }
+    }
+
     private fun initStateFlow() {
+        val context = context ?: return
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editMediaViewModel.mediaUriStringStateFlow.collect {
                     setVideo(uriString = it)
                 }
             }
+        }
+        collectInLifecycle(
+            AppConfig.getSoundOptionFlow(context)
+                .stateIn(viewLifecycleOwner.lifecycleScope, SharingStarted.WhileSubscribed(), false)
+        ) { isVolumeOn ->
+            val drawableRes =
+                if (isVolumeOn) R.drawable.ic_unmute else R.drawable.ic_mute
+            binding.inHeader.ivBtnSound.setImageResource(drawableRes)
+            playerManager?.setVolume(isVolumeOn = isVolumeOn)
         }
     }
 

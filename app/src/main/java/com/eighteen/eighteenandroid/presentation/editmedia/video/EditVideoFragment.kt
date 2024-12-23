@@ -65,7 +65,6 @@ class EditVideoFragment :
                     setVolume(isVolumeOn = it.isVolumeOn.not())
                 }
             }
-            vBackground.setOnClickListener { }
         }
         initStateFlow()
     }
@@ -327,7 +326,7 @@ class EditVideoFragment :
         val extension = getFileExtension(context = context, uri = uri)
         val resultUrl =
             "${context.getExternalFilesDir("Video")?.path}/${LocalTime.now()}.$extension"
-        binding.clLoading.isVisible = true
+        binding.inLoading.root.isVisible = true
         FfmpegUtils.trimVideo(
             mediaUriString = path,
             resultMediaUriString = resultUrl,
@@ -343,7 +342,7 @@ class EditVideoFragment :
                 }
             },
             onCancel = {
-                binding.lavLoading.isVisible = false
+                binding.inLoading.root.isVisible = false
                 val dialogFragment = PopUpDialogFragment.newInstance(
                     title = getString(R.string.edit_media_cancel_title),
                     buttonText = getString(R.string.confirm)
@@ -351,7 +350,7 @@ class EditVideoFragment :
                 showDialogFragment(dialogFragment)
             },
             onFailure = {
-                binding.lavLoading.isVisible = false
+                binding.inLoading.root.isVisible = false
                 val dialogFragment = PopUpDialogFragment.newInstance(
                     title = getString(R.string.edit_media_failure_title),
                     buttonText = getString(R.string.confirm)

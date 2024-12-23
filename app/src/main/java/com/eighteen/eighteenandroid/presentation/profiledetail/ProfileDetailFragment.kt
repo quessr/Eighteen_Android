@@ -23,6 +23,7 @@ import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.media3.PlayerManager
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogBottom
+import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.MediaDetailDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
 import com.eighteen.eighteenandroid.presentation.profiledetail.model.ProfileDetailModel
@@ -73,8 +74,14 @@ class ProfileDetailFragment() :
                         ivMore,
                         onReportClicked = {
                             // 신고 다이얼로그 보여주기
-                            // TODO. 유저 정보 필요
-//                            showDialogFragment(ReportDialogFragment.newInstance(user))
+                            profileDetailViewModel.profileInfo?.let {
+                                showDialogFragment(
+                                    ReportDialogFragment.newInstance(
+                                        userId = it.id,
+                                        userName = it.name
+                                    )
+                                )
+                            }
                         },
                         onBlockClicked = {}
                     )
@@ -277,7 +284,9 @@ class ProfileDetailFragment() :
             MediaDetailDialogFragment.newInstance(
                 requestKey = MEDIA_DETAIL_REQUEST_KEY,
                 startPosition = position,
-                mediaModels = mediaModels
+                mediaModels = mediaModels,
+                userName = profileDetailViewModel.profileInfo?.name,
+                userId = profileDetailViewModel.profileInfo?.id
             )
         )
     }

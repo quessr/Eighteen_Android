@@ -16,12 +16,15 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.common.AppConfig
 import com.eighteen.eighteenandroid.common.MEDIA_COUNT
+import com.eighteen.eighteenandroid.common.safeLet
 import com.eighteen.eighteenandroid.databinding.FragmentMediaDetailDialogBinding
 import com.eighteen.eighteenandroid.presentation.BaseDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.getParcelableListOrNull
 import com.eighteen.eighteenandroid.presentation.common.media3.viewpager2.ViewPagerPlayerManager
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.common.showReportSelectDialogBottom
+import com.eighteen.eighteenandroid.presentation.dialog.ReportDialogFragment
 import com.eighteen.eighteenandroid.presentation.mediadetail.model.MediaDetailMediaModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -50,6 +53,8 @@ class MediaDetailDialogFragment :
             MediaDetailMediaModel::class.java
         ) ?: emptyList()
 
+    private val userId get() = arguments?.getString(ARGUMENT_USER_ID_KEY)
+    private val userName get() = arguments?.getString(ARGUMENT_USER_NAME_KEY)
     override fun onResume() {
         super.onResume()
         initDialogWindow()
@@ -75,9 +80,14 @@ class MediaDetailDialogFragment :
                     showReportSelectDialogBottom(
                         ivBtnOption,
                         onReportClicked = {
-                            // 신고 다이얼로그 보여주기
-                            // TODO. 유저 정보 필요
-//                            showDialogFragment(ReportDialogFragment.newInstance(user))
+                            safeLet(userId, userName) { userId, userName ->
+                                showDialogFragment(
+                                    ReportDialogFragment.newInstance(
+                                        userId = userId,
+                                        userName = userName
+                                    )
+                                )
+                            }
                         },
                         onBlockClicked = {}
                     )
@@ -159,16 +169,22 @@ class MediaDetailDialogFragment :
         private const val ARGUMENT_REQUEST_KEY_KEY = "argument_request_key_key"
         private const val ARGUMENT_START_POSITION_KEY = "argument_start_position_key"
         private const val ARGUMENT_MEDIA_MODELS_KEY = "argument_media_models_key"
+        private const val ARGUMENT_USER_NAME_KEY = "argument_user_name_key"
+        private const val ARGUMENT_USER_ID_KEY = "argument_user_id_key"
         private const val RESULT_DISMISS_KEY = "result_dismiss_key"
         fun newInstance(
             requestKey: String? = null,
             startPosition: Int = 0,
             mediaModels: List<MediaDetailMediaModel>,
+            userId: String? = null,
+            userName: String? = null
         ) = MediaDetailDialogFragment().apply {
             arguments = bundleOf(
                 ARGUMENT_REQUEST_KEY_KEY to requestKey,
                 ARGUMENT_START_POSITION_KEY to startPosition,
-                ARGUMENT_MEDIA_MODELS_KEY to mediaModels
+                ARGUMENT_MEDIA_MODELS_KEY to mediaModels,
+                ARGUMENT_USER_ID_KEY to userId,
+                ARGUMENT_USER_NAME_KEY to userName
             )
         }
     }

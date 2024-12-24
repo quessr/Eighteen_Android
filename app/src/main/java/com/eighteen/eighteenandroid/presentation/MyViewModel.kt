@@ -97,6 +97,7 @@ class MyViewModel @Inject constructor(
     ) {
         if (editMyProfileJob?.isCompleted == false) return
         viewModelScope.launch {
+            _editProfileEventStateFlow.value = ModelState.Loading()
             myProfileStateFlow.value.data?.let { profile ->
                 val nickNameParam = nickName ?: profile.nickName
                 val schoolParam = school ?: profile.school
@@ -113,7 +114,7 @@ class MyViewModel @Inject constructor(
                     introduction = introductionParam,
                     questions = questionsParam
                 ).onSuccess {
-                    _editProfileEventStateFlow.value = ModelState.Success()
+                    _editProfileEventStateFlow.value = ModelState.Success(Event(Unit))
                     if (_myProfileStateFlow.value.isSuccess()) {
                         _myProfileStateFlow.update {
                             ModelState.Success(

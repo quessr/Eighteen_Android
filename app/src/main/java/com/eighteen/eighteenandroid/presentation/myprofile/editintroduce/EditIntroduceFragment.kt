@@ -20,6 +20,8 @@ import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.recyclerview.GridMarginItemDecoration
+import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.dialog.ErrorDialogFragment
 import com.eighteen.eighteenandroid.presentation.myprofile.editintroduce.model.EditIntroducePage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -97,18 +99,20 @@ class EditIntroduceFragment :
         collectInLifecycle(myViewModel.editProfileEventStateFlow) {
             when (it) {
                 is ModelState.Loading -> {
-                    //TODO 로딩
+                    binding.inLoading.root.isVisible = true
                 }
                 is ModelState.Success -> {
+                    binding.inLoading.root.isVisible = false
                     it.data?.getContentIfNotHandled()?.let {
                         findNavController().popBackStack()
                     }
                 }
                 is ModelState.Error -> {
-                    //TODO 에러
+                    binding.inLoading.root.isVisible = false
+                    showDialogFragment(ErrorDialogFragment())
                 }
                 is ModelState.Empty -> {
-                    //do nothing
+                    binding.inLoading.root.isVisible = false
                 }
             }
         }

@@ -109,7 +109,9 @@ class EditIntroduceFragment :
                 }
                 is ModelState.Error -> {
                     binding.inLoading.root.isVisible = false
-                    showDialogFragment(ErrorDialogFragment())
+                    it.data?.getContentIfNotHandled()?.let {
+                        showDialogFragment(ErrorDialogFragment())
+                    }
                 }
                 is ModelState.Empty -> {
                     binding.inLoading.root.isVisible = false

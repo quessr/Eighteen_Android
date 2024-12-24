@@ -72,17 +72,14 @@ class EditNicknameFragment :
                 }
                 is ModelState.Error -> {
                     binding.inLoading.root.isVisible = false
-                    showErrorDialog()
-
+                    it.data?.getContentIfNotHandled()?.let {
+                        showDialogFragment(ErrorDialogFragment())
+                    }
                 }
                 is ModelState.Empty -> {
                     binding.inLoading.root.isVisible = false
                 }
             }
         }
-    }
-
-    private fun showErrorDialog() {
-        showDialogFragment(ErrorDialogFragment())
     }
 }

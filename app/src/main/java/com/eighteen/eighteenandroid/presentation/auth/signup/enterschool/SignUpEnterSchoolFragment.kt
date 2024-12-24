@@ -12,6 +12,7 @@ import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
+import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpStatusEvent
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
@@ -107,10 +108,10 @@ class SignUpEnterSchoolFragment :
         collectInLifecycle(signUpEnterSchoolViewModel.schoolsStateFlow) {
             when (it) {
                 is ModelState.Loading -> {
-                    //TODO Loading 처리
+                    signUpViewModelContentInterface.sendSignUpStatusEvent(event = SignUpStatusEvent.LOADING)
                 }
                 is ModelState.Success -> {
-                    //TODO empty case 처리
+                    signUpViewModelContentInterface.sendSignUpStatusEvent(event = SignUpStatusEvent.INVISIBLE)
                     bind {
                         (rvSearchResult.adapter as? SchoolSearchResultAdapter)?.submitList(
                             it.data?.schools
@@ -119,7 +120,7 @@ class SignUpEnterSchoolFragment :
 
                 }
                 is ModelState.Error -> {
-                    //TODO Error 처리
+                    signUpViewModelContentInterface.sendSignUpStatusEvent(event = SignUpStatusEvent.ERROR_DIALOG)
                 }
                 is ModelState.Empty -> {
                     //do nothing

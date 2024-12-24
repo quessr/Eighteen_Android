@@ -191,23 +191,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     private fun initLoginCompleteLiveEvent() {
         signUpViewModel.requestLoginEventLiveData.observe(viewLifecycleOwner, EventObserver {
             myViewModel.completeLogin(authToken = it)
+            findNavController().popBackStack(R.id.fragmentLogin, true)
         })
-        collectInLifecycle(myViewModel.myProfileStateFlow) {
-            when (it) {
-                is ModelState.Loading -> {
-
-                }
-                is ModelState.Success -> {
-                    findNavController().popBackStack(R.id.fragmentLogin, true)
-                }
-                is ModelState.Error -> {
-
-                }
-                else -> {
-                    //do nothing
-                }
-            }
-        }
     }
 
     private fun initStatusEvent() {

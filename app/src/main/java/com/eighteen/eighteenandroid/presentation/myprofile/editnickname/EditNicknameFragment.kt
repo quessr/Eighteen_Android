@@ -60,24 +60,20 @@ class EditNicknameFragment :
             }
         }
         collectInLifecycle(myViewModel.editProfileEventStateFlow) {
+            binding.inLoading.root.isVisible = it is ModelState.Loading
             when (it) {
-                is ModelState.Loading -> {
-                    binding.inLoading.root.isVisible = true
-                }
                 is ModelState.Success -> {
-                    binding.inLoading.root.isVisible = false
                     it.data?.getContentIfNotHandled()?.let {
                         findNavController().popBackStack()
                     }
                 }
                 is ModelState.Error -> {
-                    binding.inLoading.root.isVisible = false
                     it.data?.getContentIfNotHandled()?.let {
                         showDialogFragment(ErrorDialogFragment())
                     }
                 }
-                is ModelState.Empty -> {
-                    binding.inLoading.root.isVisible = false
+                else -> {
+                    //do nothing
                 }
             }
         }

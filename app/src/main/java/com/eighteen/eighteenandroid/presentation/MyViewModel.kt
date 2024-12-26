@@ -114,9 +114,7 @@ class MyViewModel @Inject constructor(
                 val mbtiParam = mbti ?: profile.mbti
                 val introductionParam = introduction ?: profile.introduction
                 val questionsParam = questions ?: profile.qna
-                //TODO 토큰 제거
                 editMyProfileUseCase.invoke(
-                    accessToken = "",
                     nickName = nickNameParam,
                     school = schoolParam,
                     snsInfo = snsInfoParam,

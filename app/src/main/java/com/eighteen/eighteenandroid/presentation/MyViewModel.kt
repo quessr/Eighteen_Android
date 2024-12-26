@@ -47,11 +47,7 @@ class MyViewModel @Inject constructor(
     )
 
     init {
-        viewModelScope.launch {
-            getMyProfileUseCase.invoke().onSuccess {
-                _myProfileStateFlow.value = ModelState.Success(it)
-            }
-        }
+        requestMyProfile()
     }
 
     fun completeLogin(authToken: AuthToken) {
@@ -65,6 +61,19 @@ class MyViewModel @Inject constructor(
                 _myProfileStateFlow.value = ModelState.Error(throwable = it)
             }
         }
+    }
+
+    fun requestMyProfile() {
+        myProfileJob?.cancel()
+        myProfileJob = viewModelScope.launch {
+            _myProfileStateFlow.value = ModelState.Loading()
+            getMyProfileUseCase.invoke().onSuccess {
+                _myProfileStateFlow.value = ModelState.Success(it)
+            }.onFailure {
+                _myProfileStateFlow.value = ModelState.Error(throwable = it)
+            }
+        }
+
     }
 
     fun requestEditNickName(nickName: String?) {
@@ -105,6 +114,7 @@ class MyViewModel @Inject constructor(
                 val mbtiParam = mbti ?: profile.mbti
                 val introductionParam = introduction ?: profile.introduction
                 val questionsParam = questions ?: profile.qna
+                //TODO 토큰 제거
                 editMyProfileUseCase.invoke(
                     accessToken = "",
                     nickName = nickNameParam,
@@ -130,7 +140,8 @@ class MyViewModel @Inject constructor(
                         }
                     }
                 }.onFailure {
-                    _editProfileEventStateFlow.value = ModelState.Error(throwable = it)
+                    _editProfileEventStateFlow.value =
+                        ModelState.Error(data = Event(Unit), throwable = it)
                 }
             }
         }

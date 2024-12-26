@@ -17,6 +17,7 @@ import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.searchschool.SchoolSearchResultAdapter
 import com.eighteen.eighteenandroid.presentation.common.searchschool.SchoolSearchResultItemDecoration
+import com.eighteen.eighteenandroid.presentation.common.searchschool.model.SchoolSearchModel
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
 import com.eighteen.eighteenandroid.presentation.dialog.ErrorDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,6 +77,7 @@ class EditSchoolFragment :
 
     private fun initRecyclerView() = with(binding.inEditSchool.rvSearchResult) {
         adapter = SchoolSearchResultAdapter(::onClickSchool)
+        itemAnimator = null
         addItemDecoration(
             SchoolSearchResultItemDecoration(
                 dividerColor = ContextCompat.getColor(
@@ -90,12 +92,13 @@ class EditSchoolFragment :
         collectInLifecycle(editSchoolViewModel.schoolsStateFlow, viewLifecycleOwner) {
             when (it) {
                 is ModelState.Loading -> {
-                    //TODO Loading 처리
+                    (binding.inEditSchool.rvSearchResult.adapter as? SchoolSearchResultAdapter)?.submitList(
+                        listOf(SchoolSearchModel.Loading)
+                    )
                 }
                 is ModelState.Success -> {
-                    //TODO empty case 처리
                     (binding.inEditSchool.rvSearchResult.adapter as? SchoolSearchResultAdapter)?.submitList(
-                        it.data?.schools
+                        it.data?.schools?.map { school -> SchoolSearchModel.SchoolModel(school) }
                     )
                 }
                 is ModelState.Error -> {

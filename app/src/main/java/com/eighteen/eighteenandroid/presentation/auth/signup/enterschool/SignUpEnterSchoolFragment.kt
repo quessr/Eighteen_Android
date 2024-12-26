@@ -12,12 +12,12 @@ import com.eighteen.eighteenandroid.domain.model.School
 import com.eighteen.eighteenandroid.presentation.auth.signup.BaseSignUpContentFragment
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpNextButtonModel
 import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpPage
-import com.eighteen.eighteenandroid.presentation.auth.signup.model.SignUpStatusEvent
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.dp2Px
 import com.eighteen.eighteenandroid.presentation.common.searchschool.SchoolSearchResultAdapter
 import com.eighteen.eighteenandroid.presentation.common.searchschool.SchoolSearchResultItemDecoration
+import com.eighteen.eighteenandroid.presentation.common.searchschool.model.SchoolSearchModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -79,6 +79,7 @@ class SignUpEnterSchoolFragment :
 
     private fun initRecyclerView() = with(binding.rvSearchResult) {
         adapter = SchoolSearchResultAdapter(onClickSchool = ::onClickSchool)
+        itemAnimator = null
         val dividerColorInt = ContextCompat.getColor(context, R.color.divider)
         val dividerHeightPx = context.dp2Px(DIVIDER_HEIGHT_DP)
         addItemDecoration(
@@ -108,19 +109,22 @@ class SignUpEnterSchoolFragment :
         collectInLifecycle(signUpEnterSchoolViewModel.schoolsStateFlow) {
             when (it) {
                 is ModelState.Loading -> {
-                    signUpViewModelContentInterface.sendSignUpStatusEvent(event = SignUpStatusEvent.LOADING)
-                }
-                is ModelState.Success -> {
-                    signUpViewModelContentInterface.sendSignUpStatusEvent(event = SignUpStatusEvent.INVISIBLE)
                     bind {
                         (rvSearchResult.adapter as? SchoolSearchResultAdapter)?.submitList(
-                            it.data?.schools
+                            listOf(SchoolSearchModel.Loading)
+                        )
+                    }
+                }
+                is ModelState.Success -> {
+                    bind {
+                        (rvSearchResult.adapter as? SchoolSearchResultAdapter)?.submitList(
+                            it.data?.schools?.map { school -> SchoolSearchModel.SchoolModel(school) }
                         )
                     }
 
                 }
                 is ModelState.Error -> {
-                    signUpViewModelContentInterface.sendSignUpStatusEvent(event = SignUpStatusEvent.ERROR_DIALOG)
+                    //TODO 학교 검색 목록 에러 상태 처리
                 }
                 is ModelState.Empty -> {
                     //do nothing

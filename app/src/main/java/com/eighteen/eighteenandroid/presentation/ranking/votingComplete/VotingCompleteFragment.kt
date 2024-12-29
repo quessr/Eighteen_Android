@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation.ranking.votingComplete
 
+import android.graphics.Color
 import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -8,6 +9,7 @@ import com.eighteen.eighteenandroid.databinding.FragmentVotingCompleteBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
+import com.eighteen.eighteenandroid.presentation.common.imageloader.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +21,9 @@ class VotingCompleteFragment :
         val winnerName = arguments?.getString("winnerName")
         val category = arguments?.getString("category")
         val winnerId = arguments?.getString("winnerId")
+        val imgUrl = arguments?.getString("imgUrl")
+        val age = arguments?.getString("age")
+        val school = arguments?.getString("school")
 
         bind {
             tvName.text = winnerName
@@ -33,8 +38,16 @@ class VotingCompleteFragment :
                     )
                 )
             }
+            ivClose.setColorFilter(Color.WHITE)
+            tvSchool.text = "$school, "
+            tvAge.text = age
         }
-        initStateFlow()
+
+        ImageLoader.get().loadUrl(
+            binding.ivWinner,
+            imgUrl
+        )
+//        initStateFlow()
     }
 
     private fun initStateFlow() {

@@ -1,6 +1,8 @@
 package com.eighteen.eighteenandroid.presentation.ranking.voting
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -31,11 +33,15 @@ class VotingViewModel @AssistedInject constructor(
         MutableStateFlow<ModelState<List<TournamentEntity.Participant>>>(ModelState.Empty())
     val thisWeekParticipants = _thisWeekParticipants.asStateFlow()
 
+    private val _progress = MutableStateFlow<ModelState<Int>>(ModelState.Empty())
+    val progress = _progress.asStateFlow()
+
+
     private var votingJob: Job? = null
 
     private var participants: List<TournamentEntity.Participant> = listOf()
     private var matches: List<TournamentEntity.Match> = listOf()
-    private var currentRound = 16
+    var currentRound = 16
     private var currentMatchIndex = 0
 
 
@@ -43,7 +49,9 @@ class VotingViewModel @AssistedInject constructor(
         setupParticipants()
         setupMatches()
         showCurrentMatch()
-        fetchThisWeekParticipants(category = category)
+
+
+//        fetchThisWeekParticipants(category = category)
     }
 
     private fun fetchThisWeekParticipants(category: String) {
@@ -75,31 +83,128 @@ class VotingViewModel @AssistedInject constructor(
 
     fun setupParticipants() {
         participants = listOf(
-//            TournamentEntity.Participant("1", "참가자1"),
-//            TournamentEntity.Participant("2", "참가자2"),
-//            TournamentEntity.Participant("3", "참가자3"),
-//            TournamentEntity.Participant("4", "참가자4"),
-//            TournamentEntity.Participant("5", "참가자5"),
-//            TournamentEntity.Participant("6", "참가자6"),
-//            TournamentEntity.Participant("7", "참가자7"),
-//            TournamentEntity.Participant("8", "참가자8"),
-//            TournamentEntity.Participant("9", "참가자9"),
-//            TournamentEntity.Participant("10", "참가자10"),
-//            TournamentEntity.Participant("11", "참가자11"),
-//            TournamentEntity.Participant("12", "참가자12"),
-//            TournamentEntity.Participant("13", "참가자13"),
-//            TournamentEntity.Participant("14", "참가자14"),
-//            TournamentEntity.Participant("15", "참가자15"),
-//            TournamentEntity.Participant("16", "참가자16")
+            TournamentEntity.Participant(
+                "1",
+                "참가자1",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "2",
+                "참가자2",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "3",
+                "참가자3",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "4",
+                "참가자4",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "5",
+                "참가자5",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "6",
+                "참가자6",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "7",
+                "참가자7",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "8",
+                "참가자8",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "9",
+                "참가자9",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "10",
+                "참가자10",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "11",
+                "참가자11",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "12",
+                "참가자12",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "13",
+                "참가자13",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "14",
+                "참가자14",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "15",
+                "참가자15",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            ),
+            TournamentEntity.Participant(
+                "16",
+                "참가자16",
+                "서울 중학교",
+                "16세",
+                "https://cdn.seoulwire.com/news/photo/202109/450631_649892_1740.jpg"
+            )
         )
     }
 
-//    private fun postTopParticipantsList() {
-//        if (votingJob?.isCompleted == false) return
-//
-//        votingJob = viewModelScope.launch {
-//        }
-//    }
+    private fun setProgress() {
+        val totalMatches = 15 // 16강 기준 전체 경기 수
+        val completedMatches = (16 - currentRound) + currentMatchIndex // 진행된 경기 수
+        val progressValue = ((completedMatches.toDouble() / totalMatches) * 100).toInt()
+
+        _progress.value = ModelState.Success(progressValue)
+    }
 
     private fun setupMatches() {
         matches = participants.chunked(2).map { pair ->
@@ -120,14 +225,20 @@ class VotingViewModel @AssistedInject constructor(
             currentMatchIndex++
             showCurrentMatch()
         } else {
+            currentRound /= 2
+            currentMatchIndex = 0
             setupNextRound()
         }
+        setProgress()
+        Log.d("VotingViewModel", currentRound.toString())
     }
 
     private fun setupNextRound() {
-        currentRound /= 2
         currentMatchIndex = 0
+
         val winners = matches.mapNotNull { it.winner }
+
+        Log.d("VotingViewModel", "Current round updated to $currentRound")
 
         if (winners.size == 1) {
             _isRoundComplete.value = true to winners.first()

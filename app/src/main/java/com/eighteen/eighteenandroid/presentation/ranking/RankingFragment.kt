@@ -40,14 +40,15 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
             val category = categories.find { category ->
                 category.cardListItems.any { it.id == voteCard.id }
             }
-            categoryTitle = category?.categoryTitle ?: "기본 카테고리"
+            categoryTitle = category?.categoryTitle ?: "뷰티"
 
             val votingDialog = RankingVotingDialogFragment.newInstance(
                 requestKey = REQUEST_KEY_VOTING_ROOM_ENTER,
                 id = voteCard.id.toString(),
-                categoryTitle = categoryTitle ?: "기본 카테고리"
+                categoryTitle = categoryTitle ?: "뷰티"
             )
-            requestWithRequiredLogin { showDialogFragment(votingDialog) }
+            showDialogFragment(votingDialog)
+//            requestWithRequiredLogin { showDialogFragment(votingDialog) }
         }
 //        initChipGroup()
 

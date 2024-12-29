@@ -24,6 +24,9 @@ class ProfileDetailViewModel @AssistedInject constructor(
     private val _items = MutableStateFlow<ModelState<List<ProfileDetailModel>>>(ModelState.Empty())
     val items get() = _items.asStateFlow()
 
+    val profileInfo
+        get() = items.value.data?.filterIsInstance<ProfileDetailModel.ProfileInfo>()?.firstOrNull()
+
     private var showAllItems = false
 
     private var qnaItems = emptyList<ProfileDetailModel.Qna>()

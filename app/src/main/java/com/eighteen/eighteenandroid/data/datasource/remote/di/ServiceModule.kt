@@ -1,6 +1,7 @@
 package com.eighteen.eighteenandroid.data.datasource.remote.di
 
 import com.eighteen.eighteenandroid.data.datasource.remote.service.ChatService
+import com.eighteen.eighteenandroid.data.datasource.remote.service.MediaFileService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MessageService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.MyPageService
 import com.eighteen.eighteenandroid.data.datasource.remote.service.SchoolService
@@ -52,4 +53,9 @@ object ServiceModule {
     @Provides
     fun provideTournamentService(@ApiModule.QualifierRetrofit retrofit: Retrofit): TournamentService =
         retrofit.create(TournamentService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideMediaFileService(@ApiModule.QualifierRetrofit retrofit: Retrofit): MediaFileService =
+        retrofit.create(MediaFileService::class.java)
 }

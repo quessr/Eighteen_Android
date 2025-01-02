@@ -2,20 +2,20 @@ package com.eighteen.eighteenandroid.presentation.ranking
 
 import android.os.Bundle
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
-import com.eighteen.eighteenandroid.common.enums.Tag
 import com.eighteen.eighteenandroid.databinding.FragmentRankingBinding
 import com.eighteen.eighteenandroid.domain.usecase.GetTournamentCategoryInfoUseCase
 import com.eighteen.eighteenandroid.presentation.BaseFragment
 import com.eighteen.eighteenandroid.presentation.common.ModelState
-import com.eighteen.eighteenandroid.presentation.common.createChip
-import com.eighteen.eighteenandroid.presentation.common.setTagStyle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
+import com.eighteen.eighteenandroid.presentation.ranking.RankingResultFragment.Companion.ARGUMENT_KEY_CATEGORY
+import com.eighteen.eighteenandroid.presentation.ranking.RankingResultFragment.Companion.ARGUMENT_KEY_TOURNAMENT_NO
 import com.eighteen.eighteenandroid.presentation.ranking.cardList.model.CardListItem
 import com.eighteen.eighteenandroid.presentation.ranking.model.RankingCategory
 import com.google.android.material.chip.Chip
@@ -36,7 +36,7 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
     override fun initView() {
 //        val adapter = RankingAdapter()
 
-        val adapter = RankingAdapter { voteCard ->
+        val adapter = RankingAdapter(onVoteCardClick = { voteCard ->
             val category = categories.find { category ->
                 category.cardListItems.any { it.id == voteCard.id }
             }
@@ -49,13 +49,21 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
             )
             showDialogFragment(votingDialog)
 //            requestWithRequiredLogin { showDialogFragment(votingDialog) }
+        }, onWinnerCardClick = { winnerCard ->
+            findNavController().navigate(
+                R.id.action_fragmentRanking_to_fragmentRankingResult,
+                bundleOf(
+                    ARGUMENT_KEY_TOURNAMENT_NO to winnerCard.id,    // 토너먼트 번호
+                    ARGUMENT_KEY_CATEGORY to categoryTitle                // 카테고리 이름
+                )
+            )
         }
-//        initChipGroup()
-
+        )
 
         binding.rvRanking.run {
             this.adapter = adapter
         }
+
 
 //        val categoryList = listOf("운동", "뷰티", "공부", "예술", "게임")
 //
@@ -93,7 +101,9 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
 //                )
 //            )
 //        }
-//
+
+
+
 //        val cardListItems = categories.flatMap { it.cardListItems }
 //
 ////        데이터를 어댑터에 설정
@@ -131,7 +141,7 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(FragmentRankingBind
                                     category // 다른 타입은 그대로 유지
                                 }
                             }
-                            adapter.submitList(updatedList) // Success 상태에서 데이터 추출
+                            adapter.submitList(updatedList)
                         }
 
                         is ModelState.Loading -> {

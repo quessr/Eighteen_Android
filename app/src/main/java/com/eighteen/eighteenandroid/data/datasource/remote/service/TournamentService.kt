@@ -4,12 +4,13 @@ import com.eighteen.eighteenandroid.data.datasource.remote.request.TournamentReq
 import com.eighteen.eighteenandroid.data.datasource.remote.response.ApiResult
 import com.eighteen.eighteenandroid.data.datasource.remote.response.TournamentCategoryResponse
 import com.eighteen.eighteenandroid.data.datasource.remote.response.TournamentThisWeekParticipantsResponse
-import com.eighteen.eighteenandroid.domain.model.TournamentCategory
+import com.eighteen.eighteenandroid.data.datasource.remote.response.TournamentVoteResultResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TournamentService {
     @GET("/v1/api/tournament/search")
@@ -24,4 +25,7 @@ interface TournamentService {
     suspend fun submitTournamentResults(
         @Body tournamentRequest: TournamentRequest
     ): Response<ApiResult<String>>
+
+    @GET("/v1/api/tournament/final/result")
+    suspend fun getTournamentResult(@Query("tournamentNo") tournamentNo: Int): Response<ApiResult<List<TournamentVoteResultResponse>>>
 }

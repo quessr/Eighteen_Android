@@ -1,5 +1,7 @@
 package com.eighteen.eighteenandroid.domain.repository
 
+import com.eighteen.eighteenandroid.domain.model.UserRankInfo
+
 import com.eighteen.eighteenandroid.domain.model.Participant
 import com.eighteen.eighteenandroid.domain.model.TournamentCategory
 
@@ -12,4 +14,6 @@ interface TournamentRepository {
         tournamentNo: Int,
         participantIdsOrderByRank: List<String>
     ): Result<String>
+
+    suspend fun getTournamentResult(tournamentNo: Int): Result<List<UserRankInfo>>
 }

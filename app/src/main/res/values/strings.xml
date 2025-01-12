@@ -156,6 +156,17 @@
     <string name="my_profile_edit_nickname_title">닉네임 수정</string>
     <string name="my_profile_edit_media_title">사진 수정</string>
     <string name="my_profile_edit_media_guide">*사진, 동영상 포함 최대 10장을 등록할 수 있어요</string>
+    <string name="my_profile_setting_title">설정</string>
+    <string name="my_profile_setting_managing_info">내 정보 관리</string>
+    <string name="my_profile_setting_service_setting_title">서비스 설정</string>
+    <string name="my_profile_setting_service_alarm">알림 설정</string>
+    <string name="my_profile_setting_service_participate_tournament">대회 참여</string>
+    <string name="my_profile_setting_blocked_users">차단된 유저</string>
+    <string name="my_profile_setting_video_auto_play">동영상 자동 재생</string>
+    <string name="my_profile_setting_info_title">정보</string>
+    <string name="my_profile_setting_info_app_version">앱 버전</string>
+    <string name="my_profile_setting_info_app_update">업데이트 하기</string>
+    <string name="my_profile_setting_customer_service">고객센터</string>
 
     <string name="time_min_sec">"%02d:%02d"</string>
 

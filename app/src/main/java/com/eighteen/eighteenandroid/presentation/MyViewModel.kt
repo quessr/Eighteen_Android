@@ -1,5 +1,6 @@
 package com.eighteen.eighteenandroid.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eighteen.eighteenandroid.domain.model.AuthToken
@@ -19,6 +20,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -48,6 +51,16 @@ class MyViewModel @Inject constructor(
 
     init {
         requestMyProfile()
+        val f = flowOf(true,false,true,true,true,false)
+        viewModelScope.launch{
+        f.distinctUntilChanged().collect{
+
+                Log.d("FLOWTEST","$it")
+
+        }}
+
+
+
     }
 
     fun completeLogin(authToken: AuthToken) {

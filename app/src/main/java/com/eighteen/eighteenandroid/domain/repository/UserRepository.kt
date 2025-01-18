@@ -14,4 +14,6 @@ interface UserRepository {
     fun getTokenFlow(): Flow<AuthToken?>
     suspend fun saveToken(authToken: AuthToken)
     suspend fun login(phoneNumber: String): Result<AuthToken>
+    suspend fun signOut(): Result<String?>
+    suspend fun deleteUser(): Result<String?>
 }

@@ -186,7 +186,6 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun signOut(): Result<String?> = runCatching {
         userService.signOut().let {
-            if (it.isSuccessful) deleteAuthToken()
             it.mapper { apiResult ->
                 apiResult.data
             }
@@ -195,14 +194,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun deleteUser(): Result<String?> = runCatching {
         userService.deleteUser().let {
-            if (it.isSuccessful) deleteAuthToken()
             it.mapper { apiResult ->
                 apiResult.data
             }
         }
     }
 
-    private suspend fun deleteAuthToken() {
+    override suspend fun deleteAuthToken() {
         preferenceDatastore.edit {
             it.remove(ACCESS_TOKEN_PREFERENCE_KEY)
             it.remove(REFRESH_TOKEN_PREFERENCE_KEY)

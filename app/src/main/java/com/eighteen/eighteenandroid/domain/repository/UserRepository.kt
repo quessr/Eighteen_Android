@@ -16,4 +16,5 @@ interface UserRepository {
     suspend fun login(phoneNumber: String): Result<AuthToken>
     suspend fun signOut(): Result<String?>
     suspend fun deleteUser(): Result<String?>
+    suspend fun deleteAuthToken()
 }

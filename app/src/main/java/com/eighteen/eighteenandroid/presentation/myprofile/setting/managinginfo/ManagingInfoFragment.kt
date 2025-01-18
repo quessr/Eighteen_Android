@@ -1,11 +1,13 @@
 package com.eighteen.eighteenandroid.presentation.myprofile.setting.managinginfo
 
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.eighteen.eighteenandroid.R
 import com.eighteen.eighteenandroid.databinding.FragmentManagingInfoBinding
 import com.eighteen.eighteenandroid.presentation.BaseFragment
+import com.eighteen.eighteenandroid.presentation.MyViewModel
 import com.eighteen.eighteenandroid.presentation.common.ModelState
 import com.eighteen.eighteenandroid.presentation.common.collectInLifecycle
 import com.eighteen.eighteenandroid.presentation.common.showDialogFragment
@@ -16,6 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ManagingInfoFragment :
     BaseFragment<FragmentManagingInfoBinding>(FragmentManagingInfoBinding::inflate) {
     private val managingInfoViewModel by viewModels<ManagingInfoViewModel>()
+    private val myViewModel by activityViewModels<MyViewModel>()
+
     override fun initView() {
         bind {
             ivBtnBack.setOnClickListener {
@@ -38,6 +42,7 @@ class ManagingInfoFragment :
             binding.inLoading.root.isVisible = it is ModelState.Loading
             when (it) {
                 is ModelState.Success -> {
+                    myViewModel.completeLogout()
                     findNavController().popBackStack(R.id.fragmentMain, false)
 
                 }
@@ -53,6 +58,7 @@ class ManagingInfoFragment :
             binding.inLoading.root.isVisible = it is ModelState.Loading
             when (it) {
                 is ModelState.Success -> {
+                    myViewModel.completeLogout()
                     findNavController().popBackStack(R.id.fragmentMain, false)
                 }
                 is ModelState.Error -> {

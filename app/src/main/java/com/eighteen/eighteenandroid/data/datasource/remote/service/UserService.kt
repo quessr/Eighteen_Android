@@ -6,6 +6,7 @@ import com.eighteen.eighteenandroid.data.datasource.remote.response.ProfileDetai
 import com.eighteen.eighteenandroid.data.datasource.remote.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -29,4 +30,10 @@ interface UserService {
 
     @POST("/v1/api/user/sign-in")
     suspend fun postLogin(@Query("phoneNumber") phoneNumber: String): Response<ApiResult<String>>
+
+    @DELETE("/v1/api/user/sign-out")
+    suspend fun signOut(): Response<ApiResult<String>>
+
+    @DELETE("/v1/api/user/delete")
+    suspend fun deleteUser(): Response<ApiResult<String>>
 }

@@ -196,4 +196,10 @@
         android:name="com.eighteen.eighteenandroid.presentation.myprofile.setting.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/fragmentManagingInfo"
+        android:name="com.eighteen.eighteenandroid.presentation.myprofile.setting.managinginfo.ManagingInfoFragment"
+        android:label="fragment_managing_info"
+        tools:layout="@layout/fragment_managing_info" />
+
 </navigation>

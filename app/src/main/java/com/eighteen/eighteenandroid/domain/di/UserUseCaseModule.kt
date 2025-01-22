@@ -3,9 +3,11 @@ package com.eighteen.eighteenandroid.domain.di
 import com.eighteen.eighteenandroid.domain.repository.MyPageRepository
 import com.eighteen.eighteenandroid.domain.repository.UserRepository
 import com.eighteen.eighteenandroid.domain.usecase.CheckIdDuplicationUseCase
+import com.eighteen.eighteenandroid.domain.usecase.DeleteUserUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetMyProfileUseCase
 import com.eighteen.eighteenandroid.domain.usecase.GetUserDetailInfoUseCase
 import com.eighteen.eighteenandroid.domain.usecase.LoginUseCase
+import com.eighteen.eighteenandroid.domain.usecase.SignOutUseCase
 import com.eighteen.eighteenandroid.domain.usecase.SignUpUseCase
 import com.eighteen.eighteenandroid.domain.usecase.UserUseCase
 import dagger.Module
@@ -44,4 +46,13 @@ object UserUseCaseModule {
     @Provides
     @Singleton
     fun provideLoginUseCase(repository: UserRepository) = LoginUseCase(repository = repository)
+
+    @Provides
+    @Singleton
+    fun provideSignOutUseCase(repository: UserRepository) = SignOutUseCase(repository = repository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteUserUseCase(repository: UserRepository) =
+        DeleteUserUseCase(repository = repository)
 }
